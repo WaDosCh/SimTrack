@@ -50,7 +50,7 @@ public class TileEdgeCoordinate extends TileCoordinate {
 	public TileEdgeCoordinate(int u, int v, int edge) {
 		super(u - ((edge > 2 && edge < 5) ? 1 : 0), v + ((edge > 3) ? 1 : 0));
 		assert edge >= 0 && edge < 6;
-		this.edge = ((edge > 2) ? edge - 3 : edge);
+		this.edge = ((edge > 2) ? (edge - 3) : edge);
 	}
 
 	private int edge;

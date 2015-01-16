@@ -92,7 +92,7 @@ public class GraphFactory {
 			ArrayList<DirectedTileEdgeCoordinate> blacklist,
 			ArrayList<DirectedTileEdgeCoordinate> fixedDrains) {
 
-		blacklist.forEach(item -> graph.getMap());
+		blacklist.forEach(item -> graph.getMap().remove(item));
 
 		ArrayList<AbstractMap.SimpleEntry<DirectedTileEdgeCoordinate, DirectedTileEdgeCoordinate>> toDrop = new ArrayList<>();
 
@@ -105,7 +105,7 @@ public class GraphFactory {
 			toDrop.forEach(item -> {
 				graph.getMap().get(item.getKey()).remove(item.getValue());
 				if (graph.getMap().get(item.getKey()).isEmpty()) {
-					graph.getMap().remove(item);
+					graph.getMap().remove(item.getKey());
 				}
 			});
 		} while (!toDrop.isEmpty());

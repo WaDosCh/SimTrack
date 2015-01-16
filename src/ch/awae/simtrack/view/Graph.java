@@ -65,7 +65,13 @@ public class Graph {
 		}
 	}
 
-	HashMap<DirectedTileEdgeCoordinate, HashMap<DirectedTileEdgeCoordinate, Double>> getMap() {
+	/**
+	 * returns the internal hash map structure. <b>Use with caution!</b> Any
+	 * changes to the returned map will affect the internal graph structure.
+	 * 
+	 * @return the <b>actual</b> underlying hash map structure.
+	 */
+	public HashMap<DirectedTileEdgeCoordinate, HashMap<DirectedTileEdgeCoordinate, Double>> getMap() {
 		return this.map;
 	}
 
