@@ -20,7 +20,7 @@ package ch.awae.simtrack.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import controller.IBorderConnectionSpawner;
+import ch.awae.simtrack.controller.IBorderConnectionSpawner;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.track.BorderTrackTile;

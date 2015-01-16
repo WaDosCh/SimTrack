@@ -17,9 +17,9 @@
  */
 package ch.awae.simtrack.test;
 
+import ch.awae.simtrack.controller.BasicBorderConnectionSpawner;
+import ch.awae.simtrack.controller.IBorderConnectionSpawner;
 import ch.awae.simtrack.model.Map;
-import controller.BasicBorderConnectionSpawner;
-import controller.IBorderConnectionSpawner;
 
 @SuppressWarnings("javadoc")
 public class Test {
