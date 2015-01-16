@@ -48,7 +48,7 @@ public class CurvedRail extends TrackTile implements RotatableTile {
 
 	@Override
 	public void rotate(boolean isClockwise) {
-		this.rotation += 6 + (isClockwise ? -1 : 1);
+		this.rotation += isClockwise ? 5 : 1;
 		this.rotation %= 6;
 	}
 

@@ -45,7 +45,7 @@ public class StraightRail extends TrackTile implements RotatableTile {
 
 	@Override
 	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? -1 : 1;
+		this.rotation += isClockwise ? 2 : 1;
 		this.rotation %= 3;
 	}
 
