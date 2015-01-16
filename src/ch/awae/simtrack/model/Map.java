@@ -17,8 +17,10 @@
  */
 package ch.awae.simtrack.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import controller.IBorderConnectionSpawner;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.track.BorderTrackTile;
@@ -31,6 +33,21 @@ import ch.awae.simtrack.model.track.BorderTrackTile;
  * @since SimTrack 0.0.1 (2015-01-16)
  */
 public class Map {
+
+	/**
+	 * Creates a new board instance
+	 * 
+	 * @param hSize
+	 * @param vSize
+	 * @param conSpawn
+	 */
+	public Map(int hSize, int vSize, IBorderConnectionSpawner conSpawn) {
+		assert hSize > 0 && vSize > 0;
+		this.hSize = hSize;
+		this.vSize = vSize;
+		ArrayList<BorderTrackTile> cons = conSpawn.spawnConnections(this);
+		cons.forEach(con -> this.borderTracks.put(con.getPosition(), con));
+	}
 
 	/** The track pieces. */
 	private HashMap<TileCoordinate, TrackTile> trackPieces;
@@ -57,33 +74,12 @@ public class Map {
 	}
 
 	/**
-	 * Sets the track pieces.
-	 *
-	 * @param trackPieces
-	 *            the track pieces
-	 */
-	public void setTrackPieces(HashMap<TileCoordinate, TrackTile> trackPieces) {
-		this.trackPieces = trackPieces;
-	}
-
-	/**
 	 * Gets the border tracks.
 	 *
 	 * @return the border tracks
 	 */
 	public HashMap<TileCoordinate, BorderTrackTile> getBorderTracks() {
 		return this.borderTracks;
-	}
-
-	/**
-	 * Sets the border tracks.
-	 *
-	 * @param borderTracks
-	 *            the border tracks
-	 */
-	public void setBorderTracks(
-			HashMap<TileCoordinate, BorderTrackTile> borderTracks) {
-		this.borderTracks = borderTracks;
 	}
 
 	/**
@@ -95,14 +91,24 @@ public class Map {
 		return this.signals;
 	}
 
+	private final int hSize, vSize;
+
 	/**
-	 * Sets the signals.
-	 *
-	 * @param signals
-	 *            the signals
+	 * returns the horizontal tile count.
+	 * 
+	 * @return the horizontal board size
 	 */
-	public void setSignals(HashMap<TileEdgeCoordinate, ISignal> signals) {
-		this.signals = signals;
+	public int getHorizontalSize() {
+		return this.hSize;
+	}
+
+	/**
+	 * returns the vertical tile count.
+	 * 
+	 * @return the vertical board size
+	 */
+	public int getVerticalSize() {
+		return this.vSize;
 	}
 
 }
