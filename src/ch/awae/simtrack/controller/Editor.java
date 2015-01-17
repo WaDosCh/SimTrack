@@ -15,21 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.properties;
+package ch.awae.simtrack.controller;
 
 /**
- * Provides the constants for the basic rendering layers.
+ * top-level management of the active side of the user interface. It manages the
+ * activation of the different editor tools. It thereby targets reduction of
+ * complexity by delegating the user actions to well-defined tools.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.1, 2015-01-17
  * @since SimTrack 0.0.1
  */
-@SuppressWarnings("javadoc")
-public class Layer {
+public class Editor {
+	
+	
 
-	public static final int BACKGROUND = 0;
-	public static final int FIXED_TRACKS = 1;
-	public static final int TRACKS = 2;
-	public static final int SIGNALS = 3;
+	public Editor() {
+	}
 
 }

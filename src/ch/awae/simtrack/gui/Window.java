@@ -15,21 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.properties;
+package ch.awae.simtrack.gui;
 
-/**
- * Provides the constants for the basic rendering layers.
- * 
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
- */
+import javax.swing.JFrame;
+
 @SuppressWarnings("javadoc")
-public class Layer {
+public class Window extends JFrame {
 
-	public static final int BACKGROUND = 0;
-	public static final int FIXED_TRACKS = 1;
-	public static final int TRACKS = 2;
-	public static final int SIGNALS = 3;
+	private static final long serialVersionUID = 7381994043443871855L;
+
+	private Surface surface;
+
+	public Window(int x, int y) {
+		super("SimTrack");
+		this.setSize(x, y);
+		this.setAlwaysOnTop(true);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.surface = new Surface();
+		this.add(this.surface);
+		this.setResizable(false);
+		this.setVisible(true);
+	}
 
 }

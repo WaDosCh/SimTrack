@@ -24,8 +24,8 @@ import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
  * outputs for the map.
  * 
  * @author Andreas Wälchli
- * @version 1.1 (2015-01-16)
- * @since SimTrack 0.0.1 (2015-01-16)
+ * @version 1.1, 2015-01-16
+ * @since SimTrack 0.0.1
  */
 public interface BorderConnection {
 

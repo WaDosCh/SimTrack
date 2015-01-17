@@ -15,21 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.properties;
+package ch.awae.simtrack;
 
-/**
- * Provides the constants for the basic rendering layers.
- * 
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
- */
+import javax.swing.SwingUtilities;
+
+import ch.awae.simtrack.controller.RenderingController;
+import ch.awae.simtrack.gui.Window;
+
 @SuppressWarnings("javadoc")
-public class Layer {
+public class Main {
 
-	public static final int BACKGROUND = 0;
-	public static final int FIXED_TRACKS = 1;
-	public static final int TRACKS = 2;
-	public static final int SIGNALS = 3;
+	public static void main(String[] args) {
+		System.setProperty("sun.java2d.opengl", "True");
+		// System.setProperty("sun.java2d.trace", "log");
+
+		SwingUtilities.invokeLater(Main::init);
+
+	}
+
+	private static void init() {
+		Global.window = new Window(1200, 800);
+		Global.rc = new RenderingController(Global.window, 50);
+	}
 
 }

@@ -15,21 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.properties;
+package ch.awae.simtrack.gui;
 
-/**
- * Provides the constants for the basic rendering layers.
- * 
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
- */
-@SuppressWarnings("javadoc")
-public class Layer {
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-	public static final int BACKGROUND = 0;
-	public static final int FIXED_TRACKS = 1;
-	public static final int TRACKS = 2;
-	public static final int SIGNALS = 3;
+import javax.swing.JPanel;
+
+public class Surface extends JPanel {
+
+	public Surface() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		this.doPaint((Graphics2D) g);
+	}
+
+	private void doPaint(Graphics2D g) {
+		g.setBackground(Color.BLACK);
+		g.setColor(Color.LIGHT_GRAY);
+		Graphics2D g2 = (Graphics2D) g.create();
+		g2.translate(50, 50);
+		g2.fillRect(20, 20, 100, 40);
+		g2.setStroke(new BasicStroke(5));
+		g.setColor(Color.GRAY);
+		g.draw3DRect(20, 20, 100, 40, false);
+	}
 
 }

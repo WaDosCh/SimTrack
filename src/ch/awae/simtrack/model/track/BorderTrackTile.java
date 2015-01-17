@@ -27,8 +27,8 @@ import ch.awae.simtrack.properties.Layer;
  * Implementation for the border track pieces. They do not contain any paths.
  * 
  * @author Andreas Wälchli
- * @version 1.1 (2015-01-16)
- * @since SimTrack 0.0.1 (2015-01-16)
+ * @version 1.1, 2015-01-16
+ * @since SimTrack 0.0.1
  */
 public class BorderTrackTile extends TrackTile implements BorderConnection {
 

@@ -15,21 +15,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.properties;
+package ch.awae.simtrack.controller;
 
 /**
- * Provides the constants for the basic rendering layers.
+ * describes the basic behaviour of any editor tool. Each editor tool represents
+ * a possible editor state.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.1, 2015-01-17
  * @since SimTrack 0.0.1
  */
-@SuppressWarnings("javadoc")
-public class Layer {
+public interface ITool {
 
-	public static final int BACKGROUND = 0;
-	public static final int FIXED_TRACKS = 1;
-	public static final int TRACKS = 2;
-	public static final int SIGNALS = 3;
+	/**
+	 * Loads the tool. This method should be used in case a tool requires setup
+	 * of other external elements.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the tool cannot be loaded at the moment. The editor will
+	 *             fall back to the last tool used.
+	 */
+	public void load() throws IllegalStateException;
 
+	/**
+	 * Unloads the tool. This method signals the tool that it will be
+	 * deactivated. Any external cleanups should occur here. Other than the
+	 * {@link #load()} method, this method cannot deny deactivation.
+	 */
+	public void unload();
+	
+	
+	
 }

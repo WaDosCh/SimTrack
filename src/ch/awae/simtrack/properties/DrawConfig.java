@@ -22,8 +22,8 @@ package ch.awae.simtrack.properties;
  * drawing according to a particular config must be handled by the drawing code.
  * 
  * @author Andreas Wälchli
- * @version 1.1 (2015-01-16)
- * @since SimTrack 0.0.1 (2015-01-16)
+ * @version 1.1, 2015-01-16
+ * @since SimTrack 0.0.1
  *
  */
 public enum DrawConfig {

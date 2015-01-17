@@ -15,21 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.properties;
+package ch.awae.simtrack.controller;
 
-/**
- * Provides the constants for the basic rendering layers.
- * 
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
- */
-@SuppressWarnings("javadoc")
-public class Layer {
+import javax.swing.Timer;
 
-	public static final int BACKGROUND = 0;
-	public static final int FIXED_TRACKS = 1;
-	public static final int TRACKS = 2;
-	public static final int SIGNALS = 3;
+import ch.awae.simtrack.gui.Window;
+
+public class RenderingController {
+
+	private Window w;
+	private Timer t;
+
+	public RenderingController(Window w, int fps) {
+		assert w != null;
+		this.w = w;
+		this.t = new Timer(1000 / fps, e -> this.w.repaint());
+		this.t.setRepeats(true);
+	}
+
+	public void start() {
+		this.t.start();
+	}
+
+	public void stop() {
+		this.t.stop();
+	}
 
 }

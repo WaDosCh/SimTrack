@@ -15,21 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.properties;
+package ch.awae.simtrack;
 
-/**
- * Provides the constants for the basic rendering layers.
- * 
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
- */
-@SuppressWarnings("javadoc")
-public class Layer {
+import ch.awae.simtrack.controller.RenderingController;
+import ch.awae.simtrack.gui.Window;
+import ch.awae.simtrack.model.Map;
+import ch.awae.simtrack.view.SceneViewPort;
 
-	public static final int BACKGROUND = 0;
-	public static final int FIXED_TRACKS = 1;
-	public static final int TRACKS = 2;
-	public static final int SIGNALS = 3;
+public class Global {
+
+	public static Window window;
+	public static RenderingController rc;
+	public static Map map;
+	public static SceneViewPort port;
 
 }
