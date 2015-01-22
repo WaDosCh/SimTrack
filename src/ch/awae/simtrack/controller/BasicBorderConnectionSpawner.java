@@ -34,6 +34,9 @@ import ch.awae.simtrack.model.track.BorderTrackTile;
  */
 public class BasicBorderConnectionSpawner implements IBorderConnectionSpawner {
 
+	private int connectionCount;
+
+	private Random random;
 	/**
 	 * creates a new spawner instance. The same instance can be re-used.
 	 * 
@@ -44,9 +47,6 @@ public class BasicBorderConnectionSpawner implements IBorderConnectionSpawner {
 		this.connectionCount = connectionCount;
 		this.random = new Random();
 	}
-
-	private int connectionCount;
-	private Random random;
 
 	@Override
 	public ArrayList<BorderTrackTile> spawnConnections(Map map) {

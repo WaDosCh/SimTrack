@@ -33,22 +33,18 @@ import ch.awae.simtrack.view.renderer.TrackRenderUtil;
  */
 public class DoubleSlip extends TrackTile implements RotatableTile {
 
+	private int rotation;
+
 	public DoubleSlip(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
 	}
 
-	private int rotation;
-
 	@Override
-	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? 2 : 1;
-		this.rotation %= 3;
-	}
-
-	@Override
-	public void mirror() {
-		// stays static under mirroring
+	public TrackTile cloneTrack() {
+		DoubleSlip clone = new DoubleSlip(this.getPosition());
+		clone.rotation = this.rotation;
+		return clone;
 	}
 
 	@Override
@@ -57,6 +53,11 @@ public class DoubleSlip extends TrackTile implements RotatableTile {
 				{ this.rotation + 1, (this.rotation + 4) % 6, 1 },
 				{ this.rotation, (this.rotation + 4) % 6, 1 },
 				{ this.rotation + 1, this.rotation + 3, 1 } };
+	}
+
+	@Override
+	public void mirror() {
+		// stays static under mirroring
 	}
 
 	@Override
@@ -82,10 +83,9 @@ public class DoubleSlip extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
-		DoubleSlip clone = new DoubleSlip(this.getPosition());
-		clone.rotation = this.rotation;
-		return clone;
+	public void rotate(boolean isClockwise) {
+		this.rotation += isClockwise ? 2 : 1;
+		this.rotation %= 3;
 	}
 
 }

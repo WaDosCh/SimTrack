@@ -35,29 +35,30 @@ public class CurvedRail extends TrackTile implements RotatableTile {
 
 	public static final float TRAVEL_COST = 1.2f;
 
+	private int rotation = 0;
+
 	public CurvedRail(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
 	}
 
-	private int rotation = 0;
-
 	@Override
-	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? 5 : 1;
-		this.rotation %= 6;
-	}
-
-	@Override
-	public void mirror() {
-		this.rotation += 3;
-		this.rotation %= 6;
+	public TrackTile cloneTrack() {
+		CurvedRail clone = new CurvedRail(this.getPosition());
+		clone.rotation = this.rotation;
+		return clone;
 	}
 
 	@Override
 	public float[][] getRawPaths() {
 		return new float[][] { { this.rotation, (this.rotation + 2) % 6,
 				TRAVEL_COST } };
+	}
+
+	@Override
+	public void mirror() {
+		this.rotation += 3;
+		this.rotation %= 6;
 	}
 
 	@Override
@@ -73,10 +74,9 @@ public class CurvedRail extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
-		CurvedRail clone = new CurvedRail(this.getPosition());
-		clone.rotation = this.rotation;
-		return clone;
+	public void rotate(boolean isClockwise) {
+		this.rotation += isClockwise ? 5 : 1;
+		this.rotation %= 6;
 	}
 
 }

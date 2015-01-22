@@ -35,6 +35,28 @@ import ch.awae.simtrack.view.Graph;
  */
 public class Pathfinder {
 
+	private static class PriorityEntry implements Comparable<PriorityEntry> {
+
+		DirectedTileEdgeCoordinate element;
+
+		double priority;
+		PriorityEntry(double prio, DirectedTileEdgeCoordinate elem) {
+			this.priority = prio;
+			this.element = elem;
+		}
+
+		@Override
+		public int compareTo(PriorityEntry o) {
+			return Double.compare(this.priority, o.priority);
+		}
+
+	}
+
+	private static double heuristic(DirectedTileEdgeCoordinate goal,
+			DirectedTileEdgeCoordinate now) {
+		return goal.distanceTo(now);
+	}
+
 	public ArrayList<DirectedTileEdgeCoordinate> findPath(
 			DirectedTileEdgeCoordinate from, DirectedTileEdgeCoordinate to,
 			Graph graph) {
@@ -77,28 +99,6 @@ public class Pathfinder {
 
 		Collections.reverse(path);
 		return path;
-
-	}
-
-	private static double heuristic(DirectedTileEdgeCoordinate goal,
-			DirectedTileEdgeCoordinate now) {
-		return goal.distanceTo(now);
-	}
-
-	private static class PriorityEntry implements Comparable<PriorityEntry> {
-
-		PriorityEntry(double prio, DirectedTileEdgeCoordinate elem) {
-			this.priority = prio;
-			this.element = elem;
-		}
-
-		double priority;
-		DirectedTileEdgeCoordinate element;
-
-		@Override
-		public int compareTo(PriorityEntry o) {
-			return Double.compare(this.priority, o.priority);
-		}
 
 	}
 }

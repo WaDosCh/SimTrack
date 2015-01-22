@@ -33,6 +33,10 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public class BorderTrackTile extends TrackTile implements BorderConnection {
 
+	private Direction direction;
+
+	private int edge;
+
 	public BorderTrackTile(TileCoordinate position, int edge, boolean isOutput) {
 		super(position);
 		assert edge >= 0 && edge < 6;
@@ -40,9 +44,10 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 		this.direction = isOutput ? Direction.OUT : Direction.IN;
 	}
 
-	private int edge;
-
-	private Direction direction;
+	@Override
+	public TrackTile cloneTrack() {
+		return null;
+	}
 
 	@Override
 	public Direction getDirection() {
@@ -53,14 +58,14 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 		return this.edge;
 	}
 
+	// IRRELEVANT INTERFACE METHODS
+
 	@Override
 	public DirectedTileEdgeCoordinate getInterfacingEdge() {
 		TileCoordinate pos = this.getPosition();
 		return new DirectedTileEdgeCoordinate(pos.getU(), pos.getV(),
 				this.edge, this.direction != Direction.OUT);
 	}
-
-	// IRRELEVANT INTERFACE METHODS
 
 	@Override
 	public float[][] getRawPaths() {
@@ -76,11 +81,6 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 	public void renderRail(Graphics2D g) {
 		return;
 
-	}
-
-	@Override
-	public TrackTile cloneTrack() {
-		return null;
 	}
 
 }

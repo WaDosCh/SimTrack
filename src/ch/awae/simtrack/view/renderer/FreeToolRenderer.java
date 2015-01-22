@@ -23,21 +23,21 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.controller.tools.FreeTool;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
 /**
  * Render For the "Free Hand" Tool
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
-public class FreeToolRenderer extends ARenderer {
+public class FreeToolRenderer implements IRenderer {
 
-	private final FreeTool tool;
 	private final static Stroke borderStroke = new BasicStroke(6);
 	private final static int hexSideHalf = (int) (50 / SceneViewPort.SQRT3);
+	private final FreeTool tool;
 
 	public FreeToolRenderer(FreeTool tool) {
 		this.tool = tool;
@@ -46,7 +46,7 @@ public class FreeToolRenderer extends ARenderer {
 	@Override
 	public void render(Graphics2D g) {
 		g.setStroke(borderStroke);
-		Graphics2D g2 = ARenderer.focusHex(this.tool.tile, g);
+		Graphics2D g2 = IRenderer.focusHex(this.tool.tile, g);
 		g2.setColor(Color.ORANGE);
 		double angle = Math.PI / 3;
 		for (int i = 0; i < 6; i++) {

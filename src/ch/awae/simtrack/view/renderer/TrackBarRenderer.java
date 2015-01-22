@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import ch.awae.simtrack.controller.TrackBar;
 import ch.awae.simtrack.gui.Surface;
 import ch.awae.simtrack.model.TrackTile;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 
 /**
  * Track tool-bar renderer
@@ -36,15 +36,15 @@ import ch.awae.simtrack.view.ARenderer;
  * @version 1.3, 2015-01-22
  * @since SimTrack 0.1.1 (0.0.1)
  */
-public class TrackBarRenderer extends ARenderer {
+public class TrackBarRenderer implements IRenderer {
 
 	private TrackBar bar;
-	private Color bgcol = new Color(1.0f, 1.0f, 1.0f);
 	private Color bdcol = new Color(0.0f, 0.0f, 0.0f);
+	private Stroke bdst = new BasicStroke(2);
+	private Color bgcol = new Color(1.0f, 1.0f, 1.0f);
 	private Color hover = new Color(0.8f, 0.8f, 0.8f);
 	private Color rails = new Color(0.2f, 0.2f, 0.2f);
 	private Color rbeds = new Color(0.6f, 0.6f, 0.6f);
-	private Stroke bdst = new BasicStroke(2);
 	private Stroke rlst = new BasicStroke(4);
 	private Stroke xstr = new BasicStroke(6);
 

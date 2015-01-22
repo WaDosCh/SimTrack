@@ -24,7 +24,7 @@ import javax.swing.Timer;
 
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 
 /**
  * top-level management of the active side of the user interface. It manages the
@@ -37,41 +37,25 @@ import ch.awae.simtrack.view.ARenderer;
  */
 public class Editor {
 
-	private static HashMap<String, ITool> tools = new HashMap<>();
-	private static ARenderer renderer;
-	private static ITool currentTool;
-	private static Timer t;
-	private static Navigator nav = new Navigator();
 	private static TrackBar bar = new TrackBar();
-	private static ARenderer barRend;
-
-	public static void init(int logicTicks) {
-		loadTools();
-		t = new Timer(1000 / logicTicks, e -> Editor.tick());
-		t.setRepeats(true);
-		barRend = bar.getRenderer();
-		nav.load(null);
-		bar.load(null);
-	}
-
-	private static void tick() {
-		nav.tick();
-		bar.tick();
-		if (currentTool != null)
-			currentTool.tick();
-	}
-
-	public static void render(Graphics2D g) {
-		if (renderer != null)
-			renderer.render((Graphics2D) g.create());
-		barRend.render(g);
-	}
+	private static IRenderer barRend;
+	private static ITool currentTool;
+	private static IRenderer renderer;
+	private static Timer t;
+	private static HashMap<String, ITool> tools = new HashMap<>();
 
 	public static void addTool(ITool tool) {
 		tools.put(tool.getToolName(), tool);
 		if (currentTool == null) {
 			loadTool(tool.getToolName(), null);
 		}
+	}
+
+	public static void init(int logicTicks) {
+		loadTools();
+		t = new Timer(1000 / logicTicks, e -> Editor.tick());
+		t.setRepeats(true);
+		barRend = bar.getRenderer();
 	}
 
 	public static boolean loadTool(String name, Object[] args) {
@@ -101,12 +85,25 @@ public class Editor {
 		addTool(new BuildTool());
 	}
 
+	public static void render(Graphics2D g) {
+		if (renderer != null)
+			renderer.render((Graphics2D) g.create());
+		barRend.render(g);
+	}
+
 	public static void start() {
 		t.start();
 	}
 
 	public static void stop() {
 		t.stop();
+	}
+
+	private static void tick() {
+		Navigator.tick();
+		bar.tick();
+		if (currentTool != null)
+			currentTool.tick();
 	}
 
 }

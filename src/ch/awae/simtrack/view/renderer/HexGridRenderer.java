@@ -21,17 +21,17 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
 /**
  * Renderer for the hex grid overlay
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
-public class HexGridRenderer extends ARenderer {
+public class HexGridRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g) {
@@ -40,7 +40,7 @@ public class HexGridRenderer extends ARenderer {
 		for (int i = 0; i < HighLogic.map.getHorizontalSize(); i++) {
 			for (int j = 0; j < HighLogic.map.getVerticalSize(); j++) {
 				int l = i - (j / 2);
-				Graphics2D g2 = ARenderer.focusHex(new TileCoordinate(l, j), g);
+				Graphics2D g2 = IRenderer.focusHex(new TileCoordinate(l, j), g);
 				for (int k = 0; k < 3; k++) {
 					g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
 					g2.rotate(Math.PI / 3);

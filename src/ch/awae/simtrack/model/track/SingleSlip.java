@@ -35,23 +35,18 @@ public class SingleSlip extends TrackTile implements RotatableTile {
 
 	public static final float TRAVEL_COST = 1.2f;
 
+	private int rotation = 0;
+
 	public SingleSlip(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
 	}
 
-	private int rotation = 0;
-
 	@Override
-	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? 5 : 1;
-		this.rotation %= 6;
-	}
-
-	@Override
-	public void mirror() {
-		this.rotation += 3;
-		this.rotation %= 6;
+	public TrackTile cloneTrack() {
+		SingleSlip clone = new SingleSlip(this.getPosition());
+		clone.rotation = this.rotation;
+		return clone;
 	}
 
 	@Override
@@ -60,6 +55,12 @@ public class SingleSlip extends TrackTile implements RotatableTile {
 				{ (this.rotation + 1) % 6, (this.rotation + 3) % 6, TRAVEL_COST },
 				{ this.rotation, (this.rotation + 3) % 6, TRAVEL_COST },
 				{ (this.rotation + 1) % 6, (this.rotation + 4) % 6, TRAVEL_COST } };
+	}
+
+	@Override
+	public void mirror() {
+		this.rotation += 3;
+		this.rotation %= 6;
 	}
 
 	@Override
@@ -81,10 +82,9 @@ public class SingleSlip extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
-		SingleSlip clone = new SingleSlip(this.getPosition());
-		clone.rotation = this.rotation;
-		return clone;
+	public void rotate(boolean isClockwise) {
+		this.rotation += isClockwise ? 5 : 1;
+		this.rotation %= 6;
 	}
 
 }

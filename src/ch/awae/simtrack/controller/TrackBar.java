@@ -34,7 +34,7 @@ import ch.awae.simtrack.model.track.StraightCurvedCrossing;
 import ch.awae.simtrack.model.track.StraightRail;
 import ch.awae.simtrack.model.track.ThreeWayTurnout;
 import ch.awae.simtrack.model.track.WyeSwitch;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.renderer.TrackBarRenderer;
 
 /**
@@ -44,15 +44,29 @@ import ch.awae.simtrack.view.renderer.TrackBarRenderer;
  * @version 1.2, 2015-01-22
  * @since SimTrack 0.1.1 (0.0.1)
  */
-public class TrackBar implements ITool {
+public class TrackBar {
 
-	private ARenderer rend;
-	private ArrayList<TrackTile> tracks;
 	private int index;
+	private boolean isPressed = false;
+	private IRenderer rend;
+
+	private ArrayList<TrackTile> tracks;
 
 	public TrackBar() {
 		this.rend = new TrackBarRenderer(this);
 		this.init();
+	}
+
+	public int getIndex() {
+		return this.index;
+	}
+
+	public IRenderer getRenderer() {
+		return this.rend;
+	}
+
+	public ArrayList<TrackTile> getTracks() {
+		return this.tracks;
 	}
 
 	private void init() {
@@ -69,25 +83,17 @@ public class TrackBar implements ITool {
 		this.tracks.add(new DoubleSlip(new TileCoordinate(0, 0)));
 	}
 
-	@Override
-	public void load(Object[] args) throws IllegalStateException {
-		// no action required
+	private void select() {
+		if (this.index == 0) {
+			Editor.loadTool("Builder", null);
+		} else {
+			if (this.index <= this.tracks.size()) {
+				TrackTile t = this.tracks.get(this.index - 1).cloneTrack();
+				Editor.loadTool("Builder", new Object[] { t });
+			}
+		}
 	}
 
-	@Override
-	public void unload() {
-		// no action required
-	}
-
-	public ArrayList<TrackTile> getTracks() {
-		return this.tracks;
-	}
-
-	public int getIndex() {
-		return this.index;
-	}
-
-	@Override
 	public void tick() {
 		this.index = -1;
 		Point p = Mouse.position();
@@ -113,29 +119,6 @@ public class TrackBar implements ITool {
 		} else if (!button && this.isPressed) {
 			this.isPressed = false;
 		}
-	}
-
-	private void select() {
-		if (this.index == 0) {
-			Editor.loadTool("Builder", null);
-		} else {
-			if (this.index <= this.tracks.size()) {
-				TrackTile t = this.tracks.get(this.index - 1).cloneTrack();
-				Editor.loadTool("Builder", new Object[] { t });
-			}
-		}
-	}
-
-	private boolean isPressed = false;
-
-	@Override
-	public String getToolName() {
-		return null;
-	}
-
-	@Override
-	public ARenderer getRenderer() {
-		return this.rend;
 	}
 
 }

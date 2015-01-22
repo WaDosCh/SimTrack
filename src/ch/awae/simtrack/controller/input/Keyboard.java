@@ -32,8 +32,6 @@ import ch.awae.simtrack.gui.Window;
  */
 public class Keyboard {
 
-	static HashMap<Integer, Boolean> keystates = new HashMap<>();
-
 	private static KeyAdapter adapter = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -46,16 +44,21 @@ public class Keyboard {
 		}
 	};
 
+	static HashMap<Integer, Boolean> keystates = new HashMap<>();
+
 	public static void init() {
 		Window.INSTANCE.addKeyListener(Keyboard.adapter);
 	}
 
-	public static void reset() {
-		keystates.clear();
-	}
-
 	public static boolean key(int keyCode) {
 		return keystates.getOrDefault(keyCode, Boolean.FALSE).booleanValue();
+	}
+
+	public static boolean keysAnd(int... keyCode) {
+		for (int code : keyCode)
+			if (!key(code))
+				return false;
+		return true;
 	}
 
 	public static boolean keysOr(int... keyCode) {
@@ -65,11 +68,8 @@ public class Keyboard {
 		return false;
 	}
 
-	public static boolean keysAnd(int... keyCode) {
-		for (int code : keyCode)
-			if (!key(code))
-				return false;
-		return true;
+	public static void reset() {
+		keystates.clear();
 	}
 
 }

@@ -23,7 +23,6 @@ import java.awt.event.KeyEvent;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.gui.Surface;
-import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
 /**
@@ -33,23 +32,24 @@ import ch.awae.simtrack.view.SceneViewPort;
  * @version 1.2, 2015-01-22
  * @since SimTrack 0.1.1 (0.0.1)
  */
-public class Navigator implements ITool {
-
-	@Override
-	public void load(Object[] args) throws IllegalStateException {
-		// no action required
-	}
-
-	@Override
-	public void unload() {
-		// no action required
-	}
+public class Navigator {
 
 	private final static int BORDER = 20;
+	private final static int deltaZoom = 1;
+
+	private static boolean isActive = true;
+
 	private final static int MOVE_SPEED = 10;
 
-	@Override
-	public void tick() {
+	public static boolean isEnabled() {
+		return isActive;
+	}
+
+	public static void setEnabled(boolean isEnabled) {
+		isActive = isEnabled;
+	}
+
+	public static void tick() {
 		Point mouse = Mouse.position();
 		if (mouse == null)
 			return;
@@ -72,17 +72,5 @@ public class Navigator implements ITool {
 		double amount = Mouse.getScroll();
 		SceneViewPort.zoom((int) (amount * deltaZoom), mouse.x, mouse.y);
 	}
-
-	@Override
-	public String getToolName() {
-		return null;
-	}
-
-	@Override
-	public ARenderer getRenderer() {
-		return null;
-	}
-
-	private final static int deltaZoom = 1;
 
 }

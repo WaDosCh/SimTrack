@@ -40,6 +40,8 @@ public abstract class TrackTile extends Tile {
 		super(position);
 	}
 
+	public abstract TrackTile cloneTrack();
+
 	/**
 	 * Provides a list of all path supported by the tile. This paths are all
 	 * considered bidirectional.
@@ -55,7 +57,5 @@ public abstract class TrackTile extends Tile {
 	public abstract void renderBed(Graphics2D g);
 
 	public abstract void renderRail(Graphics2D g);
-
-	public abstract TrackTile cloneTrack();
 
 }

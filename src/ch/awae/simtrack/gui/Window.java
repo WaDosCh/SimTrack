@@ -27,15 +27,15 @@ import javax.swing.JFrame;
  */
 public class Window extends JFrame {
 
-	public static Window instance() {
-		return INSTANCE;
-	}
 	public static Window INSTANCE = null;
-
 	private static final long serialVersionUID = 7381994043443871855L;
 
 	public static void init(int x, int y) {
 		INSTANCE = new Window(x, y);
+	}
+
+	public static Window instance() {
+		return INSTANCE;
 	}
 
 	public Window(int x, int y) {

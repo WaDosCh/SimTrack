@@ -30,6 +30,17 @@ import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
 public interface BorderConnection {
 
 	/**
+	 * The connection directions.
+	 * 
+	 * @author Andreas Wälchli
+	 * @version 1.1 (2015-01-16)
+	 * @since SimTrack 0.0.1 (2015-01-16)
+	 */
+	public static enum Direction {
+		IN, OUT;
+	}
+
+	/**
 	 * retrieves the direction (input / output)
 	 * 
 	 * @return the direction
@@ -42,16 +53,5 @@ public interface BorderConnection {
 	 * @return the connecting edge
 	 */
 	public DirectedTileEdgeCoordinate getInterfacingEdge();
-
-	/**
-	 * The connection directions.
-	 * 
-	 * @author Andreas Wälchli
-	 * @version 1.1 (2015-01-16)
-	 * @since SimTrack 0.0.1 (2015-01-16)
-	 */
-	public static enum Direction {
-		IN, OUT;
-	}
 
 }

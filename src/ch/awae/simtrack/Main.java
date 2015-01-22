@@ -39,14 +39,6 @@ import ch.awae.simtrack.view.SceneViewPort;
  */
 public class Main {
 
-	public static void main(String[] args) {
-		// System.setProperty("sun.java2d.trace", "log");
-		System.setProperty("sun.java2d.opengl", "True");
-		System.setProperty("sun.java2d.accthreshold", "0");
-
-		SwingUtilities.invokeLater(Main::init);
-	}
-
 	private static void init() {
 		Window.init(1200, 800);
 		HighLogic.map = new Map(26, 15, new BasicBorderConnectionSpawner(20));
@@ -57,6 +49,14 @@ public class Main {
 		RenderingController.init(100);
 		Editor.start();
 		RenderingController.start();
+	}
+
+	public static void main(String[] args) {
+		// System.setProperty("sun.java2d.trace", "log");
+		System.setProperty("sun.java2d.opengl", "True");
+		System.setProperty("sun.java2d.accthreshold", "0");
+
+		SwingUtilities.invokeLater(Main::init);
 	}
 
 }

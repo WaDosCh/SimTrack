@@ -26,6 +26,13 @@ package ch.awae.simtrack.model.position;
  */
 public class TileCoordinate {
 
+	/*
+	 * exact value of the sine of 60 degrees (pi/3)
+	 */
+	private static final double SQRT3DIV2 = Math.sqrt(3) / 2;
+
+	private int u, v;
+
 	/**
 	 * Instantiates a new tile coordinate.
 	 *
@@ -40,31 +47,6 @@ public class TileCoordinate {
 		this.u = u;
 		this.v = v;
 	}
-
-	private int u, v;
-
-	/**
-	 * Gets the u component
-	 *
-	 * @return the u component
-	 */
-	public int getU() {
-		return this.u;
-	}
-
-	/**
-	 * Gets the v component
-	 *
-	 * @return the v component
-	 */
-	public int getV() {
-		return this.v;
-	}
-
-	/*
-	 * exact value of the sine of 60 degrees (pi/3)
-	 */
-	private static final double SQRT3DIV2 = Math.sqrt(3) / 2;
 
 	/**
 	 * calculates the distance between two tiles. This is the euclidian distance
@@ -84,15 +66,6 @@ public class TileCoordinate {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + this.u;
-		result = prime * result + this.v;
-		return result;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -106,6 +79,33 @@ public class TileCoordinate {
 		if (this.v != other.v)
 			return false;
 		return true;
+	}
+
+	/**
+	 * Gets the u component
+	 *
+	 * @return the u component
+	 */
+	public int getU() {
+		return this.u;
+	}
+
+	/**
+	 * Gets the v component
+	 *
+	 * @return the v component
+	 */
+	public int getV() {
+		return this.v;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + this.u;
+		result = prime * result + this.v;
+		return result;
 	}
 
 	@Override

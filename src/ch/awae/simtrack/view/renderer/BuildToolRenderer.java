@@ -27,7 +27,7 @@ import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
 /**
@@ -37,14 +37,14 @@ import ch.awae.simtrack.view.SceneViewPort;
  * @version 1.3, 2015-01-22
  * @since SimTrack 0.1.1 (0.0.1)
  */
-public class BuildToolRenderer extends ARenderer {
+public class BuildToolRenderer implements IRenderer {
 
-	private BuildTool tool;
-	private final static int hexSideHalf = (int) (50 / SceneViewPort.SQRT3);
-
-	private static Color darkRed = Color.RED.darker();
 	private static Stroke bullCursorStroke = new BasicStroke(6);
+	private static Color darkRed = Color.RED.darker();
+
+	private final static int hexSideHalf = (int) (50 / SceneViewPort.SQRT3);
 	private static Stroke railStroke = new BasicStroke(5);
+	private BuildTool tool;
 
 	public BuildToolRenderer(BuildTool tool) {
 		this.tool = tool;
@@ -56,7 +56,7 @@ public class BuildToolRenderer extends ARenderer {
 			TileCoordinate c = Mouse.hexPosition();
 			if (c == null)
 				return;
-			Graphics2D g2 = ARenderer.focusHex(c, g);
+			Graphics2D g2 = IRenderer.focusHex(c, g);
 			g2.setColor(this.tool.isValid() ? Color.RED : darkRed);
 			g2.setStroke(bullCursorStroke);
 			double angle = Math.PI / 3;
@@ -68,7 +68,7 @@ public class BuildToolRenderer extends ARenderer {
 			TrackTile t = this.tool.getTrack();
 			if (t.getPosition() == null)
 				return;
-			Graphics2D g2 = ARenderer.focusHex(t.getPosition(), g);
+			Graphics2D g2 = IRenderer.focusHex(t.getPosition(), g);
 			g2.setColor(this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED);
 			AffineTransform T = g2.getTransform();
 			t.renderBed(g2);

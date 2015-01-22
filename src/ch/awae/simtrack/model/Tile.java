@@ -29,6 +29,9 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public abstract class Tile {
 
+	/** The position. */
+	private TileCoordinate position;
+
 	/**
 	 * Instantiates a new tile.
 	 *
@@ -39,9 +42,6 @@ public abstract class Tile {
 		assert position != null;
 		this.position = position;
 	}
-
-	/** The position. */
-	private TileCoordinate position;
 
 	/**
 	 * Gets the position.

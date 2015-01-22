@@ -33,28 +33,29 @@ import ch.awae.simtrack.view.renderer.TrackRenderUtil;
  */
 public class StraightCrossing extends TrackTile implements RotatableTile {
 
+	private int rotation;
+
 	public StraightCrossing(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
 	}
 
-	private int rotation;
-
 	@Override
-	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? 2 : 1;
-		this.rotation %= 3;
-	}
-
-	@Override
-	public void mirror() {
-		// straight track is static under mirroring
+	public TrackTile cloneTrack() {
+		StraightCrossing clone = new StraightCrossing(this.getPosition());
+		clone.rotation = this.rotation;
+		return clone;
 	}
 
 	@Override
 	public float[][] getRawPaths() {
 		return new float[][] { { this.rotation, this.rotation + 3, 1 },
 				{ this.rotation + 1, (this.rotation + 4) % 6, 1 } };
+	}
+
+	@Override
+	public void mirror() {
+		// straight track is static under mirroring
 	}
 
 	@Override
@@ -74,10 +75,9 @@ public class StraightCrossing extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
-		StraightCrossing clone = new StraightCrossing(this.getPosition());
-		clone.rotation = this.rotation;
-		return clone;
+	public void rotate(boolean isClockwise) {
+		this.rotation += isClockwise ? 2 : 1;
+		this.rotation %= 3;
 	}
 
 }

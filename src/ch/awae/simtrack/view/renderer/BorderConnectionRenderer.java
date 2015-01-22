@@ -25,7 +25,7 @@ import java.awt.Stroke;
 import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.model.BorderConnection.Direction;
 import ch.awae.simtrack.model.track.BorderTrackTile;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
 /**
@@ -35,27 +35,22 @@ import ch.awae.simtrack.view.SceneViewPort;
  * @version 1.3, 2015-01-22
  * @since SimTrack 0.1.1 (0.0.1)
  */
-public class BorderConnectionRenderer extends ARenderer {
+public class BorderConnectionRenderer implements IRenderer {
+
+	private static Stroke arrowStroke = new BasicStroke(3);
+	private static Color bedColour = Color.ORANGE.darker();
+	private static Color bgColour = Color.GREEN.darker();
 
 	private final static int hexSideHalf = 1 + (int) (50 / SceneViewPort.SQRT3);
 	private final static int[][] hexEdges = {
 			{ 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf,
 					-hexSideHalf, hexSideHalf } };
-
-	private static Color bgColour = Color.GREEN.darker();
-	private static Color bedColour = Color.ORANGE.darker();
 	private static Color railColour = Color.DARK_GRAY;
 	private static Stroke railStroke = new BasicStroke(5);
-	private static Stroke arrowStroke = new BasicStroke(3);
-
-	@Override
-	public void render(Graphics2D g) {
-		HighLogic.map.getBorderTracks().values().forEach(t -> draw(t, g));
-	}
 
 	private static void draw(BorderTrackTile t, Graphics2D g) {
-		Graphics2D g2 = ARenderer.focusHex(t.getPosition(), g);
+		Graphics2D g2 = IRenderer.focusHex(t.getPosition(), g);
 		g2.setColor(bgColour);
 		g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
 		g2.rotate(-t.getEdge() * Math.PI / 3);
@@ -72,5 +67,10 @@ public class BorderConnectionRenderer extends ARenderer {
 		g2.drawLine(0, 0, -10, 10);
 		g2.drawLine(0, -10, 10, 0);
 		g2.drawLine(0, 10, 10, 0);
+	}
+
+	@Override
+	public void render(Graphics2D g) {
+		HighLogic.map.getBorderTracks().values().forEach(t -> draw(t, g));
 	}
 }

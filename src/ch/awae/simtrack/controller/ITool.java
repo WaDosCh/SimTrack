@@ -17,7 +17,7 @@
  */
 package ch.awae.simtrack.controller;
 
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 
 /**
  * describes the basic behaviour of any editor tool. Each editor tool represents
@@ -28,6 +28,10 @@ import ch.awae.simtrack.view.ARenderer;
  * @since SimTrack 0.0.1
  */
 public interface ITool {
+
+	public IRenderer getRenderer();
+
+	public String getToolName();
 
 	/**
 	 * Loads the tool. This method should be used in case a tool requires setup
@@ -40,17 +44,13 @@ public interface ITool {
 	 */
 	public void load(Object[] args) throws IllegalStateException;
 
+	public void tick();
+
 	/**
 	 * Unloads the tool. This method signals the tool that it will be
 	 * deactivated. Any external cleanups should occur here. Other than the
 	 * {@link #load(Object[])} method, this method cannot deny deactivation.
 	 */
 	public void unload();
-
-	public void tick();
-
-	public String getToolName();
-
-	public ARenderer getRenderer();
 
 }

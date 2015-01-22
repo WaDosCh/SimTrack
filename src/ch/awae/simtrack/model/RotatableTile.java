@@ -28,6 +28,15 @@ package ch.awae.simtrack.model;
 public interface RotatableTile {
 
 	/**
+	 * mirrors the part. The mirroring axis is not standardised and may be
+	 * freely chosen by the specific implementation. If no mirroring action is
+	 * desired, this method can simply return directly. This method should only
+	 * ever be called by the relevant controller. Calls from outside the defined
+	 * pathways may lead to cache inconsistencies.
+	 */
+	public void mirror();
+
+	/**
 	 * rotates the part by one edge (60 degrees). This method should only ever
 	 * be called by the relevant controller. Calls from outside the defined
 	 * pathways may lead to cache inconsistencies.
@@ -37,14 +46,5 @@ public interface RotatableTile {
 	 *            {@code true}) or counter-clockwise ({@code false})
 	 */
 	public void rotate(boolean isClockwise);
-
-	/**
-	 * mirrors the part. The mirroring axis is not standardised and may be
-	 * freely chosen by the specific implementation. If no mirroring action is
-	 * desired, this method can simply return directly. This method should only
-	 * ever be called by the relevant controller. Calls from outside the defined
-	 * pathways may lead to cache inconsistencies.
-	 */
-	public void mirror();
 
 }

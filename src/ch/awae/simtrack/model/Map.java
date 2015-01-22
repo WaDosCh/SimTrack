@@ -34,6 +34,23 @@ import ch.awae.simtrack.model.track.BorderTrackTile;
  */
 public class Map {
 
+	/** The border tracks. */
+	private HashMap<TileCoordinate, BorderTrackTile> borderTracks;
+
+	private final int hSize, vSize;
+
+	/** The signals. */
+	private HashMap<TileEdgeCoordinate, ISignal> signals;
+
+	/** The track pieces. */
+	private HashMap<TileCoordinate, TrackTile> trackPieces;
+
+	{
+		this.trackPieces = new HashMap<>();
+		this.borderTracks = new HashMap<>();
+		this.signals = new HashMap<>();
+	}
+
 	/**
 	 * Creates a new board instance
 	 * 
@@ -50,30 +67,6 @@ public class Map {
 			cons.forEach(con -> this.borderTracks.put(con.getPosition(), con));
 	}
 
-	/** The track pieces. */
-	private HashMap<TileCoordinate, TrackTile> trackPieces;
-
-	/** The border tracks. */
-	private HashMap<TileCoordinate, BorderTrackTile> borderTracks;
-
-	/** The signals. */
-	private HashMap<TileEdgeCoordinate, ISignal> signals;
-
-	{
-		this.trackPieces = new HashMap<>();
-		this.borderTracks = new HashMap<>();
-		this.signals = new HashMap<>();
-	}
-
-	/**
-	 * Gets the track pieces.
-	 *
-	 * @return the track pieces
-	 */
-	public HashMap<TileCoordinate, TrackTile> getTrackPieces() {
-		return this.trackPieces;
-	}
-
 	/**
 	 * Gets the border tracks.
 	 *
@@ -81,6 +74,15 @@ public class Map {
 	 */
 	public HashMap<TileCoordinate, BorderTrackTile> getBorderTracks() {
 		return this.borderTracks;
+	}
+
+	/**
+	 * returns the horizontal tile count.
+	 * 
+	 * @return the horizontal board size
+	 */
+	public int getHorizontalSize() {
+		return this.hSize;
 	}
 
 	/**
@@ -92,15 +94,13 @@ public class Map {
 		return this.signals;
 	}
 
-	private final int hSize, vSize;
-
 	/**
-	 * returns the horizontal tile count.
-	 * 
-	 * @return the horizontal board size
+	 * Gets the track pieces.
+	 *
+	 * @return the track pieces
 	 */
-	public int getHorizontalSize() {
-		return this.hSize;
+	public HashMap<TileCoordinate, TrackTile> getTrackPieces() {
+		return this.trackPieces;
 	}
 
 	/**

@@ -35,21 +35,16 @@ public class MapManipulator {
 
 	private static final MapManipulator INSTANCE = new MapManipulator();
 
-	public static MapManipulator instance() {
-		return INSTANCE;
-	}
-
-	// =========================================
-
 	private static void forceUpdates() {
 		@SuppressWarnings("unused")
 		Graph g = GraphFactory.buildGraph(HighLogic.map);
 		// TODO: propagate graph update to path-finders
 	}
 
-	public boolean canRemoveFrom(TileCoordinate c) {
-		assert c != null;
-		return HighLogic.map.getTrackPieces().containsKey(c);
+	// =========================================
+
+	public static MapManipulator instance() {
+		return INSTANCE;
 	}
 
 	public boolean canPlaceOn(TileCoordinate c) {
@@ -57,6 +52,11 @@ public class MapManipulator {
 		Map m = HighLogic.map;
 		return !(m.getBorderTracks().containsKey(c) || m.getTrackPieces()
 				.containsKey(c));
+	}
+
+	public boolean canRemoveFrom(TileCoordinate c) {
+		assert c != null;
+		return HighLogic.map.getTrackPieces().containsKey(c);
 	}
 
 	public void place(TrackTile t) {

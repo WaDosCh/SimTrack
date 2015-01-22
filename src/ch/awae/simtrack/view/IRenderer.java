@@ -26,20 +26,11 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * General representation of any renderer.
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-22
+ * @version 1.4, 2015-01-22
  * @since SimTrack 0.1.1 (0.0.1)
  */
-public abstract class ARenderer {
-
-	/**
-	 * The main rendering function. This will be called by the appropriate
-	 * controller whenever the renderer should be active.
-	 * 
-	 * @param g
-	 *            the graphics object to render with. This instance can be
-	 *            transformed without limitations.
-	 */
-	public abstract void render(Graphics2D g);
+@FunctionalInterface
+public interface IRenderer {
 
 	public static Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
 		Point p = SceneViewPort.getScreenCoordinate(SceneViewPort
@@ -50,5 +41,15 @@ public abstract class ARenderer {
 		g2.scale(zoomFac, zoomFac);
 		return g2;
 	}
+
+	/**
+	 * The main rendering function. This will be called by the appropriate
+	 * controller whenever the renderer should be active.
+	 * 
+	 * @param g
+	 *            the graphics object to render with. This instance can be
+	 *            transformed without limitations.
+	 */
+	public void render(Graphics2D g);
 
 }

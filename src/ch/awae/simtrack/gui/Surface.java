@@ -33,11 +33,17 @@ import ch.awae.simtrack.controller.RenderingController;
  */
 public class Surface extends JPanel {
 
+	public static Surface INSTANCE = null;
+
+	private static final long serialVersionUID = -6043801963054580971L;
+
+	public static void init(int x, int y) {
+		INSTANCE = new Surface(x, y);
+	}
+
 	public static Surface instance() {
 		return INSTANCE;
 	}
-
-	public static Surface INSTANCE = null;
 
 	public Surface(int x, int y) {
 		super();
@@ -45,12 +51,6 @@ public class Surface extends JPanel {
 		this.setMinimumSize(new Dimension(x, y));
 		this.setPreferredSize(new Dimension(x, y));
 	}
-
-	public static void init(int x, int y) {
-		INSTANCE = new Surface(x, y);
-	}
-
-	private static final long serialVersionUID = -6043801963054580971L;
 
 	@Override
 	protected void paintComponent(Graphics g) {

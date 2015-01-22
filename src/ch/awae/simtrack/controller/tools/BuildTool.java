@@ -27,7 +27,7 @@ import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.RotatableTile;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 import ch.awae.simtrack.view.renderer.BuildToolRenderer;
 
@@ -40,22 +40,35 @@ import ch.awae.simtrack.view.renderer.BuildToolRenderer;
  */
 public class BuildTool implements ITool {
 
-	private TrackTile t;
-	private ARenderer renderer;
 	private boolean isBulldoze;
+	private boolean isQ, isE, isTab;
+	private boolean isValid = false;
+
+	private IRenderer renderer;
+
+	private TrackTile t;
 
 	public BuildTool() {
 		this.renderer = new BuildToolRenderer(this);
 	}
 
-	public boolean isBulldoze() {
-		return this.isBulldoze;
+	@Override
+	public IRenderer getRenderer() {
+		return this.renderer;
+	}
+
+	@Override
+	public String getToolName() {
+		return "Builder";
 	}
 
 	public TrackTile getTrack() {
 		return this.t;
 	}
 
+	public boolean isBulldoze() {
+		return this.isBulldoze;
+	}
 	public boolean isValid() {
 		return this.isValid;
 	}
@@ -69,14 +82,6 @@ public class BuildTool implements ITool {
 			this.isBulldoze = false;
 		}
 	}
-
-	@Override
-	public void unload() {
-		// no action required
-	}
-
-	private boolean isValid = false;
-	private boolean isQ, isE, isTab;
 
 	@Override
 	public void tick() {
@@ -130,13 +135,8 @@ public class BuildTool implements ITool {
 	}
 
 	@Override
-	public String getToolName() {
-		return "Builder";
-	}
-
-	@Override
-	public ARenderer getRenderer() {
-		return this.renderer;
+	public void unload() {
+		// no action required
 	}
 
 }

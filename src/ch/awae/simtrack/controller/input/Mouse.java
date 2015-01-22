@@ -35,13 +35,13 @@ import ch.awae.simtrack.view.SceneViewPort;
  */
 public class Mouse {
 
-	static Point mouse;
-	static TileCoordinate mouseHex;
-	static boolean b1, b2, b3;
-	static double scroll;
 	private static MouseAdapter adapter;
+	static boolean b1, b2, b3;
 	static long lastScrollUpdate;
 	private final static long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
+	static Point mouse;
+	static TileCoordinate mouseHex;
+	static double scroll;
 
 	// BASIC SETUP
 	static {
@@ -54,6 +54,39 @@ public class Mouse {
 	// ADAPTER IMPLEMENTATION
 	static {
 		adapter = new MouseAdapter() {
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				this.mouseMoved(e);
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				Point p = e.getPoint();
+				if (p == null)
+					return;
+				Mouse.mouse = p;
+				Point scene = SceneViewPort.getSceneCoordinate(p);
+				TileCoordinate tile = SceneViewPort.getHexPos(scene);
+				// if (tile != null)
+				Mouse.mouseHex = tile;
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				this.setBtn(e.getButton(), true);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				this.setBtn(e.getButton(), false);
+			}
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				Mouse.scroll = e.getPreciseWheelRotation();
+				Mouse.lastScrollUpdate = System.currentTimeMillis();
+			}
 
 			private void setBtn(int button, boolean value) {
 				switch (button) {
@@ -71,59 +104,7 @@ public class Mouse {
 				}
 			}
 
-			@Override
-			public void mousePressed(MouseEvent e) {
-				this.setBtn(e.getButton(), true);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				this.setBtn(e.getButton(), false);
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				Point p = e.getPoint();
-				if (p == null)
-					return;
-				Mouse.mouse = p;
-				Point scene = SceneViewPort.getSceneCoordinate(p);
-				TileCoordinate tile = SceneViewPort.getHexPos(scene);
-				// if (tile != null)
-				Mouse.mouseHex = tile;
-			}
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				this.mouseMoved(e);
-			}
-
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				Mouse.scroll = e.getPreciseWheelRotation();
-				Mouse.lastScrollUpdate = System.currentTimeMillis();
-			}
-
 		};
-	}
-
-	public static void init() {
-		Window.INSTANCE.getContentPane().addMouseListener(adapter);
-		Window.INSTANCE.getContentPane().addMouseMotionListener(adapter);
-		Window.INSTANCE.getContentPane().addMouseWheelListener(adapter);
-	}
-
-	public static Point position() {
-		return mouse.getLocation();
-	}
-
-	public static TileCoordinate hexPosition() {
-		return mouseHex;
-	}
-
-	public static double getScroll() {
-		return (lastScrollUpdate + MAX_SCROLL_TIME_WITHOUT_UPDATE < System
-				.currentTimeMillis()) ? 0 : scroll;
 	}
 
 	public static boolean button1() {
@@ -136,6 +117,25 @@ public class Mouse {
 
 	public static boolean button3() {
 		return b3;
+	}
+
+	public static double getScroll() {
+		return (lastScrollUpdate + MAX_SCROLL_TIME_WITHOUT_UPDATE < System
+				.currentTimeMillis()) ? 0 : scroll;
+	}
+
+	public static TileCoordinate hexPosition() {
+		return mouseHex;
+	}
+
+	public static void init() {
+		Window.INSTANCE.getContentPane().addMouseListener(adapter);
+		Window.INSTANCE.getContentPane().addMouseMotionListener(adapter);
+		Window.INSTANCE.getContentPane().addMouseWheelListener(adapter);
+	}
+
+	public static Point position() {
+		return mouse.getLocation();
 	}
 
 }

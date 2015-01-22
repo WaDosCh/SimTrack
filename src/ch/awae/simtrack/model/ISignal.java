@@ -29,21 +29,6 @@ import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 public interface ISignal {
 
 	/**
-	 * retrieves the edge of the signal.
-	 * 
-	 * @return the position
-	 */
-	public TileEdgeCoordinate getPosition();
-
-	/**
-	 * sets the position of the signal.
-	 * 
-	 * @param position
-	 *            the new position
-	 */
-	public void setPosition(TileEdgeCoordinate position);
-
-	/**
 	 * indicates whether or not the signal blocks inward traffic (directions
 	 * match those of a directed edge coordinate). Block occupation is
 	 * irrelevant.
@@ -60,5 +45,20 @@ public interface ISignal {
 	 * @return {@code true} if and only if outward traffic is not allowed.
 	 */
 	public boolean blocksOutward();
+
+	/**
+	 * retrieves the edge of the signal.
+	 * 
+	 * @return the position
+	 */
+	public TileEdgeCoordinate getPosition();
+
+	/**
+	 * sets the position of the signal.
+	 * 
+	 * @param position
+	 *            the new position
+	 */
+	public void setPosition(TileEdgeCoordinate position);
 
 }

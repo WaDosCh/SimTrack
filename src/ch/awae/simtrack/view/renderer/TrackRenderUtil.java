@@ -33,16 +33,12 @@ public class TrackRenderUtil {
 
 	private final static int halfSide = (int) (50 / SceneViewPort.SQRT3);
 
-	public static void renderStraightRailbed(Graphics2D g, int count,
-			int width, int height) {
-		AffineTransform transform = g.getTransform();
-		int step = 100 / count;
-		g.translate(-50 - step / 2, 0);
-		for (int i = 0; i < count; i++) {
-			g.translate(step, 0);
-			g.fillRect(-width / 2, -height / 2, width, height);
+	public static void renderCurvedRail(Graphics2D g, int gap) {
+		for (int i = 0; i < 2; i++) {
+			int radius = 3 * halfSide + (i == 0 ? gap / 2 : -gap / 2);
+			g.drawArc(50 - radius - 2, -(3 * halfSide + radius),
+					2 * radius + 3, 2 * radius, 210, 60);
 		}
-		g.setTransform(transform);
 	}
 
 	public static void renderCurvedRailbed(Graphics2D g, int count, int width,
@@ -58,16 +54,20 @@ public class TrackRenderUtil {
 		g.setTransform(transform);
 	}
 
-	public static void renderCurvedRail(Graphics2D g, int gap) {
-		for (int i = 0; i < 2; i++) {
-			int radius = 3 * halfSide + (i == 0 ? gap / 2 : -gap / 2);
-			g.drawArc(50 - radius - 2, -(3 * halfSide + radius),
-					2 * radius + 3, 2 * radius, 210, 60);
-		}
-	}
-
 	public static void renderStraightRail(Graphics2D g, int gap) {
 		g.drawLine(-50, gap / 2, 50, gap / 2);
 		g.drawLine(-50, -gap / 2, 50, -gap / 2);
+	}
+
+	public static void renderStraightRailbed(Graphics2D g, int count,
+			int width, int height) {
+		AffineTransform transform = g.getTransform();
+		int step = 100 / count;
+		g.translate(-50 - step / 2, 0);
+		for (int i = 0; i < count; i++) {
+			g.translate(step, 0);
+			g.fillRect(-width / 2, -height / 2, width, height);
+		}
+		g.setTransform(transform);
 	}
 }

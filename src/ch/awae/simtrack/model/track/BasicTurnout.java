@@ -35,23 +35,20 @@ public class BasicTurnout extends TrackTile implements RotatableTile {
 
 	public static final float TRAVEL_COST = 1.2f;
 
+	private boolean isLeft = true;
+
+	private int rotation = 0;
 	public BasicTurnout(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
 	}
 
-	private int rotation = 0;
-	private boolean isLeft = true;
-
 	@Override
-	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? 5 : 1;
-		this.rotation %= 6;
-	}
-
-	@Override
-	public void mirror() {
-		this.isLeft = !this.isLeft;
+	public TrackTile cloneTrack() {
+		BasicTurnout clone = new BasicTurnout(this.getPosition());
+		clone.rotation = this.rotation;
+		clone.isLeft = this.isLeft;
+		return clone;
 	}
 
 	@Override
@@ -60,6 +57,11 @@ public class BasicTurnout extends TrackTile implements RotatableTile {
 				{ (this.rotation + (this.isLeft ? 1 : 5)) % 6,
 						(this.rotation + 3) % 6, TRAVEL_COST },
 				{ this.rotation, (this.rotation + 3) % 6, TRAVEL_COST } };
+	}
+
+	@Override
+	public void mirror() {
+		this.isLeft = !this.isLeft;
 	}
 
 	@Override
@@ -79,11 +81,9 @@ public class BasicTurnout extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
-		BasicTurnout clone = new BasicTurnout(this.getPosition());
-		clone.rotation = this.rotation;
-		clone.isLeft = this.isLeft;
-		return clone;
+	public void rotate(boolean isClockwise) {
+		this.rotation += isClockwise ? 5 : 1;
+		this.rotation %= 6;
 	}
 
 }

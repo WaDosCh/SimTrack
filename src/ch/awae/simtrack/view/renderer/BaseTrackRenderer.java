@@ -26,7 +26,7 @@ import java.awt.geom.AffineTransform;
 import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
 /**
@@ -36,26 +36,21 @@ import ch.awae.simtrack.view.SceneViewPort;
  * @version 1.3, 2015-01-22
  * @since SimTrack 0.1.1 (0.0.1)
  */
-public class BaseTrackRenderer extends ARenderer {
+public class BaseTrackRenderer implements IRenderer {
+	private static Color bedColour = Color.ORANGE.darker();
+	private static Color bgColour = Color.GREEN.darker();
+
 	private final static int hexSideHalf = 1 + (int) (50 / SceneViewPort.SQRT3);
 	private final static int[][] hexEdges = {
 			{ 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf,
 					-hexSideHalf, hexSideHalf } };
-
-	private static Color bgColour = Color.GREEN.darker();
-	private static Color bedColour = Color.ORANGE.darker();
 	private static Color railColour = Color.DARK_GRAY;
 	private static Stroke railStroke = new BasicStroke(5);
 
-	@Override
-	public void render(Graphics2D g) {
-		HighLogic.map.getTrackPieces().forEach((p, t) -> renderTrackTile(g, p, t));
-	}
-
 	private static void renderTrackTile(Graphics2D g, TileCoordinate pos,
 			TrackTile tile) {
-		Graphics2D g2 = ARenderer.focusHex(pos, g);
+		Graphics2D g2 = IRenderer.focusHex(pos, g);
 		g2.setColor(bgColour);
 		g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
 		g2.setColor(bedColour);
@@ -65,5 +60,11 @@ public class BaseTrackRenderer extends ARenderer {
 		g2.setColor(railColour);
 		g2.setStroke(railStroke);
 		tile.renderRail(g2);
+	}
+
+	@Override
+	public void render(Graphics2D g) {
+		HighLogic.map.getTrackPieces().forEach(
+				(p, t) -> renderTrackTile(g, p, t));
 	}
 }

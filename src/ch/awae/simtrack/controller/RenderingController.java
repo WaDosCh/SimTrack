@@ -24,10 +24,9 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 
 import ch.awae.simtrack.gui.Window;
-import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.renderer.BaseTrackRenderer;
 import ch.awae.simtrack.view.renderer.BorderConnectionRenderer;
-import ch.awae.simtrack.view.renderer.EditorRenderer;
 import ch.awae.simtrack.view.renderer.HexGridRenderer;
 
 /**
@@ -39,29 +38,29 @@ import ch.awae.simtrack.view.renderer.HexGridRenderer;
  */
 public class RenderingController {
 
-	private static Timer timer;
-	private static ArrayList<ARenderer> rends = new ArrayList<>();
-
 	private static int delC = 0;
+	private static ArrayList<IRenderer> rends = new ArrayList<>();
+
 	private static int tAvg = 0;
+	private static Timer timer;
+
+	static {
+		rends.add(new BorderConnectionRenderer());
+		rends.add(new BaseTrackRenderer());
+		rends.add(new HexGridRenderer());
+		rends.add((g) -> Editor.render(g));
+	}
 
 	public static void init(int fps) {
 		timer = new Timer(1000 / fps, e -> Window.INSTANCE.repaint());
 		timer.setRepeats(true);
 	}
 
-	static {
-		rends.add(new BorderConnectionRenderer());
-		rends.add(new BaseTrackRenderer());
-		rends.add(new HexGridRenderer());
-		rends.add(new EditorRenderer());
-	}
-
 	public static void render(Graphics g) {
 		long a = System.currentTimeMillis();
 		if (rends == null)
 			return;
-		for (ARenderer r : rends)
+		for (IRenderer r : rends)
 			r.render((Graphics2D) g.create());
 
 		// RENDERING ANALYTICS

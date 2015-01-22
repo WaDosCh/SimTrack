@@ -37,6 +37,8 @@ package ch.awae.simtrack.model.position;
  */
 public class TileEdgeCoordinate extends TileCoordinate {
 
+	private int edge;
+
 	/**
 	 * Instantiates a new tile edge coordinate.
 	 *
@@ -53,7 +55,19 @@ public class TileEdgeCoordinate extends TileCoordinate {
 		this.edge = ((edge > 2) ? (edge - 3) : edge);
 	}
 
-	private int edge;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TileEdgeCoordinate other = (TileEdgeCoordinate) obj;
+		if (this.edge != other.edge)
+			return false;
+		return true;
+	}
 
 	/**
 	 * Gets the edge index of this coordinate
@@ -70,20 +84,6 @@ public class TileEdgeCoordinate extends TileCoordinate {
 		int result = super.hashCode();
 		result = prime * result + this.edge;
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TileEdgeCoordinate other = (TileEdgeCoordinate) obj;
-		if (this.edge != other.edge)
-			return false;
-		return true;
 	}
 
 }

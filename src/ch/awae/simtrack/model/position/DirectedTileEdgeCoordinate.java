@@ -33,6 +33,8 @@ package ch.awae.simtrack.model.position;
  */
 public class DirectedTileEdgeCoordinate extends TileEdgeCoordinate {
 
+	private boolean out;
+
 	/**
 	 * Instantiates a new directed tile edge coordinate.
 	 *
@@ -54,16 +56,26 @@ public class DirectedTileEdgeCoordinate extends TileEdgeCoordinate {
 			this.out = !out;
 	}
 
-	private boolean out;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DirectedTileEdgeCoordinate other = (DirectedTileEdgeCoordinate) obj;
+		if (this.out != other.out)
+			return false;
+		return true;
+	}
 
-	/**
-	 * indicates if the coordinate is directed away from the base tile.
-	 * 
-	 * @return {@code true} if and only if the coordinate is directed away from
-	 *         the underlying tile.s
-	 */
-	public boolean isLeaving() {
-		return this.out;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + (this.out ? 1231 : 1237);
+		return result;
 	}
 
 	/**
@@ -77,32 +89,20 @@ public class DirectedTileEdgeCoordinate extends TileEdgeCoordinate {
 		return !this.out;
 	}
 
+	/**
+	 * indicates if the coordinate is directed away from the base tile.
+	 * 
+	 * @return {@code true} if and only if the coordinate is directed away from
+	 *         the underlying tile.s
+	 */
+	public boolean isLeaving() {
+		return this.out;
+	}
+
 	@Override
 	public String toString() {
 		return "DirEdge: " + this.getU() + "|" + this.getV() + "; edge "
 				+ this.getEdge() + "; out? " + this.out;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + (this.out ? 1231 : 1237);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DirectedTileEdgeCoordinate other = (DirectedTileEdgeCoordinate) obj;
-		if (this.out != other.out)
-			return false;
-		return true;
 	}
 
 }
