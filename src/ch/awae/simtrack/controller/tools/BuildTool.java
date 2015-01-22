@@ -19,21 +19,24 @@ package ch.awae.simtrack.controller.tools;
 
 import java.awt.event.KeyEvent;
 
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.ITool;
 import ch.awae.simtrack.controller.MapManipulator;
+import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.RotatableTile;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.SceneViewPort;
 import ch.awae.simtrack.view.renderer.BuildToolRenderer;
 
 /**
  * Build Tool. Used for placing and deleting track tiles
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class BuildTool implements ITool {
 
@@ -77,33 +80,33 @@ public class BuildTool implements ITool {
 
 	@Override
 	public void tick() {
-		if (Global.keyboard.key(KeyEvent.VK_ESCAPE))
-			Global.editor.loadTool("FreeHand", null);
+		if (Keyboard.key(KeyEvent.VK_ESCAPE))
+			Editor.loadTool("FreeHand", null);
 		if (!this.isBulldoze) {
 			// PLACER
-			this.t.setPosition(Global.mouse.hexPosition());
+			this.t.setPosition(Mouse.hexPosition());
 			this.isValid = (MapManipulator.instance().canPlaceOn(this.t
 					.getPosition()));
 			if (this.isValid && this.t.getPosition() != null) {
-				if (Global.mouse.button1()
-						&& Global.mouse.position().y < Global.port
+				if (Mouse.button1()
+						&& Mouse.position().y < SceneViewPort
 								.getScreenDimensions().y) {
 					MapManipulator.instance().place(this.t.cloneTrack());
 				}
 			}
-			if (Global.keyboard.key(KeyEvent.VK_Q)) {
+			if (Keyboard.key(KeyEvent.VK_Q)) {
 				if (this.t instanceof RotatableTile && !this.isQ)
 					((RotatableTile) this.t).rotate(false);
 				this.isQ = true;
 			} else
 				this.isQ = false;
-			if (Global.keyboard.key(KeyEvent.VK_E)) {
+			if (Keyboard.key(KeyEvent.VK_E)) {
 				if (this.t instanceof RotatableTile && !this.isE)
 					((RotatableTile) this.t).rotate(true);
 				this.isE = true;
 			} else
 				this.isE = false;
-			if (Global.keyboard.key(KeyEvent.VK_TAB)) {
+			if (Keyboard.key(KeyEvent.VK_TAB)) {
 				if (this.t instanceof RotatableTile && !this.isTab)
 					((RotatableTile) this.t).mirror();
 				this.isTab = true;
@@ -111,14 +114,14 @@ public class BuildTool implements ITool {
 				this.isTab = false;
 		} else {
 			// BULLDOZE
-			TileCoordinate pos = Global.mouse.hexPosition();
+			TileCoordinate pos = Mouse.hexPosition();
 			if (pos != null)
 				this.isValid = MapManipulator.instance().canRemoveFrom(pos);
 			else
 				this.isValid = false;
 			if (this.isValid) {
-				if (Global.mouse.button1()
-						&& Global.mouse.position().y < Global.port
+				if (Mouse.button1()
+						&& Mouse.position().y < SceneViewPort
 								.getScreenDimensions().y) {
 					MapManipulator.instance().remove(pos);
 				}

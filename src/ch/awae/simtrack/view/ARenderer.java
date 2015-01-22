@@ -20,15 +20,14 @@ package ch.awae.simtrack.view;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-import ch.awae.simtrack.Global;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * General representation of any renderer.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.3, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public abstract class ARenderer {
 
@@ -43,9 +42,9 @@ public abstract class ARenderer {
 	public abstract void render(Graphics2D g);
 
 	public static Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
-		SceneViewPort port = Global.port;
-		Point p = port.getScreenCoordinate(port.getScenePos(hex));
-		double zoomFac = 0.01 * port.getZoom();
+		Point p = SceneViewPort.getScreenCoordinate(SceneViewPort
+				.getScenePos(hex));
+		double zoomFac = 0.01 * SceneViewPort.getZoom();
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.translate(p.x, p.y);
 		g2.scale(zoomFac, zoomFac);

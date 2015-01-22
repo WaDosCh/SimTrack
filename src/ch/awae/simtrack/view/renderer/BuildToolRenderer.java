@@ -20,9 +20,10 @@ package ch.awae.simtrack.view.renderer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -33,13 +34,17 @@ import ch.awae.simtrack.view.SceneViewPort;
  * Renderer for the {@link BuildTool}
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.3, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class BuildToolRenderer extends ARenderer {
 
 	private BuildTool tool;
 	private final static int hexSideHalf = (int) (50 / SceneViewPort.SQRT3);
+
+	private static Color darkRed = Color.RED.darker();
+	private static Stroke bullCursorStroke = new BasicStroke(6);
+	private static Stroke railStroke = new BasicStroke(5);
 
 	public BuildToolRenderer(BuildTool tool) {
 		this.tool = tool;
@@ -48,12 +53,12 @@ public class BuildToolRenderer extends ARenderer {
 	@Override
 	public void render(Graphics2D g) {
 		if (this.tool.isBulldoze()) {
-			TileCoordinate c = Global.mouse.hexPosition();
+			TileCoordinate c = Mouse.hexPosition();
 			if (c == null)
 				return;
 			Graphics2D g2 = ARenderer.focusHex(c, g);
-			g2.setColor(this.tool.isValid() ? Color.RED : Color.RED.darker());
-			g2.setStroke(new BasicStroke(6));
+			g2.setColor(this.tool.isValid() ? Color.RED : darkRed);
+			g2.setStroke(bullCursorStroke);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {
 				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
@@ -69,7 +74,7 @@ public class BuildToolRenderer extends ARenderer {
 			t.renderBed(g2);
 			g2.setTransform(T);
 			g2.setColor(this.tool.isValid() ? Color.GRAY : Color.RED);
-			g2.setStroke(new BasicStroke(5));
+			g2.setStroke(railStroke);
 			t.renderRail(g2);
 		}
 	}

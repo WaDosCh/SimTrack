@@ -33,8 +33,8 @@ import ch.awae.simtrack.view.ARenderer;
  * Track tool-bar renderer
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.3, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class TrackBarRenderer extends ARenderer {
 
@@ -70,6 +70,7 @@ public class TrackBarRenderer extends ARenderer {
 				g.drawLine(-25, -25, 25, 25);
 				g.drawLine(-25, 25, 25, -25);
 			} else {
+				g.scale(0.8, 0.8);
 				// rail
 				g.setColor(this.rbeds);
 				g.setStroke(this.rlst);
@@ -79,6 +80,8 @@ public class TrackBarRenderer extends ARenderer {
 				g.setColor(this.rails);
 				tracks.get(i).renderRail(g);
 				g.setTransform(Tx);
+
+				g.scale(1.25, 1.25);
 			}
 			g.translate(100, 0);
 		}

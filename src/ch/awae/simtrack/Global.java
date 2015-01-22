@@ -17,10 +17,7 @@
  */
 package ch.awae.simtrack;
 
-import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.RenderingController;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.view.SceneViewPort;
@@ -30,7 +27,7 @@ import ch.awae.simtrack.view.SceneViewPort;
  * 
  * @author Andreas Wälchli
  * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class Global {
 
@@ -38,10 +35,7 @@ public class Global {
 	public static RenderingController rc;
 	public static Map map;
 	public static SceneViewPort port;
-	public static Mouse mouse;
-	public static Editor editor;
 	public static int ScreenW;
 	public static int ScreenH;
-	public static Keyboard keyboard;
 
 }

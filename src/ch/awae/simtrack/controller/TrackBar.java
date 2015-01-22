@@ -21,6 +21,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.Global;
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.track.BasicTurnout;
@@ -40,8 +41,8 @@ import ch.awae.simtrack.view.renderer.TrackBarRenderer;
  * Track tool-bar used for track selection while editing the board
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class TrackBar implements ITool {
 
@@ -89,7 +90,7 @@ public class TrackBar implements ITool {
 	@Override
 	public void tick() {
 		this.index = -1;
-		Point p = Global.mouse.position();
+		Point p = Mouse.position();
 		if (p == null) {
 			p = new Point(0, 0);
 		}
@@ -105,7 +106,7 @@ public class TrackBar implements ITool {
 			return;
 		this.index = index;
 		// index holds the track in the menu
-		boolean button = Global.mouse.button1();
+		boolean button = Mouse.button1();
 		if (button && !this.isPressed) {
 			this.isPressed = true;
 			this.select();
@@ -116,11 +117,11 @@ public class TrackBar implements ITool {
 
 	private void select() {
 		if (this.index == 0) {
-			Global.editor.loadTool("Builder", null);
+			Editor.loadTool("Builder", null);
 		} else {
 			if (this.index <= this.tracks.size()) {
 				TrackTile t = this.tracks.get(this.index - 1).cloneTrack();
-				Global.editor.loadTool("Builder", new Object[] { t });
+				Editor.loadTool("Builder", new Object[] { t });
 			}
 		}
 	}

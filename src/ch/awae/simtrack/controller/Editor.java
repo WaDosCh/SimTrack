@@ -32,53 +32,53 @@ import ch.awae.simtrack.view.ARenderer;
  * complexity by delegating the user actions to well-defined tools.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-17
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class Editor {
 
-	private HashMap<String, ITool> tools = new HashMap<>();
-	private ARenderer renderer;
-	private ITool currentTool;
-	private Timer t;
-	private Navigator nav = new Navigator();
-	private TrackBar bar = new TrackBar();
-	private ARenderer barRend;
+	private static HashMap<String, ITool> tools = new HashMap<>();
+	private static ARenderer renderer;
+	private static ITool currentTool;
+	private static Timer t;
+	private static Navigator nav = new Navigator();
+	private static TrackBar bar = new TrackBar();
+	private static ARenderer barRend;
 
-	public Editor(int logicTicks) {
-		this.loadTools();
-		this.t = new Timer(1000 / logicTicks, e -> this.tick());
-		this.t.setRepeats(true);
-		this.barRend = this.bar.getRenderer();
-		this.nav.load(null);
-		this.bar.load(null);
+	public static void init(int logicTicks) {
+		loadTools();
+		t = new Timer(1000 / logicTicks, e -> Editor.tick());
+		t.setRepeats(true);
+		barRend = bar.getRenderer();
+		nav.load(null);
+		bar.load(null);
 	}
 
-	public void tick() {
-		this.nav.tick();
-		this.bar.tick();
-		if (this.currentTool != null)
-			this.currentTool.tick();
+	private static void tick() {
+		nav.tick();
+		bar.tick();
+		if (currentTool != null)
+			currentTool.tick();
 	}
 
-	public void render(Graphics2D g) {
-		if (this.renderer != null)
-			this.renderer.render((Graphics2D) g.create());
-		this.barRend.render(g);
+	public static void render(Graphics2D g) {
+		if (renderer != null)
+			renderer.render((Graphics2D) g.create());
+		barRend.render(g);
 	}
 
-	public void addTool(ITool tool) {
-		this.tools.put(tool.getToolName(), tool);
-		if (this.currentTool == null) {
-			this.loadTool(tool.getToolName(), null);
+	public static void addTool(ITool tool) {
+		tools.put(tool.getToolName(), tool);
+		if (currentTool == null) {
+			loadTool(tool.getToolName(), null);
 		}
 	}
 
-	public boolean loadTool(String name, Object[] args) {
-		ITool next = this.tools.get(name);
+	public static boolean loadTool(String name, Object[] args) {
+		ITool next = tools.get(name);
 		if (next == null)
 			return false;
-		if (this.currentTool == next) {
+		if (currentTool == next) {
 			next.unload();
 			next.load(args);
 			return true;
@@ -89,24 +89,24 @@ public class Editor {
 			// could not load. do not make the switch and leave old tool on!
 			return false;
 		}
-		if (this.currentTool != null)
-			this.currentTool.unload();
-		this.currentTool = next;
-		this.renderer = this.currentTool.getRenderer();
+		if (currentTool != null)
+			currentTool.unload();
+		currentTool = next;
+		renderer = currentTool.getRenderer();
 		return true;
 	}
 
-	private void loadTools() {
-		this.addTool(new FreeTool());
-		this.addTool(new BuildTool());
+	private static void loadTools() {
+		addTool(new FreeTool());
+		addTool(new BuildTool());
 	}
 
-	public void start() {
-		this.t.start();
+	public static void start() {
+		t.start();
 	}
 
-	public void stop() {
-		this.t.stop();
+	public static void stop() {
+		t.stop();
 	}
 
 }

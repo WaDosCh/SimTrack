@@ -19,21 +19,21 @@ package ch.awae.simtrack.view.renderer;
 
 import java.awt.Graphics2D;
 
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.view.ARenderer;
 
 /**
  * Editor rendering delegation
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class EditorRenderer extends ARenderer {
 
 	@Override
 	public void render(Graphics2D g) {
-		Global.editor.render(g);
+		Editor.render(g);
 	}
 
 }

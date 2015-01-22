@@ -27,48 +27,47 @@ import ch.awae.simtrack.gui.Window;
  * Keyboard Observer
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class Keyboard {
 
-	HashMap<Integer, Boolean> keystates = new HashMap<>();
+	static HashMap<Integer, Boolean> keystates = new HashMap<>();
 
-	private KeyAdapter a = new KeyAdapter() {
+	private static KeyAdapter adapter = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.TRUE);
+			Keyboard.keystates.put(e.getKeyCode(), Boolean.TRUE);
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.FALSE);
+			Keyboard.keystates.put(e.getKeyCode(), Boolean.FALSE);
 		}
 	};
 
-	public Keyboard(Window w) {
-		w.addKeyListener(this.a);
+	public static void bindTo(Window w) {
+		w.addKeyListener(Keyboard.adapter);
 	}
 
-	public void reset() {
-		this.keystates.clear();
+	public static void reset() {
+		keystates.clear();
 	}
 
-	public boolean key(int keyCode) {
-		return this.keystates.getOrDefault(keyCode, Boolean.FALSE)
-				.booleanValue();
+	public static boolean key(int keyCode) {
+		return keystates.getOrDefault(keyCode, Boolean.FALSE).booleanValue();
 	}
 
-	public boolean keysOr(int... keyCode) {
+	public static boolean keysOr(int... keyCode) {
 		for (int code : keyCode)
-			if (this.key(code))
+			if (key(code))
 				return true;
 		return false;
 	}
 
-	public boolean keysAnd(int... keyCode) {
+	public static boolean keysAnd(int... keyCode) {
 		for (int code : keyCode)
-			if (!this.key(code))
+			if (!key(code))
 				return false;
 		return true;
 	}

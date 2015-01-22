@@ -19,16 +19,19 @@ package ch.awae.simtrack.controller;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.view.ARenderer;
+import ch.awae.simtrack.view.SceneViewPort;
 
 /**
  * Navigation Tool. Used for Scene movement & zoom
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class Navigator implements ITool {
 
@@ -47,27 +50,27 @@ public class Navigator implements ITool {
 
 	@Override
 	public void tick() {
-		Point mouse = Global.mouse.position();
-		Keyboard k = Global.keyboard;
+		Point mouse = Mouse.position();
 		if (mouse == null)
 			return;
 		int dx = 0, dy = 0;
-		if (mouse.x < BORDER || k.keysOr(KeyEvent.VK_A, KeyEvent.VK_LEFT))
+		if (mouse.x < BORDER
+				|| Keyboard.keysOr(KeyEvent.VK_A, KeyEvent.VK_LEFT))
 			dx = 1;
-		if (mouse.y < BORDER || k.keysOr(KeyEvent.VK_W, KeyEvent.VK_UP))
+		if (mouse.y < BORDER || Keyboard.keysOr(KeyEvent.VK_W, KeyEvent.VK_UP))
 			dy = 1;
 		if (mouse.x > Global.ScreenW - BORDER
-				|| k.keysOr(KeyEvent.VK_D, KeyEvent.VK_RIGHT))
+				|| Keyboard.keysOr(KeyEvent.VK_D, KeyEvent.VK_RIGHT))
 			dx = -1;
 		if (mouse.y > Global.ScreenH - BORDER
-				|| k.keysOr(KeyEvent.VK_S, KeyEvent.VK_DOWN))
+				|| Keyboard.keysOr(KeyEvent.VK_S, KeyEvent.VK_DOWN))
 			dy = -1;
 		dx *= MOVE_SPEED;
 		dy *= MOVE_SPEED;
-		Global.port.moveScene(dx, dy);
+		SceneViewPort.moveScene(dx, dy);
 
-		double amount = Global.mouse.getScroll();
-		Global.port.zoom((int) (amount * deltaZoom), mouse.x, mouse.y);
+		double amount = Mouse.getScroll();
+		SceneViewPort.zoom((int) (amount * deltaZoom), mouse.x, mouse.y);
 	}
 
 	@Override

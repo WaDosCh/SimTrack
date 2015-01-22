@@ -30,38 +30,27 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * 
  * @author Andreas Wälchli
  * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class SceneViewPort {
 
-	private int minZoom = 10;
-	private int zoom;
-	private Point sceneCorner;
-	private Point sceneDimensions;
-	private Point screenDimensions;
+	private static int minZoom = 10, zoom;
+	private static Point sceneCorner, sceneDimensions, screenDimensions;
 
 	public static final double SQRT3 = Math.sqrt(3);
 
-	/**
-	 * creates a new instance.
-	 * 
-	 * @param m
-	 * @param w
-	 */
-	public SceneViewPort(Map m, Window w) {
+	public static void init(Map m, Window w) {
 		int hScreen = w.getWidth();
 		int vScreen = w.getContentPane().getHeight() - 150;
-		this.screenDimensions = new Point(hScreen, vScreen);
-		{
-			double minH = hScreen / (m.getHorizontalSize() - 1.0);
-			if (minH > this.minZoom)
-				this.minZoom = (int) Math.ceil(minH);
-		}
-		this.zoom = this.minZoom;
-		this.sceneDimensions = new Point((m.getHorizontalSize() - 1) * 100,
+		screenDimensions = new Point(hScreen, vScreen);
+		double minH = hScreen / (m.getHorizontalSize() - 1.0);
+		if (minH > minZoom)
+			minZoom = (int) Math.ceil(minH);
+		zoom = minZoom;
+		sceneDimensions = new Point((m.getHorizontalSize() - 1) * 100,
 				(int) ((m.getVerticalSize() - 1) * SQRT3 * 50));
-		this.sceneCorner = new Point(0, 0);
-		this.updateCorner();
+		sceneCorner = new Point(0, 0);
+		updateCorner();
 	}
 
 	/**
@@ -72,20 +61,20 @@ public class SceneViewPort {
 	 * @param fixX
 	 *            x-coordinate of the fixed point
 	 * @param fixY
-	 *            y-corrdinate of the fixed point
+	 *            y-coordinate of the fixed point
 	 */
-	public void zoom(int delta, int fixX, int fixY) {
-		int newZoom = this.zoom + delta;
-		if (newZoom < this.minZoom)
-			newZoom = this.minZoom;
-		int x = this.sceneCorner.x - fixX, y = this.sceneCorner.y - fixY;
+	public static void zoom(int delta, int fixX, int fixY) {
+		int newZoom = zoom + delta;
+		if (newZoom < minZoom)
+			newZoom = minZoom;
+		int x = sceneCorner.x - fixX, y = sceneCorner.y - fixY;
 		x *= newZoom;
 		y *= newZoom;
-		x /= this.zoom;
-		y /= this.zoom;
-		this.sceneCorner = new Point(x + fixX, y + fixY);
-		this.zoom = newZoom;
-		this.updateCorner();
+		x /= zoom;
+		y /= zoom;
+		sceneCorner = new Point(x + fixX, y + fixY);
+		zoom = newZoom;
+		updateCorner();
 	}
 
 	/**
@@ -93,17 +82,15 @@ public class SceneViewPort {
 	 * 
 	 * @return the screen dimensions
 	 */
-	public Point getScreenDimensions() {
-		return this.screenDimensions;
+	public static Point getScreenDimensions() {
+		return screenDimensions;
 	}
 
-	private void updateCorner() {
-		double minX = this.screenDimensions.x
-				- (0.01 * this.zoom * this.sceneDimensions.x);
-		double minY = this.screenDimensions.y
-				- (0.01 * this.zoom * this.sceneDimensions.y);
-		int x = this.sceneCorner.x;
-		int y = this.sceneCorner.y;
+	private static void updateCorner() {
+		double minX = screenDimensions.x - (0.01 * zoom * sceneDimensions.x);
+		double minY = screenDimensions.y - (0.01 * zoom * sceneDimensions.y);
+		int x = sceneCorner.x;
+		int y = sceneCorner.y;
 		if (x > 0)
 			x = 0;
 		if (x < minX)
@@ -112,7 +99,7 @@ public class SceneViewPort {
 			y = 0;
 		if (y < minY)
 			y = (int) minY;
-		this.sceneCorner = new Point(x, y);
+		sceneCorner = new Point(x, y);
 	}
 
 	/**
@@ -122,8 +109,8 @@ public class SceneViewPort {
 	 * 
 	 * @return the inner hex radius
 	 */
-	public int getZoom() {
-		return this.zoom;
+	public static int getZoom() {
+		return zoom;
 	}
 
 	/**
@@ -134,7 +121,7 @@ public class SceneViewPort {
 	 *            the hex to convert to scene coordinates
 	 * @return the position of the hex centre on the scene.
 	 */
-	public Point getScenePos(TileCoordinate hexCoor) {
+	public static Point getScenePos(TileCoordinate hexCoor) {
 		int x = (2 * hexCoor.getU() + hexCoor.getV()) * 50;
 		int y = (int) (hexCoor.getV() * SQRT3 * 50);
 		return new Point(x, y);
@@ -146,7 +133,7 @@ public class SceneViewPort {
 	 * @param p
 	 * @return the hex closest to the given scene coordinates.
 	 */
-	public TileCoordinate getHexPos(Point p) {
+	public static TileCoordinate getHexPos(Point p) {
 		double v = (2.0 * p.y) / (SQRT3 * 100);
 		double u = (1.0 * p.x) / 100 - v / 2;
 		int baseU = (int) Math.floor(u);
@@ -181,24 +168,24 @@ public class SceneViewPort {
 	 *            the scene coordinate
 	 * @return the screen coordinate
 	 */
-	public Point getScreenCoordinate(Point p) {
+	public static Point getScreenCoordinate(Point p) {
 		double x = p.x;
 		double y = p.y;
-		x *= 0.01 * this.zoom;
-		y *= 0.01 * this.zoom; // here : screen scaled scene coordinate
-		x += this.sceneCorner.x;
-		y += this.sceneCorner.y;
+		x *= 0.01 * zoom;
+		y *= 0.01 * zoom; // here : screen scaled scene coordinate
+		x += sceneCorner.x;
+		y += sceneCorner.y;
 		return new Point((int) x, (int) y);
 	}
 
-	public int getMinZoom() {
-		return this.minZoom;
+	public static int getMinZoom() {
+		return minZoom;
 	}
 
-	public void moveScene(int dx, int dy) {
-		this.sceneCorner.x += dx;
-		this.sceneCorner.y += dy;
-		this.updateCorner();
+	public static void moveScene(int dx, int dy) {
+		sceneCorner.x += dx;
+		sceneCorner.y += dy;
+		updateCorner();
 	}
 
 	/**
@@ -208,11 +195,11 @@ public class SceneViewPort {
 	 *            the screen coordinate
 	 * @return the scene coordinate
 	 */
-	public Point getSceneCoordinate(Point p) {
-		double x = p.x - this.sceneCorner.x;
-		double y = p.y - this.sceneCorner.y;
-		x /= 0.01 * this.zoom;
-		y /= 0.01 * this.zoom;
+	public static Point getSceneCoordinate(Point p) {
+		double x = p.x - sceneCorner.x;
+		double y = p.y - sceneCorner.y;
+		x /= 0.01 * zoom;
+		y /= 0.01 * zoom;
 		return new Point((int) x, (int) y);
 	}
 }

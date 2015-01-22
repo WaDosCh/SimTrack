@@ -20,6 +20,7 @@ package ch.awae.simtrack.view.renderer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.model.BorderConnection.Direction;
@@ -31,8 +32,8 @@ import ch.awae.simtrack.view.SceneViewPort;
  * Renderer for the "border tracks"
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.3, 2015-01-22
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class BorderConnectionRenderer extends ARenderer {
 
@@ -42,6 +43,12 @@ public class BorderConnectionRenderer extends ARenderer {
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf,
 					-hexSideHalf, hexSideHalf } };
 
+	private static Color bgColour = Color.GREEN.darker();
+	private static Color bedColour = Color.ORANGE.darker();
+	private static Color railColour = Color.DARK_GRAY;
+	private static Stroke railStroke = new BasicStroke(5);
+	private static Stroke arrowStroke = new BasicStroke(3);
+
 	@Override
 	public void render(Graphics2D g) {
 		Global.map.getBorderTracks().values().forEach(t -> draw(t, g));
@@ -49,17 +56,15 @@ public class BorderConnectionRenderer extends ARenderer {
 
 	private static void draw(BorderTrackTile t, Graphics2D g) {
 		Graphics2D g2 = ARenderer.focusHex(t.getPosition(), g);
-		g2.setColor(Color.GREEN.darker());
+		g2.setColor(bgColour);
 		g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
 		g2.rotate(-t.getEdge() * Math.PI / 3);
-		g2.setColor(Color.orange.darker());
+		g2.setColor(bedColour);
 		TrackRenderUtil.renderStraightRailbed(g2, 10, 5, 45);
-		// TrackRenderUtil.renderCurvedRailbed(g2, 8, 5, 40);
-		g2.setColor(Color.DARK_GRAY);
-		g2.setStroke(new BasicStroke(5));
+		g2.setColor(railColour);
+		g2.setStroke(railStroke);
 		TrackRenderUtil.renderStraightRail(g2, 30);
-		// TrackRenderUtil.renderCurvedRail(g2, 30);
-		g2.setStroke(new BasicStroke(3));
+		g2.setStroke(arrowStroke);
 		g2.translate(30, 0);
 		if (t.getDirection() == Direction.OUT)
 			g2.scale(-1, 1);

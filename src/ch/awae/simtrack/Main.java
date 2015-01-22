@@ -35,7 +35,7 @@ import ch.awae.simtrack.view.SceneViewPort;
  * 
  * @author Andreas Wälchli
  * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class Main {
 
@@ -55,13 +55,14 @@ public class Main {
 		Global.ScreenW = Global.window.getContentPane().getWidth();
 		Global.ScreenH = Global.window.getContentPane().getHeight();
 		Global.map = new Map(26, 15, new BasicBorderConnectionSpawner(20));
-		Global.port = new SceneViewPort(Global.map, Global.window);
-		Global.editor = new Editor(50);
 		Global.rc = new RenderingController(Global.window, 50);
-		Global.mouse = new Mouse(Global.window);
-		Global.keyboard = new Keyboard(Global.window);
+
+		SceneViewPort.init(Global.map, Global.window);
+		Mouse.bindTo(Global.window);
+		Keyboard.bindTo(Global.window);
+		Editor.init(50);
 		Global.rc.start();
-		Global.editor.start();
+		Editor.start();
 	}
 
 }
