@@ -24,15 +24,21 @@ import ch.awae.simtrack.controller.IBorderConnectionSpawner;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.track.BorderTrackTile;
+import ch.awae.simtrack.view.Graph;
 
 /**
  * Model for the map itself.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class Map {
+
+	/** @since 1.3 **/
+	public Graph graph = null;
+	/** @since 1.3 **/
+	public ArrayList<Block> blocks = null;
 
 	/** The border tracks. */
 	private HashMap<TileCoordinate, BorderTrackTile> borderTracks;
@@ -110,6 +116,22 @@ public class Map {
 	 */
 	public int getVerticalSize() {
 		return this.vSize;
+	}
+
+	/**
+	 * retrieves the signal at the given position
+	 * 
+	 * @param t
+	 *            the position to retrieve for
+	 * @return the signal at the given position
+	 * @since 1.3 (SimTrack 0.1.1)
+	 */
+	public ISignal getSignalAt(TileEdgeCoordinate t) {
+		return this.signals.getOrDefault(t, null);
+	}
+
+	public TrackTile getTileAt(TileCoordinate t) {
+		return this.trackPieces.getOrDefault(t, this.borderTracks.get(t));
 	}
 
 }

@@ -69,6 +69,7 @@ public class BuildTool implements ITool {
 	public boolean isBulldoze() {
 		return this.isBulldoze;
 	}
+
 	public boolean isValid() {
 		return this.isValid;
 	}
@@ -90,13 +91,12 @@ public class BuildTool implements ITool {
 		if (!this.isBulldoze) {
 			// PLACER
 			this.t.setPosition(Mouse.hexPosition());
-			this.isValid = (MapManipulator.instance().canPlaceOn(this.t
-					.getPosition()));
+			this.isValid = (MapManipulator.canPlaceOn(this.t.getPosition()));
 			if (this.isValid && this.t.getPosition() != null) {
 				if (Mouse.button1()
 						&& Mouse.position().y < SceneViewPort
 								.getScreenDimensions().y) {
-					MapManipulator.instance().place(this.t.cloneTrack());
+					MapManipulator.place(this.t.cloneTrack());
 				}
 			}
 			if (Keyboard.key(KeyEvent.VK_Q)) {
@@ -121,14 +121,14 @@ public class BuildTool implements ITool {
 			// BULLDOZE
 			TileCoordinate pos = Mouse.hexPosition();
 			if (pos != null)
-				this.isValid = MapManipulator.instance().canRemoveFrom(pos);
+				this.isValid = MapManipulator.canRemoveFrom(pos);
 			else
 				this.isValid = false;
 			if (this.isValid) {
 				if (Mouse.button1()
 						&& Mouse.position().y < SceneViewPort
 								.getScreenDimensions().y) {
-					MapManipulator.instance().remove(pos);
+					MapManipulator.remove(pos);
 				}
 			}
 		}

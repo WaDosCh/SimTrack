@@ -25,10 +25,12 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * This class provides an abstract definition of a track tile.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.4, 2015-01-23
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public abstract class TrackTile extends Tile {
+
+	private Block block = null;
 
 	/**
 	 * Instantiates a new track tile.
@@ -41,6 +43,14 @@ public abstract class TrackTile extends Tile {
 	}
 
 	public abstract TrackTile cloneTrack();
+
+	/**
+	 * @return the block
+	 * @since 1.4 (SimTrack 0.1.1)
+	 */
+	public Block getBlock() {
+		return this.block;
+	}
 
 	/**
 	 * Provides a list of all path supported by the tile. This paths are all
@@ -58,4 +68,29 @@ public abstract class TrackTile extends Tile {
 
 	public abstract void renderRail(Graphics2D g);
 
+	/**
+	 * 
+	 * @param block
+	 *            the new block
+	 * @since 1.4 (SimTrack 0.1.1)
+	 */
+	public void setBlock(Block block) {
+		this.block = block;
+	}
+
+	/**
+	 * indicates if the tile connects at a given edge
+	 * 
+	 * @param edge
+	 *            the edge to check for
+	 * @return {@code true} if it connects
+	 * @since 1.4 (SimTrack 0.1.1)
+	 */
+	public boolean connectsToEdge(int edge) {
+		float[][] paths = this.getRawPaths();
+		for (int i = 0; i < 2 * paths.length; i++)
+			if (edge == (int) paths[i % paths.length][i < paths.length ? 0 : 1])
+				return true;
+		return false;
+	}
 }
