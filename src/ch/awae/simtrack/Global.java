@@ -17,7 +17,9 @@
  */
 package ch.awae.simtrack;
 
+import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.RenderingController;
+import ch.awae.simtrack.gui.MouseObserver;
 import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.view.SceneViewPort;
@@ -28,5 +30,9 @@ public class Global {
 	public static RenderingController rc;
 	public static Map map;
 	public static SceneViewPort port;
+	public static MouseObserver mouseObserver;
+	public static Editor editor;
+	public static int ScreenW;
+	public static int ScreenH;
 
 }

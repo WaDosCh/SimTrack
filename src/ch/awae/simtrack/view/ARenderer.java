@@ -42,12 +42,11 @@ public abstract class ARenderer {
 	 */
 	public abstract void render(Graphics2D g);
 
-	@SuppressWarnings("static-method")
-	protected final Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
+	public static Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
 		SceneViewPort port = Global.port;
 		Point p = port.getScreenCoordinate(port.getScenePos(hex));
-		double zoomFac = port.getMaxZoom();
-		zoomFac /= port.getZoom();
+		// System.out.println(p);
+		double zoomFac = 0.01 * port.getZoom();
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.translate(p.x, p.y);
 		g2.scale(zoomFac, zoomFac);

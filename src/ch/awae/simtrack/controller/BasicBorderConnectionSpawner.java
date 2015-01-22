@@ -55,55 +55,47 @@ public class BasicBorderConnectionSpawner implements IBorderConnectionSpawner {
 
 		for (int i = 0; i < this.connectionCount; i++) {
 
-			final int h = map.getHorizontalSize();
-			final int v = map.getVerticalSize();
+			final int ho = map.getHorizontalSize();
+			final int ve = map.getVerticalSize();
 
-			// top / bottom edge may spawn anywhere. => 2*h possibilities
-			// left / right edge may only spawn on outer tiles. => v - 3
-			// possibilities. the corners should not be occupied. => total
-			// possible:
-			// 2 * h + v - 7
+			boolean isHo = this.random.nextInt(ho + ve / 2) < ho;
+			boolean isTo = this.random.nextBoolean();
 
-			int slots = 2 * h + v - 7;
+			int r1 = this.random.nextInt(isHo ? ho : ((ve + 1) / 2));
 
-			if (slots <= 0)
-				return null;
-
-			// STEP 1: choose border
-			int slot = this.random.nextInt(slots);
-
-			int U, V, edge;
-
+			int edge, u, v;
 			// STEP 2: determine position / orient
-			if (slot < h - 2) {
-				slot += 1;
-				// TOP
-				U = slot;
-				V = 0;
-				edge = this.random.nextInt(2) + 4;
-			} else if (slot < h - 4) {
-				slot -= h - 1;
-				// BOTTOM
-				U = slot;
-				V = v - 1;
-				edge = this.random.nextInt(2) + 1;
-			} else if (slot < h - 4 + (v - 3) / 2) {
-				slot -= h - 3 + (v - 3) / 2;
-				// LEFT
-				U = -slot;
-				V = 2 * slot;
-				edge = (this.random.nextInt(3) + 5) % 6;
+			if (isHo) {
+				v = isTo ? 0 : ve - 1;
+				u = r1 - v / 2;
+				if (r1 == 0)
+					// left corners
+					edge = isTo ? 5 : 1;
+				else if (r1 == ho - 1)
+					// right corners
+					edge = isTo ? 4 : 2;
+				else if (isTo)
+					// top edge
+					edge = this.random.nextBoolean() ? 4 : 5;
+				else
+					// bottom edge
+					edge = this.random.nextBoolean() ? 1 : 2;
 			} else {
-				slot -= h + v - 6;
-				// RIGHT
-				U = h - 1 - slot;
-				V = 2 * slot;
-				edge = this.random.nextInt(3) + 2;
+				r1 += 2;
+				r1 *= 2;
+				v = r1;
+				if (r1 + 1 >= ve)
+					continue;
+				u = (isTo ? 0 : ho - 1) - (v / 2);
+				edge = this.random.nextInt(3)
+						+ (this.random.nextBoolean() ? 5 : 2);
+				if (edge > 5)
+					edge -= 6;
 			}
 
 			// STEP 3: assemble
 			BorderTrackTile tile = new BorderTrackTile(
-					new TileCoordinate(U, V), edge, this.random.nextBoolean());
+					new TileCoordinate(u, v), edge, this.random.nextBoolean());
 
 			list.add(tile);
 		}

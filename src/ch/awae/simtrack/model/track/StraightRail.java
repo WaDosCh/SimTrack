@@ -17,9 +17,12 @@
  */
 package ch.awae.simtrack.model.track;
 
+import java.awt.Graphics2D;
+
 import ch.awae.simtrack.model.RotatableTile;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Implementation for a straight rail piece
@@ -57,6 +60,31 @@ public class StraightRail extends TrackTile implements RotatableTile {
 	@Override
 	public float[][] getRawPaths() {
 		return new float[][] { { this.rotation, this.rotation + 3, 1 } };
+	}
+
+	@Override
+	public void renderBed(Graphics2D g) {
+		g.rotate(Math.PI / 3 * this.rotation);
+		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
+	}
+
+	@Override
+	public void renderRail(Graphics2D g) {
+		g.rotate(Math.PI / 3 * this.rotation);
+		TrackRenderUtil.renderStraightRail(g, 30);
+	}
+
+	@Override
+	public void renderPreview(Graphics2D g) {
+		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
+		TrackRenderUtil.renderStraightRail(g, 30);
+	}
+
+	@Override
+	public TrackTile cloneTrack() {
+		StraightRail clone = new StraightRail(this.getPosition());
+		clone.rotation = this.rotation;
+		return clone;
 	}
 
 }

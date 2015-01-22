@@ -24,6 +24,8 @@ import ch.awae.simtrack.controller.IBorderConnectionSpawner;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.track.BorderTrackTile;
+import ch.awae.simtrack.model.track.CurvedRail;
+import ch.awae.simtrack.model.track.StraightCrossing;
 
 /**
  * Model for the map itself.
@@ -46,7 +48,16 @@ public class Map {
 		this.hSize = hSize;
 		this.vSize = vSize;
 		ArrayList<BorderTrackTile> cons = conSpawn.spawnConnections(this);
-		cons.forEach(con -> this.borderTracks.put(con.getPosition(), con));
+		if (cons != null)
+			cons.forEach(con -> this.borderTracks.put(con.getPosition(), con));
+
+		// TODO debugging ;)
+		{
+			StraightCrossing r1 = new StraightCrossing(new TileCoordinate(2, 1));
+			r1.rotate(true);
+			r1.rotate(true);
+			this.trackPieces.put(r1.getPosition(), r1);
+		}
 	}
 
 	/** The track pieces. */

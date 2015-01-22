@@ -24,6 +24,10 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import ch.awae.simtrack.Global;
+import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.view.ARenderer;
+
 public class Surface extends JPanel {
 
 	public Surface() {
@@ -36,15 +40,17 @@ public class Surface extends JPanel {
 		this.doPaint((Graphics2D) g);
 	}
 
+	@SuppressWarnings("static-method")
 	private void doPaint(Graphics2D g) {
-		g.setBackground(Color.BLACK);
-		g.setColor(Color.LIGHT_GRAY);
-		Graphics2D g2 = (Graphics2D) g.create();
-		g2.translate(50, 50);
-		g2.fillRect(20, 20, 100, 40);
-		g2.setStroke(new BasicStroke(5));
-		g.setColor(Color.GRAY);
-		g.draw3DRect(20, 20, 100, 40, false);
+		/*
+		 * g.setColor(Color.BLACK); for (int i = 0; i < 20; i++) { for (int j =
+		 * 0; j < 20; j++) { Graphics2D g2 = ARenderer.focusHex(new
+		 * TileCoordinate(i, j), g); for (int k = 0; k < 3; k++) {
+		 * g2.drawLine(25, -14, 25, 14); g2.rotate(Math.PI / 3); } } }
+		 */
+		if (Global.rc == null)
+			return;
+		Global.rc.render(g);
 	}
 
 }

@@ -19,89 +19,81 @@ package ch.awae.simtrack.model.track;
 
 import java.awt.Graphics2D;
 
-import ch.awae.simtrack.model.BorderConnection;
+import ch.awae.simtrack.model.RotatableTile;
 import ch.awae.simtrack.model.TrackTile;
-import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.properties.Layer;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
- * Implementation for the border track pieces. They do not contain any paths.
+ * Implementation for a straight rail piece
  * 
  * @author Andreas Wälchli
  * @version 1.1, 2015-01-16
  * @since SimTrack 0.0.1
  */
-public class BorderTrackTile extends TrackTile implements BorderConnection {
+public class StraightCrossing extends TrackTile implements RotatableTile {
 
 	/**
-	 * Instantiates a new border track tile.
+	 * Instantiates a new straight rail.
 	 *
 	 * @param position
 	 *            the position
-	 * @param edge
-	 *            the edge
-	 * @param isOutput
-	 *            the is output
 	 */
-	public BorderTrackTile(TileCoordinate position, int edge, boolean isOutput) {
+	public StraightCrossing(TileCoordinate position) {
 		super(position);
-		assert edge >= 0 && edge < 6;
-		this.edge = edge;
-		this.direction = isOutput ? Direction.OUT : Direction.IN;
-		this.setLayer(Layer.FIXED_TRACKS);
+		this.rotation = 0;
 	}
 
-	private int edge;
-
-	private Direction direction;
+	private int rotation;
 
 	@Override
-	public Direction getDirection() {
-		return this.direction;
-	}
-
-	/**
-	 * @return the interfacing edge
-	 */
-	public int getEdge() {
-		return this.edge;
+	public void rotate(boolean isClockwise) {
+		this.rotation += isClockwise ? 2 : 1;
+		this.rotation %= 3;
 	}
 
 	@Override
-	public DirectedTileEdgeCoordinate getInterfacingEdge() {
-		TileCoordinate pos = this.getPosition();
-		return new DirectedTileEdgeCoordinate(pos.getU(), pos.getU(),
-				this.edge, this.direction == Direction.OUT);
+	public void mirror() {
+		// straight track is static under mirroring
 	}
 
 	@Override
 	public float[][] getRawPaths() {
-		return null;
+		return new float[][] { { this.rotation, this.rotation + 3, 1 },
+				{ this.rotation + 1, (this.rotation + 4) % 6, 1 } };
 	}
 
 	@Override
 	public void renderBed(Graphics2D g) {
-		// TODO Auto-generated method stub
-
+		g.rotate(Math.PI / 3 * this.rotation);
+		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
+		g.rotate(Math.PI / 3);
+		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
 	}
 
 	@Override
 	public void renderRail(Graphics2D g) {
-		// TODO Auto-generated method stub
-
+		g.rotate(Math.PI / 3 * this.rotation);
+		TrackRenderUtil.renderStraightRail(g, 30);
+		g.rotate(Math.PI / 3);
+		TrackRenderUtil.renderStraightRail(g, 30);
 	}
 
 	@Override
 	public void renderPreview(Graphics2D g) {
-		// TODO Auto-generated method stub
-
+		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
+		TrackRenderUtil.renderStraightRail(g, 30);
+		g.rotate(Math.PI / 3);
+		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
+		TrackRenderUtil.renderStraightRail(g, 30);
+		g.rotate(-Math.PI / 3);
 	}
 
 	@Override
 	public TrackTile cloneTrack() {
-		// TODO Auto-generated method stub
-		return null;
+		StraightCrossing clone = new StraightCrossing(this.getPosition());
+		clone.rotation = this.rotation;
+		return clone;
 	}
 
 }

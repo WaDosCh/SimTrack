@@ -19,23 +19,39 @@ package ch.awae.simtrack;
 
 import javax.swing.SwingUtilities;
 
+import ch.awae.simtrack.controller.BasicBorderConnectionSpawner;
+import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.RenderingController;
+import ch.awae.simtrack.gui.MouseObserver;
 import ch.awae.simtrack.gui.Window;
+import ch.awae.simtrack.model.Map;
+import ch.awae.simtrack.view.SceneViewPort;
 
 @SuppressWarnings("javadoc")
 public class Main {
 
 	public static void main(String[] args) {
+		//System.setProperty("sun.java2d.trace", "log");
 		System.setProperty("sun.java2d.opengl", "True");
-		// System.setProperty("sun.java2d.trace", "log");
+		System.setProperty("sun.java2d.accthreshold", "0");
 
 		SwingUtilities.invokeLater(Main::init);
+		Runtime.getRuntime()
+				.addShutdownHook(new Thread(() -> Global.rc.stop()));
 
 	}
 
 	private static void init() {
 		Global.window = new Window(1200, 800);
+		Global.ScreenW = Global.window.getContentPane().getWidth();
+		Global.ScreenH = Global.window.getContentPane().getHeight();
+		Global.map = new Map(26, 15, new BasicBorderConnectionSpawner(20));
+		Global.port = new SceneViewPort(Global.map, Global.window);
+		Global.editor = new Editor(50);
 		Global.rc = new RenderingController(Global.window, 50);
+		Global.mouseObserver = new MouseObserver(Global.window);
+		Global.rc.start();
+		Global.editor.start();
 	}
 
 }

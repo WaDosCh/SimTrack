@@ -108,4 +108,9 @@ public class TileCoordinate {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Hex[" + this.u + "," + this.v + "]";
+	}
+
 }

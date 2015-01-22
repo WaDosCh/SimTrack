@@ -17,6 +17,8 @@
  */
 package ch.awae.simtrack.model;
 
+import java.awt.Graphics2D;
+
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -49,5 +51,13 @@ public abstract class TrackTile extends Tile {
 	 *         path.
 	 */
 	public abstract float[][] getRawPaths();
+
+	public abstract void renderBed(Graphics2D g);
+
+	public abstract void renderRail(Graphics2D g);
+
+	public abstract void renderPreview(Graphics2D g);
+
+	public abstract TrackTile cloneTrack();
 
 }

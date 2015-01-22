@@ -17,6 +17,8 @@
  */
 package ch.awae.simtrack.controller;
 
+import ch.awae.simtrack.view.ARenderer;
+
 /**
  * describes the basic behaviour of any editor tool. Each editor tool represents
  * a possible editor state.
@@ -43,7 +45,11 @@ public interface ITool {
 	 * {@link #load()} method, this method cannot deny deactivation.
 	 */
 	public void unload();
-	
-	
-	
+
+	public void tick();
+
+	public String getToolName();
+
+	public ARenderer getRenderer();
+
 }
