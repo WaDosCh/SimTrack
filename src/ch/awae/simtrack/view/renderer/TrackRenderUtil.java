@@ -8,7 +8,6 @@ import ch.awae.simtrack.view.SceneViewPort;
 public class TrackRenderUtil {
 
 	private final static int halfSide = (int) (50 / SceneViewPort.SQRT3);
-	private final static int curveCen = (50 - halfSide) / 2;
 
 	public static void renderStraightRailbed(Graphics2D g, int count,
 			int width, int height) {

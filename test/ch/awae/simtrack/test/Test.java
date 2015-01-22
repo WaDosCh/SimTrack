@@ -21,7 +21,6 @@ import ch.awae.simtrack.controller.BasicBorderConnectionSpawner;
 import ch.awae.simtrack.controller.IBorderConnectionSpawner;
 import ch.awae.simtrack.model.Map;
 
-@SuppressWarnings("javadoc")
 public class Test {
 
 	public static void main(String[] args) {

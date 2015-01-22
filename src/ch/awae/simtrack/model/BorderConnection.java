@@ -50,7 +50,6 @@ public interface BorderConnection {
 	 * @version 1.1 (2015-01-16)
 	 * @since SimTrack 0.0.1 (2015-01-16)
 	 */
-	@SuppressWarnings("javadoc")
 	public static enum Direction {
 		IN, OUT;
 	}

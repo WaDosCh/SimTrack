@@ -4,7 +4,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
-import ch.awae.simtrack.Global;
 import ch.awae.simtrack.gui.Window;
 
 public class Keyboard {

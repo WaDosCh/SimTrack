@@ -33,6 +33,7 @@ public interface ITool {
 	 * Loads the tool. This method should be used in case a tool requires setup
 	 * of other external elements.
 	 * 
+	 * @param args additional parameters
 	 * @throws IllegalStateException
 	 *             if the tool cannot be loaded at the moment. The editor will
 	 *             fall back to the last tool used.
@@ -42,7 +43,7 @@ public interface ITool {
 	/**
 	 * Unloads the tool. This method signals the tool that it will be
 	 * deactivated. Any external cleanups should occur here. Other than the
-	 * {@link #load()} method, this method cannot deny deactivation.
+	 * {@link #load(Object[])} method, this method cannot deny deactivation.
 	 */
 	public void unload();
 

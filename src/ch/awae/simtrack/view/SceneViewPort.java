@@ -50,8 +50,7 @@ public class SceneViewPort {
 	 */
 	public SceneViewPort(Map m, Window w) {
 		int hScreen = w.getWidth();
-		int vScreen = w.getContentPane().getHeight() - 150; // TODO: fix bound
-															// refs
+		int vScreen = w.getContentPane().getHeight() - 150;
 		this.screenDimensions = new Point(hScreen, vScreen);
 		{
 			double minH = hScreen / (m.getHorizontalSize() - 1.0);
@@ -68,7 +67,12 @@ public class SceneViewPort {
 	/**
 	 * sets the zoom level.
 	 * 
-	 * @param zoom
+	 * @param delta
+	 *            difference between new zoom and current
+	 * @param fixX
+	 *            x-coordinate of the fixed point
+	 * @param fixY
+	 *            y-corrdinate of the fixed point
 	 */
 	public void zoom(int delta, int fixX, int fixY) {
 		int newZoom = this.zoom + delta;
@@ -187,7 +191,6 @@ public class SceneViewPort {
 		return new Point((int) x, (int) y);
 	}
 
-	@SuppressWarnings("javadoc")
 	public int getMinZoom() {
 		return this.minZoom;
 	}

@@ -17,9 +17,10 @@ public class TilePlacer {
 
 	// =========================================
 
-	private void forceUpdates() {
+	private static void forceUpdates() {
+		@SuppressWarnings("unused")
 		Graph g = GraphFactory.buildGraph(Global.map);
-		// TODO: propagate graph update to path-finder
+		// TODO: propagate graph update to path-finders
 	}
 
 	public boolean canRemoveFrom(TileCoordinate c) {
@@ -38,12 +39,12 @@ public class TilePlacer {
 		if (!this.canPlaceOn(t.getPosition()))
 			return;
 		Global.map.getTrackPieces().put(t.getPosition(), t);
-		this.forceUpdates();
+		forceUpdates();
 	}
 
 	public TrackTile remove(TileCoordinate c) {
 		TrackTile t = Global.map.getTrackPieces().remove(c);
-		this.forceUpdates();
+		forceUpdates();
 		return t;
 	}
 }

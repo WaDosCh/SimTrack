@@ -1,13 +1,7 @@
 package ch.awae.simtrack.controller;
 
 import java.awt.Point;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-
-import javax.vecmath.Vector2f;
-
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.view.ARenderer;
@@ -16,6 +10,7 @@ public class Navigator implements ITool {
 
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
+		// no action required
 	}
 
 	@Override

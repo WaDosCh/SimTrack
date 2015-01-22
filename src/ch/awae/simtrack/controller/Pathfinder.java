@@ -73,7 +73,7 @@ public class Pathfinder {
 
 		@Override
 		public int compareTo(PriorityEntry o) {
-			return Double.compare(priority, o.priority);
+			return Double.compare(this.priority, o.priority);
 		}
 
 	}

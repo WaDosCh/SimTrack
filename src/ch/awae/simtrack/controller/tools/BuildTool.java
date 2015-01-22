@@ -45,8 +45,7 @@ public class BuildTool implements ITool {
 
 	@Override
 	public void unload() {
-		// TODO Auto-generated method stub
-
+		// no action required
 	}
 
 	private boolean isValid = false;

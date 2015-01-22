@@ -24,8 +24,6 @@ import ch.awae.simtrack.controller.IBorderConnectionSpawner;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.track.BorderTrackTile;
-import ch.awae.simtrack.model.track.CurvedRail;
-import ch.awae.simtrack.model.track.StraightCrossing;
 
 /**
  * Model for the map itself.

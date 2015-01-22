@@ -17,9 +17,7 @@
  */
 package ch.awae.simtrack.controller;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 
 import javax.swing.Timer;
@@ -77,7 +75,7 @@ public class Editor {
 	}
 
 	public boolean loadTool(String name, Object[] args) {
-		ITool next = tools.get(name);
+		ITool next = this.tools.get(name);
 		if (next == null)
 			return false;
 		if (this.currentTool == next) {

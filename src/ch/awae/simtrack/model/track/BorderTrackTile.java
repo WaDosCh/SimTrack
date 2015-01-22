@@ -82,25 +82,22 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 
 	@Override
 	public void renderBed(Graphics2D g) {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 
 	@Override
 	public void renderRail(Graphics2D g) {
-		// TODO Auto-generated method stub
+		return;
 
 	}
 
 	@Override
 	public void renderPreview(Graphics2D g) {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 
 	@Override
 	public TrackTile cloneTrack() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

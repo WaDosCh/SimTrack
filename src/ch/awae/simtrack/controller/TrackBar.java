@@ -3,7 +3,6 @@ package ch.awae.simtrack.controller;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import sun.nio.cs.SingleByte;
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -47,21 +46,20 @@ public class TrackBar implements ITool {
 
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
-
+		// no action required
 	}
 
 	@Override
 	public void unload() {
-		// TODO Auto-generated method stub
-
+		// no action required
 	}
 
 	public ArrayList<TrackTile> getTracks() {
-		return tracks;
+		return this.tracks;
 	}
 
 	public int getIndex() {
-		return index;
+		return this.index;
 	}
 
 	@Override
@@ -107,7 +105,6 @@ public class TrackBar implements ITool {
 
 	@Override
 	public String getToolName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

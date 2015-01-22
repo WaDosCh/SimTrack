@@ -2,8 +2,6 @@ package ch.awae.simtrack.view.renderer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
-
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.ARenderer;

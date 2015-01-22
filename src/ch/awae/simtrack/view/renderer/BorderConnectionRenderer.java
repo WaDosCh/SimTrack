@@ -2,10 +2,7 @@ package ch.awae.simtrack.view.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-
-import javax.swing.JFrame;
 
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.model.BorderConnection.Direction;
@@ -26,7 +23,7 @@ public class BorderConnectionRenderer extends ARenderer {
 		Global.map.getBorderTracks().values().forEach(t -> draw(t, g));
 	}
 
-	private void draw(BorderTrackTile t, Graphics2D g) {
+	private static void draw(BorderTrackTile t, Graphics2D g) {
 		Graphics2D g2 = ARenderer.focusHex(t.getPosition(), g);
 		g2.setColor(Color.GREEN.darker());
 		g2.fillPolygon(hexEdges[0], hexEdges[1], 6);

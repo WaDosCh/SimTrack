@@ -17,22 +17,16 @@
  */
 package ch.awae.simtrack.gui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
 import ch.awae.simtrack.Global;
-import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.ARenderer;
 
 public class Surface extends JPanel {
 
-	public Surface() {
-		// TODO Auto-generated constructor stub
-	}
+	private static final long serialVersionUID = -6043801963054580971L;
 
 	@Override
 	protected void paintComponent(Graphics g) {

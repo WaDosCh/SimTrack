@@ -24,7 +24,6 @@ package ch.awae.simtrack.properties;
  * @version 1.1, 2015-01-16
  * @since SimTrack 0.0.1
  */
-@SuppressWarnings("javadoc")
 public class Layer {
 
 	public static final int BACKGROUND = 0;

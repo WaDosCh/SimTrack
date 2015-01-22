@@ -21,10 +21,10 @@ public class BaseTrackRenderer extends ARenderer {
 	@Override
 	public void render(Graphics2D g) {
 		Global.map.getTrackPieces().forEach(
-				(p, t) -> this.renderTrackTile(g, p, t));
+				(p, t) -> renderTrackTile(g, p, t));
 	}
 
-	private void renderTrackTile(Graphics2D g, TileCoordinate pos,
+	private static void renderTrackTile(Graphics2D g, TileCoordinate pos,
 			TrackTile tile) {
 		Graphics2D g2 = ARenderer.focusHex(pos, g);
 		g2.setColor(Color.GREEN.darker());

@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.SceneViewPort;

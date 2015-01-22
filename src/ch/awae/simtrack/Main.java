@@ -28,7 +28,6 @@ import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.view.SceneViewPort;
 
-@SuppressWarnings("javadoc")
 public class Main {
 
 	public static void main(String[] args) {
