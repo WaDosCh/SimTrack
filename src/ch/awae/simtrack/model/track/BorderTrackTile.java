@@ -71,8 +71,8 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 	@Override
 	public DirectedTileEdgeCoordinate getInterfacingEdge() {
 		TileCoordinate pos = this.getPosition();
-		return new DirectedTileEdgeCoordinate(pos.getU(), pos.getU(),
-				this.edge, this.direction == Direction.OUT);
+		return new DirectedTileEdgeCoordinate(pos.getU(), pos.getV(),
+				this.edge, this.direction != Direction.OUT);
 	}
 
 	@Override

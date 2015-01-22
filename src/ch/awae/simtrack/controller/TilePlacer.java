@@ -4,6 +4,8 @@ import ch.awae.simtrack.Global;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.view.Graph;
+import ch.awae.simtrack.view.GraphFactory;
 
 public class TilePlacer {
 
@@ -16,8 +18,8 @@ public class TilePlacer {
 	// =========================================
 
 	private void forceUpdates() {
-		// TODO: implement update propagation
-		System.out.println("Map updated");
+		Graph g = GraphFactory.buildGraph(Global.map);
+		// TODO: propagate graph update to path-finder
 	}
 
 	public boolean canRemoveFrom(TileCoordinate c) {
