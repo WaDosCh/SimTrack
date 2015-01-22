@@ -31,7 +31,7 @@ public class TrackBar implements ITool {
 	}
 
 	@Override
-	public void load() throws IllegalStateException {
+	public void load(Object[] args) throws IllegalStateException {
 
 	}
 
@@ -48,10 +48,11 @@ public class TrackBar implements ITool {
 	public int getIndex() {
 		return index;
 	}
+
 	@Override
 	public void tick() {
 		this.index = -1;
-		Point p = Global.mouseObserver.mouse;
+		Point p = Global.mouse.position();
 		if (p == null) {
 			p = new Point(0, 0);
 		}
@@ -63,11 +64,31 @@ public class TrackBar implements ITool {
 		if (p.x < 0 || p.y < 0)
 			return;
 		int index = p.x / 100;
-		if (index > 9)
+		if (index > 10)
 			return;
 		this.index = index;
 		// index holds the track in the menu
+		boolean button = Global.mouse.button1();
+		if (button && !this.isPressed) {
+			this.isPressed = true;
+			this.select();
+		} else if (!button && this.isPressed) {
+			this.isPressed = false;
+		}
 	}
+
+	private void select() {
+		if (this.index == 0) {
+			Global.editor.loadTool("Builder", null);
+		} else {
+			if (this.index <= this.tracks.size()) {
+				TrackTile t = this.tracks.get(this.index - 1).cloneTrack();
+				Global.editor.loadTool("Builder", new Object[] { t });
+			}
+		}
+	}
+
+	private boolean isPressed = false;
 
 	@Override
 	public String getToolName() {

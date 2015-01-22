@@ -1,7 +1,5 @@
 package ch.awae.simtrack.controller.tools;
 
-import java.awt.event.MouseListener;
-
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.ITool;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -12,13 +10,13 @@ public class FreeTool implements ITool {
 
 	private final FreeToolRenderer renderer;
 	public TileCoordinate tile;
-	
+
 	public FreeTool() {
 		this.renderer = new FreeToolRenderer(this);
 	}
 
 	@Override
-	public void load() throws IllegalStateException {
+	public void load(Object[] args) throws IllegalStateException {
 		this.tile = new TileCoordinate(0, 0);
 	}
 
@@ -29,8 +27,10 @@ public class FreeTool implements ITool {
 
 	@Override
 	public void tick() {
-		this.tile = Global.mouseObserver.mouseHex;
-		//System.out.println(this.tile);
+		TileCoordinate tile = Global.mouse.hexPosition();
+		if (tile != null)
+			this.tile = tile;
+		// System.out.println(this.tile);
 	}
 
 	@Override

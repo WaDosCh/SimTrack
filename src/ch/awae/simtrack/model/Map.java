@@ -50,14 +50,6 @@ public class Map {
 		ArrayList<BorderTrackTile> cons = conSpawn.spawnConnections(this);
 		if (cons != null)
 			cons.forEach(con -> this.borderTracks.put(con.getPosition(), con));
-
-		// TODO debugging ;)
-		{
-			StraightCrossing r1 = new StraightCrossing(new TileCoordinate(2, 1));
-			r1.rotate(true);
-			r1.rotate(true);
-			this.trackPieces.put(r1.getPosition(), r1);
-		}
 	}
 
 	/** The track pieces. */

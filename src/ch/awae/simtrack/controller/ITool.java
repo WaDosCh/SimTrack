@@ -37,7 +37,7 @@ public interface ITool {
 	 *             if the tool cannot be loaded at the moment. The editor will
 	 *             fall back to the last tool used.
 	 */
-	public void load() throws IllegalStateException;
+	public void load(Object[] args) throws IllegalStateException;
 
 	/**
 	 * Unloads the tool. This method signals the tool that it will be

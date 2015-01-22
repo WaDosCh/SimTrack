@@ -22,7 +22,8 @@ import javax.swing.SwingUtilities;
 import ch.awae.simtrack.controller.BasicBorderConnectionSpawner;
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.RenderingController;
-import ch.awae.simtrack.gui.MouseObserver;
+import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.view.SceneViewPort;
@@ -49,7 +50,8 @@ public class Main {
 		Global.port = new SceneViewPort(Global.map, Global.window);
 		Global.editor = new Editor(50);
 		Global.rc = new RenderingController(Global.window, 50);
-		Global.mouseObserver = new MouseObserver(Global.window);
+		Global.mouse = new Mouse(Global.window);
+		Global.keyboard = new Keyboard(Global.window);
 		Global.rc.start();
 		Global.editor.start();
 	}

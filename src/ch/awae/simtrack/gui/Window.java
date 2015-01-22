@@ -36,6 +36,7 @@ public class Window extends JFrame {
 		this.add(this.surface);
 		this.setResizable(false);
 		this.setVisible(true);
+		this.setFocusTraversalKeysEnabled(false);
 	}
 
 }

@@ -57,7 +57,8 @@ public class CurvedRail extends TrackTile implements RotatableTile {
 
 	@Override
 	public void mirror() {
-		// mirroring unclear since no symmetric root
+		this.rotation += 3;
+		this.rotation %= 6;
 	}
 
 	@Override

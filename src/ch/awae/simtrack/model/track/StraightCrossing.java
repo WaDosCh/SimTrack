@@ -65,17 +65,17 @@ public class StraightCrossing extends TrackTile implements RotatableTile {
 
 	@Override
 	public void renderBed(Graphics2D g) {
-		g.rotate(Math.PI / 3 * this.rotation);
+		g.rotate(-Math.PI / 3 * this.rotation);
 		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
-		g.rotate(Math.PI / 3);
+		g.rotate(-Math.PI / 3);
 		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
 	}
 
 	@Override
 	public void renderRail(Graphics2D g) {
-		g.rotate(Math.PI / 3 * this.rotation);
+		g.rotate(-Math.PI / 3 * this.rotation);
 		TrackRenderUtil.renderStraightRail(g, 30);
-		g.rotate(Math.PI / 3);
+		g.rotate(-Math.PI / 3);
 		TrackRenderUtil.renderStraightRail(g, 30);
 	}
 
@@ -83,10 +83,10 @@ public class StraightCrossing extends TrackTile implements RotatableTile {
 	public void renderPreview(Graphics2D g) {
 		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
 		TrackRenderUtil.renderStraightRail(g, 30);
-		g.rotate(Math.PI / 3);
+		g.rotate(-Math.PI / 3);
 		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
 		TrackRenderUtil.renderStraightRail(g, 30);
-		g.rotate(-Math.PI / 3);
+		g.rotate(Math.PI / 3);
 	}
 
 	@Override

@@ -17,14 +17,15 @@
  */
 package ch.awae.simtrack.controller;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 
 import javax.swing.Timer;
 
+import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
-import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.view.ARenderer;
 
 /**
@@ -51,8 +52,8 @@ public class Editor {
 		this.t = new Timer(1000 / logicTicks, e -> this.tick());
 		this.t.setRepeats(true);
 		this.barRend = this.bar.getRenderer();
-		this.nav.load();
-		this.bar.load();
+		this.nav.load(null);
+		this.bar.load(null);
 	}
 
 	public void tick() {
@@ -71,16 +72,21 @@ public class Editor {
 	public void addTool(ITool tool) {
 		this.tools.put(tool.getToolName(), tool);
 		if (this.currentTool == null) {
-			this.loadTool(tool.getToolName());
+			this.loadTool(tool.getToolName(), null);
 		}
 	}
 
-	public boolean loadTool(String name) {
+	public boolean loadTool(String name, Object[] args) {
 		ITool next = tools.get(name);
-		if (next == currentTool || next == null)
+		if (next == null)
 			return false;
+		if (this.currentTool == next) {
+			next.unload();
+			next.load(args);
+			return true;
+		}
 		try {
-			next.load();
+			next.load(args);
 		} catch (IllegalStateException ex) {
 			// could not load. do not make the switch and leave old tool on!
 			return false;
@@ -94,6 +100,7 @@ public class Editor {
 
 	private void loadTools() {
 		this.addTool(new FreeTool());
+		this.addTool(new BuildTool());
 	}
 
 	public void start() {

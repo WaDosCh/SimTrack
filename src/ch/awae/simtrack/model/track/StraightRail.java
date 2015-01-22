@@ -64,13 +64,13 @@ public class StraightRail extends TrackTile implements RotatableTile {
 
 	@Override
 	public void renderBed(Graphics2D g) {
-		g.rotate(Math.PI / 3 * this.rotation);
+		g.rotate(-Math.PI / 3 * this.rotation);
 		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
 	}
 
 	@Override
 	public void renderRail(Graphics2D g) {
-		g.rotate(Math.PI / 3 * this.rotation);
+		g.rotate(-Math.PI / 3 * this.rotation);
 		TrackRenderUtil.renderStraightRail(g, 30);
 	}
 
