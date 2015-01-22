@@ -23,33 +23,21 @@ import ch.awae.simtrack.model.BorderConnection;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.properties.Layer;
 
 /**
  * Implementation for the border track pieces. They do not contain any paths.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.2, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public class BorderTrackTile extends TrackTile implements BorderConnection {
 
-	/**
-	 * Instantiates a new border track tile.
-	 *
-	 * @param position
-	 *            the position
-	 * @param edge
-	 *            the edge
-	 * @param isOutput
-	 *            the is output
-	 */
 	public BorderTrackTile(TileCoordinate position, int edge, boolean isOutput) {
 		super(position);
 		assert edge >= 0 && edge < 6;
 		this.edge = edge;
 		this.direction = isOutput ? Direction.OUT : Direction.IN;
-		this.setLayer(Layer.FIXED_TRACKS);
 	}
 
 	private int edge;
@@ -61,9 +49,6 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 		return this.direction;
 	}
 
-	/**
-	 * @return the interfacing edge
-	 */
 	public int getEdge() {
 		return this.edge;
 	}
@@ -74,6 +59,8 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 		return new DirectedTileEdgeCoordinate(pos.getU(), pos.getV(),
 				this.edge, this.direction != Direction.OUT);
 	}
+
+	// IRRELEVANT INTERFACE METHODS
 
 	@Override
 	public float[][] getRawPaths() {
@@ -89,11 +76,6 @@ public class BorderTrackTile extends TrackTile implements BorderConnection {
 	public void renderRail(Graphics2D g) {
 		return;
 
-	}
-
-	@Override
-	public void renderPreview(Graphics2D g) {
-		return;
 	}
 
 	@Override

@@ -25,6 +25,13 @@ import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.view.SceneViewPort;
 
+/**
+ * Globally relevant data. Most of this will probably be replaced by singletons
+ * 
+ * @author Andreas Wälchli
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.0.1
+ */
 public class Global {
 
 	public static Window window;

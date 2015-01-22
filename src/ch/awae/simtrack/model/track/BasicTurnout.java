@@ -25,23 +25,16 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
- * Implementation for a curved rail piece.
+ * Basic turnout.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.1, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public class BasicTurnout extends TrackTile implements RotatableTile {
 
-	/** The Constant TRAVEL_COST. */
 	public static final float TRAVEL_COST = 1.2f;
 
-	/**
-	 * Instantiates a new curved rail.
-	 *
-	 * @param position
-	 *            the position
-	 */
 	public BasicTurnout(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
@@ -82,12 +75,6 @@ public class BasicTurnout extends TrackTile implements RotatableTile {
 		g.rotate(-Math.PI / 3 * this.rotation);
 		TrackRenderUtil.renderStraightRail(g, 30);
 		g.rotate(-Math.PI / 3 * (this.isLeft ? 1 : 3));
-		TrackRenderUtil.renderCurvedRail(g, 30);
-	}
-
-	@Override
-	public void renderPreview(Graphics2D g) {
-		TrackRenderUtil.renderCurvedRailbed(g, 8, 5, 45);
 		TrackRenderUtil.renderCurvedRail(g, 30);
 	}
 

@@ -1,16 +1,40 @@
+/*
+ * SimTrack - Railway Planning and Simulation Game
+ * Copyright (C) 2015 Andreas Wälchli
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ch.awae.simtrack.controller.tools;
 
 import java.awt.event.KeyEvent;
 
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.ITool;
-import ch.awae.simtrack.controller.TilePlacer;
+import ch.awae.simtrack.controller.MapManipulator;
 import ch.awae.simtrack.model.RotatableTile;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.renderer.BuildToolRenderer;
 
+/**
+ * Build Tool. Used for placing and deleting track tiles
+ * 
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-22
+ * @since SimTrack 0.0.1
+ */
 public class BuildTool implements ITool {
 
 	private TrackTile t;
@@ -53,18 +77,18 @@ public class BuildTool implements ITool {
 
 	@Override
 	public void tick() {
+		if (Global.keyboard.key(KeyEvent.VK_ESCAPE))
+			Global.editor.loadTool("FreeHand", null);
 		if (!this.isBulldoze) {
 			// PLACER
 			this.t.setPosition(Global.mouse.hexPosition());
-			if (Global.keyboard.key(KeyEvent.VK_ESCAPE))
-				Global.editor.loadTool("FreeHand", null);
-			this.isValid = (TilePlacer.instance().canPlaceOn(this.t
+			this.isValid = (MapManipulator.instance().canPlaceOn(this.t
 					.getPosition()));
 			if (this.isValid && this.t.getPosition() != null) {
 				if (Global.mouse.button1()
 						&& Global.mouse.position().y < Global.port
 								.getScreenDimensions().y) {
-					TilePlacer.instance().place(this.t.cloneTrack());
+					MapManipulator.instance().place(this.t.cloneTrack());
 				}
 			}
 			if (Global.keyboard.key(KeyEvent.VK_Q)) {
@@ -89,14 +113,14 @@ public class BuildTool implements ITool {
 			// BULLDOZE
 			TileCoordinate pos = Global.mouse.hexPosition();
 			if (pos != null)
-				this.isValid = TilePlacer.instance().canRemoveFrom(pos);
+				this.isValid = MapManipulator.instance().canRemoveFrom(pos);
 			else
 				this.isValid = false;
 			if (this.isValid) {
 				if (Global.mouse.button1()
 						&& Global.mouse.position().y < Global.port
 								.getScreenDimensions().y) {
-					TilePlacer.instance().remove(pos);
+					MapManipulator.instance().remove(pos);
 				}
 			}
 		}

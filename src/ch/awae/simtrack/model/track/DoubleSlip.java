@@ -25,20 +25,14 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
- * Implementation for a straight rail piece
+ * Implementation for a double slip
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.1, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public class DoubleSlip extends TrackTile implements RotatableTile {
 
-	/**
-	 * Instantiates a new straight rail.
-	 *
-	 * @param position
-	 *            the position
-	 */
 	public DoubleSlip(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
@@ -54,7 +48,7 @@ public class DoubleSlip extends TrackTile implements RotatableTile {
 
 	@Override
 	public void mirror() {
-		// straight track is static under mirroring
+		// stays static under mirroring
 	}
 
 	@Override
@@ -85,16 +79,6 @@ public class DoubleSlip extends TrackTile implements RotatableTile {
 		TrackRenderUtil.renderCurvedRail(g, 30);
 		g.rotate(Math.PI);
 		TrackRenderUtil.renderCurvedRail(g, 30);
-	}
-
-	@Override
-	public void renderPreview(Graphics2D g) {
-		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
-		TrackRenderUtil.renderStraightRail(g, 30);
-		g.rotate(-Math.PI / 3);
-		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
-		TrackRenderUtil.renderStraightRail(g, 30);
-		g.rotate(Math.PI / 3);
 	}
 
 	@Override

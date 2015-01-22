@@ -18,15 +18,13 @@
 package ch.awae.simtrack.model;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.properties.Layer;
 
 /**
  * This class provides an abstract description of a hex tile. Therefore it holds
- * the tiles' coordinates and its layer. This layering can be used to avoid
- * re-rendering unchanged content. For the layer definition see {@link Layer}.
+ * the tiles' coordinates.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.2, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public abstract class Tile {
@@ -44,9 +42,6 @@ public abstract class Tile {
 
 	/** The position. */
 	private TileCoordinate position;
-
-	/** The layer. */
-	private int layer = -1;
 
 	/**
 	 * Gets the position.
@@ -66,26 +61,5 @@ public abstract class Tile {
 	public void setPosition(TileCoordinate newCoord) {
 		assert newCoord != null;
 		this.position = newCoord;
-	}
-
-	/**
-	 * Gets the layer of this tile.
-	 *
-	 * @return the layer of this tile is located on
-	 */
-	public int getLayer() {
-		return this.layer;
-	}
-
-	/**
-	 * Sets the layer of this tile. This does not enforce re-rendering of the
-	 * previous or the new layer. The re-rendering has to be initiated
-	 * externally.
-	 *
-	 * @param newLayer
-	 *            the new layer this tile should be located on.
-	 */
-	public void setLayer(int newLayer) {
-		this.layer = newLayer;
 	}
 }

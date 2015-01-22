@@ -31,6 +31,13 @@ import ch.awae.simtrack.view.renderer.BorderConnectionRenderer;
 import ch.awae.simtrack.view.renderer.EditorRenderer;
 import ch.awae.simtrack.view.renderer.HexGridRenderer;
 
+/**
+ * Core Rendering Control
+ * 
+ * @author Andreas Wälchli
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.0.1
+ */
 public class RenderingController {
 
 	private Window w;
@@ -65,8 +72,6 @@ public class RenderingController {
 
 		this.tAvg += System.currentTimeMillis() - a;
 		if (++this.delC == 49) {
-			// System.out.println("average rendering time: "
-			// + (this.tAvg * 1.0 / this.delC));
 			Global.window.setTitle("Rendering Pass Time: "
 					+ (this.tAvg * 1000 / this.delC) + " ns");
 			this.tAvg = this.delC = 0;

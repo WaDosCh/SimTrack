@@ -19,6 +19,12 @@ package ch.awae.simtrack.gui;
 
 import javax.swing.JFrame;
 
+/**
+ * Main GUI Window
+ * 
+ * @author Andreas Wälchli
+ * @version 1.2, 2015-01-22
+ */
 public class Window extends JFrame {
 
 	private static final long serialVersionUID = 7381994043443871855L;

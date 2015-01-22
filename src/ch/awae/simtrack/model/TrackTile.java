@@ -25,7 +25,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * This class provides an abstract definition of a track tile.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.2, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public abstract class TrackTile extends Tile {
@@ -55,8 +55,6 @@ public abstract class TrackTile extends Tile {
 	public abstract void renderBed(Graphics2D g);
 
 	public abstract void renderRail(Graphics2D g);
-
-	public abstract void renderPreview(Graphics2D g);
 
 	public abstract TrackTile cloneTrack();
 

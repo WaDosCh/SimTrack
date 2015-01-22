@@ -28,17 +28,11 @@ import ch.awae.simtrack.view.renderer.TrackRenderUtil;
  * Implementation for a straight rail piece
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
+ * @version 1.2, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public class StraightRail extends TrackTile implements RotatableTile {
 
-	/**
-	 * Instantiates a new straight rail.
-	 *
-	 * @param position
-	 *            the position
-	 */
 	public StraightRail(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
@@ -71,12 +65,6 @@ public class StraightRail extends TrackTile implements RotatableTile {
 	@Override
 	public void renderRail(Graphics2D g) {
 		g.rotate(-Math.PI / 3 * this.rotation);
-		TrackRenderUtil.renderStraightRail(g, 30);
-	}
-
-	@Override
-	public void renderPreview(Graphics2D g) {
-		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
 		TrackRenderUtil.renderStraightRail(g, 30);
 	}
 

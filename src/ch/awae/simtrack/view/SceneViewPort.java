@@ -29,7 +29,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * well as the hex scaling.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-17
+ * @version 1.2, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public class SceneViewPort {

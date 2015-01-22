@@ -1,3 +1,20 @@
+/*
+ * SimTrack - Railway Planning and Simulation Game
+ * Copyright (C) 2015 Andreas Wälchli
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ch.awae.simtrack.view.renderer;
 
 import java.awt.Color;
@@ -7,6 +24,13 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
+/**
+ * Renderer for the hex grid overlay
+ * 
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-22
+ * @since SimTrack 0.0.1
+ */
 public class HexGridRenderer extends ARenderer {
 
 	@Override
@@ -17,13 +41,6 @@ public class HexGridRenderer extends ARenderer {
 			for (int j = 0; j < Global.map.getVerticalSize(); j++) {
 				int l = i - (j / 2);
 				Graphics2D g2 = ARenderer.focusHex(new TileCoordinate(l, j), g);
-				// g2.drawString(l + "|" + j, -20, 0);
-				/**
-				 * if (i == 0) { g2.scale(2, 2); g2.drawLine(-12, -7, -12, 7);
-				 * g2.scale(0.5, 0.5); } else if (i ==
-				 * (Global.map.getHorizontalSize() - 1)) { g2.scale(2, 2);
-				 * g2.drawLine(5, -7, 5, 7); g2.scale(0.5, 0.5); }
-				 **/
 				for (int k = 0; k < 3; k++) {
 					g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
 					g2.rotate(Math.PI / 3);

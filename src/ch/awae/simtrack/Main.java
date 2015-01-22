@@ -28,10 +28,19 @@ import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.view.SceneViewPort;
 
+/**
+ * Main Class.
+ * 
+ * Will be replaced by a more elaborate high-logic system.
+ * 
+ * @author Andreas Wälchli
+ * @version 1.2, 2015-01-22
+ * @since SimTrack 0.0.1
+ */
 public class Main {
 
 	public static void main(String[] args) {
-		//System.setProperty("sun.java2d.trace", "log");
+		// System.setProperty("sun.java2d.trace", "log");
 		System.setProperty("sun.java2d.opengl", "True");
 		System.setProperty("sun.java2d.accthreshold", "0");
 

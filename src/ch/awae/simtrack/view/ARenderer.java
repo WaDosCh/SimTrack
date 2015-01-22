@@ -27,7 +27,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * General representation of any renderer.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-17
+ * @version 1.2, 2015-01-22
  * @since SimTrack 0.0.1
  */
 public abstract class ARenderer {
@@ -45,7 +45,6 @@ public abstract class ARenderer {
 	public static Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
 		SceneViewPort port = Global.port;
 		Point p = port.getScreenCoordinate(port.getScenePos(hex));
-		// System.out.println(p);
 		double zoomFac = 0.01 * port.getZoom();
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.translate(p.x, p.y);
