@@ -19,7 +19,7 @@ package ch.awae.simtrack.view;
 
 import java.awt.Point;
 
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -154,7 +154,7 @@ public class SceneViewPort {
 
 		// note: horizontal validation irrelevant, since could NEVER be reached
 		// due to zoom limitations along the horizontal axis.
-		if (baseV < 0 || baseV >= Global.map.getVerticalSize())
+		if (baseV < 0 || baseV >= HighLogic.map.getVerticalSize())
 			return null;
 
 		return new TileCoordinate(baseU, baseV);

@@ -19,7 +19,7 @@ package ch.awae.simtrack.view.renderer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.SceneViewPort;
@@ -37,8 +37,8 @@ public class HexGridRenderer extends ARenderer {
 	public void render(Graphics2D g) {
 		g.setColor(Color.BLACK);
 		int hexSideHalf = 1 + (int) (50 / SceneViewPort.SQRT3);
-		for (int i = 0; i < Global.map.getHorizontalSize(); i++) {
-			for (int j = 0; j < Global.map.getVerticalSize(); j++) {
+		for (int i = 0; i < HighLogic.map.getHorizontalSize(); i++) {
+			for (int j = 0; j < HighLogic.map.getVerticalSize(); j++) {
 				int l = i - (j / 2);
 				Graphics2D g2 = ARenderer.focusHex(new TileCoordinate(l, j), g);
 				for (int k = 0; k < 3; k++) {

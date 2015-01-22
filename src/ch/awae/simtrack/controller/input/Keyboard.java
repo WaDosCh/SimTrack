@@ -46,8 +46,8 @@ public class Keyboard {
 		}
 	};
 
-	public static void bindTo(Window w) {
-		w.addKeyListener(Keyboard.adapter);
+	public static void init() {
+		Window.INSTANCE.addKeyListener(Keyboard.adapter);
 	}
 
 	public static void reset() {

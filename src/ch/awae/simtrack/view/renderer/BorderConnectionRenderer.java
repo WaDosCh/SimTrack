@@ -22,7 +22,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.model.BorderConnection.Direction;
 import ch.awae.simtrack.model.track.BorderTrackTile;
 import ch.awae.simtrack.view.ARenderer;
@@ -51,7 +51,7 @@ public class BorderConnectionRenderer extends ARenderer {
 
 	@Override
 	public void render(Graphics2D g) {
-		Global.map.getBorderTracks().values().forEach(t -> draw(t, g));
+		HighLogic.map.getBorderTracks().values().forEach(t -> draw(t, g));
 	}
 
 	private static void draw(BorderTrackTile t, Graphics2D g) {

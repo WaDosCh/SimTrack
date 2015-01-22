@@ -17,7 +17,7 @@
  */
 package ch.awae.simtrack.controller;
 
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -43,18 +43,18 @@ public class MapManipulator {
 
 	private static void forceUpdates() {
 		@SuppressWarnings("unused")
-		Graph g = GraphFactory.buildGraph(Global.map);
+		Graph g = GraphFactory.buildGraph(HighLogic.map);
 		// TODO: propagate graph update to path-finders
 	}
 
 	public boolean canRemoveFrom(TileCoordinate c) {
 		assert c != null;
-		return Global.map.getTrackPieces().containsKey(c);
+		return HighLogic.map.getTrackPieces().containsKey(c);
 	}
 
 	public boolean canPlaceOn(TileCoordinate c) {
 		assert c != null;
-		Map m = Global.map;
+		Map m = HighLogic.map;
 		return !(m.getBorderTracks().containsKey(c) || m.getTrackPieces()
 				.containsKey(c));
 	}
@@ -62,12 +62,12 @@ public class MapManipulator {
 	public void place(TrackTile t) {
 		if (!this.canPlaceOn(t.getPosition()))
 			return;
-		Global.map.getTrackPieces().put(t.getPosition(), t);
+		HighLogic.map.getTrackPieces().put(t.getPosition(), t);
 		forceUpdates();
 	}
 
 	public TrackTile remove(TileCoordinate c) {
-		TrackTile t = Global.map.getTrackPieces().remove(c);
+		TrackTile t = HighLogic.map.getTrackPieces().remove(c);
 		forceUpdates();
 		return t;
 	}

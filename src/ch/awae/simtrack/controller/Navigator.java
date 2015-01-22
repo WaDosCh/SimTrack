@@ -20,9 +20,9 @@ package ch.awae.simtrack.controller;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.gui.Surface;
 import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.SceneViewPort;
 
@@ -59,10 +59,10 @@ public class Navigator implements ITool {
 			dx = 1;
 		if (mouse.y < BORDER || Keyboard.keysOr(KeyEvent.VK_W, KeyEvent.VK_UP))
 			dy = 1;
-		if (mouse.x > Global.ScreenW - BORDER
+		if (mouse.x > Surface.instance().getWidth() - BORDER
 				|| Keyboard.keysOr(KeyEvent.VK_D, KeyEvent.VK_RIGHT))
 			dx = -1;
-		if (mouse.y > Global.ScreenH - BORDER
+		if (mouse.y > Surface.instance().getHeight() - BORDER
 				|| Keyboard.keysOr(KeyEvent.VK_S, KeyEvent.VK_DOWN))
 			dy = -1;
 		dx *= MOVE_SPEED;

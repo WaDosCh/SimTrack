@@ -23,7 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 
-import ch.awae.simtrack.Global;
+import ch.awae.simtrack.HighLogic;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.ARenderer;
@@ -50,7 +50,7 @@ public class BaseTrackRenderer extends ARenderer {
 
 	@Override
 	public void render(Graphics2D g) {
-		Global.map.getTrackPieces().forEach((p, t) -> renderTrackTile(g, p, t));
+		HighLogic.map.getTrackPieces().forEach((p, t) -> renderTrackTile(g, p, t));
 	}
 
 	private static void renderTrackTile(Graphics2D g, TileCoordinate pos,

@@ -17,25 +17,17 @@
  */
 package ch.awae.simtrack;
 
-import ch.awae.simtrack.controller.RenderingController;
-import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.model.Map;
-import ch.awae.simtrack.view.SceneViewPort;
 
 /**
- * Globally relevant data. Most of this will probably be replaced by singletons
+ * Top-level game logic
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.1, 2015-01-22
+ * @since SimTrack 0.1.1
  */
-public class Global {
+public class HighLogic {
 
-	public static Window window;
-	public static RenderingController rc;
 	public static Map map;
-	public static SceneViewPort port;
-	public static int ScreenW;
-	public static int ScreenH;
 
 }

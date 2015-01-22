@@ -20,8 +20,8 @@ package ch.awae.simtrack.controller;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.gui.Surface;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.track.BasicTurnout;
@@ -95,9 +95,9 @@ public class TrackBar implements ITool {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= Global.ScreenW / 2;
+		p.x -= Surface.instance().getWidth() / 2;
 		p.x += 550;
-		p.y -= Global.ScreenH;
+		p.y -= Surface.instance().getHeight();
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;

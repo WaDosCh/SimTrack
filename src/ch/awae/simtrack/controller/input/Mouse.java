@@ -107,10 +107,10 @@ public class Mouse {
 		};
 	}
 
-	public static void bindTo(Window w) {
-		w.getContentPane().addMouseListener(adapter);
-		w.getContentPane().addMouseMotionListener(adapter);
-		w.getContentPane().addMouseWheelListener(adapter);
+	public static void init() {
+		Window.INSTANCE.getContentPane().addMouseListener(adapter);
+		Window.INSTANCE.getContentPane().addMouseMotionListener(adapter);
+		Window.INSTANCE.getContentPane().addMouseWheelListener(adapter);
 	}
 
 	public static Point position() {

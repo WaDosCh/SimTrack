@@ -24,8 +24,8 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.Global;
 import ch.awae.simtrack.controller.TrackBar;
+import ch.awae.simtrack.gui.Surface;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.view.ARenderer;
 
@@ -54,7 +54,8 @@ public class TrackBarRenderer extends ARenderer {
 
 	@Override
 	public void render(Graphics2D g) {
-		g.translate(Global.ScreenW / 2 - 500, Global.ScreenH - 50);
+		g.translate(Surface.instance().getWidth() / 2 - 500, Surface.instance()
+				.getHeight() - 50);
 		g.setStroke(new BasicStroke(4));
 		ArrayList<TrackTile> tracks = this.bar.getTracks();
 		for (int i = -1; i < tracks.size(); i++) {

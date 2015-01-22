@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
-import ch.awae.simtrack.Global;
 import ch.awae.simtrack.gui.Window;
 import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.renderer.BaseTrackRenderer;
@@ -36,55 +35,51 @@ import ch.awae.simtrack.view.renderer.HexGridRenderer;
  * 
  * @author Andreas Wälchli
  * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @since SimTrack 0.1.1 (0.0.1)
  */
 public class RenderingController {
 
-	private Window w;
-	private Timer t;
-	private ArrayList<ARenderer> rends;
+	private static Timer timer;
+	private static ArrayList<ARenderer> rends = new ArrayList<>();
 
-	private int delC = 0;
-	private int tAvg = 0;
+	private static int delC = 0;
+	private static int tAvg = 0;
 
-	public RenderingController(Window w, int fps) {
-		assert w != null;
-		this.w = w;
-		this.rends = new ArrayList<>();
-		this.init();
-		this.t = new Timer(1000 / fps, e -> this.w.repaint());
-		this.t.setRepeats(true);
+	public static void init(int fps) {
+		timer = new Timer(1000 / fps, e -> Window.INSTANCE.repaint());
+		timer.setRepeats(true);
 	}
 
-	private void init() {
-		this.rends.add(new BorderConnectionRenderer());
-		this.rends.add(new BaseTrackRenderer());
-		this.rends.add(new HexGridRenderer());
-		this.rends.add(new EditorRenderer());
+	static {
+		rends.add(new BorderConnectionRenderer());
+		rends.add(new BaseTrackRenderer());
+		rends.add(new HexGridRenderer());
+		rends.add(new EditorRenderer());
 	}
 
-	public void render(Graphics g) {
+	public static void render(Graphics g) {
 		long a = System.currentTimeMillis();
-		if (this.rends == null)
+		if (rends == null)
 			return;
-		for (ARenderer r : this.rends)
+		for (ARenderer r : rends)
 			r.render((Graphics2D) g.create());
 
-		this.tAvg += System.currentTimeMillis() - a;
-		if (++this.delC == 49) {
-			Global.window.setTitle("Rendering Pass Time: "
-					+ (this.tAvg * 1000 / this.delC) + " ns");
-			this.tAvg = this.delC = 0;
+		// RENDERING ANALYTICS
+		tAvg += System.currentTimeMillis() - a;
+		if (++delC == 49) {
+			Window.instance().setTitle(
+					"Rendering Pass Time: " + (tAvg * 1000 / delC) + " ns");
+			tAvg = delC = 0;
 		}
 
 	}
 
-	public void start() {
-		this.t.start();
+	public static void start() {
+		timer.start();
 	}
 
-	public void stop() {
-		this.t.stop();
+	public static void stop() {
+		timer.stop();
 	}
 
 }

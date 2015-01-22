@@ -45,24 +45,18 @@ public class Main {
 		System.setProperty("sun.java2d.accthreshold", "0");
 
 		SwingUtilities.invokeLater(Main::init);
-		Runtime.getRuntime()
-				.addShutdownHook(new Thread(() -> Global.rc.stop()));
-
 	}
 
 	private static void init() {
-		Global.window = new Window(1200, 800);
-		Global.ScreenW = Global.window.getContentPane().getWidth();
-		Global.ScreenH = Global.window.getContentPane().getHeight();
-		Global.map = new Map(26, 15, new BasicBorderConnectionSpawner(20));
-		Global.rc = new RenderingController(Global.window, 50);
-
-		SceneViewPort.init(Global.map, Global.window);
-		Mouse.bindTo(Global.window);
-		Keyboard.bindTo(Global.window);
+		Window.init(1200, 800);
+		HighLogic.map = new Map(26, 15, new BasicBorderConnectionSpawner(20));
+		SceneViewPort.init(HighLogic.map, Window.instance());
+		Mouse.init();
+		Keyboard.init();
 		Editor.init(50);
-		Global.rc.start();
+		RenderingController.init(100);
 		Editor.start();
+		RenderingController.start();
 	}
 
 }
