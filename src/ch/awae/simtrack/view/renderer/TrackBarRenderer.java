@@ -54,6 +54,7 @@ public class TrackBarRenderer extends ARenderer {
 				g.setTransform(Tx);
 				g.setColor(this.rails);
 				tracks.get(i).renderRail(g);
+				g.setTransform(Tx);
 			}
 			g.translate(100, 0);
 		}

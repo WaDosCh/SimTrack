@@ -3,12 +3,20 @@ package ch.awae.simtrack.controller;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import sun.nio.cs.SingleByte;
 import ch.awae.simtrack.Global;
 import ch.awae.simtrack.model.TrackTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.track.BasicTurnout;
+import ch.awae.simtrack.model.track.CurvedCrossing;
 import ch.awae.simtrack.model.track.CurvedRail;
+import ch.awae.simtrack.model.track.DoubleSlip;
+import ch.awae.simtrack.model.track.SingleSlip;
 import ch.awae.simtrack.model.track.StraightCrossing;
+import ch.awae.simtrack.model.track.StraightCurvedCrossing;
 import ch.awae.simtrack.model.track.StraightRail;
+import ch.awae.simtrack.model.track.ThreeWayTurnout;
+import ch.awae.simtrack.model.track.WyeSwitch;
 import ch.awae.simtrack.view.ARenderer;
 import ch.awae.simtrack.view.renderer.TrackBarRenderer;
 
@@ -28,6 +36,13 @@ public class TrackBar implements ITool {
 		this.tracks.add(new StraightRail(new TileCoordinate(0, 0)));
 		this.tracks.add(new CurvedRail(new TileCoordinate(0, 0)));
 		this.tracks.add(new StraightCrossing(new TileCoordinate(0, 0)));
+		this.tracks.add(new StraightCurvedCrossing(new TileCoordinate(0, 0)));
+		this.tracks.add(new CurvedCrossing(new TileCoordinate(0, 0)));
+		this.tracks.add(new BasicTurnout(new TileCoordinate(0, 0)));
+		this.tracks.add(new ThreeWayTurnout(new TileCoordinate(0, 0)));
+		this.tracks.add(new WyeSwitch(new TileCoordinate(0, 0)));
+		this.tracks.add(new SingleSlip(new TileCoordinate(0, 0)));
+		this.tracks.add(new DoubleSlip(new TileCoordinate(0, 0)));
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class TrackRenderUtil {
 	public static void renderCurvedRail(Graphics2D g, int gap) {
 		for (int i = 0; i < 2; i++) {
 			int radius = 3 * halfSide + (i == 0 ? gap / 2 : -gap / 2);
-			g.drawArc(50 - radius, -(3 * halfSide + radius), 2 * radius,
+			g.drawArc(50 - radius - 2, -(3 * halfSide + radius), 2 * radius + 3,
 					2 * radius, 210, 60);
 		}
 	}
