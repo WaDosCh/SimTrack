@@ -30,7 +30,7 @@ import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class Graph implements IGraph<DirectedTileEdgeCoordinate, ITile> {
+class Graph implements IGraph<DirectedTileEdgeCoordinate, ITile> {
 
 	private HashMap<DirectedTileEdgeCoordinate, HashMap<DirectedTileEdgeCoordinate, ITile>> map;
 

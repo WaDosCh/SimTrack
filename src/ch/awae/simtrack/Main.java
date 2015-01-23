@@ -33,8 +33,8 @@ import ch.awae.simtrack.view.ViewFactory;
  * Will be replaced by a more elaborate high-logic system.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class Main {
 

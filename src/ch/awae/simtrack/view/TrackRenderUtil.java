@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.view.renderer;
+package ch.awae.simtrack.view;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -26,14 +26,14 @@ import java.awt.geom.AffineTransform;
  * 
  * @author Andreas Wälchli
  * @version 1.2, 2015-01-23
- * @since SimTrack 0.2.
+ * @since SimTrack 0.2.1
  */
 public class TrackRenderUtil {
 
 	private final static int sleeperCount = 8;
 	private final static int sleeperWidth = 5;
 	private final static int sleeperHeight = 45;
-	private final static int railGauge = 30;
+	private final static int railGauge = 35;
 
 	private final static int halfSide = (int) (50 / Math.sqrt(3));
 

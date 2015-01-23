@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.view.renderer;
+package ch.awae.simtrack.view;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -23,8 +23,6 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.model.ITile;
-import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IView;
 
 /**
  * Renderer for track rendering
@@ -33,7 +31,7 @@ import ch.awae.simtrack.view.IView;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class TrackRenderer implements IRenderer {
+class TrackRenderer implements IRenderer {
 	private static Color bedColour = Color.ORANGE.darker();
 	private static Color bgColour = Color.GREEN.darker();
 

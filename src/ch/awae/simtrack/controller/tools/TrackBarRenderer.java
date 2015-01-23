@@ -27,14 +27,14 @@ import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IView;
-import ch.awae.simtrack.view.renderer.TrackRenderUtil;
+import ch.awae.simtrack.view.TrackRenderUtil;
 
 /**
  * Track tool-bar renderer
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class TrackBarRenderer implements IRenderer {
 

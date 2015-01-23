@@ -15,14 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.view.renderer;
+package ch.awae.simtrack.view;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IView;
 
 /**
  * Renderer for the hex grid overlay
@@ -31,7 +29,7 @@ import ch.awae.simtrack.view.IView;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class HexGridRenderer implements IRenderer {
+class HexGridRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g, IView view) {

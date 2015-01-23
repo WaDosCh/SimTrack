@@ -23,9 +23,10 @@ import javax.swing.JFrame;
  * Main GUI Window
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.2.1
  */
-public class Window extends JFrame {
+class Window extends JFrame {
 
 	private static final long serialVersionUID = 7381994043443871855L;
 

@@ -26,7 +26,7 @@ import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IView;
-import ch.awae.simtrack.view.renderer.TrackRenderUtil;
+import ch.awae.simtrack.view.TrackRenderUtil;
 
 /**
  * Renderer for the {@link BuildTool}
@@ -35,7 +35,7 @@ import ch.awae.simtrack.view.renderer.TrackRenderUtil;
  * @version 1.4, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class BuildToolRenderer implements IRenderer {
+class BuildToolRenderer implements IRenderer {
 
 	private static Stroke bullCursorStroke = new BasicStroke(6);
 	private static Color darkRed = Color.RED.darker();

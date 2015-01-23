@@ -15,14 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.controller;
+package ch.awae.simtrack.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-import ch.awae.simtrack.model.Graph;
 import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
 
 /**
@@ -59,7 +58,7 @@ public class Pathfinder {
 
 	public ArrayList<DirectedTileEdgeCoordinate> findPath(
 			DirectedTileEdgeCoordinate from, DirectedTileEdgeCoordinate to,
-			Graph graph) {
+			IGraph<DirectedTileEdgeCoordinate, ITile> graph) {
 		PriorityQueue<PriorityEntry> frontier = new PriorityQueue<>();
 		HashMap<DirectedTileEdgeCoordinate, DirectedTileEdgeCoordinate> cameFrom = new HashMap<>();
 		HashMap<DirectedTileEdgeCoordinate, Double> costSoFar = new HashMap<>();

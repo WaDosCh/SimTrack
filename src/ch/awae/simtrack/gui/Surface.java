@@ -31,7 +31,7 @@ import javax.swing.JPanel;
  * @version 1.3, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class Surface extends JPanel {
+class Surface extends JPanel {
 
 	private static final long serialVersionUID = -6043801963054580971L;
 
