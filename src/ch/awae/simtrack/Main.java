@@ -19,14 +19,13 @@ package ch.awae.simtrack;
 
 import javax.swing.SwingUtilities;
 
-import ch.awae.simtrack.controller.BasicBorderConnectionSpawner;
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.RenderingController;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.gui.Window;
-import ch.awae.simtrack.model.Map;
-import ch.awae.simtrack.view.SceneViewPort;
+import ch.awae.simtrack.controller.ControllerFactory;
+import ch.awae.simtrack.controller.IController;
+import ch.awae.simtrack.gui.GUI;
+import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.ModelFactory;
+import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.ViewFactory;
 
 /**
  * Main Class.
@@ -40,15 +39,12 @@ import ch.awae.simtrack.view.SceneViewPort;
 public class Main {
 
 	private static void init() {
-		Window.init(1200, 800);
-		HighLogic.map = new Map(26, 15, new BasicBorderConnectionSpawner(20));
-		SceneViewPort.init(HighLogic.map, Window.instance());
-		Mouse.init();
-		Keyboard.init();
-		Editor.init(50);
-		RenderingController.init(100);
-		Editor.start();
-		RenderingController.start();
+		GUI g = new GUI(1200, 800);
+		IModel m = ModelFactory.getModel(25, 13, 20);
+		IView v = ViewFactory.createGameView(m, g);
+		IController c = ControllerFactory.buildGameController(m, v, g, 50, 50);
+		c.startView();
+		c.start();
 	}
 
 	public static void main(String[] args) {

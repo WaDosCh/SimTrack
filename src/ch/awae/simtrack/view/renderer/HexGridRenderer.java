@@ -19,28 +19,29 @@ package ch.awae.simtrack.view.renderer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import ch.awae.simtrack.HighLogic;
+
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.SceneViewPort;
+import ch.awae.simtrack.view.IView;
 
 /**
  * Renderer for the hex grid overlay
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class HexGridRenderer implements IRenderer {
 
 	@Override
-	public void render(Graphics2D g) {
+	public void render(Graphics2D g, IView view) {
 		g.setColor(Color.BLACK);
-		int hexSideHalf = 1 + (int) (50 / SceneViewPort.SQRT3);
-		for (int i = 0; i < HighLogic.map.getHorizontalSize(); i++) {
-			for (int j = 0; j < HighLogic.map.getVerticalSize(); j++) {
+		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
+		for (int i = 0; i < view.getModel().getHorizontalSize(); i++) {
+			for (int j = 0; j < view.getModel().getVerticalSize(); j++) {
 				int l = i - (j / 2);
-				Graphics2D g2 = IRenderer.focusHex(new TileCoordinate(l, j), g);
+				Graphics2D g2 = view.getViewPort().focusHex(
+						new TileCoordinate(l, j), g);
 				for (int k = 0; k < 3; k++) {
 					g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
 					g2.rotate(Math.PI / 3);

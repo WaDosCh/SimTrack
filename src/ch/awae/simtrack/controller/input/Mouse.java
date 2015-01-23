@@ -22,38 +22,39 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import ch.awae.simtrack.gui.Window;
+import ch.awae.simtrack.controller.IController;
+import ch.awae.simtrack.controller.IGUIControllerHookup;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.SceneViewPort;
 
 /**
  * Mouse Observer
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class Mouse {
 
-	private static MouseAdapter adapter;
-	static boolean b1, b2, b3;
-	static long lastScrollUpdate;
-	private final static long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
-	static Point mouse;
-	static TileCoordinate mouseHex;
-	static double scroll;
+	IController owner;
+	private MouseAdapter adapter;
+	boolean b1, b2, b3;
+	long lastScrollUpdate;
+	private final long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
+	Point mouse;
+	TileCoordinate mouseHex;
+	double scroll;
 
 	// BASIC SETUP
-	static {
-		mouse = new Point(0, 0);
-		mouseHex = new TileCoordinate(0, 0);
-		b1 = b2 = b3 = false;
-		scroll = 0;
+	{
+		this.mouse = new Point(0, 0);
+		this.mouseHex = new TileCoordinate(0, 0);
+		this.b1 = this.b2 = this.b3 = false;
+		this.scroll = 0;
 	}
 
 	// ADAPTER IMPLEMENTATION
-	static {
-		adapter = new MouseAdapter() {
+	{
+		this.adapter = new MouseAdapter() {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -65,11 +66,13 @@ public class Mouse {
 				Point p = e.getPoint();
 				if (p == null)
 					return;
-				Mouse.mouse = p;
-				Point scene = SceneViewPort.getSceneCoordinate(p);
-				TileCoordinate tile = SceneViewPort.getHexPos(scene);
+				Mouse.this.mouse = p;
+				Point scene = Mouse.this.owner.getView().getViewPort()
+						.getSceneCoordinate(p);
+				TileCoordinate tile = Mouse.this.owner.getView().getViewPort()
+						.getHexPos(scene);
 				// if (tile != null)
-				Mouse.mouseHex = tile;
+				Mouse.this.mouseHex = tile;
 			}
 
 			@Override
@@ -84,20 +87,20 @@ public class Mouse {
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				Mouse.scroll = e.getPreciseWheelRotation();
-				Mouse.lastScrollUpdate = System.currentTimeMillis();
+				Mouse.this.scroll = e.getPreciseWheelRotation();
+				Mouse.this.lastScrollUpdate = System.currentTimeMillis();
 			}
 
 			private void setBtn(int button, boolean value) {
 				switch (button) {
 				case MouseEvent.BUTTON1:
-					Mouse.b1 = value;
+					Mouse.this.b1 = value;
 					break;
 				case MouseEvent.BUTTON2:
-					Mouse.b2 = value;
+					Mouse.this.b2 = value;
 					break;
 				case MouseEvent.BUTTON3:
-					Mouse.b3 = value;
+					Mouse.this.b3 = value;
 					break;
 				default:
 					break;
@@ -107,35 +110,34 @@ public class Mouse {
 		};
 	}
 
-	public static boolean button1() {
-		return b1;
+	public boolean button1() {
+		return this.b1;
 	}
 
-	public static boolean button2() {
-		return b2;
+	public boolean button2() {
+		return this.b2;
 	}
 
-	public static boolean button3() {
-		return b3;
+	public boolean button3() {
+		return this.b3;
 	}
 
-	public static double getScroll() {
-		return (lastScrollUpdate + MAX_SCROLL_TIME_WITHOUT_UPDATE < System
-				.currentTimeMillis()) ? 0 : scroll;
+	public double getScroll() {
+		return (this.lastScrollUpdate + this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System
+				.currentTimeMillis()) ? 0 : this.scroll;
 	}
 
-	public static TileCoordinate hexPosition() {
-		return mouseHex;
+	public TileCoordinate hexPosition() {
+		return this.mouseHex;
 	}
 
-	public static void init() {
-		Window.INSTANCE.getContentPane().addMouseListener(adapter);
-		Window.INSTANCE.getContentPane().addMouseMotionListener(adapter);
-		Window.INSTANCE.getContentPane().addMouseWheelListener(adapter);
+	public Mouse(IController owner, IGUIControllerHookup hooker) {
+		this.owner = owner;
+		hooker.getMouseHookup().accept(this.adapter);
 	}
 
-	public static Point position() {
-		return mouse.getLocation();
+	public Point position() {
+		return this.mouse.getLocation();
 	}
 
 }

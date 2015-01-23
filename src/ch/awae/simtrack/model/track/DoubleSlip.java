@@ -17,21 +17,18 @@
  */
 package ch.awae.simtrack.model.track;
 
-import java.awt.Graphics2D;
-
-import ch.awae.simtrack.model.RotatableTile;
-import ch.awae.simtrack.model.TrackTile;
+import ch.awae.simtrack.model.BasicTrackTile;
+import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Implementation for a double slip
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
-public class DoubleSlip extends TrackTile implements RotatableTile {
+class DoubleSlip extends BasicTrackTile {
 
 	private int rotation;
 
@@ -41,18 +38,17 @@ public class DoubleSlip extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
+	public ITile cloneTile() {
 		DoubleSlip clone = new DoubleSlip(this.getPosition());
 		clone.rotation = this.rotation;
 		return clone;
 	}
 
 	@Override
-	public float[][] getRawPaths() {
-		return new float[][] { { this.rotation, this.rotation + 3, 1 },
-				{ this.rotation + 1, (this.rotation + 4) % 6, 1 },
-				{ this.rotation, (this.rotation + 4) % 6, 1 },
-				{ this.rotation + 1, this.rotation + 3, 1 } };
+	public int[] getRailPaths() {
+		return new int[] { this.rotation, this.rotation + 3, this.rotation + 1,
+				(this.rotation + 4) % 6, this.rotation,
+				(this.rotation + 4) % 6, this.rotation + 1, this.rotation + 3 };
 	}
 
 	@Override
@@ -61,31 +57,14 @@ public class DoubleSlip extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public void renderBed(Graphics2D g) {
-		g.rotate(-Math.PI / 3 * this.rotation);
-		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
-		g.rotate(-Math.PI / 3);
-		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
-		TrackRenderUtil.renderCurvedRailbed(g, 8, 5, 45);
-		g.rotate(Math.PI);
-		TrackRenderUtil.renderCurvedRailbed(g, 8, 5, 45);
-	}
-
-	@Override
-	public void renderRail(Graphics2D g) {
-		g.rotate(-Math.PI / 3 * this.rotation);
-		TrackRenderUtil.renderStraightRail(g, 30);
-		g.rotate(-Math.PI / 3);
-		TrackRenderUtil.renderStraightRail(g, 30);
-		TrackRenderUtil.renderCurvedRail(g, 30);
-		g.rotate(Math.PI);
-		TrackRenderUtil.renderCurvedRail(g, 30);
-	}
-
-	@Override
 	public void rotate(boolean isClockwise) {
 		this.rotation += isClockwise ? 2 : 1;
 		this.rotation %= 3;
+	}
+
+	@Override
+	public float getTravelCost() {
+		return 1.2f;
 	}
 
 }

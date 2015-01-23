@@ -18,9 +18,6 @@
 package ch.awae.simtrack.view;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
-
-import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * General representation of any renderer.
@@ -32,16 +29,6 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 @FunctionalInterface
 public interface IRenderer {
 
-	public static Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
-		Point p = SceneViewPort.getScreenCoordinate(SceneViewPort
-				.getScenePos(hex));
-		double zoomFac = 0.01 * SceneViewPort.getZoom();
-		Graphics2D g2 = (Graphics2D) g.create();
-		g2.translate(p.x, p.y);
-		g2.scale(zoomFac, zoomFac);
-		return g2;
-	}
-
 	/**
 	 * The main rendering function. This will be called by the appropriate
 	 * controller whenever the renderer should be active.
@@ -49,7 +36,9 @@ public interface IRenderer {
 	 * @param g
 	 *            the graphics object to render with. This instance can be
 	 *            transformed without limitations.
+	 * @param view
+	 *            the view that invokes the rendering
 	 */
-	public void render(Graphics2D g);
+	public void render(Graphics2D g, IView view);
 
 }

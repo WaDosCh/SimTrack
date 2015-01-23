@@ -27,28 +27,24 @@ import javax.swing.JFrame;
  */
 public class Window extends JFrame {
 
-	public static Window INSTANCE = null;
 	private static final long serialVersionUID = 7381994043443871855L;
 
-	public static void init(int x, int y) {
-		INSTANCE = new Window(x, y);
-	}
-
-	public static Window instance() {
-		return INSTANCE;
-	}
+	private Surface surface;
 
 	Window(int x, int y) {
 		super("SimTrack");
 		this.setAlwaysOnTop(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		Surface.init(x, y);
-		this.add(Surface.INSTANCE);
+		this.add(this.surface = new Surface(x, y));
 		this.pack();
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setFocusTraversalKeysEnabled(false);
 		this.setVisible(true);
+	}
+
+	public Surface getSurface() {
+		return this.surface;
 	}
 
 }

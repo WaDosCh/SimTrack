@@ -15,19 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.view.renderer;
+package ch.awae.simtrack.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.controller.TrackBar;
-import ch.awae.simtrack.gui.Surface;
-import ch.awae.simtrack.model.TrackTile;
+import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Track tool-bar renderer
@@ -48,17 +48,22 @@ public class TrackBarRenderer implements IRenderer {
 	private Stroke rlst = new BasicStroke(4);
 	private Stroke xstr = new BasicStroke(6);
 
+	private ArrayList<ITile> tiles;
+
 	public TrackBarRenderer(TrackBar bar) {
 		this.bar = bar;
+		this.tiles = new ArrayList<>();
+		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
+			this.tiles.add(TrackProvider.getTileInstance(i));
+		}
 	}
 
 	@Override
-	public void render(Graphics2D g) {
-		g.translate(Surface.instance().getWidth() / 2 - 500, Surface.instance()
-				.getHeight() - 50);
+	public void render(Graphics2D g, IView view) {
+		g.translate(view.getHorizontalScreenSize() / 2 - 500,
+				view.getVerticalScreenSize() - 50);
 		g.setStroke(new BasicStroke(4));
-		ArrayList<TrackTile> tracks = this.bar.getTracks();
-		for (int i = -1; i < tracks.size(); i++) {
+		for (int i = -1; i < this.tiles.size(); i++) {
 			// box
 			g.setStroke(this.bdst);
 			g.setColor(i + 1 == this.bar.getIndex() ? this.hover : this.bgcol);
@@ -73,14 +78,9 @@ public class TrackBarRenderer implements IRenderer {
 			} else {
 				g.scale(0.8, 0.8);
 				// rail
-				g.setColor(this.rbeds);
 				g.setStroke(this.rlst);
-				AffineTransform Tx = g.getTransform();
-				tracks.get(i).renderBed(g);
-				g.setTransform(Tx);
-				g.setColor(this.rails);
-				tracks.get(i).renderRail(g);
-				g.setTransform(Tx);
+				TrackRenderUtil.renderRails(g, this.rbeds, this.rails,
+						this.tiles.get(i).getRailPaths());
 
 				g.scale(1.25, 1.25);
 			}

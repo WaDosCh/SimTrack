@@ -20,23 +20,22 @@ package ch.awae.simtrack.controller.tools;
 import java.awt.event.KeyEvent;
 
 import ch.awae.simtrack.controller.Editor;
+import ch.awae.simtrack.controller.IController;
 import ch.awae.simtrack.controller.ITool;
-import ch.awae.simtrack.controller.MapManipulator;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.model.RotatableTile;
-import ch.awae.simtrack.model.TrackTile;
+import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.SceneViewPort;
-import ch.awae.simtrack.view.renderer.BuildToolRenderer;
+import ch.awae.simtrack.view.IViewPort;
 
 /**
  * Build Tool. Used for placing and deleting track tiles
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class BuildTool implements ITool {
 
@@ -44,11 +43,15 @@ public class BuildTool implements ITool {
 	private boolean isQ, isE, isTab;
 	private boolean isValid = false;
 
+	private Editor editor;
+
 	private IRenderer renderer;
+	TileCoordinate pos = null;
 
-	private TrackTile t;
+	private ITile t;
 
-	public BuildTool() {
+	public BuildTool(Editor editor) {
+		this.editor = editor;
 		this.renderer = new BuildToolRenderer(this);
 	}
 
@@ -62,7 +65,7 @@ public class BuildTool implements ITool {
 		return "Builder";
 	}
 
-	public TrackTile getTrack() {
+	public ITile getTrack() {
 		return this.t;
 	}
 
@@ -79,56 +82,78 @@ public class BuildTool implements ITool {
 		if (args == null) {
 			this.isBulldoze = true;
 		} else {
-			this.t = (TrackTile) args[0];
+			this.t = (ITile) args[0];
 			this.isBulldoze = false;
 		}
 	}
 
+	private static boolean canPlaceOn(TileCoordinate c, IModel m) {
+		if (c == null)
+			return false;
+		if (m.getTileAt(c) != null)
+			return false;
+		return true;
+	}
+
+	private static boolean canDelete(TileCoordinate c, IModel m) {
+		if (c == null)
+			return false;
+		ITile t = m.getTileAt(c);
+		if (t == null || t.isFixed())
+			return false;
+		return true;
+	}
+
 	@Override
 	public void tick() {
-		if (Keyboard.key(KeyEvent.VK_ESCAPE))
-			Editor.loadTool("FreeHand", null);
+
+		IController controller = this.editor.getController();
+		IViewPort port = controller.getView().getViewPort();
+		IModel model = controller.getModel();
+		Mouse mouse = controller.getMouse();
+		Keyboard keyboard = controller.getKeyboard();
+
+		this.pos = mouse.hexPosition();
+
+		if (keyboard.key(KeyEvent.VK_ESCAPE)) {
+			this.editor.loadTool("FreeHand", null);
+			return;
+		}
 		if (!this.isBulldoze) {
 			// PLACER
-			this.t.setPosition(Mouse.hexPosition());
-			this.isValid = (MapManipulator.canPlaceOn(this.t.getPosition()));
-			if (this.isValid && this.t.getPosition() != null) {
-				if (Mouse.button1()
-						&& Mouse.position().y < SceneViewPort
-								.getScreenDimensions().y) {
-					MapManipulator.place(this.t.cloneTrack());
+			this.t.setPosition(this.pos);
+			this.isValid = canPlaceOn(this.pos, model);
+			if (this.isValid) {
+				if (mouse.button1()
+						&& mouse.position().y < port.getScreenDimensions().y) {
+					model.setTileAt(this.pos, this.t.cloneTile());
 				}
 			}
-			if (Keyboard.key(KeyEvent.VK_Q)) {
-				if (this.t instanceof RotatableTile && !this.isQ)
-					((RotatableTile) this.t).rotate(false);
+			if (keyboard.key(KeyEvent.VK_Q)) {
+				if (!this.isQ)
+					this.t.rotate(false);
 				this.isQ = true;
 			} else
 				this.isQ = false;
-			if (Keyboard.key(KeyEvent.VK_E)) {
-				if (this.t instanceof RotatableTile && !this.isE)
-					((RotatableTile) this.t).rotate(true);
+			if (keyboard.key(KeyEvent.VK_E)) {
+				if (!this.isE)
+					this.t.rotate(true);
 				this.isE = true;
 			} else
 				this.isE = false;
-			if (Keyboard.key(KeyEvent.VK_TAB)) {
-				if (this.t instanceof RotatableTile && !this.isTab)
-					((RotatableTile) this.t).mirror();
+			if (keyboard.key(KeyEvent.VK_TAB)) {
+				if (!this.isTab)
+					this.t.mirror();
 				this.isTab = true;
 			} else
 				this.isTab = false;
 		} else {
 			// BULLDOZE
-			TileCoordinate pos = Mouse.hexPosition();
-			if (pos != null)
-				this.isValid = MapManipulator.canRemoveFrom(pos);
-			else
-				this.isValid = false;
+			this.isValid = canDelete(this.pos, model);
 			if (this.isValid) {
-				if (Mouse.button1()
-						&& Mouse.position().y < SceneViewPort
-								.getScreenDimensions().y) {
-					MapManipulator.remove(pos);
+				if (mouse.button1()
+						&& mouse.position().y < port.getScreenDimensions().y) {
+					model.removeTileAt(this.pos);
 				}
 			}
 		}

@@ -20,57 +20,63 @@ package ch.awae.simtrack.controller;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.gui.Surface;
-import ch.awae.simtrack.view.SceneViewPort;
-
 /**
  * Navigation Tool. Used for Scene movement & zoom
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class Navigator {
 
-	private final static int BORDER = 20;
-	private final static int deltaZoom = 1;
+	IController owner;
 
-	private static boolean isActive = true;
+	Navigator(IController c) {
+		this.owner = c;
+	}
+
+	private final static int BORDER = 20;
+	private final static float deltaZoom = 0.1f;
+
+	private boolean isActive = true;
 
 	private final static int MOVE_SPEED = 10;
 
-	public static boolean isEnabled() {
-		return isActive;
+	public boolean isEnabled() {
+		return this.isActive;
 	}
 
-	public static void setEnabled(boolean isEnabled) {
-		isActive = isEnabled;
+	public void setEnabled(boolean isEnabled) {
+		this.isActive = isEnabled;
 	}
 
-	public static void tick() {
-		Point mouse = Mouse.position();
+	public void tick() {
+		Point mouse = this.owner.getMouse().position();
 		if (mouse == null)
 			return;
 		int dx = 0, dy = 0;
 		if (mouse.x < BORDER
-				|| Keyboard.keysOr(KeyEvent.VK_A, KeyEvent.VK_LEFT))
+				|| this.owner.getKeyboard().keysOr(KeyEvent.VK_A,
+						KeyEvent.VK_LEFT))
 			dx = 1;
-		if (mouse.y < BORDER || Keyboard.keysOr(KeyEvent.VK_W, KeyEvent.VK_UP))
+		if (mouse.y < BORDER
+				|| this.owner.getKeyboard().keysOr(KeyEvent.VK_W,
+						KeyEvent.VK_UP))
 			dy = 1;
-		if (mouse.x > Surface.instance().getWidth() - BORDER
-				|| Keyboard.keysOr(KeyEvent.VK_D, KeyEvent.VK_RIGHT))
+		if (mouse.x > this.owner.getView().getHorizontalScreenSize() - BORDER
+				|| this.owner.getKeyboard().keysOr(KeyEvent.VK_D,
+						KeyEvent.VK_RIGHT))
 			dx = -1;
-		if (mouse.y > Surface.instance().getHeight() - BORDER
-				|| Keyboard.keysOr(KeyEvent.VK_S, KeyEvent.VK_DOWN))
+		if (mouse.y > this.owner.getView().getVerticalScreenSize() - BORDER
+				|| this.owner.getKeyboard().keysOr(KeyEvent.VK_S,
+						KeyEvent.VK_DOWN))
 			dy = -1;
 		dx *= MOVE_SPEED;
 		dy *= MOVE_SPEED;
-		SceneViewPort.moveScene(dx, dy);
+		this.owner.getView().moveScene(dx, dy);
 
-		double amount = Mouse.getScroll();
-		SceneViewPort.zoom((int) (amount * deltaZoom), mouse.x, mouse.y);
+		double amount = this.owner.getMouse().getScroll();
+		this.owner.getView().zoom((float) (amount * deltaZoom), mouse.x,
+				mouse.y);
 	}
-
 }

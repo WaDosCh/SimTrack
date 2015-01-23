@@ -28,8 +28,8 @@ package ch.awae.simtrack.model.position;
  * direction by comparison with a reference instance with known direction.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-23
+ * @since SimTrack 0.2.1 (0.0.1)
  */
 public class DirectedTileEdgeCoordinate extends TileEdgeCoordinate {
 
@@ -103,6 +103,15 @@ public class DirectedTileEdgeCoordinate extends TileEdgeCoordinate {
 	public String toString() {
 		return "DirEdge: " + this.getU() + "|" + this.getV() + "; edge "
 				+ this.getEdge() + "; out? " + this.out;
+	}
+
+	/**
+	 * @return the opposite direction
+	 * @since 1.2 (SimTrack 0.2.1)
+	 **/
+	public DirectedTileEdgeCoordinate getOppositeDirection() {
+		return new DirectedTileEdgeCoordinate(this.getU(), this.getV(),
+				this.getEdge(), !this.out);
 	}
 
 }

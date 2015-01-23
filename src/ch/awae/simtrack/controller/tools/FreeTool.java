@@ -17,26 +17,27 @@
  */
 package ch.awae.simtrack.controller.tools;
 
+import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.ITool;
-import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.renderer.FreeToolRenderer;
 
 /**
  * "Free-Hand" tool
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class FreeTool implements ITool {
 
 	private final FreeToolRenderer renderer;
 	public TileCoordinate tile;
+	private Editor owner;
 
-	public FreeTool() {
+	public FreeTool(Editor e) {
 		this.renderer = new FreeToolRenderer(this);
+		this.owner = e;
 	}
 
 	@Override
@@ -51,12 +52,14 @@ public class FreeTool implements ITool {
 
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
+		// ensure valid position
 		this.tile = new TileCoordinate(0, 0);
 	}
 
 	@Override
 	public void tick() {
-		TileCoordinate tile = Mouse.hexPosition();
+		TileCoordinate tile = this.owner.getController().getMouse()
+				.hexPosition();
 		if (tile != null)
 			this.tile = tile;
 		// TODO: onClick

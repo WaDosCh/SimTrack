@@ -15,53 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.controller;
+package ch.awae.simtrack.model;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import ch.awae.simtrack.model.Map;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.model.track.BorderTrackTile;
 
 /**
  * This basic implementation spawns connections on the edges with a random
  * distribution.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
-public class BasicBorderConnectionSpawner implements IBorderConnectionSpawner {
+class ConnectionSpawner {
 
-	private int connectionCount;
+	private static Random RAND = new Random();
 
-	private Random random;
-	/**
-	 * creates a new spawner instance. The same instance can be re-used.
-	 * 
-	 * @param connectionCount
-	 *            the number of connections the spawner should place.
-	 */
-	public BasicBorderConnectionSpawner(int connectionCount) {
-		this.connectionCount = connectionCount;
-		this.random = new Random();
-	}
+	public static void spawnConnections(IModel model, int amount) {
 
-	@Override
-	public ArrayList<BorderTrackTile> spawnConnections(Map map) {
+		ArrayList<TileCoordinate> list = new ArrayList<>();
 
-		ArrayList<BorderTrackTile> list = new ArrayList<>();
+		for (int i = 0; i < amount; i++) {
 
-		for (int i = 0; i < this.connectionCount; i++) {
+			final int ho = model.getHorizontalSize();
+			final int ve = model.getVerticalSize();
 
-			final int ho = map.getHorizontalSize();
-			final int ve = map.getVerticalSize();
+			boolean isHo = RAND.nextInt(ho + ve / 2) < ho;
+			boolean isTo = RAND.nextBoolean();
 
-			boolean isHo = this.random.nextInt(ho + ve / 2) < ho;
-			boolean isTo = this.random.nextBoolean();
-
-			int r1 = this.random.nextInt(isHo ? ho : ((ve + 1) / 2));
+			int r1 = RAND.nextInt(isHo ? ho : ((ve + 1) / 2));
 
 			int edge, u, v;
 			// STEP 2: determine position / orient
@@ -76,10 +61,10 @@ public class BasicBorderConnectionSpawner implements IBorderConnectionSpawner {
 					edge = isTo ? 4 : 2;
 				else if (isTo)
 					// top edge
-					edge = this.random.nextBoolean() ? 4 : 5;
+					edge = RAND.nextBoolean() ? 4 : 5;
 				else
 					// bottom edge
-					edge = this.random.nextBoolean() ? 1 : 2;
+					edge = RAND.nextBoolean() ? 1 : 2;
 			} else {
 				r1 += 2;
 				r1 *= 2;
@@ -87,18 +72,23 @@ public class BasicBorderConnectionSpawner implements IBorderConnectionSpawner {
 				if (r1 + 1 >= ve)
 					continue;
 				u = (isTo ? 0 : ho - 1) - (v / 2);
-				edge = this.random.nextInt(3)
-						+ (this.random.nextBoolean() ? 5 : 2);
+				edge = RAND.nextInt(3) + (isTo ? 5 : 2);
 				if (edge > 5)
 					edge -= 6;
 			}
 
-			// STEP 3: assemble
-			BorderTrackTile tile = new BorderTrackTile(
-					new TileCoordinate(u, v), edge, this.random.nextBoolean());
+			TileCoordinate pos = new TileCoordinate(u, v);
+			if (!list.contains(pos)) {
+				BorderTrackTile tile = new BorderTrackTile(pos, edge,
+						RAND.nextBoolean());
+				model.setTileAt(pos, tile);
+				list.add(pos);
+			} else {
+				i--;
+				continue;
+			}
 
-			list.add(tile);
 		}
-		return list;
+
 	}
 }

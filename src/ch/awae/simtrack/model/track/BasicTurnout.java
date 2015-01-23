@@ -17,34 +17,30 @@
  */
 package ch.awae.simtrack.model.track;
 
-import java.awt.Graphics2D;
-
-import ch.awae.simtrack.model.RotatableTile;
-import ch.awae.simtrack.model.TrackTile;
+import ch.awae.simtrack.model.BasicTrackTile;
+import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Basic turnout.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
-public class BasicTurnout extends TrackTile implements RotatableTile {
-
-	public static final float TRAVEL_COST = 1.2f;
+class BasicTurnout extends BasicTrackTile {
 
 	private boolean isLeft = true;
 
 	private int rotation = 0;
+
 	public BasicTurnout(TileCoordinate position) {
 		super(position);
 		this.rotation = 0;
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
+	public ITile cloneTile() {
 		BasicTurnout clone = new BasicTurnout(this.getPosition());
 		clone.rotation = this.rotation;
 		clone.isLeft = this.isLeft;
@@ -52,32 +48,20 @@ public class BasicTurnout extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public float[][] getRawPaths() {
-		return new float[][] {
-				{ (this.rotation + (this.isLeft ? 1 : 5)) % 6,
-						(this.rotation + 3) % 6, TRAVEL_COST },
-				{ this.rotation, (this.rotation + 3) % 6, TRAVEL_COST } };
+	public float getTravelCost() {
+		return 1.2f;
+	}
+
+	@Override
+	public int[] getRailPaths() {
+		return new int[] { this.rotation, (this.rotation + 3) % 6,
+				(this.rotation + (this.isLeft ? 1 : -1)) % 6,
+				(this.rotation + 3) % 6 };
 	}
 
 	@Override
 	public void mirror() {
 		this.isLeft = !this.isLeft;
-	}
-
-	@Override
-	public void renderBed(Graphics2D g) {
-		g.rotate(-Math.PI / 3 * this.rotation);
-		TrackRenderUtil.renderStraightRailbed(g, 8, 5, 45);
-		g.rotate(-Math.PI / 3 * (this.isLeft ? 1 : 3));
-		TrackRenderUtil.renderCurvedRailbed(g, 8, 5, 45);
-	}
-
-	@Override
-	public void renderRail(Graphics2D g) {
-		g.rotate(-Math.PI / 3 * this.rotation);
-		TrackRenderUtil.renderStraightRail(g, 30);
-		g.rotate(-Math.PI / 3 * (this.isLeft ? 1 : 3));
-		TrackRenderUtil.renderCurvedRail(g, 30);
 	}
 
 	@Override

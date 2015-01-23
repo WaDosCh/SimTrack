@@ -15,72 +15,74 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.model.track;
+package ch.awae.simtrack.model;
 
-import java.awt.Graphics2D;
-
-import ch.awae.simtrack.model.BorderConnection;
-import ch.awae.simtrack.model.TrackTile;
-import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * Implementation for the border track pieces. They do not contain any paths.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
-public class BorderTrackTile extends TrackTile implements BorderConnection {
-
-	private Direction direction;
+class BorderTrackTile extends BasicTrackTile {
 
 	private int edge;
+	private boolean isOutput;
 
 	public BorderTrackTile(TileCoordinate position, int edge, boolean isOutput) {
 		super(position);
 		assert edge >= 0 && edge < 6;
 		this.edge = edge;
-		this.direction = isOutput ? Direction.OUT : Direction.IN;
+		this.isOutput = isOutput;
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
-		return null;
+	public float getTravelCost() {
+		return 1;
 	}
 
 	@Override
-	public Direction getDirection() {
-		return this.direction;
-	}
-
-	public int getEdge() {
-		return this.edge;
-	}
-
-	// IRRELEVANT INTERFACE METHODS
-
-	@Override
-	public DirectedTileEdgeCoordinate getInterfacingEdge() {
-		TileCoordinate pos = this.getPosition();
-		return new DirectedTileEdgeCoordinate(pos.getU(), pos.getV(),
-				this.edge, this.direction != Direction.OUT);
+	public int[] getRailPaths() {
+		return new int[] { this.edge, (this.edge + 3) % 6 };
 	}
 
 	@Override
-	public float[][] getRawPaths() {
-		return null;
+	public boolean isFixed() {
+		return true;
 	}
 
 	@Override
-	public void renderBed(Graphics2D g) {
+	public boolean isTrainDestination() {
+		return this.isOutput;
+	}
+
+	@Override
+	public boolean isTrainSpawner() {
+		return !this.isOutput;
+	}
+
+	@Override
+	public boolean connectsAt(int edge) {
+		return edge == this.edge;
+	}
+
+	// == IRRELEVANT INTERFACE METHODS
+
+	@Override
+	public void rotate(boolean clockwise) {
 		return;
 	}
 
 	@Override
-	public void renderRail(Graphics2D g) {
+	public void mirror() {
 		return;
+	}
 
+	@Override
+	public ITile cloneTile() {
+		return null;
 	}
 
 }

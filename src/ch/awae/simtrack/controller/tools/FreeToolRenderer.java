@@ -15,28 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.view.renderer;
+package ch.awae.simtrack.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.SceneViewPort;
+import ch.awae.simtrack.view.IView;
 
 /**
  * Render For the "Free Hand" Tool
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
-public class FreeToolRenderer implements IRenderer {
+class FreeToolRenderer implements IRenderer {
 
 	private final static Stroke borderStroke = new BasicStroke(6);
-	private final static int hexSideHalf = (int) (50 / SceneViewPort.SQRT3);
+	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 	private final FreeTool tool;
 
 	public FreeToolRenderer(FreeTool tool) {
@@ -44,9 +43,9 @@ public class FreeToolRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g) {
+	public void render(Graphics2D g, IView view) {
 		g.setStroke(borderStroke);
-		Graphics2D g2 = IRenderer.focusHex(this.tool.tile, g);
+		Graphics2D g2 = view.getViewPort().focusHex(this.tool.tile, g);
 		g2.setColor(Color.ORANGE);
 		double angle = Math.PI / 3;
 		for (int i = 0; i < 6; i++) {

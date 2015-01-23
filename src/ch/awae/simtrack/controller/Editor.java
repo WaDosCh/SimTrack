@@ -20,11 +20,10 @@ package ch.awae.simtrack.controller;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
-import javax.swing.Timer;
-
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.IView;
 
 /**
  * top-level management of the active side of the user interface. It manages the
@@ -32,37 +31,39 @@ import ch.awae.simtrack.view.IRenderer;
  * complexity by delegating the user actions to well-defined tools.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class Editor {
 
-	private static TrackBar bar = new TrackBar();
-	private static IRenderer barRend;
-	private static ITool currentTool;
-	private static IRenderer renderer;
-	private static Timer t;
-	private static HashMap<String, ITool> tools = new HashMap<>();
+	private IController owner;
 
-	public static void addTool(ITool tool) {
-		tools.put(tool.getToolName(), tool);
-		if (currentTool == null) {
+	private ITool currentTool;
+	private IRenderer renderer;
+	private HashMap<String, ITool> tools = new HashMap<>();
+
+	public void addTool(ITool tool) {
+		this.tools.put(tool.getToolName(), tool);
+		if (this.currentTool == null) {
 			loadTool(tool.getToolName(), null);
 		}
 	}
 
-	public static void init(int logicTicks) {
+	Editor(IController c) {
+		this.owner = c;
 		loadTools();
-		t = new Timer(1000 / logicTicks, e -> Editor.tick());
-		t.setRepeats(true);
-		barRend = bar.getRenderer();
+		// this.owner.getView().setEditorRenderer(this::render);
 	}
 
-	public static boolean loadTool(String name, Object[] args) {
-		ITool next = tools.get(name);
+	public IController getController() {
+		return this.owner;
+	}
+
+	public boolean loadTool(String name, Object[] args) {
+		ITool next = this.tools.get(name);
 		if (next == null)
 			return false;
-		if (currentTool == next) {
+		if (this.currentTool == next) {
 			next.unload();
 			next.load(args);
 			return true;
@@ -73,37 +74,26 @@ public class Editor {
 			// could not load. do not make the switch and leave old tool on!
 			return false;
 		}
-		if (currentTool != null)
-			currentTool.unload();
-		currentTool = next;
-		renderer = currentTool.getRenderer();
+		if (this.currentTool != null)
+			this.currentTool.unload();
+		this.currentTool = next;
+		this.renderer = this.currentTool.getRenderer();
 		return true;
 	}
 
-	private static void loadTools() {
-		addTool(new FreeTool());
-		addTool(new BuildTool());
+	private void loadTools() {
+		addTool(new FreeTool(this));
+		addTool(new BuildTool(this));
 	}
 
-	public static void render(Graphics2D g) {
-		if (renderer != null)
-			renderer.render((Graphics2D) g.create());
-		barRend.render(g);
+	void render(Graphics2D g, IView view) {
+		if (this.renderer != null)
+			this.renderer.render((Graphics2D) g.create(), view);
 	}
 
-	public static void start() {
-		t.start();
-	}
-
-	public static void stop() {
-		t.stop();
-	}
-
-	private static void tick() {
-		Navigator.tick();
-		bar.tick();
-		if (currentTool != null)
-			currentTool.tick();
+	void tick() {
+		if (this.currentTool != null)
+			this.currentTool.tick();
 	}
 
 }

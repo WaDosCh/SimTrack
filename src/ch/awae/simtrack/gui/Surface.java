@@ -19,31 +19,21 @@ package ch.awae.simtrack.gui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.function.Consumer;
 
 import javax.swing.JPanel;
-
-import ch.awae.simtrack.controller.RenderingController;
 
 /**
  * Drawing Surface
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.3, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class Surface extends JPanel {
 
-	public static Surface INSTANCE = null;
-
 	private static final long serialVersionUID = -6043801963054580971L;
-
-	static void init(int x, int y) {
-		INSTANCE = new Surface(x, y);
-	}
-
-	public static Surface instance() {
-		return INSTANCE;
-	}
 
 	Surface(int x, int y) {
 		super();
@@ -52,10 +42,18 @@ public class Surface extends JPanel {
 		this.setPreferredSize(new Dimension(x, y));
 	}
 
+	private Consumer<Graphics2D> renderer = (g) -> {
+		// nop
+	};
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		RenderingController.render(g);
+		this.renderer.accept((Graphics2D) g);
+	}
+
+	void setRenderingHook(Consumer<Graphics2D> renderer) {
+		this.renderer = renderer;
 	}
 
 }

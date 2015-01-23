@@ -15,34 +15,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.view.renderer;
+package ch.awae.simtrack.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 
-import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.controller.tools.BuildTool;
-import ch.awae.simtrack.model.TrackTile;
+import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.SceneViewPort;
+import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Renderer for the {@link BuildTool}
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-22
- * @since SimTrack 0.1.1 (0.0.1)
+ * @version 1.4, 2015-01-23
+ * @since SimTrack 0.2.1
  */
 public class BuildToolRenderer implements IRenderer {
 
 	private static Stroke bullCursorStroke = new BasicStroke(6);
 	private static Color darkRed = Color.RED.darker();
 
-	private final static int hexSideHalf = (int) (50 / SceneViewPort.SQRT3);
+	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 	private static Stroke railStroke = new BasicStroke(5);
 	private BuildTool tool;
 
@@ -51,12 +49,12 @@ public class BuildToolRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g) {
+	public void render(Graphics2D g, IView view) {
 		if (this.tool.isBulldoze()) {
-			TileCoordinate c = Mouse.hexPosition();
+			TileCoordinate c = this.tool.pos;
 			if (c == null)
 				return;
-			Graphics2D g2 = IRenderer.focusHex(c, g);
+			Graphics2D g2 = view.getViewPort().focusHex(c, g);
 			g2.setColor(this.tool.isValid() ? Color.RED : darkRed);
 			g2.setStroke(bullCursorStroke);
 			double angle = Math.PI / 3;
@@ -65,17 +63,15 @@ public class BuildToolRenderer implements IRenderer {
 				g2.rotate(angle);
 			}
 		} else {
-			TrackTile t = this.tool.getTrack();
+			ITile t = this.tool.getTrack();
 			if (t.getPosition() == null)
 				return;
-			Graphics2D g2 = IRenderer.focusHex(t.getPosition(), g);
-			g2.setColor(this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED);
-			AffineTransform T = g2.getTransform();
-			t.renderBed(g2);
-			g2.setTransform(T);
-			g2.setColor(this.tool.isValid() ? Color.GRAY : Color.RED);
+			Graphics2D g2 = view.getViewPort().focusHex(t.getPosition(), g);
 			g2.setStroke(railStroke);
-			t.renderRail(g2);
+			TrackRenderUtil.renderRails(g2,
+					this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED,
+					this.tool.isValid() ? Color.GRAY : Color.RED,
+					t.getRailPaths());
 		}
 	}
 }

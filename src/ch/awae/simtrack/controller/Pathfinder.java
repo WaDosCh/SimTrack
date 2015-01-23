@@ -20,18 +20,17 @@ package ch.awae.simtrack.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.PriorityQueue;
 
+import ch.awae.simtrack.model.Graph;
 import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
-import ch.awae.simtrack.view.Graph;
 
 /**
  * A-Star pathfinding algorithm.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 1.2, 2015-01-23
+ * @since SimTrack 0.1.2
  */
 public class Pathfinder {
 
@@ -40,6 +39,7 @@ public class Pathfinder {
 		DirectedTileEdgeCoordinate element;
 
 		double priority;
+
 		PriorityEntry(double prio, DirectedTileEdgeCoordinate elem) {
 			this.priority = prio;
 			this.element = elem;
@@ -71,10 +71,9 @@ public class Pathfinder {
 			PriorityEntry current = frontier.poll();
 			if (current.element.equals(to))
 				break;
-			for (Entry<DirectedTileEdgeCoordinate, Double> entry : graph
+			for (DirectedTileEdgeCoordinate next : graph
 					.getNeighbours(current.element)) {
-				DirectedTileEdgeCoordinate next = entry.getKey();
-				double cost = entry.getValue().doubleValue();
+				double cost = graph.getCost(current.element, next);
 				double newCost = costSoFar.get(current).doubleValue() + cost;
 				if (!costSoFar.containsKey(next)
 						|| newCost < costSoFar.get(next).doubleValue()) {

@@ -17,23 +17,18 @@
  */
 package ch.awae.simtrack.model.track;
 
-import java.awt.Graphics2D;
-
-import ch.awae.simtrack.model.RotatableTile;
-import ch.awae.simtrack.model.TrackTile;
+import ch.awae.simtrack.model.BasicTrackTile;
+import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Implementation for a curved rail piece.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-22
- * @since SimTrack 0.0.1
+ * @version 2.1, 2015-01-23
+ * @since SimTrack 0.2.1
  */
-public class CurvedRail extends TrackTile implements RotatableTile {
-
-	public static final float TRAVEL_COST = 1.2f;
+class CurvedRail extends BasicTrackTile {
 
 	private int rotation = 0;
 
@@ -43,16 +38,15 @@ public class CurvedRail extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public TrackTile cloneTrack() {
+	public ITile cloneTile() {
 		CurvedRail clone = new CurvedRail(this.getPosition());
 		clone.rotation = this.rotation;
 		return clone;
 	}
 
 	@Override
-	public float[][] getRawPaths() {
-		return new float[][] { { this.rotation, (this.rotation + 2) % 6,
-				TRAVEL_COST } };
+	public int[] getRailPaths() {
+		return new int[] { this.rotation, (this.rotation + 2) % 6 };
 	}
 
 	@Override
@@ -62,21 +56,14 @@ public class CurvedRail extends TrackTile implements RotatableTile {
 	}
 
 	@Override
-	public void renderBed(Graphics2D g) {
-		g.rotate(-Math.PI / 3 * this.rotation);
-		TrackRenderUtil.renderCurvedRailbed(g, 8, 5, 45);
-	}
-
-	@Override
-	public void renderRail(Graphics2D g) {
-		g.rotate(-Math.PI / 3 * this.rotation);
-		TrackRenderUtil.renderCurvedRail(g, 30);
-	}
-
-	@Override
 	public void rotate(boolean isClockwise) {
 		this.rotation += isClockwise ? 5 : 1;
 		this.rotation %= 6;
+	}
+
+	@Override
+	public float getTravelCost() {
+		return 1.1f;
 	}
 
 }
