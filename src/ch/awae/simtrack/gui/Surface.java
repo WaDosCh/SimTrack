@@ -37,7 +37,7 @@ public class Surface extends JPanel {
 
 	private static final long serialVersionUID = -6043801963054580971L;
 
-	public static void init(int x, int y) {
+	static void init(int x, int y) {
 		INSTANCE = new Surface(x, y);
 	}
 
@@ -45,7 +45,7 @@ public class Surface extends JPanel {
 		return INSTANCE;
 	}
 
-	public Surface(int x, int y) {
+	Surface(int x, int y) {
 		super();
 		this.setSize(x, y);
 		this.setMinimumSize(new Dimension(x, y));

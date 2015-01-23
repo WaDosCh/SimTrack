@@ -38,7 +38,7 @@ public class Window extends JFrame {
 		return INSTANCE;
 	}
 
-	public Window(int x, int y) {
+	Window(int x, int y) {
 		super("SimTrack");
 		this.setAlwaysOnTop(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
