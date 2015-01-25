@@ -22,6 +22,11 @@ import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IView;
 
+/**
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.2
+ */
 public interface IController {
 
 	public IModel getModel();
@@ -35,8 +40,9 @@ public interface IController {
 	public void start();
 
 	public void stop();
-	
+
 	public void startView();
+
 	public void stopView();
 
 	public Mouse getMouse();

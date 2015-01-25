@@ -27,7 +27,12 @@ import ch.awae.simtrack.controller.tools.TrackBar;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IView;
 
-public class GameController implements IController {
+/**
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.2
+ */
+class GameController implements IController {
 
 	private IModel model;
 	private IView view;

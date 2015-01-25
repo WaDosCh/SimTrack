@@ -25,6 +25,11 @@ import java.util.function.Consumer;
 import ch.awae.simtrack.controller.IGUIControllerHookup;
 import ch.awae.simtrack.view.IGUIHookProvider;
 
+/**
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.2
+ */
 public class GUI implements IGUIControllerHookup, IGUIHookProvider {
 
 	private Window window;

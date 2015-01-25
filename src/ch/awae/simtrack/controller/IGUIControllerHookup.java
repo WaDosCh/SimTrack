@@ -21,6 +21,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.util.function.Consumer;
 
+/**
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.2
+ */
 public interface IGUIControllerHookup {
 
 	public Consumer<MouseAdapter> getMouseHookup();

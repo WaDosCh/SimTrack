@@ -22,6 +22,11 @@ import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IView;
 
+/**
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.2
+ */
 public class ControllerFactory {
 
 	public static IController buildGameController(IModel model, IView view,

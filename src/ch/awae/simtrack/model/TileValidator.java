@@ -30,7 +30,7 @@ import ch.awae.simtrack.model.track.TrackProvider;
  */
 public class TileValidator {
 
-	public static List<int[]> validTiles;
+	private static List<int[]> validTiles;
 
 	static {
 		validTiles = new ArrayList<>();
@@ -93,10 +93,6 @@ public class TileValidator {
 					list[j + 3] = temp;
 				}
 			}
-		// if (list[0] == 0)
 		return;
-		// int delta = list[0];
-		// for (int i = 0; i < list.length; i++)
-		// list[i] = (list[i] + 6 - delta) % 6;
 	}
 }
