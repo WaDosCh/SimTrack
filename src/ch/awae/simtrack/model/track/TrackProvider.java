@@ -22,9 +22,13 @@ import java.util.ArrayList;
 import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
+/**
+ * @author Andreas Wälchli
+ * @version 1.3, 2015-01-26
+ * @since SimTrack 0.2.2 (0.2.1)
+ */
 public class TrackProvider {
 
-	private static int[] specialMirrors = { 5 };
 	private static ArrayList<ITile> tiles;
 
 	static {
@@ -48,13 +52,6 @@ public class TrackProvider {
 
 	public static int getTileCount() {
 		return tiles.size();
-	}
-
-	public static boolean isSpecialMirror(int tileID) {
-		for (int id : specialMirrors)
-			if (tileID == id)
-				return true;
-		return false;
 	}
 
 }

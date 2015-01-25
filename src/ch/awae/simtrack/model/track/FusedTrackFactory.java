@@ -15,16 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.track;
 
+import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-25
+ * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class AnonymousTrackFactory {
+public class FusedTrackFactory {
 
 	public static ITile createAnonymousTrack(TileCoordinate position,
 			int[] connections, float cost) {

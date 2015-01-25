@@ -25,32 +25,43 @@ import ch.awae.simtrack.model.track.TrackProvider;
 
 /**
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-25
+ * @version 1.3, 2015-01-26
  * @since SimTrack 0.2.2
  */
 public class TileValidator {
 
-	static List<int[]> validTiles;
+	public static List<int[]> validTiles;
 
 	static {
 		validTiles = new ArrayList<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
+			int[] paths;
 			ITile t = TrackProvider.getTileInstance(i);
-			int[] paths = t.getRailPaths().clone();
-			sortAndNormalisePaths(paths);
-			validTiles.add(paths);
-			if (TrackProvider.isSpecialMirror(i)) {
-				t.mirror();
+			ITile t1 = TrackProvider.getTileInstance(i);
+			t1.mirror();
+			for (int r = 0; r < 6; r++) {
 				paths = t.getRailPaths().clone();
-				sortAndNormalisePaths(paths);
-				validTiles.add(paths);
+				sortPathList(paths);
+				addIfNotThere(paths);
+				paths = t1.getRailPaths().clone();
+				sortPathList(paths);
+				addIfNotThere(paths);
+				t.rotate(false);
+				t1.rotate(false);
 			}
 		}
 	}
 
+	private static void addIfNotThere(int[] item) {
+		for (int[] entry : validTiles)
+			if (Arrays.equals(entry, item))
+				return;
+		validTiles.add(item);
+	}
+
 	public static boolean isValidTrack(ITile tile) {
 		int[] paths = tile.getRailPaths().clone();
-		sortAndNormalisePaths(paths);
+		sortPathList(paths);
 		// STEP 1: check for duplicates
 		for (int i = 0; i + 3 < paths.length; i++)
 			if (paths[i] == paths[i + 2] && paths[i + 1] == paths[i + 3])
@@ -62,27 +73,30 @@ public class TileValidator {
 		return false;
 	}
 
-	private static void sortAndNormalisePaths(int[] list) {
+	private static void sortPathList(int[] list) {
+		for (int i = 0; i + 1 < list.length; i += 2) {
+			if (list[i] > list[i + 1]) {
+				int temp = list[i];
+				list[i] = list[i + 1];
+				list[i + 1] = temp;
+			}
+		}
 		for (int i = 0; i + 3 < list.length; i += 2)
 			for (int j = 0; j + 3 < list.length; j += 2) {
-				if (list[j] < list[j + 1]) {
-					int temp = list[j];
-					list[j] = list[j + 1];
-					list[j + 1] = temp;
-				}
 				if (list[j] > list[j + 2]
 						|| (list[j] == list[j + 2] && list[j + 1] > list[j + 3])) {
 					int temp = list[j];
 					list[j] = list[j + 2];
 					list[j + 2] = temp;
+					temp = list[j + 1];
 					list[j + 1] = list[j + 3];
 					list[j + 3] = temp;
 				}
 			}
-		if (list[0] == 0)
-			return;
-		int delta = list[0];
-		for (int i = 0; i < list.length; i++)
-			list[i] = (list[i] + 6 - delta) % 6;
+		// if (list[0] == 0)
+		return;
+		// int delta = list[0];
+		// for (int i = 0; i < list.length; i++)
+		// list[i] = (list[i] + 6 - delta) % 6;
 	}
 }

@@ -25,8 +25,8 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * Basic turnout.
  * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 2.2, 2015-01-26
+ * @since SimTrack (0.2.2) 0.2.1
  */
 class BasicTurnout extends BasicTrackTile {
 
@@ -55,7 +55,7 @@ class BasicTurnout extends BasicTrackTile {
 	@Override
 	public int[] getRailPaths() {
 		return new int[] { this.rotation, (this.rotation + 3) % 6,
-				(this.rotation + (this.isLeft ? 1 : -1)) % 6,
+				(this.rotation + (this.isLeft ? 1 : 5)) % 6,
 				(this.rotation + 3) % 6 };
 	}
 
