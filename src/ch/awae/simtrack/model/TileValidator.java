@@ -25,7 +25,7 @@ import ch.awae.simtrack.model.track.TrackProvider;
 
 /**
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-24
+ * @version 1.2, 2015-01-25
  * @since SimTrack 0.2.2
  */
 public class TileValidator {
@@ -37,12 +37,12 @@ public class TileValidator {
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			ITile t = TrackProvider.getTileInstance(i);
 			int[] paths = t.getRailPaths().clone();
-			sortPaths(paths);
+			sortAndNormalisePaths(paths);
 			validTiles.add(paths);
 			if (TrackProvider.isSpecialMirror(i)) {
 				t.mirror();
 				paths = t.getRailPaths().clone();
-				sortPaths(paths);
+				sortAndNormalisePaths(paths);
 				validTiles.add(paths);
 			}
 		}
@@ -50,7 +50,7 @@ public class TileValidator {
 
 	public static boolean isValidTrack(ITile tile) {
 		int[] paths = tile.getRailPaths().clone();
-		sortPaths(paths);
+		sortAndNormalisePaths(paths);
 		// STEP 1: check for duplicates
 		for (int i = 0; i + 3 < paths.length; i++)
 			if (paths[i] == paths[i + 2] && paths[i + 1] == paths[i + 3])
@@ -62,7 +62,7 @@ public class TileValidator {
 		return false;
 	}
 
-	private static void sortPaths(int[] list) {
+	private static void sortAndNormalisePaths(int[] list) {
 		for (int i = 0; i + 3 < list.length; i += 2)
 			for (int j = 0; j + 3 < list.length; j += 2) {
 				if (list[j] < list[j + 1]) {
@@ -79,5 +79,10 @@ public class TileValidator {
 					list[j + 3] = temp;
 				}
 			}
+		if (list[0] == 0)
+			return;
+		int delta = list[0];
+		for (int i = 0; i < list.length; i++)
+			list[i] = (list[i] + 6 - delta) % 6;
 	}
 }
