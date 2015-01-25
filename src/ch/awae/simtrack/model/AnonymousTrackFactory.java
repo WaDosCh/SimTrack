@@ -21,35 +21,31 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-24
- * @since SimTrack 0.2.2 (0.2.1)
+ * @version 1.1, 2015-01-25
+ * @since SimTrack 0.2.2
  */
-public interface ITile extends IEntity {
+public class AnonymousTrackFactory {
 
-	public TileCoordinate getPosition();
+	public static ITile createAnonymousTrack(TileCoordinate position,
+			int[] connections, float cost) {
+		return new AnonymousTrack(position, connections, cost);
+	}
 
-	public void setPosition(TileCoordinate position);
+	public static ITile createAnonymousTrack(ITile tile) {
+		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths(),
+				tile.getTravelCost());
+	}
 
-	public boolean isFixed();
+	public static ITile createFusedTrack(ITile tile0, ITile tile1) {
+		int[] con0 = tile0.getRailPaths();
+		int[] con1 = tile1.getRailPaths();
 
-	public boolean isTrainSpawner();
+		int[] cons = new int[con0.length + con1.length];
 
-	public boolean isTrainDestination();
+		System.arraycopy(con0, 0, cons, 0, con0.length);
+		System.arraycopy(con1, 0, cons, con0.length, con1.length);
 
-	public float getTravelCost();
-
-	public int[] getRailPaths();
-
-	public void rotate(boolean clockwise);
-
-	public void mirror();
-
-	public boolean connectsAt(int edge);
-
-	public ITile cloneTile();
-
-	public void setBlock(IBlock block);
-
-	public IBlock getBlock();
-
+		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(
+				tile0.getTravelCost(), tile1.getTravelCost()));
+	}
 }

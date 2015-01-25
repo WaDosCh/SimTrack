@@ -21,35 +21,44 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-24
- * @since SimTrack 0.2.2 (0.2.1)
+ * @version 1.1, 2014-01-25
+ * @since SimTrack 0.2.2
  */
-public interface ITile extends IEntity {
+class AnonymousTrack extends BasicTrackTile {
 
-	public TileCoordinate getPosition();
+	private float cost;
+	private int[] connections;
 
-	public void setPosition(TileCoordinate position);
+	AnonymousTrack(TileCoordinate position, int[] connections, float cost) {
+		super(position);
+		this.connections = connections.clone();
+		this.cost = cost;
+	}
 
-	public boolean isFixed();
+	@Override
+	public float getTravelCost() {
+		return this.cost;
+	}
 
-	public boolean isTrainSpawner();
+	@Override
+	public int[] getRailPaths() {
+		return this.connections;
+	}
 
-	public boolean isTrainDestination();
+	@Override
+	public void rotate(boolean clockwise) {
+		throw new UnsupportedOperationException("Cannot rotate anonymous track");
+	}
 
-	public float getTravelCost();
+	@Override
+	public void mirror() {
+		throw new UnsupportedOperationException("Cannot mirror anonymous track");
+	}
 
-	public int[] getRailPaths();
-
-	public void rotate(boolean clockwise);
-
-	public void mirror();
-
-	public boolean connectsAt(int edge);
-
-	public ITile cloneTile();
-
-	public void setBlock(IBlock block);
-
-	public IBlock getBlock();
+	@Override
+	public ITile cloneTile() {
+		return new AnonymousTrack(this.getPosition(), this.connections,
+				this.cost);
+	}
 
 }

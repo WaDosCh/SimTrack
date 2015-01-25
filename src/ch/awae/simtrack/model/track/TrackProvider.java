@@ -24,6 +24,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 
 public class TrackProvider {
 
+	private static int[] specialMirrors = { 5 };
 	private static ArrayList<ITile> tiles;
 
 	static {
@@ -47,6 +48,13 @@ public class TrackProvider {
 
 	public static int getTileCount() {
 		return tiles.size();
+	}
+
+	public static boolean isSpecialMirror(int tileID) {
+		for (int id : specialMirrors)
+			if (tileID == id)
+				return true;
+		return false;
 	}
 
 }
