@@ -26,7 +26,9 @@ import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.track.FusedTrackFactory;
 import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IViewPort;
 
@@ -49,6 +51,7 @@ public class BuildTool implements ITool {
 	TileCoordinate pos = null;
 
 	private ITile t;
+	private static ITile createFusedTrack;
 
 	public BuildTool(Editor editor) {
 		this.editor = editor;
@@ -87,11 +90,18 @@ public class BuildTool implements ITool {
 		}
 	}
 
-	private static boolean canPlaceOn(TileCoordinate c, IModel m) {
+	private static boolean canPlaceOn(TileCoordinate c, IModel m, ITile t) {
 		if (c == null)
 			return false;
-		if (m.getTileAt(c) != null)
+		ITile tile = m.getTileAt(c);
+		if (tile != null) {
+			if (tile.isFixed())
+				return false;
+			if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(
+					tile, t)))
+				return true;
 			return false;
+		}
 		return true;
 	}
 
@@ -102,6 +112,18 @@ public class BuildTool implements ITool {
 		if (t == null || t.isFixed())
 			return false;
 		return true;
+	}
+
+	private void place() {
+		IModel model = this.editor.getController().getModel();
+		if (model.getTileAt(this.pos) == null)
+			model.setTileAt(this.pos, this.t.cloneTile());
+		else {
+			ITile oldTile = model.getTileAt(this.pos);
+			model.removeTileAt(this.pos);
+			model.setTileAt(this.pos,
+					FusedTrackFactory.createFusedTrack(oldTile, this.t));
+		}
 	}
 
 	@Override
@@ -122,11 +144,11 @@ public class BuildTool implements ITool {
 		if (!this.isBulldoze) {
 			// PLACER
 			this.t.setPosition(this.pos);
-			this.isValid = canPlaceOn(this.pos, model);
+			this.isValid = canPlaceOn(this.pos, model, this.t);
 			if (this.isValid) {
 				if (mouse.button1()
 						&& mouse.position().y < port.getScreenDimensions().y) {
-					model.setTileAt(this.pos, this.t.cloneTile());
+					this.place();
 				}
 			}
 			if (keyboard.key(KeyEvent.VK_Q)) {
