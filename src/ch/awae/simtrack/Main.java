@@ -55,5 +55,4 @@ public class Main {
 
 		SwingUtilities.invokeLater(Main::init);
 	}
-
 }
