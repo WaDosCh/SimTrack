@@ -18,8 +18,10 @@
 package ch.awae.simtrack.controller.tools;
 
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 
 import ch.awae.simtrack.controller.Editor;
+import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IRenderer;
 
@@ -27,8 +29,8 @@ import ch.awae.simtrack.view.IRenderer;
  * Track tool-bar used for track selection while editing the board
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.4, 2015-01-23
+ * @since SimTrack 0.2.2 (0.2.1)
  */
 public class TrackBar {
 
@@ -64,6 +66,8 @@ public class TrackBar {
 
 	public void tick() {
 		this.index = -1;
+		if (this.checkForHotKeys(this.editor.getController().getKeyboard()))
+			return;
 		Point p = this.editor.getController().getMouse().position();
 		if (p == null) {
 			p = new Point(0, 0);
@@ -87,6 +91,46 @@ public class TrackBar {
 		} else if (!button && this.isPressed) {
 			this.isPressed = false;
 		}
+
+	}
+
+	/**
+	 * performs hotkey checks for quick track piece access
+	 * 
+	 * @param k
+	 *            the keyboard to operate with
+	 * @return {@code true} if a hotkey was used (terminates tick),
+	 *         {@code false} otherwise
+	 * @since 1.4 (SimTrack 0.2.2)
+	 */
+	private boolean checkForHotKeys(Keyboard k) {
+		if (k.key(KeyEvent.VK_MINUS))
+			this.index = 0;
+		else if (k.key(KeyEvent.VK_1))
+			this.index = 1;
+		else if (k.key(KeyEvent.VK_2))
+			this.index = 2;
+		else if (k.key(KeyEvent.VK_3))
+			this.index = 3;
+		else if (k.key(KeyEvent.VK_4))
+			this.index = 4;
+		else if (k.key(KeyEvent.VK_5))
+			this.index = 5;
+		else if (k.key(KeyEvent.VK_6))
+			this.index = 6;
+		else if (k.key(KeyEvent.VK_7))
+			this.index = 7;
+		else if (k.key(KeyEvent.VK_8))
+			this.index = 8;
+		else if (k.key(KeyEvent.VK_9))
+			this.index = 9;
+		else if (k.key(KeyEvent.VK_0))
+			this.index = 10;
+		else
+			return false;
+		this.select();
+		return true;
+
 	}
 
 }
