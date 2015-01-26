@@ -27,7 +27,7 @@ import ch.awae.simtrack.model.track.TrackProvider;
  * Validation class to determine whether or not a tile is valid
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-26
+ * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
 public class TileValidator {
@@ -38,8 +38,8 @@ public class TileValidator {
 		validTiles = new ArrayList<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			int[] paths;
-			ITile t = TrackProvider.getTileInstance(i);
-			ITile t1 = TrackProvider.getTileInstance(i);
+			ITile t = TrackProvider.getTileInstance(i).cloneTile();
+			ITile t1 = TrackProvider.getTileInstance(i).cloneTile();
 			t1.mirror();
 			for (int r = 0; r < 6; r++) {
 				paths = t.getRailPaths().clone();
@@ -71,10 +71,6 @@ public class TileValidator {
 	public static boolean isValidTrack(ITile tile) {
 		int[] paths = tile.getRailPaths().clone();
 		sortPathList(paths);
-
-		for (int p : paths)
-			System.out.print(p + " ; ");
-		System.out.println();
 
 		// STEP 1: check for duplicates
 		for (int i = 0; i + 3 < paths.length; i += 2)

@@ -29,17 +29,17 @@ public class FusedTrackFactory {
 
 	public static ITile createAnonymousTrack(TileCoordinate position,
 			int[] connections, float cost) {
-		return new AnonymousTrack(position, connections, cost);
+		return new AnonymousTrack(position, connections.clone(), cost);
 	}
 
 	public static ITile createAnonymousTrack(ITile tile) {
-		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths(),
-				tile.getTravelCost());
+		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths()
+				.clone(), tile.getTravelCost());
 	}
 
 	public static ITile createFusedTrack(ITile tile0, ITile tile1) {
-		int[] con0 = tile0.getRailPaths();
-		int[] con1 = tile1.getRailPaths();
+		int[] con0 = tile0.getRailPaths().clone();
+		int[] con1 = tile1.getRailPaths().clone();
 
 		int[] cons = new int[con0.length + con1.length];
 

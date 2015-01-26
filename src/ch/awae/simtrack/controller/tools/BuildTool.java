@@ -36,7 +36,7 @@ import ch.awae.simtrack.view.IViewPort;
  * Build Tool. Used for placing and deleting track tiles
  * 
  * @author Andreas Wälchli
- * @version 1.4, 2015-01-26
+ * @version 1.5, 2015-01-26
  * @since SimTrack 0.2.2
  */
 public class BuildTool implements ITool {
@@ -48,8 +48,6 @@ public class BuildTool implements ITool {
 	private IRenderer renderer;
 	private TileCoordinate pos = null;
 	private ITile t;
-	private int rotationCache = 0;
-	private boolean mirrorCache = false;
 
 	/**
 	 * instantiates a new build tool
@@ -114,10 +112,6 @@ public class BuildTool implements ITool {
 			this.isBulldoze = true;
 		} else {
 			this.t = (ITile) args[0];
-			for (int i = 0; i < this.rotationCache; i++)
-				this.t.rotate(false);
-			if (this.mirrorCache)
-				this.t.mirror();
 			this.isBulldoze = false;
 		}
 	}
@@ -213,8 +207,6 @@ public class BuildTool implements ITool {
 			if (keyboard.key(KeyEvent.VK_Q)) {
 				if (!this.isQ) {
 					this.t.rotate(false);
-					this.rotationCache++;
-					this.rotationCache %= 6;
 				}
 				this.isQ = true;
 			} else
@@ -222,8 +214,6 @@ public class BuildTool implements ITool {
 			if (keyboard.key(KeyEvent.VK_E)) {
 				if (!this.isE) {
 					this.t.rotate(true);
-					this.rotationCache += 5;
-					this.rotationCache %= 6;
 				}
 				this.isE = true;
 			} else
@@ -231,7 +221,6 @@ public class BuildTool implements ITool {
 			if (keyboard.key(KeyEvent.VK_TAB)) {
 				if (!this.isTab) {
 					this.t.mirror();
-					this.mirrorCache = !this.mirrorCache;
 				}
 				this.isTab = true;
 			} else

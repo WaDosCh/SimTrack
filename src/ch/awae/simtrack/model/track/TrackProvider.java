@@ -52,7 +52,7 @@ public class TrackProvider {
 	}
 
 	public static ITile getTileInstance(int tileID) {
-		return tiles.get(tileID).cloneTile();
+		return tiles.get(tileID);
 	}
 
 	public static int getTileCount() {
