@@ -28,8 +28,10 @@ import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IView;
 
 /**
+ * The game controller implementation
+ * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-26
+ * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.2
  */
 class GameController implements IController {
@@ -45,6 +47,12 @@ class GameController implements IController {
 
 	private Timer tickTimer, viewTimer;
 
+	/**
+	 * instantiates a new controller instance
+	 * 
+	 * @param model
+	 * @param view
+	 */
 	public GameController(IModel model, IView view) {
 		this.model = model;
 		this.view = view;
@@ -58,15 +66,36 @@ class GameController implements IController {
 		this.view.setEditorRenderer(this::render);
 	}
 
+	/**
+	 * renders the controller-associated elements. There include the editor and
+	 * the track-bar
+	 * 
+	 * @param g
+	 *            the graphics instance to render onto
+	 * @param v
+	 *            the view
+	 */
 	private void render(Graphics2D g, IView v) {
 		this.editor.render(g, v);
 		this.trackbar.getRenderer().render(g, v);
 	}
 
+	/**
+	 * sets the controller's mouse observer instance
+	 * 
+	 * @param mouse
+	 *            the mouse observer
+	 */
 	void setMouse(Mouse mouse) {
 		this.mouse = mouse;
 	}
 
+	/**
+	 * sets the controller's keyboard observer instance
+	 * 
+	 * @param keyboard
+	 *            the keyboard observer
+	 */
 	void setKeyboard(Keyboard keyboard) {
 		this.keyboard = keyboard;
 	}
@@ -123,6 +152,9 @@ class GameController implements IController {
 		return this.keyboard;
 	}
 
+	/**
+	 * performs a game logic update tick.
+	 */
 	private void tick() {
 		this.navigator.tick();
 		this.editor.tick();
@@ -130,6 +162,10 @@ class GameController implements IController {
 		// TODO: tick logic
 	}
 
+	/**
+	 * performs a view tick. This renders the view associated with this
+	 * controller.
+	 */
 	private void viewTick() {
 		long a = System.nanoTime();
 		this.view.renderView();

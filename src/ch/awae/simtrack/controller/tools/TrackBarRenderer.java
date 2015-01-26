@@ -33,8 +33,8 @@ import ch.awae.simtrack.view.TrackRenderUtil;
  * Track tool-bar renderer
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.4, 2015-01-26
+ * @since SimTrack 0.2.2
  */
 public class TrackBarRenderer implements IRenderer {
 
@@ -50,7 +50,13 @@ public class TrackBarRenderer implements IRenderer {
 
 	private ArrayList<ITile> tiles;
 
-	public TrackBarRenderer(TrackBar bar) {
+	/**
+	 * creates a new renderer instance
+	 * 
+	 * @param bar
+	 *            the track-bar rendered by this renderer
+	 */
+	TrackBarRenderer(TrackBar bar) {
 		this.bar = bar;
 		this.tiles = new ArrayList<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {

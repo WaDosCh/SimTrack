@@ -24,10 +24,11 @@ import java.util.HashMap;
 import ch.awae.simtrack.controller.IGUIControllerHookup;
 
 /**
- * Keyboard Observer
+ * Keyboard Observer. Records any keyboard actions and provides the information
+ * in a lightweight way.
  * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
+ * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
 public class Keyboard {
@@ -44,17 +45,46 @@ public class Keyboard {
 		}
 	};
 
+	/**
+	 * the recording map for all key states
+	 */
 	HashMap<Integer, Boolean> keystates = new HashMap<>();
 
+	/**
+	 * instantiates a new keyboard observer
+	 * 
+	 * @param hooker
+	 *            the hook-up that should be used by the keyboard. The hook-up
+	 *            provides an anonymous way for the keyboard instance to hook
+	 *            into the GUI structure without directly accessing it.
+	 */
 	public Keyboard(IGUIControllerHookup hooker) {
 		hooker.getKeyboardHookup().accept(this.adapter);
 	}
 
+	/**
+	 * checks whether or not a given key is currently pressed.
+	 * 
+	 * @param keyCode
+	 *            the key code of the key to check for. It is recommended to use
+	 *            the key-code constants provided by {@link KeyEvent}.
+	 * @return {@code true} if and only if the key with the given code is
+	 *         currently pressed.
+	 */
 	public boolean key(int keyCode) {
 		return this.keystates.getOrDefault(keyCode, Boolean.FALSE)
 				.booleanValue();
 	}
 
+	/**
+	 * checks whether or not all of the given keys are currently pressed. This
+	 * can be useful for checking for key combinations
+	 * 
+	 * @param keyCode
+	 *            an array of all keys that should be checked.
+	 * @return {@code true} if and only if all key in the provided list are
+	 *         pressed.
+	 */
 	public boolean keysAnd(int... keyCode) {
 		for (int code : keyCode)
 			if (!key(code))
@@ -62,6 +92,14 @@ public class Keyboard {
 		return true;
 	}
 
+	/**
+	 * checks whether or not any of the given keys is currently pressed. This
+	 * can be useful for checking multiple key mappings at the same time.
+	 * 
+	 * @param keyCode
+	 *            an array of all the keys that should be checked.
+	 * @return {@code true} if any of the given keys is pressed.
+	 */
 	public boolean keysOr(int... keyCode) {
 		for (int code : keyCode)
 			if (key(code))
@@ -69,6 +107,10 @@ public class Keyboard {
 		return false;
 	}
 
+	/**
+	 * resets the internal recordings and thereby virtually neutralises any
+	 * currently pressed keys.
+	 */
 	public void reset() {
 		this.keystates.clear();
 	}

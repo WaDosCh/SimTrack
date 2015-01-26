@@ -24,7 +24,7 @@ import javax.swing.JFrame;
  * 
  * @author Andreas Wälchli
  * @version 1.3, 2015-01-23
- * @since SimTrack 0.2.1
+ * @since SimTrack 0.2.2
  */
 class Window extends JFrame {
 
@@ -32,6 +32,14 @@ class Window extends JFrame {
 
 	private Surface surface;
 
+	/**
+	 * instantiates a new main window
+	 * 
+	 * @param x
+	 *            the width of the drawing surface
+	 * @param y
+	 *            the height of the drawing surface
+	 */
 	Window(int x, int y) {
 		super("SimTrack");
 		this.setAlwaysOnTop(true);
@@ -44,7 +52,12 @@ class Window extends JFrame {
 		this.setVisible(true);
 	}
 
-	public Surface getSurface() {
+	/**
+	 * retrieves the drawing surface
+	 * 
+	 * @return the drawing surface
+	 */
+	Surface getSurface() {
 		return this.surface;
 	}
 

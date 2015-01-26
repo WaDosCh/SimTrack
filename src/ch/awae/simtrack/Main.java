@@ -36,6 +36,7 @@ import ch.awae.simtrack.view.ViewFactory;
  * @version 1.3, 2015-01-23
  * @since SimTrack 0.2.1
  */
+@SuppressWarnings("javadoc")
 public class Main {
 
 	private static void init() {

@@ -23,12 +23,25 @@ import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IView;
 
 /**
+ * Factory for controller instances.
+ * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-26
+ * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.2
  */
 public class ControllerFactory {
 
+	/**
+	 * creates a new game controller. A game controller manages the in-game
+	 * processes.
+	 * 
+	 * @param model
+	 * @param view
+	 * @param hooker
+	 * @param tps
+	 * @param fps
+	 * @return a new game controller instantiated with the provided params
+	 */
 	public static IController buildGameController(IModel model, IView view,
 			IGUIControllerHookup hooker, int tps, int fps) {
 		GameController c = new GameController(model, view);

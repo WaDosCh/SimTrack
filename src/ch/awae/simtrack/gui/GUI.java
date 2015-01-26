@@ -26,8 +26,10 @@ import ch.awae.simtrack.controller.IGUIControllerHookup;
 import ch.awae.simtrack.view.IGUIHookProvider;
 
 /**
+ * The GUI wrapper class
+ * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-26
+ * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.2
  */
 public class GUI implements IGUIControllerHookup, IGUIHookProvider {
@@ -35,6 +37,14 @@ public class GUI implements IGUIControllerHookup, IGUIHookProvider {
 	private Window window;
 	private Surface surface;
 
+	/**
+	 * instantiates a new GUI with the provided dimensions
+	 * 
+	 * @param x
+	 *            the width of the window in pixels
+	 * @param y
+	 *            the height of the window in pixels
+	 */
 	public GUI(int x, int y) {
 		this.window = new Window(x, y);
 		this.surface = this.window.getSurface();

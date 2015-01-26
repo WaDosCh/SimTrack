@@ -29,7 +29,7 @@ import ch.awae.simtrack.view.IRenderer;
  * Track tool-bar used for track selection while editing the board
  * 
  * @author Andreas Wälchli
- * @version 1.4, 2015-01-23
+ * @version 1.5, 2015-01-26
  * @since SimTrack 0.2.2 (0.2.1)
  */
 public class TrackBar {
@@ -39,19 +39,38 @@ public class TrackBar {
 	private IRenderer rend;
 	private Editor editor;
 
+	/**
+	 * creates a new track-bar instance
+	 * 
+	 * @param editor
+	 *            the editor owning the build tool
+	 */
 	public TrackBar(Editor editor) {
 		this.editor = editor;
 		this.rend = new TrackBarRenderer(this);
 	}
 
-	public int getIndex() {
+	/**
+	 * provides the index of the currently selected tile
+	 * 
+	 * @return the current tile index
+	 */
+	int getIndex() {
 		return this.index;
 	}
 
+	/**
+	 * provides the renderer responsible for rendering the track-bar
+	 * 
+	 * @return the renderer
+	 */
 	public IRenderer getRenderer() {
 		return this.rend;
 	}
 
+	/**
+	 * activates the build tool with the currently selected tile
+	 */
 	private void select() {
 		if (this.index == 0) {
 			this.editor.loadTool("Builder", null);
@@ -64,6 +83,9 @@ public class TrackBar {
 		}
 	}
 
+	/**
+	 * performs an update tick on the "tool"
+	 */
 	public void tick() {
 		this.index = -1;
 		if (this.checkForHotKeys(this.editor.getController().getKeyboard()))

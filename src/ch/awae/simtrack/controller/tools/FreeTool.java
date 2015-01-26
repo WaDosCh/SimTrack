@@ -23,18 +23,33 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
 
 /**
- * "Free-Hand" tool
+ * "Free-Hand" tool. This tool will be used for in-situ tile manipulation
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.4, 2015-01-26
+ * @since SimTrack 0.2.2
  */
 public class FreeTool implements ITool {
 
 	private final FreeToolRenderer renderer;
-	public TileCoordinate tile;
+	private TileCoordinate tile;
 	private Editor owner;
 
+	/**
+	 * provides the current tool position
+	 * 
+	 * @return the current position
+	 */
+	TileCoordinate getPosition() {
+		return this.tile;
+	}
+
+	/**
+	 * creates a new tool instance.
+	 * 
+	 * @param e
+	 *            the editor owning the tool
+	 */
 	public FreeTool(Editor e) {
 		this.renderer = new FreeToolRenderer(this);
 		this.owner = e;

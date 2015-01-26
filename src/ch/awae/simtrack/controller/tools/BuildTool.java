@@ -36,28 +36,39 @@ import ch.awae.simtrack.view.IViewPort;
  * Build Tool. Used for placing and deleting track tiles
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-26
- * @since SimTrack 0.2.2 (0.2.1)
+ * @version 1.4, 2015-01-26
+ * @since SimTrack 0.2.2
  */
 public class BuildTool implements ITool {
 
 	private boolean isBulldoze;
 	private boolean isQ, isE, isTab;
 	private boolean isValid = false;
-
 	private Editor editor;
-
 	private IRenderer renderer;
-	TileCoordinate pos = null;
-
+	private TileCoordinate pos = null;
 	private ITile t;
-
 	private int rotationCache = 0;
 	private boolean mirrorCache = false;
 
+	/**
+	 * instantiates a new build tool
+	 * 
+	 * @param editor
+	 *            the editor the build tool will operate under
+	 */
 	public BuildTool(Editor editor) {
 		this.editor = editor;
 		this.renderer = new BuildToolRenderer(this);
+	}
+
+	/**
+	 * retrieves the current position
+	 * 
+	 * @return the position
+	 */
+	TileCoordinate getPosition() {
+		return this.pos;
 	}
 
 	@Override
@@ -70,15 +81,30 @@ public class BuildTool implements ITool {
 		return "Builder";
 	}
 
-	public ITile getTrack() {
+	/**
+	 * retrieves the current tile type
+	 * 
+	 * @return the tile, or {@code null} if the deletion tool is active
+	 */
+	ITile getTrack() {
 		return this.t;
 	}
 
-	public boolean isBulldoze() {
+	/**
+	 * indicates whether or not the tool is in deletion mode
+	 * 
+	 * @return {@code true} if and only if deletion mode is active
+	 */
+	boolean isBulldoze() {
 		return this.isBulldoze;
 	}
 
-	public boolean isValid() {
+	/**
+	 * indicates whether or not the tool is in a valid state.
+	 * 
+	 * @return {@code true} if and only if the tool is in a valid state.
+	 */
+	boolean isValid() {
 		return this.isValid;
 	}
 
@@ -96,6 +122,19 @@ public class BuildTool implements ITool {
 		}
 	}
 
+	/**
+	 * checks if a given tile can be placed at a given location in a given model
+	 * 
+	 * @param c
+	 *            the position to check on
+	 * @param m
+	 *            the model to check in
+	 * @param t
+	 *            the tile to check for
+	 * @return {@code true} if and only if the tile can either be placed on the
+	 *         provided position in the provided model, or if it can be fused
+	 *         with the currently present tile.
+	 */
 	private static boolean canPlaceOn(TileCoordinate c, IModel m, ITile t) {
 		if (c == null)
 			return false;
@@ -111,6 +150,16 @@ public class BuildTool implements ITool {
 		return true;
 	}
 
+	/**
+	 * checks if the tile at a given location in a given model can be deleted
+	 * 
+	 * @param c
+	 *            the location to check on
+	 * @param m
+	 *            the model to check in
+	 * @return {@code true} if and only if the given position in the given model
+	 *         contains a tile and it can be deleted.
+	 */
 	private static boolean canDelete(TileCoordinate c, IModel m) {
 		if (c == null)
 			return false;
@@ -120,6 +169,10 @@ public class BuildTool implements ITool {
 		return true;
 	}
 
+	/**
+	 * places the tile at the current location or (if applicable) fuses the new
+	 * tile onto the current one.
+	 */
 	private void place() {
 		IModel model = this.editor.getController().getModel();
 		if (model.getTileAt(this.pos) == null)

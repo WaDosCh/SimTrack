@@ -23,9 +23,10 @@ import java.awt.Point;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
+ * basic viewport interface
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-23
+ * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
 public interface IViewPort {
@@ -66,8 +67,24 @@ public interface IViewPort {
 	 */
 	public Point getScreenCoordinate(Point p);
 
+	/**
+	 * focuses the given hex
+	 * 
+	 * @param hex
+	 *            the hex to be focused
+	 * @param g
+	 *            the graphics
+	 * @return a new graphics instance that has the centre of the given tile in
+	 *         its origin and a total tile width of 100
+	 */
 	public Graphics2D focusHex(TileCoordinate hex, Graphics2D g);
 
+	/**
+	 * returns the dimension of the section of the drawing surface reserved for
+	 * the scene rendering.
+	 * 
+	 * @return the scene surface dimensions
+	 */
 	public Point getScreenDimensions();
-	
+
 }
