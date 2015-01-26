@@ -24,6 +24,8 @@ import java.util.List;
 import ch.awae.simtrack.model.track.TrackProvider;
 
 /**
+ * Validation class to determine whether or not a tile is valid
+ * 
  * @author Andreas Wälchli
  * @version 1.3, 2015-01-26
  * @since SimTrack 0.2.2
@@ -60,6 +62,12 @@ public class TileValidator {
 		validTiles.add(item);
 	}
 
+	/**
+	 * checks if a tile is valid
+	 * 
+	 * @param tile
+	 * @return {@code true} if and only if the provided tile is valid.
+	 */
 	public static boolean isValidTrack(ITile tile) {
 		int[] paths = tile.getRailPaths().clone();
 		sortPathList(paths);
