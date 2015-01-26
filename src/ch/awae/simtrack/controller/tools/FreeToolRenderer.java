@@ -29,8 +29,8 @@ import ch.awae.simtrack.view.IView;
  * Render For the "Free Hand" Tool
  * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 2.2, 2015-01-26
+ * @since SimTrack 0.2.2
  */
 class FreeToolRenderer implements IRenderer {
 
@@ -38,6 +38,12 @@ class FreeToolRenderer implements IRenderer {
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 	private final FreeTool tool;
 
+	/**
+	 * creates a new renderer instance
+	 * 
+	 * @param tool
+	 *            the tool this renderer should render
+	 */
 	public FreeToolRenderer(FreeTool tool) {
 		this.tool = tool;
 	}
@@ -45,7 +51,7 @@ class FreeToolRenderer implements IRenderer {
 	@Override
 	public void render(Graphics2D g, IView view) {
 		g.setStroke(borderStroke);
-		Graphics2D g2 = view.getViewPort().focusHex(this.tool.tile, g);
+		Graphics2D g2 = view.getViewPort().focusHex(this.tool.getPosition(), g);
 		g2.setColor(Color.ORANGE);
 		double angle = Math.PI / 3;
 		for (int i = 0; i < 6; i++) {

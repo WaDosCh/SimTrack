@@ -32,8 +32,8 @@ import ch.awae.simtrack.view.TrackRenderUtil;
  * Renderer for the {@link BuildTool}
  * 
  * @author Andreas Wälchli
- * @version 1.4, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.5, 2015-01-26
+ * @since SimTrack 0.2.2
  */
 class BuildToolRenderer implements IRenderer {
 
@@ -44,14 +44,20 @@ class BuildToolRenderer implements IRenderer {
 	private static Stroke railStroke = new BasicStroke(5);
 	private BuildTool tool;
 
-	public BuildToolRenderer(BuildTool tool) {
+	/**
+	 * creates a new renderer instance
+	 * 
+	 * @param tool
+	 *            the tool the renderer should render
+	 */
+	BuildToolRenderer(BuildTool tool) {
 		this.tool = tool;
 	}
 
 	@Override
 	public void render(Graphics2D g, IView view) {
 		if (this.tool.isBulldoze()) {
-			TileCoordinate c = this.tool.pos;
+			TileCoordinate c = this.tool.getPosition();
 			if (c == null)
 				return;
 			Graphics2D g2 = view.getViewPort().focusHex(c, g);

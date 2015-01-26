@@ -27,22 +27,24 @@ import ch.awae.simtrack.controller.IGUIControllerHookup;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
- * Mouse Observer
+ * Mouse Observer.
  * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
+ * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
+@SuppressWarnings("javadoc")
 public class Mouse {
 
 	IController owner;
-	private MouseAdapter adapter;
 	boolean b1, b2, b3;
 	long lastScrollUpdate;
-	private final long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
 	Point mouse;
 	TileCoordinate mouseHex;
 	double scroll;
+
+	private MouseAdapter adapter;
+	private final long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
 
 	// BASIC SETUP
 	{
@@ -110,32 +112,70 @@ public class Mouse {
 		};
 	}
 
+	/**
+	 * indicates whether or not the primary mouse button is pressed.
+	 * 
+	 * @return {@code true} if and only if the 1st button is pressed.
+	 */
 	public boolean button1() {
 		return this.b1;
 	}
 
+	/**
+	 * indicates whether or not the secondary mouse button is pressed.
+	 * 
+	 * @return {@code true} if and only if the 2nd button is pressed.
+	 */
 	public boolean button2() {
 		return this.b2;
 	}
 
+	/**
+	 * indicates whether or not the tertiary mouse button is pressed.
+	 * 
+	 * @return {@code true} if and only if the 3rd button is pressed.
+	 */
 	public boolean button3() {
 		return this.b3;
 	}
 
+	/**
+	 * provides the current mouse scroll speed.
+	 * 
+	 * @return the current scroll speed.
+	 */
 	public double getScroll() {
 		return (this.lastScrollUpdate + this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System
 				.currentTimeMillis()) ? 0 : this.scroll;
 	}
 
+	/**
+	 * provides the hex tile the mouse is currently on.
+	 * 
+	 * @return the tile below the mouse.
+	 */
 	public TileCoordinate hexPosition() {
 		return this.mouseHex;
 	}
 
+	/**
+	 * instantiates a new mouse observer instance.
+	 * 
+	 * @param owner
+	 *            the controller owning the mouse observer
+	 * @param hooker
+	 *            the hook-up for the mouse observer
+	 */
 	public Mouse(IController owner, IGUIControllerHookup hooker) {
 		this.owner = owner;
 		hooker.getMouseHookup().accept(this.adapter);
 	}
 
+	/**
+	 * provides the current mouse position
+	 * 
+	 * @return the current mouse positions
+	 */
 	public Point position() {
 		return this.mouse.getLocation();
 	}

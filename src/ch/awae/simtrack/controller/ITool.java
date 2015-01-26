@@ -24,26 +24,41 @@ import ch.awae.simtrack.view.IRenderer;
  * a possible editor state.
  * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-17
+ * @version 1.2, 2015-01-26
  * @since SimTrack 0.0.1
  */
 public interface ITool {
 
+	/**
+	 * retrieves the renderer for this tool
+	 * 
+	 * @return the tool renderer
+	 */
 	public IRenderer getRenderer();
 
+	/**
+	 * provides the tool identification string. This will be used to identify
+	 * tools for loading them
+	 * 
+	 * @return the tool identifier
+	 */
 	public String getToolName();
 
 	/**
 	 * Loads the tool. This method should be used in case a tool requires setup
 	 * of other external elements.
 	 * 
-	 * @param args additional parameters
+	 * @param args
+	 *            additional parameters
 	 * @throws IllegalStateException
 	 *             if the tool cannot be loaded at the moment. The editor will
 	 *             fall back to the last tool used.
 	 */
 	public void load(Object[] args) throws IllegalStateException;
 
+	/**
+	 * performs an update tick on the tool
+	 */
 	public void tick();
 
 	/**

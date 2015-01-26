@@ -31,7 +31,7 @@ import ch.awae.simtrack.view.IView;
  * complexity by delegating the user actions to well-defined tools.
  * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
+ * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
 public class Editor {
@@ -42,6 +42,24 @@ public class Editor {
 	private IRenderer renderer;
 	private HashMap<String, ITool> tools = new HashMap<>();
 
+	/**
+	 * instantiates a new editor for the given controller.
+	 * 
+	 * @param c
+	 *            the controller
+	 */
+	Editor(IController c) {
+		this.owner = c;
+		loadTools();
+	}
+
+	/**
+	 * adds a new tool to the editor. If this is the first tool added to the
+	 * editor, it will be directly activated with a {@code null} argument.
+	 * 
+	 * @param tool
+	 *            the tool to add.
+	 */
 	public void addTool(ITool tool) {
 		this.tools.put(tool.getToolName(), tool);
 		if (this.currentTool == null) {
@@ -49,16 +67,25 @@ public class Editor {
 		}
 	}
 
-	Editor(IController c) {
-		this.owner = c;
-		loadTools();
-		// this.owner.getView().setEditorRenderer(this::render);
-	}
-
+	/**
+	 * retrieves the controller instance owning this editor
+	 * 
+	 * @return the owning controller instance
+	 */
 	public IController getController() {
 		return this.owner;
 	}
 
+	/**
+	 * loads a tool and unloads the current one. If the new tool cannot be
+	 * loaded, the current one will not be unloaded and stays active.
+	 * 
+	 * @param name
+	 *            the identifier string of the new tool
+	 * @param args
+	 *            additional arguments to hand over to the new tool
+	 * @return {@code true} if the tool switch was successful
+	 */
 	public boolean loadTool(String name, Object[] args) {
 		ITool next = this.tools.get(name);
 		if (next == null)
@@ -81,16 +108,30 @@ public class Editor {
 		return true;
 	}
 
+	/**
+	 * initialise all available tools
+	 */
 	private void loadTools() {
 		addTool(new FreeTool(this));
 		addTool(new BuildTool(this));
 	}
 
+	/**
+	 * renders the currently active tool
+	 * 
+	 * @param g
+	 *            the graphics instance to render onto
+	 * @param view
+	 *            the view
+	 */
 	void render(Graphics2D g, IView view) {
 		if (this.renderer != null)
 			this.renderer.render((Graphics2D) g.create(), view);
 	}
 
+	/**
+	 * performs an editor update tick
+	 */
 	void tick() {
 		if (this.currentTool != null)
 			this.currentTool.tick();

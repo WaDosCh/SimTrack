@@ -17,53 +17,36 @@
  */
 package ch.awae.simtrack.model.track;
 
-import ch.awae.simtrack.model.BasicTrackTile;
 import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
- * Implementation for a curved rail piece.
- * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.2
  */
-class CurvedRail extends BasicTrackTile {
+public class FusedTrackFactory {
 
-	private int rotation = 0;
-
-	public CurvedRail(TileCoordinate position) {
-		super(position);
-		this.rotation = 0;
+	public static ITile createAnonymousTrack(TileCoordinate position,
+			int[] connections, float cost) {
+		return new AnonymousTrack(position, connections.clone(), cost);
 	}
 
-	@Override
-	public ITile cloneTile() {
-		CurvedRail clone = new CurvedRail(this.getPosition());
-		clone.rotation = this.rotation;
-		return clone;
+	public static ITile createAnonymousTrack(ITile tile) {
+		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths()
+				.clone(), tile.getTravelCost());
 	}
 
-	@Override
-	public int[] getRailPaths() {
-		return new int[] { this.rotation, (this.rotation + 2) % 6 };
-	}
+	public static ITile createFusedTrack(ITile tile0, ITile tile1) {
+		int[] con0 = tile0.getRailPaths().clone();
+		int[] con1 = tile1.getRailPaths().clone();
 
-	@Override
-	public void mirror() {
-		this.rotation += 3;
-		this.rotation %= 6;
-	}
+		int[] cons = new int[con0.length + con1.length];
 
-	@Override
-	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? 5 : 1;
-		this.rotation %= 6;
-	}
+		System.arraycopy(con0, 0, cons, 0, con0.length);
+		System.arraycopy(con1, 0, cons, con0.length, con1.length);
 
-	@Override
-	public float getTravelCost() {
-		return 1.1f;
+		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(
+				tile0.getTravelCost(), tile1.getTravelCost()));
 	}
-
 }

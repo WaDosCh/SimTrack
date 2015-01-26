@@ -21,8 +21,22 @@ import java.util.ArrayList;
 
 import ch.awae.simtrack.model.IModel;
 
+/**
+ * factory for view instance
+ * 
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.1
+ */
 public class ViewFactory {
 
+	/**
+	 * creates a new game view instance
+	 * 
+	 * @param model
+	 * @param hooker
+	 * @return a new game view instance
+	 */
 	public static IView createGameView(IModel model, IGUIHookProvider hooker) {
 		GameView v = new GameView(model, hooker.getScreenWidth(),
 				hooker.getScreenHeight());

@@ -25,7 +25,7 @@ import java.awt.geom.AffineTransform;
  * Rendering utilities for the rail rendering
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-23
+ * @version 1.3, 2015-01-26
  * @since SimTrack 0.2.1
  */
 public class TrackRenderUtil {
@@ -37,7 +37,7 @@ public class TrackRenderUtil {
 
 	private final static int halfSide = (int) (50 / Math.sqrt(3));
 
-	public static void renderCurvedRail(Graphics2D g) {
+	private static void renderCurvedRail(Graphics2D g) {
 		for (int i = 0; i < 2; i++) {
 			int radius = 3 * halfSide
 					+ (i == 0 ? railGauge / 2 : -railGauge / 2);
@@ -46,7 +46,7 @@ public class TrackRenderUtil {
 		}
 	}
 
-	public static void renderCurvedRailbed(Graphics2D g) {
+	private static void renderCurvedRailbed(Graphics2D g) {
 		AffineTransform transform = g.getTransform();
 		int radius = 3 * halfSide;
 		double step = Math.PI / (3 * sleeperCount);
@@ -59,12 +59,12 @@ public class TrackRenderUtil {
 		g.setTransform(transform);
 	}
 
-	public static void renderStraightRail(Graphics2D g) {
+	private static void renderStraightRail(Graphics2D g) {
 		g.drawLine(-50, railGauge / 2, 50, railGauge / 2);
 		g.drawLine(-50, -railGauge / 2, 50, -railGauge / 2);
 	}
 
-	public static void renderStraightRailbed(Graphics2D g) {
+	private static void renderStraightRailbed(Graphics2D g) {
 		AffineTransform transform = g.getTransform();
 		int step = 100 / sleeperCount;
 		g.translate(-50 - step / 2, 0);
@@ -76,6 +76,14 @@ public class TrackRenderUtil {
 		g.setTransform(transform);
 	}
 
+	/**
+	 * renders a given rail connection network
+	 * 
+	 * @param g
+	 * @param sleepers
+	 * @param rails
+	 * @param network
+	 */
 	public static void renderRails(Graphics2D g, Color sleepers, Color rails,
 			int[] network) {
 		AffineTransform Tx = g.getTransform();

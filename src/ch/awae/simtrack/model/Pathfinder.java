@@ -28,7 +28,7 @@ import ch.awae.simtrack.model.position.DirectedTileEdgeCoordinate;
  * A-Star pathfinding algorithm.
  * 
  * @author Andreas Wälchli
- * @version 1.2, 2015-01-23
+ * @version 1.3, 2015-01-26
  * @since SimTrack 0.1.2
  */
 public class Pathfinder {
@@ -56,6 +56,17 @@ public class Pathfinder {
 		return goal.distanceTo(now);
 	}
 
+	/**
+	 * path-finder method
+	 * 
+	 * @param from
+	 *            start point
+	 * @param to
+	 *            destination
+	 * @param graph
+	 *            the graph
+	 * @return a list containing a path with all intermediate steps
+	 */
 	public ArrayList<DirectedTileEdgeCoordinate> findPath(
 			DirectedTileEdgeCoordinate from, DirectedTileEdgeCoordinate to,
 			IGraph<DirectedTileEdgeCoordinate, ITile> graph) {

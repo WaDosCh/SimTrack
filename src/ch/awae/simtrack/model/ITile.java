@@ -20,10 +20,9 @@ package ch.awae.simtrack.model;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
- * 
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.2, 2015-01-24
+ * @since SimTrack 0.2.2 (0.2.1)
  */
 public interface ITile extends IEntity {
 
@@ -48,9 +47,9 @@ public interface ITile extends IEntity {
 	public boolean connectsAt(int edge);
 
 	public ITile cloneTile();
-	
+
 	public void setBlock(IBlock block);
-	
+
 	public IBlock getBlock();
 
 }

@@ -27,7 +27,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * well as the hex scaling.
  * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
+ * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
 class ViewPort implements IViewPort {
@@ -37,6 +37,11 @@ class ViewPort implements IViewPort {
 	private static final double SQRT3 = Math.sqrt(3);
 	private IView owner;
 
+	/**
+	 * instantiates a new view-port
+	 * 
+	 * @param owner
+	 */
 	ViewPort(IView owner) {
 		this.owner = owner;
 		this.init();
@@ -98,21 +103,31 @@ class ViewPort implements IViewPort {
 		return new Point((int) x, (int) y);
 	}
 
+	/**
+	 * initialises the viewport
+	 */
 	void init() {
 		int hScreen = this.owner.getHorizontalScreenSize();
 		int vScreen = this.owner.getVerticalScreenSize() - 150;
 		this.screenDimensions = new Point(hScreen, vScreen);
-		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
+		double minH = hScreen
+				/ (this.owner.getModel().getHorizontalSize() - 1.0);
 		if (minH > this.minZoom)
 			this.minZoom = (int) Math.ceil(minH);
 		this.zoom = this.minZoom;
-		this.sceneDimensions = new Point(
-				(this.owner.getModel().getHorizontalSize() - 1) * 100, (int) ((this.owner
-						.getModel().getVerticalSize() - 1) * SQRT3 * 50));
+		this.sceneDimensions = new Point((this.owner.getModel()
+				.getHorizontalSize() - 1) * 100, (int) ((this.owner.getModel()
+				.getVerticalSize() - 1) * SQRT3 * 50));
 		this.sceneCorner = new Point(0, 0);
 		updateCorner();
 	}
 
+	/**
+	 * moves the scene
+	 * 
+	 * @param dx
+	 * @param dy
+	 */
 	void moveScene(int dx, int dy) {
 		this.sceneCorner.x += dx;
 		this.sceneCorner.y += dy;
@@ -120,8 +135,10 @@ class ViewPort implements IViewPort {
 	}
 
 	private void updateCorner() {
-		double minX = this.screenDimensions.x - (0.01 * this.zoom * this.sceneDimensions.x);
-		double minY = this.screenDimensions.y - (0.01 * this.zoom * this.sceneDimensions.y);
+		double minX = this.screenDimensions.x
+				- (0.01 * this.zoom * this.sceneDimensions.x);
+		double minY = this.screenDimensions.y
+				- (0.01 * this.zoom * this.sceneDimensions.y);
 		int x = this.sceneCorner.x;
 		int y = this.sceneCorner.y;
 		if (x > 0)

@@ -24,33 +24,52 @@ import java.awt.event.KeyEvent;
  * Navigation Tool. Used for Scene movement & zoom
  * 
  * @author Andreas Wälchli
- * @version 1.3, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.4, 2015-01-26
+ * @since SimTrack 0.2.2
  */
 public class Navigator {
 
-	IController owner;
+	private IController owner;
 
+	/**
+	 * instantiates a new navigator
+	 * 
+	 * @param c
+	 *            the controller owning the navigator
+	 */
 	Navigator(IController c) {
 		this.owner = c;
 	}
 
 	private final static int BORDER = 20;
 	private final static float deltaZoom = 0.1f;
-
 	private boolean isActive = true;
-
 	private final static int MOVE_SPEED = 10;
 
+	/**
+	 * indicates whether or not the navigator is active
+	 * 
+	 * @return {@code true} if and only if the navigator is active
+	 */
 	public boolean isEnabled() {
 		return this.isActive;
 	}
 
+	/**
+	 * set the activity state of the navigator
+	 * 
+	 * @param isEnabled
+	 */
 	public void setEnabled(boolean isEnabled) {
 		this.isActive = isEnabled;
 	}
 
+	/**
+	 * performs an update tick on the navigator
+	 */
 	public void tick() {
+		if (!this.isActive)
+			return;
 		Point mouse = this.owner.getMouse().position();
 		if (mouse == null)
 			return;

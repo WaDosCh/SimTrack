@@ -23,6 +23,13 @@ import java.util.List;
 
 import ch.awae.simtrack.model.IModel;
 
+/**
+ * the game view implementation
+ * 
+ * @author Andreas Wälchli
+ * @version 1.1, 2015-01-26
+ * @since SimTrack 0.2.2
+ */
 class GameView implements IView {
 
 	private IModel model;
@@ -35,13 +42,25 @@ class GameView implements IView {
 		// void
 	};
 
-	public GameView(IModel model, int screenX, int screenY) {
+	/**
+	 * instantiates a new game view
+	 * 
+	 * @param model
+	 * @param screenX
+	 * @param screenY
+	 */
+	GameView(IModel model, int screenX, int screenY) {
 		this.model = model;
 		this.screenX = screenX;
 		this.screenY = screenY;
 		this.port = new ViewPort(this);
 	}
 
+	/**
+	 * sets the list of renderers to be used to render this view
+	 * 
+	 * @param renderers
+	 */
 	void setRenderers(List<IRenderer> renderers) {
 		this.renderers = renderers;
 	}
@@ -62,6 +81,12 @@ class GameView implements IView {
 		this.port.zoom((int) (100 * dzoom), fixX, fixY);
 	}
 
+	/**
+	 * renders the view onto the graphics instance
+	 * 
+	 * @param graphics
+	 *            the graphics instance to render onto
+	 */
 	void render(Graphics2D graphics) {
 		this.renderers.forEach(r -> r.render((Graphics2D) graphics.create(),
 				this));
@@ -80,6 +105,11 @@ class GameView implements IView {
 		this.delegate.run();
 	}
 
+	/**
+	 * sets the delegate responsible for enforcing the rendering
+	 * 
+	 * @param delegate
+	 */
 	void setRenderingDelegate(Runnable delegate) {
 		this.delegate = delegate;
 	}

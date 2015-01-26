@@ -22,52 +22,45 @@ import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
- * Basic turnout.
- * 
  * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
- * @since SimTrack 0.2.1
+ * @version 1.1, 2014-01-26
+ * @since SimTrack 0.2.2
  */
-class BasicTurnout extends BasicTrackTile {
+class AnonymousTrack extends BasicTrackTile {
 
-	private boolean isLeft = true;
+	private float cost;
+	private int[] connections;
 
-	private int rotation = 0;
-
-	public BasicTurnout(TileCoordinate position) {
+	AnonymousTrack(TileCoordinate position, int[] connections, float cost) {
 		super(position);
-		this.rotation = 0;
-	}
-
-	@Override
-	public ITile cloneTile() {
-		BasicTurnout clone = new BasicTurnout(this.getPosition());
-		clone.rotation = this.rotation;
-		clone.isLeft = this.isLeft;
-		return clone;
+		this.connections = connections.clone();
+		this.cost = cost;
 	}
 
 	@Override
 	public float getTravelCost() {
-		return 1.2f;
+		return this.cost;
 	}
 
 	@Override
 	public int[] getRailPaths() {
-		return new int[] { this.rotation, (this.rotation + 3) % 6,
-				(this.rotation + (this.isLeft ? 1 : -1)) % 6,
-				(this.rotation + 3) % 6 };
+		return this.connections;
+	}
+
+	@Override
+	public void rotate(boolean clockwise) {
+		throw new UnsupportedOperationException("Cannot rotate anonymous track");
 	}
 
 	@Override
 	public void mirror() {
-		this.isLeft = !this.isLeft;
+		throw new UnsupportedOperationException("Cannot mirror anonymous track");
 	}
 
 	@Override
-	public void rotate(boolean isClockwise) {
-		this.rotation += isClockwise ? 5 : 1;
-		this.rotation %= 6;
+	public ITile cloneTile() {
+		return new AnonymousTrack(this.getPosition(), this.connections,
+				this.cost);
 	}
 
 }
