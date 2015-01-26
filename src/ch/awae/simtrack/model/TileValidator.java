@@ -50,6 +50,7 @@ public class TileValidator {
 				t1.rotate(false);
 			}
 		}
+
 	}
 
 	private static void addIfNotThere(int[] item) {
@@ -62,8 +63,13 @@ public class TileValidator {
 	public static boolean isValidTrack(ITile tile) {
 		int[] paths = tile.getRailPaths().clone();
 		sortPathList(paths);
+
+		for (int p : paths)
+			System.out.print(p + " ; ");
+		System.out.println();
+
 		// STEP 1: check for duplicates
-		for (int i = 0; i + 3 < paths.length; i++)
+		for (int i = 0; i + 3 < paths.length; i += 2)
 			if (paths[i] == paths[i + 2] && paths[i + 1] == paths[i + 3])
 				return false;
 		// STEP 2: check for validity
