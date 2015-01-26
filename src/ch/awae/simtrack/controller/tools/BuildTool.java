@@ -194,7 +194,7 @@ public class BuildTool implements ITool {
 			this.editor.loadTool("FreeHand", null);
 			return;
 		}
-		if (!this.isBulldoze) {
+		if (!this.isBulldoze && !mouse.button3()) {
 			// PLACER
 			this.t.setPosition(this.pos);
 			this.isValid = canPlaceOn(this.pos, model, this.t);
@@ -229,7 +229,7 @@ public class BuildTool implements ITool {
 			// BULLDOZE
 			this.isValid = canDelete(this.pos, model);
 			if (this.isValid) {
-				if (mouse.button1()
+				if ((mouse.button1() || mouse.button3())
 						&& mouse.position().y < port.getScreenDimensions().y) {
 					model.removeTileAt(this.pos);
 				}
