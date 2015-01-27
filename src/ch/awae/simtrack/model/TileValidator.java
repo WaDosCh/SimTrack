@@ -83,7 +83,7 @@ public class TileValidator {
 		return false;
 	}
 
-	private static void sortPathList(int[] list) {
+	public static void sortPathList(int[] list) {
 		for (int i = 0; i + 1 < list.length; i += 2) {
 			if (list[i] > list[i + 1]) {
 				int temp = list[i];

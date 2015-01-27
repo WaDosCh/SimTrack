@@ -17,12 +17,15 @@
  */
 package ch.awae.simtrack.model.track;
 
+import java.util.ArrayList;
+
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * @author Andreas Wälchli
- * @version 1.1, 2015-01-26
+ * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.2
  */
 public class FusedTrackFactory {
@@ -46,7 +49,32 @@ public class FusedTrackFactory {
 		System.arraycopy(con0, 0, cons, 0, con0.length);
 		System.arraycopy(con1, 0, cons, con0.length, con1.length);
 
+		cons = clean(cons);
+
 		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(
 				tile0.getTravelCost(), tile1.getTravelCost()));
+	}
+
+	private static int[] clean(int[] cons) {
+		TileValidator.sortPathList(cons);
+		ArrayList<Integer> items = new ArrayList<>();
+		for (int i : cons)
+			items.add(new Integer(i));
+
+		for (int i = 0; i + 3 < items.size(); i += 2) {
+			if (items.get(i).equals(items.get(i + 2))
+					&& items.get(i + 1).equals(items.get(i + 3))) {
+				items.remove(i + 3);
+				items.remove(i + 2);
+				i -= 2;
+			}
+		}
+
+		int[] res = new int[items.size()];
+
+		for (int i = 0; i < items.size(); i++)
+			res[i] = items.get(i).intValue();
+
+		return res;
 	}
 }
