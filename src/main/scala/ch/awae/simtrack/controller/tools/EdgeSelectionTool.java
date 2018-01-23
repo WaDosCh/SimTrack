@@ -44,11 +44,11 @@ public class EdgeSelectionTool implements ITool {
 		// TODO Auto-generated method stub
 
 	}
-
+/*
 	private static double preciseDist(double u1, double v1, double u2, double v2) {
 		double x = (u1 - u2) + (v1 - v2) * 0.5;
 		double y = (v1 - v2) * Math.sqrt(3) / 2;
 		return Math.sqrt(x * x + y * y);
 	}
-
+*/
 }

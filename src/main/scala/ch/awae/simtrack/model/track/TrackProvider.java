@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import javax.json.JsonObject;
 import javax.json.spi.JsonProvider;
 
-import org.glassfish.json.JsonProviderImpl;
-
 import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
@@ -39,15 +37,11 @@ public class TrackProvider {
 	static {
 		tiles = new ArrayList<>();
 
-		JsonObject tracks = JsonProvider
-				.provider()
-				.createReader(
-						TrackProvider.class.getResourceAsStream("tracks.json"))
+		JsonObject tracks = JsonProvider.provider().createReader(TrackProvider.class.getResourceAsStream("tracks.json"))
 				.readObject();
 
 		for (String key : tracks.keySet()) {
-			tiles.add(new MutableTrack(new TileCoordinate(0, 0), tracks
-					.getJsonObject(key)));
+			tiles.add(new MutableTrack(new TileCoordinate(0, 0), tracks.getJsonObject(key)));
 		}
 	}
 
