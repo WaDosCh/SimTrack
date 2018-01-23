@@ -169,7 +169,6 @@ class GameController implements IController {
 	private void viewTick() {
 		long a = System.nanoTime();
 		this.view.renderView();
-		System.out.println((System.nanoTime() - a) / 1000);
 	}
 
 }
