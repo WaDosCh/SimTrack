@@ -20,10 +20,10 @@ package ch.awae.simtrack.model.track;
 import java.util.ArrayList;
 
 import javax.json.JsonObject;
-import javax.json.spi.JsonProvider;
 
 import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.util.Resource;
 
 /**
  * @author Andreas Wälchli
@@ -37,8 +37,7 @@ public class TrackProvider {
 	static {
 		tiles = new ArrayList<>();
 
-		JsonObject tracks = JsonProvider.provider().createReader(TrackProvider.class.getResourceAsStream("tracks.json"))
-				.readObject();
+		JsonObject tracks = Resource.getJSON("tracks.json");
 
 		for (String key : tracks.keySet()) {
 			tiles.add(new MutableTrack(new TileCoordinate(0, 0), tracks.getJsonObject(key)));

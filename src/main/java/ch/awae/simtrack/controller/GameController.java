@@ -167,7 +167,6 @@ class GameController implements IController {
 	 * controller.
 	 */
 	private void viewTick() {
-		long a = System.nanoTime();
 		this.view.renderView();
 	}
 
