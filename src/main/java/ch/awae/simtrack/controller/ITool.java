@@ -66,6 +66,6 @@ public interface ITool {
 	 * deactivated. Any external cleanups should occur here. Other than the
 	 * {@link #load(Object[])} method, this method cannot deny deactivation.
 	 */
-	public void unload();
+	default void unload() {};
 
 }

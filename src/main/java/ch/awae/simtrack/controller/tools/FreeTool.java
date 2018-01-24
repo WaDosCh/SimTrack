@@ -20,7 +20,7 @@ package ch.awae.simtrack.controller.tools;
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.ITool;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.IRenderer;
+import lombok.Getter;
 
 /**
  * "Free-Hand" tool. This tool will be used for in-situ tile manipulation
@@ -31,6 +31,7 @@ import ch.awae.simtrack.view.IRenderer;
  */
 public class FreeTool implements ITool {
 
+	@Getter
 	private final FreeToolRenderer renderer;
 	private TileCoordinate tile;
 	private Editor owner;
@@ -56,11 +57,6 @@ public class FreeTool implements ITool {
 	}
 
 	@Override
-	public IRenderer getRenderer() {
-		return this.renderer;
-	}
-
-	@Override
 	public String getToolName() {
 		return "FreeHand";
 	}
@@ -73,16 +69,10 @@ public class FreeTool implements ITool {
 
 	@Override
 	public void tick() {
-		TileCoordinate tile = this.owner.getController().getMouse()
-				.hexPosition();
+		TileCoordinate tile = this.owner.getController().getMouse().hexPosition();
 		if (tile != null)
 			this.tile = tile;
 		// TODO: onClick
-	}
-
-	@Override
-	public void unload() {
-		// nothing required
 	}
 
 }

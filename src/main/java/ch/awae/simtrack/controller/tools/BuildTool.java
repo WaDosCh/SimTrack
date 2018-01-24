@@ -32,6 +32,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
 import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IViewPort;
+import lombok.Getter;
 
 /**
  * Build Tool. Used for placing and deleting track tiles
@@ -42,13 +43,18 @@ import ch.awae.simtrack.view.IViewPort;
  */
 public class BuildTool implements ITool {
 
-	private boolean isBulldoze;
+	@Getter
+	private boolean bulldoze;
 	private boolean isQ, isE, isTab;
-	private boolean isValid = false;
+	@Getter
+	private boolean valid = false;
 	private Editor editor;
+	@Getter
 	private IRenderer renderer;
-	private TileCoordinate pos = null;
-	private ITransformableTile t;
+	@Getter
+	private TileCoordinate position = null;
+	@Getter
+	private ITransformableTile track;
 
 	/**
 	 * instantiates a new build tool
@@ -61,59 +67,18 @@ public class BuildTool implements ITool {
 		this.renderer = new BuildToolRenderer(this);
 	}
 
-	/**
-	 * retrieves the current position
-	 * 
-	 * @return the position
-	 */
-	TileCoordinate getPosition() {
-		return this.pos;
-	}
-
-	@Override
-	public IRenderer getRenderer() {
-		return this.renderer;
-	}
-
 	@Override
 	public String getToolName() {
 		return "Builder";
 	}
 
-	/**
-	 * retrieves the current tile type
-	 * 
-	 * @return the tile, or {@code null} if the deletion tool is active
-	 */
-	ITransformableTile getTrack() {
-		return this.t;
-	}
-
-	/**
-	 * indicates whether or not the tool is in deletion mode
-	 * 
-	 * @return {@code true} if and only if deletion mode is active
-	 */
-	boolean isBulldoze() {
-		return this.isBulldoze;
-	}
-
-	/**
-	 * indicates whether or not the tool is in a valid state.
-	 * 
-	 * @return {@code true} if and only if the tool is in a valid state.
-	 */
-	boolean isValid() {
-		return this.isValid;
-	}
-
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
 		if (args == null) {
-			this.isBulldoze = true;
+			this.bulldoze = true;
 		} else {
-			this.t = (ITransformableTile) args[0];
-			this.isBulldoze = false;
+			this.track = (ITransformableTile) args[0];
+			this.bulldoze = false;
 		}
 	}
 
@@ -169,12 +134,13 @@ public class BuildTool implements ITool {
 	 */
 	private void place() {
 		IModel model = this.editor.getController().getModel();
-		if (model.getTileAt(this.pos) == null)
-			model.setTileAt(this.pos, TileValidator.intern(t));
+		if (model.getTileAt(this.position) == null)
+			model.setTileAt(this.position, TileValidator.intern(track));
 		else {
-			ITile oldTile = model.getTileAt(this.pos);
-			model.removeTileAt(this.pos);
-			model.setTileAt(this.pos, TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.t)));
+			ITile oldTile = model.getTileAt(this.position);
+			model.removeTileAt(this.position);
+			model.setTileAt(this.position,
+					TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));
 		}
 	}
 
@@ -187,55 +153,50 @@ public class BuildTool implements ITool {
 		Mouse mouse = controller.getMouse();
 		Keyboard keyboard = controller.getKeyboard();
 
-		this.pos = mouse.hexPosition();
+		this.position = mouse.hexPosition();
 
 		if (keyboard.key(KeyEvent.VK_ESCAPE)) {
 			this.editor.loadTool("FreeHand", null);
 			return;
 		}
-		if (!this.isBulldoze && !mouse.button3()) {
+		if (!this.bulldoze && !mouse.button3()) {
 			// PLACER
-			this.isValid = canPlaceOn(this.pos, model, this.t);
-			if (this.isValid) {
+			this.valid = canPlaceOn(this.position, model, this.track);
+			if (this.valid) {
 				if (mouse.button1() && mouse.position().y < port.getScreenDimensions().y) {
 					this.place();
 				}
 			}
 			if (keyboard.key(KeyEvent.VK_Q)) {
 				if (!this.isQ) {
-					this.t = t.rotated(false);
+					this.track = track.rotated(false);
 				}
 				this.isQ = true;
 			} else
 				this.isQ = false;
 			if (keyboard.key(KeyEvent.VK_E)) {
 				if (!this.isE) {
-					this.t = t.rotated(true);
+					this.track = track.rotated(true);
 				}
 				this.isE = true;
 			} else
 				this.isE = false;
 			if (keyboard.key(KeyEvent.VK_TAB)) {
 				if (!this.isTab) {
-					this.t = t.mirrored();
+					this.track = track.mirrored();
 				}
 				this.isTab = true;
 			} else
 				this.isTab = false;
 		} else {
 			// BULLDOZE
-			this.isValid = canDelete(this.pos, model);
-			if (this.isValid) {
+			this.valid = canDelete(this.position, model);
+			if (this.valid) {
 				if ((mouse.button1() || mouse.button3()) && mouse.position().y < port.getScreenDimensions().y) {
-					model.removeTileAt(this.pos);
+					model.removeTileAt(this.position);
 				}
 			}
 		}
-	}
-
-	@Override
-	public void unload() {
-		// no action required
 	}
 
 }
