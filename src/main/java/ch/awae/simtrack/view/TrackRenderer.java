@@ -58,7 +58,7 @@ class TrackRenderer implements IRenderer {
 			TrackRenderUtil.renderRails(g2, bedColour, railColour,
 					tile.getRailPaths());
 			if (tile.isFixed()) {
-				g2.rotate(-Math.PI / 3 * tile.getRailPaths()[0]);
+				g2.rotate(Math.PI / 3 * tile.getRailPaths()[0]._1.ordinal());
 				g2.setColor(railColour);
 				g2.setStroke(arrowStroke);
 				g2.translate(30, 0);

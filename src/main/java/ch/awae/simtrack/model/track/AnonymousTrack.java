@@ -18,6 +18,7 @@
 package ch.awae.simtrack.model.track;
 
 import ch.awae.simtrack.model.BasicTrackTile;
+import ch.awae.simtrack.model.TilePath;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -28,9 +29,9 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 class AnonymousTrack extends BasicTrackTile {
 
 	private float cost;
-	private int[] connections;
+	private TilePath[] connections;
 
-	AnonymousTrack(TileCoordinate position, int[] connections, float cost) {
+	AnonymousTrack(TileCoordinate position, TilePath[] connections, float cost) {
 		super(position);
 		this.connections = connections.clone();
 		this.cost = cost;
@@ -42,7 +43,7 @@ class AnonymousTrack extends BasicTrackTile {
 	}
 
 	@Override
-	public int[] getRailPaths() {
+	public TilePath[] getRailPaths() {
 		return this.connections;
 	}
 

@@ -20,6 +20,7 @@ package ch.awae.simtrack.model.track;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.TilePath;
 import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
@@ -30,7 +31,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public class FusedTrackFactory {
 
-	public static ITile createAnonymousTrack(TileCoordinate position, int[] connections, float cost) {
+	public static ITile createAnonymousTrack(TileCoordinate position, TilePath[] connections, float cost) {
 		return new AnonymousTrack(position, connections.clone(), cost);
 	}
 
@@ -39,10 +40,10 @@ public class FusedTrackFactory {
 	}
 
 	public static ITile createFusedTrack(ITile tile0, ITile tile1) {
-		int[] con0 = tile0.getRailPaths().clone();
-		int[] con1 = tile1.getRailPaths().clone();
+		TilePath[] con0 = tile0.getRailPaths().clone();
+		TilePath[] con1 = tile1.getRailPaths().clone();
 
-		int[] cons = new int[con0.length + con1.length];
+		TilePath[] cons = new TilePath[con0.length + con1.length];
 
 		System.arraycopy(con0, 0, cons, 0, con0.length);
 		System.arraycopy(con1, 0, cons, con0.length, con1.length);
@@ -52,25 +53,17 @@ public class FusedTrackFactory {
 		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(tile0.getTravelCost(), tile1.getTravelCost()));
 	}
 
-	private static int[] clean(int[] cons) {
+	private static TilePath[] clean(TilePath[] cons) {
 		TileValidator.sortPathList(cons);
-		ArrayList<Integer> items = new ArrayList<>();
-		for (int i : cons)
-			items.add(new Integer(i));
-
-		for (int i = 0; i + 3 < items.size(); i += 2) {
-			if (items.get(i).equals(items.get(i + 2)) && items.get(i + 1).equals(items.get(i + 3))) {
-				items.remove(i + 3);
-				items.remove(i + 2);
-				i -= 2;
+		ArrayList<TilePath> items = new ArrayList<>();
+		for (TilePath p : cons)
+			items.add(p);
+		for (int i = 0; i + 1 < items.size(); i++) {
+			if (items.get(i).equals(items.get(i + 1))) {
+				items.remove(i + 1);
+				i--;
 			}
 		}
-
-		int[] res = new int[items.size()];
-
-		for (int i = 0; i < items.size(); i++)
-			res[i] = items.get(i).intValue();
-
-		return res;
+		return items.toArray(new TilePath[0]);
 	}
 }

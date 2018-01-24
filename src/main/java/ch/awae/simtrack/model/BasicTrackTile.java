@@ -17,6 +17,7 @@
  */
 package ch.awae.simtrack.model;
 
+import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -52,10 +53,10 @@ public abstract class BasicTrackTile implements ITile {
 	}
 
 	@Override
-	public boolean connectsAt(int edge) {
-		int[] paths = this.getRailPaths();
-		for (int e : paths)
-			if (e == edge)
+	public boolean connectsAt(Edge edge) {
+		TilePath[] paths = this.getRailPaths();
+		for (TilePath p : paths)
+			if (p._1 == edge || p._2 == edge)
 				return true;
 		return false;
 	}

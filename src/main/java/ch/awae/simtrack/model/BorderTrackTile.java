@@ -17,6 +17,7 @@
  */
 package ch.awae.simtrack.model;
 
+import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -28,12 +29,11 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 class BorderTrackTile extends BasicTrackTile {
 
-	private int edge;
+	private Edge edge;
 	private boolean isOutput;
 
-	public BorderTrackTile(TileCoordinate position, int edge, boolean isOutput) {
+	public BorderTrackTile(TileCoordinate position, Edge edge, boolean isOutput) {
 		super(position);
-		assert edge >= 0 && edge < 6;
 		this.edge = edge;
 		this.isOutput = isOutput;
 	}
@@ -44,8 +44,8 @@ class BorderTrackTile extends BasicTrackTile {
 	}
 
 	@Override
-	public int[] getRailPaths() {
-		return new int[] { this.edge, (this.edge + 3) % 6 };
+	public TilePath[] getRailPaths() {
+		return new TilePath[] { new TilePath(edge, edge.getOpposite()) };
 	}
 
 	@Override
@@ -64,7 +64,7 @@ class BorderTrackTile extends BasicTrackTile {
 	}
 
 	@Override
-	public boolean connectsAt(int edge) {
+	public boolean connectsAt(Edge edge) {
 		return edge == this.edge;
 	}
 

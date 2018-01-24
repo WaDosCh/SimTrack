@@ -21,6 +21,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
+import ch.awae.simtrack.model.TilePath;
+
 /**
  * Rendering utilities for the rail rendering
  * 
@@ -85,14 +87,14 @@ public class TrackRenderUtil {
 	 * @param network
 	 */
 	public static void renderRails(Graphics2D g, Color sleepers, Color rails,
-			int[] network) {
+			TilePath[] network) {
 		AffineTransform Tx = g.getTransform();
 		for (int pass = 0; pass < 2; pass++) {
 			g.setColor(pass == 0 ? sleepers : rails);
-			for (int i = 0; i + 1 < network.length; i += 2) {
-				g.rotate(-Math.PI / 3 * network[i]);
-				switch ((network[i + 1] - network[i] + 6) % 6) {
-				case 2:
+			for (int i = 0; i < network.length; i++) {
+				g.rotate(Math.PI / 3 * network[i]._1.ordinal());
+				switch ((network[i]._2.ordinal() - network[i]._1.ordinal() + 6) % 6) {
+				case 4:
 					if (pass == 0)
 						TrackRenderUtil.renderCurvedRailbed(g);
 					else
@@ -104,7 +106,7 @@ public class TrackRenderUtil {
 					else
 						TrackRenderUtil.renderStraightRail(g);
 					break;
-				case 4:
+				case 2:
 					g.scale(1, -1);
 					if (pass == 0)
 						TrackRenderUtil.renderCurvedRailbed(g);
