@@ -28,8 +28,6 @@ public interface ITile extends IEntity {
 
 	public TileCoordinate getPosition();
 
-	public void setPosition(TileCoordinate position);
-
 	public boolean isFixed();
 
 	public boolean isTrainSpawner();
@@ -38,14 +36,8 @@ public interface ITile extends IEntity {
 
 	public float getTravelCost();
 
-	public int[] getRailPaths();
-
-	public void rotate(boolean clockwise);
-
-	public void mirror();
-
 	public boolean connectsAt(int edge);
 
-	public ITile cloneTile();
+	public int[] getRailPaths();
 
 }

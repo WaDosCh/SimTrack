@@ -38,18 +38,17 @@ public class TileValidator {
 		validTiles = new ArrayList<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			int[] paths;
-			ITile t = TrackProvider.getTileInstance(i).cloneTile();
-			ITile t1 = TrackProvider.getTileInstance(i).cloneTile();
-			t1.mirror();
+			ITransformableTile t0 = TrackProvider.getTileInstance(i);
+			ITransformableTile t1 = t0.mirrored();
 			for (int r = 0; r < 6; r++) {
-				paths = t.getRailPaths().clone();
+				paths = t0.getRailPaths().clone();
 				sortPathList(paths);
 				addIfNotThere(paths);
 				paths = t1.getRailPaths().clone();
 				sortPathList(paths);
 				addIfNotThere(paths);
-				t.rotate(false);
-				t1.rotate(false);
+				t0 = t0.rotated(false);
+				t1 = t1.rotated(false);
 			}
 		}
 
@@ -93,8 +92,7 @@ public class TileValidator {
 		}
 		for (int i = 0; i + 3 < list.length; i += 2)
 			for (int j = 0; j + 3 < list.length; j += 2) {
-				if (list[j] > list[j + 2]
-						|| (list[j] == list[j + 2] && list[j + 1] > list[j + 3])) {
+				if (list[j] > list[j + 2] || (list[j] == list[j + 2] && list[j + 1] > list[j + 3])) {
 					int temp = list[j];
 					list[j] = list[j + 2];
 					list[j + 2] = temp;

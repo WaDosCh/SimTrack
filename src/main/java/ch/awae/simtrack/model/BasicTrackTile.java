@@ -32,10 +32,6 @@ public abstract class BasicTrackTile implements ITile {
 		this.position = position;
 	}
 
-	public void setPosition(TileCoordinate position) {
-		this.position = position;
-	}
-
 	public TileCoordinate getPosition() {
 		return this.position;
 	}

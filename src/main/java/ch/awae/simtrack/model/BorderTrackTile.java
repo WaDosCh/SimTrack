@@ -68,21 +68,4 @@ class BorderTrackTile extends BasicTrackTile {
 		return edge == this.edge;
 	}
 
-	// == IRRELEVANT INTERFACE METHODS
-
-	@Override
-	public void rotate(boolean clockwise) {
-		return;
-	}
-
-	@Override
-	public void mirror() {
-		return;
-	}
-
-	@Override
-	public ITile cloneTile() {
-		return null;
-	}
-
 }
