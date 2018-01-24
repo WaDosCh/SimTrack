@@ -20,6 +20,7 @@ package ch.awae.simtrack.view;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -33,7 +34,8 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 class ViewPort implements IViewPort {
 
 	private int minZoom = 10, zoom;
-	private Point sceneCorner, sceneDimensions, screenDimensions;
+	private Point sceneCorner, screenDimensions;
+	private SceneCoordinate sceneDimensions;
 	private static final double SQRT3 = Math.sqrt(3);
 	private IView owner;
 
@@ -48,7 +50,7 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public TileCoordinate getHexPos(Point p) {
+	public TileCoordinate toHex(SceneCoordinate p) {
 		double v = (2.0 * p.y) / (SQRT3 * 100);
 		double u = (1.0 * p.x) / 100 - v / 2;
 		int baseU = (int) Math.floor(u);
@@ -77,23 +79,23 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public Point getSceneCoordinate(Point p) {
+	public SceneCoordinate toScene(Point p) {
 		double x = p.x - this.sceneCorner.x;
 		double y = p.y - this.sceneCorner.y;
 		x /= 0.01 * this.zoom;
 		y /= 0.01 * this.zoom;
-		return new Point((int) x, (int) y);
+		return new SceneCoordinate(x, y);
 	}
 
 	@Override
-	public Point getScenePos(TileCoordinate hexCoor) {
-		int x = (2 * hexCoor.getU() + hexCoor.getV()) * 50;
-		int y = (int) (hexCoor.getV() * SQRT3 * 50);
-		return new Point(x, y);
+	public SceneCoordinate toScene(TileCoordinate hexCoor) {
+		double x = (2 * hexCoor.getU() + hexCoor.getV()) * 50;
+		double y = hexCoor.getV() * SQRT3 * 50;
+		return new SceneCoordinate(x, y);
 	}
 
 	@Override
-	public Point getScreenCoordinate(Point p) {
+	public Point toScreen(SceneCoordinate p) {
 		double x = p.x;
 		double y = p.y;
 		x *= 0.01 * this.zoom;
@@ -115,8 +117,8 @@ class ViewPort implements IViewPort {
 		if (minH > this.minZoom)
 			this.minZoom = (int) Math.ceil(minH);
 		this.zoom = this.minZoom;
-		this.sceneDimensions = new Point((this.owner.getModel()
-				.getHorizontalSize() - 1) * 100, (int) ((this.owner.getModel()
+		this.sceneDimensions = new SceneCoordinate((this.owner.getModel()
+				.getHorizontalSize() - 1) * 100,  ((this.owner.getModel()
 				.getVerticalSize() - 1) * SQRT3 * 50));
 		this.sceneCorner = new Point(0, 0);
 		updateCorner();
@@ -178,7 +180,7 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
-		Point p = getScreenCoordinate(getScenePos(hex));
+		Point p = toScreen(hex);
 		double zoomFac = 0.01 * this.zoom;
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.translate(p.x, p.y);
@@ -192,8 +194,8 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public boolean isVisible(Point point, int radius) {
-		Point screenPos = getScreenCoordinate(point);
+	public boolean isVisible(SceneCoordinate point, int radius) {
+		Point screenPos = toScreen(point);
 		double screenRad = radius * 0.01 * this.zoom;
 		// above or to the left is outside
 		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
@@ -207,6 +209,6 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public boolean isVisible(TileCoordinate hex) {
-		return isVisible(getScenePos(hex), 50);
+		return isVisible(toScene(hex), 50);
 	}
 }

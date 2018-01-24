@@ -64,16 +64,10 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 		if (!this.specialMirror) {
 			return rotated(false).rotated(false).rotated(false);
 		} else {
-			System.out.println("special");
-			for(TilePath p : getRailPaths())
-				System.out.println(p._1+"/"+p._2);
 			int rot = this.rotation;
 			ITransformableTile tile = this;
 			for (int i = 0; i < rot; i++)
 				tile = tile.rotated(false);
-			System.out.println("########");
-			for(TilePath p : tile.getRailPaths())
-				System.out.println(p._1+"/"+p._2);
 			TilePath[] links = new TilePath[tile.getRailPaths().length];
 			for (int i = 0; i < tile.getRailPaths().length; i++)
 				links[i] = new TilePath(Edge.byIndex((6 - tile.getRailPaths()[i]._1.ordinal()) % 6),

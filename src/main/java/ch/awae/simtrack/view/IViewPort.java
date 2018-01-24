@@ -20,6 +20,7 @@ package ch.awae.simtrack.view;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -31,22 +32,15 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public interface IViewPort {
 
+	/* HEX <<====>> SCENE */
+	
 	/**
 	 * calculates the closest hex tile for any given scene coordinates.
 	 * 
 	 * @param p
 	 * @return the hex closest to the given scene coordinates.
 	 */
-	public TileCoordinate getHexPos(Point p);
-
-	/**
-	 * returns the scene coordinate for a given screen coordinate
-	 * 
-	 * @param p
-	 *            the screen coordinate
-	 * @return the scene coordinate
-	 */
-	public Point getSceneCoordinate(Point p);
+	public TileCoordinate toHex(SceneCoordinate p);
 
 	/**
 	 * calculates the scene pixel coordinates of the centre of a given hex tile.
@@ -56,8 +50,20 @@ public interface IViewPort {
 	 *            the hex to convert to scene coordinates
 	 * @return the position of the hex centre on the scene.
 	 */
-	public Point getScenePos(TileCoordinate hexCoor);
+	public SceneCoordinate toScene(TileCoordinate hexCoor);
+	
+	/* SCENE <<====>> SCREEN */
+	
+	/**
+	 * returns the scene coordinate for a given screen coordinate
+	 * 
+	 * @param p
+	 *            the screen coordinate
+	 * @return the scene coordinate
+	 */
+	public SceneCoordinate toScene(Point p);
 
+	
 	/**
 	 * returns the screen coordinate for a given scene coordinate
 	 * 
@@ -65,8 +71,18 @@ public interface IViewPort {
 	 *            the scene coordinate
 	 * @return the screen coordinate
 	 */
-	public Point getScreenCoordinate(Point p);
+	public Point toScreen(SceneCoordinate p);
+	
+	/* HEX <<====>> SCREEN */
 
+	default Point toScreen(TileCoordinate t) {
+		return toScreen(toScene(t));
+	}
+	
+	default TileCoordinate toHex(Point p) {
+		return toHex(toScene(p));
+	}
+	
 	/**
 	 * focuses the given hex
 	 * 
@@ -103,7 +119,7 @@ public interface IViewPort {
 	 * @return false if it can be proven that the area is invisible, true
 	 *         otherwise
 	 */
-	public boolean isVisible(Point point, int radius);
+	public boolean isVisible(SceneCoordinate point, int radius);
 
 	/**
 	 * checks if a given tile is (potentially visible)

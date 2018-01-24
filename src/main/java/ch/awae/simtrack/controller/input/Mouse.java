@@ -25,6 +25,7 @@ import java.awt.event.MouseWheelEvent;
 import ch.awae.simtrack.controller.IController;
 import ch.awae.simtrack.controller.IGUIControllerHookup;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.view.IViewPort;
 
 /**
  * Mouse Observer.
@@ -69,12 +70,8 @@ public class Mouse {
 				if (p == null)
 					return;
 				Mouse.this.mouse = p;
-				Point scene = Mouse.this.owner.getView().getViewPort()
-						.getSceneCoordinate(p);
-				TileCoordinate tile = Mouse.this.owner.getView().getViewPort()
-						.getHexPos(scene);
-				// if (tile != null)
-				Mouse.this.mouseHex = tile;
+				IViewPort port = Mouse.this.owner.getView().getViewPort();
+				Mouse.this.mouseHex = port.toHex(p);
 			}
 
 			@Override
