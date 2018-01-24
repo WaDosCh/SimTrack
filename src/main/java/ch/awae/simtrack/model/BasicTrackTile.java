@@ -60,4 +60,9 @@ public abstract class BasicTrackTile implements ITile {
 		return;
 	}
 
+	@Override
+	public TileType getType() {
+		return TileType.RAILS;
+	}
+
 }

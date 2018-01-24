@@ -24,6 +24,7 @@ import java.awt.Stroke;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.TileType;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -40,10 +41,10 @@ class TrackRenderer implements IRenderer {
 	private static Stroke arrowStroke = new BasicStroke(3);
 
 	private final static int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
-	private final static int[][] hexEdges = {
-			{ 0, -50, -50, 0, 50, 50 },
+	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf,
 					-hexSideHalf, hexSideHalf } };
+	private static final Color waterColor = Color.BLUE;
 	private static Color railColour = Color.DARK_GRAY;
 	private static Stroke railStroke = new BasicStroke(5);
 
@@ -58,21 +59,37 @@ class TrackRenderer implements IRenderer {
 				continue;
 			Graphics2D g2 = port.focusHex(pos, g);
 			g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
-			g2.setStroke(railStroke);
-			TrackRenderUtil.renderRails(g2, bedColour, railColour,
-					tile.getRailPaths());
-			if (tile.isFixed()) {
-				g2.rotate(Math.PI / 3 * tile.getRailPaths()[0]._1.ordinal());
-				g2.setColor(railColour);
-				g2.setStroke(arrowStroke);
-				g2.translate(30, 0);
-				if (tile.isTrainDestination())
-					g2.scale(-1, 1);
-				g2.drawLine(0, 0, -10, -10);
-				g2.drawLine(0, 0, -10, 10);
-				g2.drawLine(0, -10, 10, 0);
-				g2.drawLine(0, 10, 10, 0);
-			}
+
+			if (tile.getType() == TileType.RAILS)
+				renderTrack(g2, tile);
+			else if (tile.getType() == TileType.OBSTACLE)
+				renderObstacle(g2, tile);
+
+		}
+	}
+
+	private void renderObstacle(Graphics2D g2, ITile tile) {
+		g2.setColor(waterColor);
+		g2.fillOval(10 - 20, 10 - 20, 40, 40);
+		g2.fillOval(-10 - 20, 10 - 20, 40, 40);
+		g2.fillOval(0 - 20, -10 - 20, 40, 40);
+	}
+
+	private void renderTrack(Graphics2D g2, ITile tile) {
+		g2.setStroke(railStroke);
+		TrackRenderUtil.renderRails(g2, bedColour, railColour,
+				tile.getRailPaths());
+		if (tile.isFixed()) {
+			g2.rotate(Math.PI / 3 * tile.getRailPaths()[0]._1.ordinal());
+			g2.setColor(railColour);
+			g2.setStroke(arrowStroke);
+			g2.translate(30, 0);
+			if (tile.isTrainDestination())
+				g2.scale(-1, 1);
+			g2.drawLine(0, 0, -10, -10);
+			g2.drawLine(0, 0, -10, 10);
+			g2.drawLine(0, -10, 10, 0);
+			g2.drawLine(0, 10, 10, 0);
 		}
 	}
 }
