@@ -66,4 +66,9 @@ class BorderTrackTile extends BasicTrackTile {
 		return edge == this.edge;
 	}
 
+	@Override
+	public TileType getType() {
+		return TileType.RAILS;
+	}
+
 }

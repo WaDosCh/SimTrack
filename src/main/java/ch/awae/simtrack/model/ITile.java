@@ -26,6 +26,8 @@ import ch.awae.simtrack.model.position.Edge;
  */
 public interface ITile extends IEntity {
 
+	public TileType getType();
+
 	public boolean isFixed();
 
 	public boolean isTrainSpawner();
