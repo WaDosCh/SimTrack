@@ -22,7 +22,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IView;
@@ -56,10 +55,10 @@ class BuildToolRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g, IView view) {
+		TileCoordinate c = this.tool.getPosition();
+		if (c == null)
+			return;
 		if (this.tool.isBulldoze()) {
-			TileCoordinate c = this.tool.getPosition();
-			if (c == null)
-				return;
 			Graphics2D g2 = view.getViewPort().focusHex(c, g);
 			g2.setColor(this.tool.isValid() ? Color.RED : darkRed);
 			g2.setStroke(bullCursorStroke);
@@ -69,15 +68,10 @@ class BuildToolRenderer implements IRenderer {
 				g2.rotate(angle);
 			}
 		} else {
-			ITile t = this.tool.getTrack();
-			if (t.getPosition() == null)
-				return;
-			Graphics2D g2 = view.getViewPort().focusHex(t.getPosition(), g);
+			Graphics2D g2 = view.getViewPort().focusHex(c, g);
 			g2.setStroke(railStroke);
-			TrackRenderUtil.renderRails(g2,
-					this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED,
-					this.tool.isValid() ? Color.GRAY : Color.RED,
-					t.getRailPaths());
+			TrackRenderUtil.renderRails(g2, this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED,
+					this.tool.isValid() ? Color.GRAY : Color.RED, tool.getTrack().getRailPaths());
 		}
 	}
 }

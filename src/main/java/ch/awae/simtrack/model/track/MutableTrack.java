@@ -7,7 +7,6 @@ import ch.awae.simtrack.model.BasicTrackTile;
 import ch.awae.simtrack.model.ITransformableTile;
 import ch.awae.simtrack.model.TilePath;
 import ch.awae.simtrack.model.position.Edge;
-import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * mutable track implementation. used by the editor
@@ -22,8 +21,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 	private TilePath[] links;
 	private boolean specialMirror = false;
 
-	MutableTrack(TileCoordinate position, JsonObject json) {
-		super(position);
+	MutableTrack(JsonObject json) {
 		JsonArray a = json.getJsonArray("links");
 		this.links = new TilePath[a.size() / 2];
 		for (int i = 0; i + 1 < a.size(); i += 2) {
@@ -32,8 +30,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 		this.specialMirror = json.getBoolean("mirror", false);
 	}
 
-	private MutableTrack(TileCoordinate position, TilePath[] links, int rotation, boolean specialM) {
-		super(position);
+	private MutableTrack(TilePath[] links, int rotation, boolean specialM) {
 		this.links = links;
 		this.specialMirror = specialM;
 		this.rotation = rotation;
@@ -55,7 +52,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 		for (int i = 0; i < this.links.length; i++) {
 			links[i] = new TilePath(this.links[i]._1.getNeighbour(clockwise), this.links[i]._2.getNeighbour(clockwise));
 		}
-		return new MutableTrack(this.getPosition(), links, (rotation + (clockwise ? 1 : 5)) % 6, this.specialMirror);
+		return new MutableTrack(links, (rotation + (clockwise ? 1 : 5)) % 6, this.specialMirror);
 	}
 
 	@Override
@@ -72,7 +69,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 			for (int i = 0; i < tile.getRailPaths().length; i++)
 				links[i] = new TilePath(Edge.byIndex((6 - tile.getRailPaths()[i]._1.ordinal()) % 6),
 						Edge.byIndex((6 - tile.getRailPaths()[i]._2.ordinal()) % 6));
-			tile = new MutableTrack(this.getPosition(), links, 0, this.specialMirror);
+			tile = new MutableTrack(links, 0, this.specialMirror);
 			for (int i = 0; i < rot; i++)
 				tile = tile.rotated(true);
 			return tile;
@@ -81,12 +78,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 
 	@Override
 	public ITransformableTile cloneTile() {
-		return new MutableTrack(this.getPosition(), this.links.clone(), rotation, this.specialMirror);
-	}
-
-	@Override
-	public ITransformableTile withPosition(TileCoordinate position) {
-		return new MutableTrack(position, links, rotation, specialMirror);
+		return new MutableTrack(this.links.clone(), rotation, this.specialMirror);
 	}
 
 }

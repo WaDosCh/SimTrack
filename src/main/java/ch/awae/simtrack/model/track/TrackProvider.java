@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import javax.json.JsonObject;
 
 import ch.awae.simtrack.model.ITransformableTile;
-import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
 
 /**
@@ -40,7 +39,7 @@ public class TrackProvider {
 		JsonObject tracks = Resource.getJSON("tracks.json");
 
 		for (String key : tracks.keySet()) {
-			tiles.add(new MutableTrack(new TileCoordinate(0, 0), tracks.getJsonObject(key)));
+			tiles.add(new MutableTrack(tracks.getJsonObject(key)));
 		}
 	}
 

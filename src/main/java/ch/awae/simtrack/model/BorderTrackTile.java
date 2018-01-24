@@ -18,7 +18,6 @@
 package ch.awae.simtrack.model;
 
 import ch.awae.simtrack.model.position.Edge;
-import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * Implementation for the border track pieces. They do not contain any paths.
@@ -32,8 +31,7 @@ class BorderTrackTile extends BasicTrackTile {
 	private Edge edge;
 	private boolean isOutput;
 
-	public BorderTrackTile(TileCoordinate position, Edge edge, boolean isOutput) {
-		super(position);
+	public BorderTrackTile(Edge edge, boolean isOutput) {
 		this.edge = edge;
 		this.isOutput = isOutput;
 	}

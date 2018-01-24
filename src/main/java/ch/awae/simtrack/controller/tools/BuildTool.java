@@ -170,11 +170,11 @@ public class BuildTool implements ITool {
 	private void place() {
 		IModel model = this.editor.getController().getModel();
 		if (model.getTileAt(this.pos) == null)
-			model.setTileAt(this.pos, this.t.cloneTile());
+			model.setTileAt(this.pos, TileValidator.intern(t));
 		else {
 			ITile oldTile = model.getTileAt(this.pos);
 			model.removeTileAt(this.pos);
-			model.setTileAt(this.pos, FusedTrackFactory.createFusedTrack(oldTile, this.t));
+			model.setTileAt(this.pos, TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.t)));
 		}
 	}
 
@@ -195,7 +195,6 @@ public class BuildTool implements ITool {
 		}
 		if (!this.isBulldoze && !mouse.button3()) {
 			// PLACER
-			this.t = t.withPosition(this.pos);
 			this.isValid = canPlaceOn(this.pos, model, this.t);
 			if (this.isValid) {
 				if (mouse.button1() && mouse.position().y < port.getScreenDimensions().y) {
