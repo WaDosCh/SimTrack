@@ -11,10 +11,10 @@ public class ObstacleSpawner {
 
 		for (int i = 0; i < amountOfObstacles; i++) {
 
-			int u = r.nextInt(model.getHorizontalSize());
-			int v = r.nextInt(model.getVerticalSize());
+			int u = r.nextInt(model.getHorizontalSize() - 4) + 2;
+			int v = r.nextInt(model.getVerticalSize() - 4) + 2;
 
-			TileCoordinate tileCoordinate = new TileCoordinate(u, v);
+			TileCoordinate tileCoordinate = new TileCoordinate(u - (v / 2), v);
 			ObstacleTile obstacle = new ObstacleTile();
 
 			model.setTileAt(tileCoordinate, obstacle);
