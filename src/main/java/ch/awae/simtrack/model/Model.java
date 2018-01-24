@@ -17,9 +17,9 @@
  */
 package ch.awae.simtrack.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 
@@ -57,8 +57,8 @@ class Model implements IModel {
 	}
 
 	@Override
-	public List<ITile> getTiles() {
-		return new ArrayList<>(this.tiles.values());
+	public Set<Map.Entry<TileCoordinate, ITile>> getTiles() {
+		return tiles.entrySet();
 	}
 
 	@Override

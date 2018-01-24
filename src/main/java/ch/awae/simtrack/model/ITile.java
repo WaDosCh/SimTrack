@@ -18,7 +18,6 @@
 package ch.awae.simtrack.model;
 
 import ch.awae.simtrack.model.position.Edge;
-import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * @author Andreas Wälchli
@@ -26,8 +25,6 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * @since SimTrack 0.2.2 (0.2.1)
  */
 public interface ITile extends IEntity {
-
-	public TileCoordinate getPosition();
 
 	public boolean isFixed();
 

@@ -17,7 +17,8 @@
  */
 package ch.awae.simtrack.model;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 
@@ -36,7 +37,7 @@ public interface IModel {
 
 	public void setTileAt(TileCoordinate position, ITile tile);
 
-	public List<ITile> getTiles();
+	public Set<Map.Entry<TileCoordinate, ITile>> getTiles();
 
 	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException;
 

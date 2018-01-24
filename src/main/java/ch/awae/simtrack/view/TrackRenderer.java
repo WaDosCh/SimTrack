@@ -21,8 +21,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.util.Map.Entry;
 
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * Renderer for track rendering
@@ -49,10 +51,12 @@ class TrackRenderer implements IRenderer {
 	public void render(Graphics2D g, IView view) {
 		g.setColor(bgColour);
 		IViewPort port = view.getViewPort();
-		for (ITile tile : view.getModel().getTiles()) {
-			if (!port.isVisible(tile.getPosition()))
+		for (Entry<TileCoordinate, ITile> pair : view.getModel().getTiles()) {
+			TileCoordinate pos = pair.getKey();
+			ITile tile = pair.getValue();
+			if (!port.isVisible(pos))
 				continue;
-			Graphics2D g2 = port.focusHex(tile.getPosition(), g);
+			Graphics2D g2 = port.focusHex(pos, g);
 			g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
 			g2.setStroke(railStroke);
 			TrackRenderUtil.renderRails(g2, bedColour, railColour,

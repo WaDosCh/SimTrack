@@ -80,7 +80,7 @@ class ConnectionSpawner {
 
 			TileCoordinate pos = new TileCoordinate(u, v);
 			if (!list.contains(pos)) {
-				BorderTrackTile tile = new BorderTrackTile(pos, Edge.byIndex(edge), RAND.nextBoolean());
+				BorderTrackTile tile = new BorderTrackTile(Edge.byIndex(edge), RAND.nextBoolean());
 				model.setTileAt(pos, tile);
 				list.add(pos);
 			} else {

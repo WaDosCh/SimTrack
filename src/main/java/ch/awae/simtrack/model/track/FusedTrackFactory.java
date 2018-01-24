@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.TilePath;
 import ch.awae.simtrack.model.TileValidator;
-import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
  * @author Andreas Wälchli
@@ -31,12 +30,12 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public class FusedTrackFactory {
 
-	public static ITile createAnonymousTrack(TileCoordinate position, TilePath[] connections, float cost) {
-		return new AnonymousTrack(position, connections.clone(), cost);
+	public static ITile createAnonymousTrack(TilePath[] connections, float cost) {
+		return new AnonymousTrack(connections.clone(), cost);
 	}
 
 	public static ITile createAnonymousTrack(ITile tile) {
-		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths().clone(), tile.getTravelCost());
+		return new AnonymousTrack(tile.getRailPaths().clone(), tile.getTravelCost());
 	}
 
 	public static ITile createFusedTrack(ITile tile0, ITile tile1) {
@@ -50,7 +49,7 @@ public class FusedTrackFactory {
 
 		cons = clean(cons);
 
-		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(tile0.getTravelCost(), tile1.getTravelCost()));
+		return new AnonymousTrack(cons, Math.max(tile0.getTravelCost(), tile1.getTravelCost()));
 	}
 
 	private static TilePath[] clean(TilePath[] cons) {

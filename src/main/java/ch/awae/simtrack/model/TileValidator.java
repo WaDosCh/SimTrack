@@ -19,7 +19,9 @@ package ch.awae.simtrack.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.awae.simtrack.model.track.TrackProvider;
 
@@ -33,9 +35,11 @@ import ch.awae.simtrack.model.track.TrackProvider;
 public class TileValidator {
 
 	private static List<TilePath[]> validTiles;
+	private static Map<Integer, ITile> tileCache;
 
 	static {
 		validTiles = new ArrayList<>();
+		tileCache = new HashMap<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			TilePath[] paths;
 			ITransformableTile t0 = TrackProvider.getTileInstance(i);
@@ -73,7 +77,7 @@ public class TileValidator {
 
 		// STEP 1: check for duplicates
 		for (int i = 0; i + 1 < paths.length; i += 2)
-			if (paths[i].equals(paths[i+1]))
+			if (paths[i].equals(paths[i + 1]))
 				return false;
 		// STEP 2: check for validity
 		for (TilePath[] sample : validTiles)
@@ -83,9 +87,26 @@ public class TileValidator {
 	}
 
 	public static void sortPathList(TilePath[] list) {
-		for (int i = 0; i < list.length; i ++)
+		for (int i = 0; i < list.length; i++)
 			list[i] = list[i].normalised();
 		Arrays.sort(list);
 		return;
+	}
+
+	/**
+	 * Caches the tile if it is the first of it's kind to be placed, returns the
+	 * cached version otherwise
+	 * 
+	 * @return
+	 */
+	public static ITile intern(ITile tile) {
+		Integer key = Integer.valueOf(Arrays.hashCode(tile.getRailPaths()));
+		ITile res = tileCache.get(key);
+		if (res == null) {
+			tileCache.put(key, tile);
+			System.out.println("added new tile to cache with hash: " + key);
+			res = tile;
+		}
+		return res;
 	}
 }
