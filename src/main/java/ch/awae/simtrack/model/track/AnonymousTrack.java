@@ -19,6 +19,7 @@ package ch.awae.simtrack.model.track;
 
 import ch.awae.simtrack.model.BasicTrackTile;
 import ch.awae.simtrack.model.TilePath;
+import lombok.Getter;
 
 /**
  * @author Andreas Wälchli
@@ -28,21 +29,17 @@ import ch.awae.simtrack.model.TilePath;
 class AnonymousTrack extends BasicTrackTile {
 
 	private float cost;
-	private TilePath[] connections;
+	@Getter
+	private TilePath[] railPaths;
 
 	AnonymousTrack(TilePath[] connections, float cost) {
-		this.connections = connections.clone();
+		this.railPaths = connections.clone();
 		this.cost = cost;
 	}
 
 	@Override
 	public float getTravelCost() {
 		return this.cost;
-	}
-
-	@Override
-	public TilePath[] getRailPaths() {
-		return this.connections;
 	}
 
 }
