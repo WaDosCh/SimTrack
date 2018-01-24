@@ -20,6 +20,7 @@ package ch.awae.simtrack.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -55,16 +56,16 @@ class ConnectionSpawner {
 				u = r1 - v / 2;
 				if (r1 == 0)
 					// left corners
-					edge = isTo ? 5 : 1;
+					edge = isTo ? 1 : 5;
 				else if (r1 == ho - 1)
 					// right corners
-					edge = isTo ? 4 : 2;
+					edge = isTo ? 2 : 4;
 				else if (isTo)
 					// top edge
-					edge = RAND.nextBoolean() ? 4 : 5;
+					edge = RAND.nextBoolean() ? 1 : 2;
 				else
 					// bottom edge
-					edge = RAND.nextBoolean() ? 1 : 2;
+					edge = RAND.nextBoolean() ? 4 : 5;
 			} else {
 				r1 += 2;
 				r1 *= 2;
@@ -79,8 +80,7 @@ class ConnectionSpawner {
 
 			TileCoordinate pos = new TileCoordinate(u, v);
 			if (!list.contains(pos)) {
-				BorderTrackTile tile = new BorderTrackTile(pos, edge,
-						RAND.nextBoolean());
+				BorderTrackTile tile = new BorderTrackTile(pos, Edge.byIndex(edge), RAND.nextBoolean());
 				model.setTileAt(pos, tile);
 				list.add(pos);
 			} else {

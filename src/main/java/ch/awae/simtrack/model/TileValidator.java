@@ -32,12 +32,12 @@ import ch.awae.simtrack.model.track.TrackProvider;
  */
 public class TileValidator {
 
-	private static List<int[]> validTiles;
+	private static List<TilePath[]> validTiles;
 
 	static {
 		validTiles = new ArrayList<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
-			int[] paths;
+			TilePath[] paths;
 			ITransformableTile t0 = TrackProvider.getTileInstance(i);
 			ITransformableTile t1 = t0.mirrored();
 			for (int r = 0; r < 6; r++) {
@@ -54,8 +54,8 @@ public class TileValidator {
 
 	}
 
-	private static void addIfNotThere(int[] item) {
-		for (int[] entry : validTiles)
+	private static void addIfNotThere(TilePath[] item) {
+		for (TilePath[] entry : validTiles)
 			if (Arrays.equals(entry, item))
 				return;
 		validTiles.add(item);
@@ -68,39 +68,24 @@ public class TileValidator {
 	 * @return {@code true} if and only if the provided tile is valid.
 	 */
 	public static boolean isValidTrack(ITile tile) {
-		int[] paths = tile.getRailPaths().clone();
+		TilePath[] paths = tile.getRailPaths().clone();
 		sortPathList(paths);
 
 		// STEP 1: check for duplicates
-		for (int i = 0; i + 3 < paths.length; i += 2)
-			if (paths[i] == paths[i + 2] && paths[i + 1] == paths[i + 3])
+		for (int i = 0; i + 1 < paths.length; i += 2)
+			if (paths[i].equals(paths[i+1]))
 				return false;
 		// STEP 2: check for validity
-		for (int[] sample : validTiles)
+		for (TilePath[] sample : validTiles)
 			if (Arrays.equals(sample, paths))
 				return true;
 		return false;
 	}
 
-	public static void sortPathList(int[] list) {
-		for (int i = 0; i + 1 < list.length; i += 2) {
-			if (list[i] > list[i + 1]) {
-				int temp = list[i];
-				list[i] = list[i + 1];
-				list[i + 1] = temp;
-			}
-		}
-		for (int i = 0; i + 3 < list.length; i += 2)
-			for (int j = 0; j + 3 < list.length; j += 2) {
-				if (list[j] > list[j + 2] || (list[j] == list[j + 2] && list[j + 1] > list[j + 3])) {
-					int temp = list[j];
-					list[j] = list[j + 2];
-					list[j + 2] = temp;
-					temp = list[j + 1];
-					list[j + 1] = list[j + 3];
-					list[j + 3] = temp;
-				}
-			}
+	public static void sortPathList(TilePath[] list) {
+		for (int i = 0; i < list.length; i ++)
+			list[i] = list[i].normalised();
+		Arrays.sort(list);
 		return;
 	}
 }

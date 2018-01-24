@@ -31,7 +31,7 @@ public class TileCoordinate {
 	 */
 	private static final double SQRT3DIV2 = Math.sqrt(3) / 2;
 
-	private int u, v;
+	private final int u, v;
 
 	/**
 	 * Instantiates a new tile coordinate.
@@ -111,6 +111,14 @@ public class TileCoordinate {
 	@Override
 	public String toString() {
 		return "Hex[" + this.u + "," + this.v + "]";
+	}
+
+	public TileEdgeCoordinate getEdge(Edge edge) {
+		return new TileEdgeCoordinate(this, edge);
+	}
+
+	public TileCoordinate getNeighbour(Edge edge) {
+		return new TileCoordinate(u + edge.Δu, v + edge.Δv);
 	}
 
 }

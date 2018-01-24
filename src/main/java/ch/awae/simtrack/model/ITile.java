@@ -17,6 +17,7 @@
  */
 package ch.awae.simtrack.model;
 
+import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -36,8 +37,8 @@ public interface ITile extends IEntity {
 
 	public float getTravelCost();
 
-	public boolean connectsAt(int edge);
+	public boolean connectsAt(Edge edge);
 
-	public int[] getRailPaths();
+	public TilePath[] getRailPaths();
 
 }
