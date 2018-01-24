@@ -87,4 +87,33 @@ public interface IViewPort {
 	 */
 	public Point getScreenDimensions();
 
+	/**
+	 * checks if a given area around a given scene coordinate is at least
+	 * partially visible on the screen. The check can be performed as
+	 * efficiently as possible and therefore may not be perfect. The
+	 * implementation must avoid any false negatives, but may introduce false
+	 * positives (i.e. a return value of {@code false} implies that the area is
+	 * certainly invisible, but a return value of {@code true} does not imply
+	 * any visibility)
+	 * 
+	 * @param point
+	 *            the scene coordinate
+	 * @param radius
+	 *            the radius of the area to be checked
+	 * @return false if it can be proven that the area is invisible, true
+	 *         otherwise
+	 */
+	public boolean isVisible(Point point, int radius);
+
+	/**
+	 * checks if a given tile is (potentially visible)
+	 * 
+	 * @param hex
+	 *            the hex to check
+	 * @return false if it can be proven that the tile is invisible, true
+	 *         otherwise
+	 * @see #isVisible(Point, int)
+	 */
+	public boolean isVisible(TileCoordinate hex);
+
 }

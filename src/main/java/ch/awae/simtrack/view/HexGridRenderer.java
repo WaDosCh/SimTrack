@@ -33,13 +33,15 @@ class HexGridRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g, IView view) {
+		IViewPort port = view.getViewPort();
 		g.setColor(Color.BLACK);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 		for (int i = 0; i < view.getModel().getHorizontalSize(); i++) {
 			for (int j = 0; j < view.getModel().getVerticalSize(); j++) {
-				int l = i - (j / 2);
-				Graphics2D g2 = view.getViewPort().focusHex(
-						new TileCoordinate(l, j), g);
+				TileCoordinate hex = new TileCoordinate(i - (j / 2), j);
+				if (!port.isVisible(hex))
+					continue;
+				Graphics2D g2 = port.focusHex(hex, g);
 				for (int k = 0; k < 3; k++) {
 					g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
 					g2.rotate(Math.PI / 3);

@@ -190,4 +190,23 @@ class ViewPort implements IViewPort {
 	public Point getScreenDimensions() {
 		return this.screenDimensions;
 	}
+
+	@Override
+	public boolean isVisible(Point point, int radius) {
+		Point screenPos = getScreenCoordinate(point);
+		double screenRad = radius * 0.01 * this.zoom;
+		// above or to the left is outside
+		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
+			return false;
+		// below or to the right is outside
+		if (screenPos.x > screenDimensions.x + screenRad || screenPos.y > screenDimensions.y + screenRad)
+			return false;
+		// anything else is (potentially) inside
+		return true;
+	}
+
+	@Override
+	public boolean isVisible(TileCoordinate hex) {
+		return isVisible(getScenePos(hex), 50);
+	}
 }
