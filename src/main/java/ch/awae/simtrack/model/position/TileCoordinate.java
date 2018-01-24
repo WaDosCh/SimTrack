@@ -17,6 +17,8 @@
  */
 package ch.awae.simtrack.model.position;
 
+import lombok.Data;
+
 /**
  * This class defines a hexadecimal coordinate
  * 
@@ -24,6 +26,7 @@ package ch.awae.simtrack.model.position;
  * @version 1.1, 2015-01-16
  * @since SimTrack 0.0.1
  */
+@Data
 public class TileCoordinate {
 
 	/*
@@ -63,49 +66,6 @@ public class TileCoordinate {
 		double y = (this.v - other.v) * SQRT3DIV2;
 
 		return Math.sqrt(x * x + y * y);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TileCoordinate other = (TileCoordinate) obj;
-		if (this.u != other.u)
-			return false;
-		if (this.v != other.v)
-			return false;
-		return true;
-	}
-
-	/**
-	 * Gets the u component
-	 *
-	 * @return the u component
-	 */
-	public int getU() {
-		return this.u;
-	}
-
-	/**
-	 * Gets the v component
-	 *
-	 * @return the v component
-	 */
-	public int getV() {
-		return this.v;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + this.u;
-		result = prime * result + this.v;
-		return result;
 	}
 
 	@Override

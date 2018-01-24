@@ -50,9 +50,9 @@ class TrackRenderer implements IRenderer {
 		g.setColor(bgColour);
 		IViewPort port = view.getViewPort();
 		for (ITile tile : view.getModel().getTiles()) {
-			if (!port.isVisible(tile.getPosition()))
+			if (!port.isVisible(tile.getTileCoordinate()))
 				continue;
-			Graphics2D g2 = port.focusHex(tile.getPosition(), g);
+			Graphics2D g2 = port.focusHex(tile.getTileCoordinate(), g);
 			g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
 			g2.setStroke(railStroke);
 			TrackRenderUtil.renderRails(g2, bedColour, railColour,

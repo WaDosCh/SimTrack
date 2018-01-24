@@ -19,6 +19,7 @@ package ch.awae.simtrack.model;
 
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import lombok.Getter;
 
 /**
  * @author Andreas Wälchli
@@ -27,14 +28,10 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public abstract class BasicTrackTile implements ITile {
 
-	private TileCoordinate position;
+	private @Getter TileCoordinate tileCoordinate;
 
-	public BasicTrackTile(TileCoordinate position) {
-		this.position = position;
-	}
-
-	public TileCoordinate getPosition() {
-		return this.position;
+	public BasicTrackTile(TileCoordinate tileCoordinate) {
+		this.tileCoordinate = tileCoordinate;
 	}
 
 	@Override
