@@ -42,7 +42,6 @@ class Window extends JFrame {
 	 */
 	Window(int x, int y) {
 		super("SimTrack");
-		this.setAlwaysOnTop(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.add(this.surface = new Surface(x, y));
 		this.pack();
