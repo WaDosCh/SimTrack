@@ -48,8 +48,4 @@ public interface ITile extends IEntity {
 
 	public ITile cloneTile();
 
-	public void setBlock(IBlock block);
-
-	public IBlock getBlock();
-
 }
