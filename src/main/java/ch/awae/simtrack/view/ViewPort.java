@@ -90,7 +90,7 @@ class ViewPort implements IViewPort {
 	@Override
 	public SceneCoordinate toScene(TileCoordinate hexCoor) {
 		double x = (2 * hexCoor.u + hexCoor.v) * 50;
-		double y = hexCoor.u * SQRT3 * 50;
+		double y = hexCoor.v * SQRT3 * 50;
 		return new SceneCoordinate(x, y);
 	}
 
