@@ -18,7 +18,6 @@
 package ch.awae.simtrack.model.track;
 
 import ch.awae.simtrack.model.BasicTrackTile;
-import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -45,22 +44,6 @@ class AnonymousTrack extends BasicTrackTile {
 	@Override
 	public int[] getRailPaths() {
 		return this.connections;
-	}
-
-	@Override
-	public void rotate(boolean clockwise) {
-		throw new UnsupportedOperationException("Cannot rotate anonymous track");
-	}
-
-	@Override
-	public void mirror() {
-		throw new UnsupportedOperationException("Cannot mirror anonymous track");
-	}
-
-	@Override
-	public ITile cloneTile() {
-		return new AnonymousTrack(this.getPosition(), this.connections,
-				this.cost);
 	}
 
 }

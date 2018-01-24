@@ -26,6 +26,7 @@ import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.ITransformableTile;
 import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
@@ -47,7 +48,7 @@ public class BuildTool implements ITool {
 	private Editor editor;
 	private IRenderer renderer;
 	private TileCoordinate pos = null;
-	private ITile t;
+	private ITransformableTile t;
 
 	/**
 	 * instantiates a new build tool
@@ -84,7 +85,7 @@ public class BuildTool implements ITool {
 	 * 
 	 * @return the tile, or {@code null} if the deletion tool is active
 	 */
-	ITile getTrack() {
+	ITransformableTile getTrack() {
 		return this.t;
 	}
 
@@ -111,7 +112,7 @@ public class BuildTool implements ITool {
 		if (args == null) {
 			this.isBulldoze = true;
 		} else {
-			this.t = (ITile) args[0];
+			this.t = (ITransformableTile) args[0];
 			this.isBulldoze = false;
 		}
 	}
@@ -136,8 +137,7 @@ public class BuildTool implements ITool {
 		if (tile != null) {
 			if (tile.isFixed())
 				return false;
-			if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(
-					tile, t)))
+			if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(tile, t)))
 				return true;
 			return false;
 		}
@@ -174,8 +174,7 @@ public class BuildTool implements ITool {
 		else {
 			ITile oldTile = model.getTileAt(this.pos);
 			model.removeTileAt(this.pos);
-			model.setTileAt(this.pos,
-					FusedTrackFactory.createFusedTrack(oldTile, this.t));
+			model.setTileAt(this.pos, FusedTrackFactory.createFusedTrack(oldTile, this.t));
 		}
 	}
 
@@ -196,31 +195,30 @@ public class BuildTool implements ITool {
 		}
 		if (!this.isBulldoze && !mouse.button3()) {
 			// PLACER
-			this.t.setPosition(this.pos);
+			this.t = t.withPosition(this.pos);
 			this.isValid = canPlaceOn(this.pos, model, this.t);
 			if (this.isValid) {
-				if (mouse.button1()
-						&& mouse.position().y < port.getScreenDimensions().y) {
+				if (mouse.button1() && mouse.position().y < port.getScreenDimensions().y) {
 					this.place();
 				}
 			}
 			if (keyboard.key(KeyEvent.VK_Q)) {
 				if (!this.isQ) {
-					this.t.rotate(false);
+					this.t = t.rotated(false);
 				}
 				this.isQ = true;
 			} else
 				this.isQ = false;
 			if (keyboard.key(KeyEvent.VK_E)) {
 				if (!this.isE) {
-					this.t.rotate(true);
+					this.t = t.rotated(true);
 				}
 				this.isE = true;
 			} else
 				this.isE = false;
 			if (keyboard.key(KeyEvent.VK_TAB)) {
 				if (!this.isTab) {
-					this.t.mirror();
+					this.t = t.mirrored();
 				}
 				this.isTab = true;
 			} else
@@ -229,8 +227,7 @@ public class BuildTool implements ITool {
 			// BULLDOZE
 			this.isValid = canDelete(this.pos, model);
 			if (this.isValid) {
-				if ((mouse.button1() || mouse.button3())
-						&& mouse.position().y < port.getScreenDimensions().y) {
+				if ((mouse.button1() || mouse.button3()) && mouse.position().y < port.getScreenDimensions().y) {
 					model.removeTileAt(this.pos);
 				}
 			}

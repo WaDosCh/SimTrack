@@ -32,10 +32,6 @@ public abstract class BasicTrackTile implements ITile {
 		this.position = position;
 	}
 
-	public void setPosition(TileCoordinate position) {
-		this.position = position;
-	}
-
 	public TileCoordinate getPosition() {
 		return this.position;
 	}
@@ -72,18 +68,6 @@ public abstract class BasicTrackTile implements ITile {
 	@Override
 	public void update(IModel model) {
 		return;
-	}
-
-	private IBlock block;
-
-	@Override
-	public void setBlock(IBlock block) {
-		this.block = block;
-	}
-
-	@Override
-	public IBlock getBlock() {
-		return this.block;
 	}
 
 }

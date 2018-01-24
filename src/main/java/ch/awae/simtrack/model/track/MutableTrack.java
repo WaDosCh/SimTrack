@@ -4,7 +4,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import ch.awae.simtrack.model.BasicTrackTile;
-import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.ITransformableTile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
 /**
@@ -14,7 +14,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-class MutableTrack extends BasicTrackTile {
+class MutableTrack extends BasicTrackTile implements ITransformableTile {
 
 	private int rotation = 0;
 	private int[] links;
@@ -47,35 +47,42 @@ class MutableTrack extends BasicTrackTile {
 	}
 
 	@Override
-	public void rotate(boolean clockwise) {
-		this.rotation += clockwise ? 5 : 1;
-		this.rotation %= 6;
+	public ITransformableTile rotated(boolean clockwise) {
+		int[] links = new int[this.links.length];
 		for (int i = 0; i < this.links.length; i++) {
-			this.links[i] = (this.links[i] + (clockwise ? 5 : 1)) % 6;
+			links[i] = (this.links[i] + (clockwise ? 5 : 1)) % 6;
 		}
+		return new MutableTrack(this.getPosition(), links, this.specialMirror);
 	}
 
 	@Override
-	public void mirror() {
+	public ITransformableTile mirrored() {
+		// not the most efficient but ok
 		if (!this.specialMirror) {
-			this.rotate(false);
-			this.rotate(false);
-			this.rotate(false);
+			return rotated(false).rotated(false).rotated(false);
 		} else {
 			int rot = this.rotation;
+			ITransformableTile tile = this;
 			for (int i = 0; i < rot; i++)
-				this.rotate(true);
+				tile = tile.rotated(true);
+			int[] links = new int[this.links.length];
 			for (int i = 0; i < this.links.length; i++)
-				this.links[i] = ((this.links[i] * -1) + 6) % 6;
+				links[i] = ((this.links[i] * -1) + 6) % 6;
+			tile = new MutableTrack(this.getPosition(), links, this.specialMirror);
 			for (int i = 0; i < rot; i++)
-				this.rotate(false);
+				tile = tile.rotated(false);
+			return tile;
 		}
 	}
 
 	@Override
-	public ITile cloneTile() {
-		return new MutableTrack(this.getPosition(), this.links.clone(),
-				this.specialMirror);
+	public ITransformableTile cloneTile() {
+		return new MutableTrack(this.getPosition(), this.links.clone(), this.specialMirror);
+	}
+
+	@Override
+	public ITransformableTile withPosition(TileCoordinate position) {
+		return new MutableTrack(position, links, specialMirror);
 	}
 
 }

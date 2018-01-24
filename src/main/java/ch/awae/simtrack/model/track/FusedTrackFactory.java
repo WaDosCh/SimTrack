@@ -30,14 +30,12 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public class FusedTrackFactory {
 
-	public static ITile createAnonymousTrack(TileCoordinate position,
-			int[] connections, float cost) {
+	public static ITile createAnonymousTrack(TileCoordinate position, int[] connections, float cost) {
 		return new AnonymousTrack(position, connections.clone(), cost);
 	}
 
 	public static ITile createAnonymousTrack(ITile tile) {
-		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths()
-				.clone(), tile.getTravelCost());
+		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths().clone(), tile.getTravelCost());
 	}
 
 	public static ITile createFusedTrack(ITile tile0, ITile tile1) {
@@ -51,8 +49,7 @@ public class FusedTrackFactory {
 
 		cons = clean(cons);
 
-		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(
-				tile0.getTravelCost(), tile1.getTravelCost()));
+		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(tile0.getTravelCost(), tile1.getTravelCost()));
 	}
 
 	private static int[] clean(int[] cons) {
@@ -62,8 +59,7 @@ public class FusedTrackFactory {
 			items.add(new Integer(i));
 
 		for (int i = 0; i + 3 < items.size(); i += 2) {
-			if (items.get(i).equals(items.get(i + 2))
-					&& items.get(i + 1).equals(items.get(i + 3))) {
+			if (items.get(i).equals(items.get(i + 2)) && items.get(i + 1).equals(items.get(i + 3))) {
 				items.remove(i + 3);
 				items.remove(i + 2);
 				i -= 2;
