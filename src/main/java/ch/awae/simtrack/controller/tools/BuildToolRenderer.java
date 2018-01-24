@@ -70,9 +70,9 @@ class BuildToolRenderer implements IRenderer {
 			}
 		} else {
 			ITile t = this.tool.getTrack();
-			if (t.getPosition() == null)
+			if (t.getTileCoordinate() == null)
 				return;
-			Graphics2D g2 = view.getViewPort().focusHex(t.getPosition(), g);
+			Graphics2D g2 = view.getViewPort().focusHex(t.getTileCoordinate(), g);
 			g2.setStroke(railStroke);
 			TrackRenderUtil.renderRails(g2,
 					this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED,

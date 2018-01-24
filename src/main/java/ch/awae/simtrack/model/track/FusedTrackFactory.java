@@ -36,7 +36,7 @@ public class FusedTrackFactory {
 	}
 
 	public static ITile createAnonymousTrack(ITile tile) {
-		return new AnonymousTrack(tile.getPosition(), tile.getRailPaths().clone(), tile.getTravelCost());
+		return new AnonymousTrack(tile.getTileCoordinate(), tile.getRailPaths().clone(), tile.getTravelCost());
 	}
 
 	public static ITile createFusedTrack(ITile tile0, ITile tile1) {
@@ -50,7 +50,7 @@ public class FusedTrackFactory {
 
 		cons = clean(cons);
 
-		return new AnonymousTrack(tile0.getPosition(), cons, Math.max(tile0.getTravelCost(), tile1.getTravelCost()));
+		return new AnonymousTrack(tile0.getTileCoordinate(), cons, Math.max(tile0.getTravelCost(), tile1.getTravelCost()));
 	}
 
 	private static TilePath[] clean(TilePath[] cons) {

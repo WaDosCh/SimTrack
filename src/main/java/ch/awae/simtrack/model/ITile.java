@@ -27,7 +27,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 public interface ITile extends IEntity {
 
-	public TileCoordinate getPosition();
+	public TileCoordinate getTileCoordinate();
 
 	public boolean isFixed();
 
