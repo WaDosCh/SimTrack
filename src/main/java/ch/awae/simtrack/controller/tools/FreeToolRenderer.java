@@ -51,7 +51,8 @@ class FreeToolRenderer implements IRenderer {
 	@Override
 	public void render(Graphics2D g, IView view) {
 		g.setStroke(borderStroke);
-		Graphics2D g2 = view.getViewPort().focusHex(this.tool.getPosition(), g);
+		Graphics2D g2 = view.getViewPort()
+				.focusHex(this.tool.getTileCoordinate(), g);
 		g2.setColor(Color.ORANGE);
 		double angle = Math.PI / 3;
 		for (int i = 0; i < 6; i++) {

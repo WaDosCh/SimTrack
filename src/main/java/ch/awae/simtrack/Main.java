@@ -40,10 +40,10 @@ import ch.awae.simtrack.view.ViewFactory;
 public class Main {
 
 	private static void init() {
-		GUI g = new GUI(1200, 800);
+		GUI gui = new GUI(1200, 800);
 		IModel m = ModelFactory.getModel(25, 13, 20);
-		IView v = ViewFactory.createGameView(m, g);
-		IController c = ControllerFactory.buildGameController(m, v, g, 50, 50);
+		IView v = ViewFactory.createGameView(m, gui);
+		IController c = ControllerFactory.buildGameController(m, v, gui, 50, 50);
 		c.startView();
 		c.start();
 	}

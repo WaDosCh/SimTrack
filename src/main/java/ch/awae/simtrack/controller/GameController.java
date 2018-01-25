@@ -23,6 +23,7 @@ import javax.swing.Timer;
 
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.TrackBar;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IView;
@@ -46,6 +47,7 @@ class GameController implements IController {
 	private int fps, tps;
 
 	private Timer tickTimer, viewTimer;
+	private DebugTools debugTools;
 
 	/**
 	 * instantiates a new controller instance
@@ -63,6 +65,7 @@ class GameController implements IController {
 		this.navigator = new Navigator(this);
 		this.editor = new Editor(this);
 		this.trackbar = new TrackBar(this.editor);
+		this.debugTools = new DebugTools(this.editor);
 		this.view.setEditorRenderer(this::render);
 	}
 
@@ -78,6 +81,7 @@ class GameController implements IController {
 	private void render(Graphics2D g, IView v) {
 		this.editor.render(g, v);
 		this.trackbar.getRenderer().render(g, v);
+		this.debugTools.getRenderer().render(g, v);
 	}
 
 	/**
@@ -159,6 +163,7 @@ class GameController implements IController {
 		this.navigator.tick();
 		this.editor.tick();
 		this.trackbar.tick();
+		this.debugTools.tick();
 		// TODO: tick logic
 	}
 

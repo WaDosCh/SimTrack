@@ -41,7 +41,7 @@ public class FreeTool implements ITool {
 	 * 
 	 * @return the current position
 	 */
-	TileCoordinate getPosition() {
+	TileCoordinate getTileCoordinate() {
 		return this.tile;
 	}
 
@@ -69,7 +69,8 @@ public class FreeTool implements ITool {
 
 	@Override
 	public void tick() {
-		TileCoordinate tile = this.owner.getController().getMouse().hexPosition();
+		TileCoordinate tile = this.owner.getController().getMouse()
+				.hexPosition();
 		if (tile != null)
 			this.tile = tile;
 		// TODO: onClick
