@@ -7,7 +7,7 @@ import java.util.HashSet;
 import ch.awae.simtrack.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.ViewConstants;
 
 public class DebugToolsRenderer implements IRenderer {
@@ -21,22 +21,31 @@ public class DebugToolsRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g, IView view) {
-		if (this.showing.contains(Option.InputGuide)) {
-			int w = view.getHorizontalScreenSize();
-			int h = view.getVerticalScreenSize();
-			g.setColor(new Color(255, 255, 255, 225));
-			g.fillRect(50, 50, w - 100, h - 100 - ViewConstants.toolbarHeight);
-			g.setColor(new Color(128, 128, 128, 255));
-			g.drawRect(50, 50, w - 100, h - 100 - ViewConstants.toolbarHeight);
+	public void render(Graphics2D g, IGameView view) {
+		if (this.showing.contains(Option.InputGuide))
+			renderUserGuide(g, view);
+		if (this.showing.contains(Option.Coordinates))
+			renderCoordinate(g, view);
+	}
 
-			int y = 80;
-			g.setColor(Color.black);
-			g.setFont(ViewConstants.text);
-			for (String s : this.inputGuideText) {
-				g.drawString(s, 60, y);
-				y += ViewConstants.text.getSize();
-			}
+	private void renderCoordinate(Graphics2D g, IGameView view) {
+
+	}
+
+	private void renderUserGuide(Graphics2D g, IGameView view) {
+		int w = view.getHorizontalScreenSize();
+		int h = view.getVerticalScreenSize();
+		g.setColor(new Color(255, 255, 255, 225));
+		g.fillRect(50, 50, w - 100, h - 100 - ViewConstants.toolbarHeight);
+		g.setColor(new Color(128, 128, 128, 255));
+		g.drawRect(50, 50, w - 100, h - 100 - ViewConstants.toolbarHeight);
+
+		int y = 80;
+		g.setColor(Color.black);
+		g.setFont(ViewConstants.text);
+		for (String s : this.inputGuideText) {
+			g.drawString(s, 60, y);
+			y += ViewConstants.text.getSize();
 		}
 	}
 
