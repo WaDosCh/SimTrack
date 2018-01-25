@@ -23,7 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.ITrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IView;
@@ -48,7 +48,7 @@ public class TrackBarRenderer implements IRenderer {
 	private Stroke rlst = new BasicStroke(4);
 	private Stroke xstr = new BasicStroke(6);
 
-	private ArrayList<ITile> tiles;
+	private ArrayList<ITrackTile> tiles;
 
 	/**
 	 * creates a new renderer instance

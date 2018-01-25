@@ -24,9 +24,11 @@ import ch.awae.simtrack.controller.IController;
 import ch.awae.simtrack.controller.ITool;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.model.IFixedTile;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.ITile;
-import ch.awae.simtrack.model.ITransformableTile;
+import ch.awae.simtrack.model.ITrackTile;
+import ch.awae.simtrack.model.ITransformableTrackTile;
 import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
@@ -54,7 +56,7 @@ public class BuildTool implements ITool {
 	@Getter
 	private TileCoordinate position = null;
 	@Getter
-	private ITransformableTile track;
+	private ITransformableTrackTile track;
 
 	/**
 	 * instantiates a new build tool
@@ -77,7 +79,7 @@ public class BuildTool implements ITool {
 		if (args == null) {
 			this.bulldoze = true;
 		} else {
-			this.track = (ITransformableTile) args[0];
+			this.track = (ITransformableTrackTile) args[0];
 			this.bulldoze = false;
 		}
 	}
@@ -95,15 +97,18 @@ public class BuildTool implements ITool {
 	 *         provided position in the provided model, or if it can be fused
 	 *         with the currently present tile.
 	 */
-	private static boolean canPlaceOn(TileCoordinate c, IModel m, ITile t) {
+	private static boolean canPlaceOn(TileCoordinate c, IModel m, ITrackTile t) {
 		if (c == null)
 			return false;
 		ITile tile = m.getTileAt(c);
 		if (tile != null) {
-			if (tile.isFixed())
+			if (tile instanceof IFixedTile)
 				return false;
-			if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(tile, t)))
-				return true;
+			if (tile instanceof ITrackTile) {
+				ITrackTile ttile = (ITrackTile) tile;
+				if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(ttile, t)))
+					return true;
+			}
 			return false;
 		}
 		return true;
@@ -123,7 +128,7 @@ public class BuildTool implements ITool {
 		if (c == null)
 			return false;
 		ITile t = m.getTileAt(c);
-		if (t == null || t.isFixed())
+		if (t == null || t instanceof IFixedTile)
 			return false;
 		return true;
 	}
@@ -137,7 +142,7 @@ public class BuildTool implements ITool {
 		if (model.getTileAt(this.position) == null)
 			model.setTileAt(this.position, TileValidator.intern(track));
 		else {
-			ITile oldTile = model.getTileAt(this.position);
+			ITrackTile oldTile = (ITrackTile) model.getTileAt(this.position);
 			model.removeTileAt(this.position);
 			model.setTileAt(this.position,
 					TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));

@@ -24,22 +24,7 @@ import ch.awae.simtrack.model.position.Edge;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public abstract class BasicTrackTile implements ITile {
-
-	@Override
-	public boolean isFixed() {
-		return false;
-	}
-
-	@Override
-	public boolean isTrainSpawner() {
-		return false;
-	}
-
-	@Override
-	public boolean isTrainDestination() {
-		return false;
-	}
+public abstract class BasicTrackTile implements ITrackTile {
 
 	@Override
 	public boolean connectsAt(Edge edge) {
@@ -48,21 +33,6 @@ public abstract class BasicTrackTile implements ITile {
 			if (p._1 == edge || p._2 == edge)
 				return true;
 		return false;
-	}
-
-	@Override
-	public void tick() {
-		return;
-	}
-
-	@Override
-	public void update(IModel model) {
-		return;
-	}
-
-	@Override
-	public TileType getType() {
-		return TileType.RAILS;
 	}
 
 }

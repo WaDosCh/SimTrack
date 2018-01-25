@@ -43,7 +43,7 @@ public class ViewFactory {
 		v.setRenderingDelegate(hooker.getRenderDelegate());
 		hooker.hookComponentRenderer(v::render);
 		ArrayList<IRenderer> rends = new ArrayList<>();
-		rends.add(new TrackRenderer());
+		rends.add(new TileRenderer());
 		rends.add(new HexGridRenderer());
 		v.setRenderers(rends);
 		return v;

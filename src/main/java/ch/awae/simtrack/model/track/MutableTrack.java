@@ -4,7 +4,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import ch.awae.simtrack.model.BasicTrackTile;
-import ch.awae.simtrack.model.ITransformableTile;
+import ch.awae.simtrack.model.ITransformableTrackTile;
 import ch.awae.simtrack.model.TilePath;
 import ch.awae.simtrack.model.position.Edge;
 
@@ -15,7 +15,7 @@ import ch.awae.simtrack.model.position.Edge;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-class MutableTrack extends BasicTrackTile implements ITransformableTile {
+class MutableTrack extends BasicTrackTile implements ITransformableTrackTile {
 
 	private int rotation = 0;
 	private TilePath[] links;
@@ -47,7 +47,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 	}
 
 	@Override
-	public ITransformableTile rotated(boolean clockwise) {
+	public ITransformableTrackTile rotated(boolean clockwise) {
 		TilePath[] links = new TilePath[this.links.length];
 		for (int i = 0; i < this.links.length; i++) {
 			links[i] = new TilePath(this.links[i]._1.getNeighbour(clockwise), this.links[i]._2.getNeighbour(clockwise));
@@ -56,13 +56,13 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 	}
 
 	@Override
-	public ITransformableTile mirrored() {
+	public ITransformableTrackTile mirrored() {
 		// not the most efficient but ok
 		if (!this.specialMirror) {
 			return rotated(false).rotated(false).rotated(false);
 		} else {
 			int rot = this.rotation;
-			ITransformableTile tile = this;
+			ITransformableTrackTile tile = this;
 			for (int i = 0; i < rot; i++)
 				tile = tile.rotated(false);
 			TilePath[] links = new TilePath[tile.getRailPaths().length];
@@ -77,7 +77,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTile {
 	}
 
 	@Override
-	public ITransformableTile cloneTile() {
+	public ITransformableTrackTile cloneTile() {
 		return new MutableTrack(this.links.clone(), rotation, this.specialMirror);
 	}
 

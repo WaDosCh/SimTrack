@@ -15,9 +15,8 @@ public class ObstacleSpawner {
 			int v = r.nextInt(model.getVerticalSize() - 4) + 2;
 
 			TileCoordinate tileCoordinate = new TileCoordinate(u - (v / 2), v);
-			ObstacleTile obstacle = new ObstacleTile();
 
-			model.setTileAt(tileCoordinate, obstacle);
+			model.setTileAt(tileCoordinate, ObstacleTile.INSTANCE);
 		}
 	}
 }

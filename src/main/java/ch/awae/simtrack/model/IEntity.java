@@ -24,8 +24,10 @@ package ch.awae.simtrack.model;
  */
 public interface IEntity {
 
-	public void tick();
+	default void tick() {
+	};
 
-	public void update(IModel model);
+	default void update(IModel model) {
+	};
 
 }

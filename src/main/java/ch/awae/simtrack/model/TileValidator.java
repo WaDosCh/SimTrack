@@ -35,15 +35,15 @@ import ch.awae.simtrack.model.track.TrackProvider;
 public class TileValidator {
 
 	private static List<TilePath[]> validTiles;
-	private static Map<Integer, ITile> tileCache;
+	private static Map<Integer, ITrackTile> tileCache;
 
 	static {
 		validTiles = new ArrayList<>();
 		tileCache = new HashMap<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			TilePath[] paths;
-			ITransformableTile t0 = TrackProvider.getTileInstance(i);
-			ITransformableTile t1 = t0.mirrored();
+			ITransformableTrackTile t0 = TrackProvider.getTileInstance(i);
+			ITransformableTrackTile t1 = t0.mirrored();
 			for (int r = 0; r < 6; r++) {
 				paths = t0.getRailPaths().clone();
 				sortPathList(paths);
@@ -71,7 +71,7 @@ public class TileValidator {
 	 * @param tile
 	 * @return {@code true} if and only if the provided tile is valid.
 	 */
-	public static boolean isValidTrack(ITile tile) {
+	public static boolean isValidTrack(ITrackTile tile) {
 		TilePath[] paths = tile.getRailPaths().clone();
 		sortPathList(paths);
 
@@ -99,9 +99,9 @@ public class TileValidator {
 	 * 
 	 * @return
 	 */
-	public static ITile intern(ITile tile) {
+	public static ITrackTile intern(ITrackTile tile) {
 		Integer key = Integer.valueOf(Arrays.hashCode(tile.getRailPaths()));
-		ITile res = tileCache.get(key);
+		ITrackTile res = tileCache.get(key);
 		if (res == null) {
 			tileCache.put(key, tile);
 			System.out.println("added new tile to cache with hash: " + key);

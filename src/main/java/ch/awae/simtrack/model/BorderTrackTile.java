@@ -26,12 +26,26 @@ import ch.awae.simtrack.model.position.Edge;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-class BorderTrackTile extends BasicTrackTile {
+class BorderTrackTile extends BasicTrackTile implements IDestinationTrackTile {
 
-	private Edge edge;
-	private boolean isOutput;
+	private final Edge edge;
+	private final boolean isOutput;
 
-	public BorderTrackTile(Edge edge, boolean isOutput) {
+	private final static BorderTrackTile[] INSTANCE;
+
+	static {
+		INSTANCE = new BorderTrackTile[12];
+		for (Edge e : Edge.values()) {
+			INSTANCE[e.ordinal()] = new BorderTrackTile(e, false);
+			INSTANCE[e.ordinal() + 6] = new BorderTrackTile(e, true);
+		}
+	}
+
+	public static BorderTrackTile getInstance(Edge edge, boolean isOutput) {
+		return INSTANCE[edge.ordinal() + (isOutput ? 6 : 0)];
+	}
+
+	private BorderTrackTile(Edge edge, boolean isOutput) {
 		this.edge = edge;
 		this.isOutput = isOutput;
 	}
@@ -47,28 +61,13 @@ class BorderTrackTile extends BasicTrackTile {
 	}
 
 	@Override
-	public boolean isFixed() {
-		return true;
-	}
-
-	@Override
-	public boolean isTrainDestination() {
-		return this.isOutput;
-	}
-
-	@Override
-	public boolean isTrainSpawner() {
-		return !this.isOutput;
-	}
-
-	@Override
 	public boolean connectsAt(Edge edge) {
 		return edge == this.edge;
 	}
 
 	@Override
-	public TileType getType() {
-		return TileType.RAILS;
+	public boolean isTrainSpawner() {
+		return !isOutput;
 	}
 
 }

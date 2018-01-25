@@ -17,8 +17,6 @@
  */
 package ch.awae.simtrack.model;
 
-import ch.awae.simtrack.model.position.Edge;
-
 /**
  * @author Andreas Wälchli
  * @version 1.2, 2015-01-24
@@ -26,18 +24,8 @@ import ch.awae.simtrack.model.position.Edge;
  */
 public interface ITile extends IEntity {
 
-	public TileType getType();
-
-	public boolean isFixed();
-
-	public boolean isTrainSpawner();
-
-	public boolean isTrainDestination();
-
-	public float getTravelCost();
-
-	public boolean connectsAt(Edge edge);
-
-	public TilePath[] getRailPaths();
-
+	default TileType getType() {
+		return TileType.UNKNOWN;
+	}
+	
 }
