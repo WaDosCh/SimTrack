@@ -64,7 +64,7 @@ class Model implements IModel {
 	@Override
 	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException {
 		ITile tile = this.tiles.get(position);
-		if (tile == null || tile.isFixed())
+		if (tile == null || tile instanceof IFixedTile)
 			throw new IllegalArgumentException();
 		this.tiles.remove(position);
 	}

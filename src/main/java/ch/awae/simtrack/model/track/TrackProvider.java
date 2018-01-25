@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import javax.json.JsonObject;
 
-import ch.awae.simtrack.model.ITransformableTile;
+import ch.awae.simtrack.model.ITransformableTrackTile;
 import ch.awae.simtrack.util.Resource;
 
 /**
@@ -31,7 +31,7 @@ import ch.awae.simtrack.util.Resource;
  */
 public class TrackProvider {
 
-	private static ArrayList<ITransformableTile> tiles;
+	private static ArrayList<ITransformableTrackTile> tiles;
 
 	static {
 		tiles = new ArrayList<>();
@@ -43,7 +43,7 @@ public class TrackProvider {
 		}
 	}
 
-	public static ITransformableTile getTileInstance(int tileID) {
+	public static ITransformableTrackTile getTileInstance(int tileID) {
 		return tiles.get(tileID);
 	}
 

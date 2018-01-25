@@ -23,7 +23,9 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.Map.Entry;
 
+import ch.awae.simtrack.model.IDestinationTrackTile;
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.ITrackTile;
 import ch.awae.simtrack.model.TileType;
 import ch.awae.simtrack.model.position.TileCoordinate;
 
@@ -34,7 +36,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-class TrackRenderer implements IRenderer {
+class TileRenderer implements IRenderer {
 	private static Color bedColour = Color.ORANGE.darker();
 	private static Color bgColour = Color.GREEN.darker();
 
@@ -42,8 +44,7 @@ class TrackRenderer implements IRenderer {
 
 	private final static int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
-			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf,
-					-hexSideHalf, hexSideHalf } };
+			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 	private static final Color waterColor = Color.BLUE;
 	private static Color railColour = Color.DARK_GRAY;
 	private static Stroke railStroke = new BasicStroke(5);
@@ -60,31 +61,48 @@ class TrackRenderer implements IRenderer {
 			Graphics2D g2 = port.focusHex(pos, g);
 			g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
 
-			if (tile.getType() == TileType.RAILS)
-				renderTrack(g2, tile);
-			else if (tile.getType() == TileType.OBSTACLE)
-				renderObstacle(g2, tile);
+			// decide how to work
+			TileType type = tile.getType();
+			switch (type == null ? TileType.UNKNOWN : type) {
+			case TRACK:
+				renderTrack(g2, (ITrackTile) tile);
+				break;
+			case OBSTACLE:
+				renderObstacle(g2);
+				break;
+			// unknown tile
+			default:
+				renderUnknown(g2);
+			}
 
 		}
 	}
+	
+	private void renderUnknown(Graphics2D g2) {
+		g2.setColor(Color.RED.darker());
+		g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
+		g2.setColor(Color.BLACK);
+		g2.scale(5, 5);
+		g2.drawString("?", -2, 5);
+	}
 
-	private void renderObstacle(Graphics2D g2, ITile tile) {
+	private void renderObstacle(Graphics2D g2) {
 		g2.setColor(waterColor);
 		g2.fillOval(10 - 20, 10 - 20, 40, 40);
 		g2.fillOval(-10 - 20, 10 - 20, 40, 40);
 		g2.fillOval(0 - 20, -10 - 20, 40, 40);
 	}
 
-	private void renderTrack(Graphics2D g2, ITile tile) {
+	private void renderTrack(Graphics2D g2, ITrackTile tile) {
 		g2.setStroke(railStroke);
-		TrackRenderUtil.renderRails(g2, bedColour, railColour,
-				tile.getRailPaths());
-		if (tile.isFixed()) {
+		TrackRenderUtil.renderRails(g2, bedColour, railColour, tile.getRailPaths());
+		if (tile instanceof IDestinationTrackTile) {
+			IDestinationTrackTile dest = (IDestinationTrackTile) tile;
 			g2.rotate(Math.PI / 3 * tile.getRailPaths()[0]._1.ordinal());
 			g2.setColor(railColour);
 			g2.setStroke(arrowStroke);
 			g2.translate(30, 0);
-			if (tile.isTrainDestination())
+			if (dest.isTrainDestination())
 				g2.scale(-1, 1);
 			g2.drawLine(0, 0, -10, -10);
 			g2.drawLine(0, 0, -10, 10);
