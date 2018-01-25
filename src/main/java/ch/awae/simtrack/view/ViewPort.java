@@ -37,14 +37,14 @@ class ViewPort implements IViewPort {
 	private Point sceneCorner, screenDimensions;
 	private SceneCoordinate sceneDimensions;
 	private static final double SQRT3 = Math.sqrt(3);
-	private IView owner;
+	private IGameView owner;
 
 	/**
 	 * instantiates a new view-port
 	 * 
 	 * @param owner
 	 */
-	ViewPort(IView owner) {
+	ViewPort(IGameView owner) {
 		this.owner = owner;
 		this.init();
 	}

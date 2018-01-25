@@ -70,7 +70,7 @@ public class Mouse {
 				if (p == null)
 					return;
 				Mouse.this.mouse = p;
-				IViewPort port = Mouse.this.owner.getView().getViewPort();
+				IViewPort port = Mouse.this.owner.getGameView().getViewPort();
 				Mouse.this.mouseHex = port.toHex(p);
 			}
 

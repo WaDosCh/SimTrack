@@ -24,7 +24,7 @@ import ch.awae.simtrack.controller.IController;
 import ch.awae.simtrack.gui.GUI;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.ModelFactory;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.ViewFactory;
 
 /**
@@ -41,9 +41,9 @@ public class Main {
 
 	private static void init() {
 		GUI gui = new GUI(1200, 800);
-		IModel m = ModelFactory.getModel(25, 13, 20);
-		IView v = ViewFactory.createGameView(m, gui);
-		IController c = ControllerFactory.buildGameController(m, v, gui, 50, 50);
+		IModel model = ModelFactory.getModel(25, 13, 20);
+		IGameView gameView = ViewFactory.createGameView(model, gui);
+		IController c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
 		c.startView();
 		c.start();
 	}

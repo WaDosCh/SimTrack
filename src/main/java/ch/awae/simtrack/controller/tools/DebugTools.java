@@ -26,9 +26,10 @@ public class DebugTools {
 
 	public void tick() {
 		Keyboard keyboard = this.editor.getController().getKeyboard();
-		if (keyboard.key(KeyEvent.VK_F1)) {
+		if (keyboard.key(KeyEvent.VK_F1))
 			toggle(Option.InputGuide);
-		}
+		if (keyboard.key(KeyEvent.VK_F2))
+			toggle(Option.Coordinates);
 	}
 
 	private void toggle(Option option) {

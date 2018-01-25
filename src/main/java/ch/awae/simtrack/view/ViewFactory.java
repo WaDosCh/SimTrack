@@ -37,7 +37,7 @@ public class ViewFactory {
 	 * @param hooker
 	 * @return a new game view instance
 	 */
-	public static IView createGameView(IModel model, IGUIHookProvider hooker) {
+	public static IGameView createGameView(IModel model, IGUIHookProvider hooker) {
 		GameView v = new GameView(model, hooker.getScreenWidth(),
 				hooker.getScreenHeight());
 		v.setRenderingDelegate(hooker.getRenderDelegate());

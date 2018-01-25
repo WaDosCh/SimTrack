@@ -24,7 +24,7 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.TrackRenderUtil;
 
 /**
@@ -54,7 +54,7 @@ class BuildToolRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g, IView view) {
+	public void render(Graphics2D g, IGameView view) {
 		TileCoordinate c = this.tool.getPosition();
 		if (c == null)
 			return;

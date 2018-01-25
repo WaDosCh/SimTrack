@@ -72,17 +72,17 @@ public class Navigator {
 		if (mouse.y < BORDER
 			|| this.owner.getKeyboard().keysOr(KeyEvent.VK_W, KeyEvent.VK_UP))
 			dy = 1;
-		if (mouse.x > this.owner.getView().getHorizontalScreenSize() - BORDER
+		if (mouse.x > this.owner.getGameView().getHorizontalScreenSize() - BORDER
 			|| this.owner.getKeyboard().keysOr(KeyEvent.VK_D, KeyEvent.VK_RIGHT))
 			dx = -1;
-		if (mouse.y > this.owner.getView().getVerticalScreenSize() - BORDER
+		if (mouse.y > this.owner.getGameView().getVerticalScreenSize() - BORDER
 			|| this.owner.getKeyboard().keysOr(KeyEvent.VK_S, KeyEvent.VK_DOWN))
 			dy = -1;
 		dx *= MOVE_SPEED;
 		dy *= MOVE_SPEED;
-		this.owner.getView().moveScene(dx, dy);
+		this.owner.getGameView().moveScene(dx, dy);
 
 		double amount = this.owner.getMouse().getScroll();
-		this.owner.getView().zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
+		this.owner.getGameView().zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
 	}
 }

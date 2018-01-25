@@ -23,7 +23,7 @@ import java.util.HashMap;
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 
 /**
  * top-level management of the active side of the user interface. It manages the
@@ -124,7 +124,7 @@ public class Editor {
 	 * @param view
 	 *            the view
 	 */
-	void render(Graphics2D g, IView view) {
+	void render(Graphics2D g, IGameView view) {
 		if (this.renderer != null)
 			this.renderer.render((Graphics2D) g.create(), view);
 	}

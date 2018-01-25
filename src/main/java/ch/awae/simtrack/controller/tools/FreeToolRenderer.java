@@ -23,7 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 
 /**
  * Render For the "Free Hand" Tool
@@ -49,7 +49,7 @@ class FreeToolRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g, IView view) {
+	public void render(Graphics2D g, IGameView view) {
 		g.setStroke(borderStroke);
 		Graphics2D g2 = view.getViewPort()
 				.focusHex(this.tool.getTileCoordinate(), g);

@@ -39,6 +39,6 @@ public interface IRenderer {
 	 * @param view
 	 *            the view that invokes the rendering
 	 */
-	public void render(Graphics2D g, IView view);
+	public void render(Graphics2D g, IGameView view);
 
 }

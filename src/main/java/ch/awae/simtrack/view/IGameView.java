@@ -26,7 +26,7 @@ import ch.awae.simtrack.model.IModel;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public interface IView {
+public interface IGameView {
 
 	/**
 	 * sets the model associated with the view

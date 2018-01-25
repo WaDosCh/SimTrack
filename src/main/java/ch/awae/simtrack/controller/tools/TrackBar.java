@@ -95,9 +95,9 @@ public class TrackBar {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= this.editor.getController().getView().getHorizontalScreenSize() / 2;
+		p.x -= this.editor.getController().getGameView().getHorizontalScreenSize() / 2;
 		p.x += 550;
-		p.y -= this.editor.getController().getView().getVerticalScreenSize();
+		p.y -= this.editor.getController().getGameView().getVerticalScreenSize();
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;

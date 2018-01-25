@@ -50,7 +50,7 @@ class TileRenderer implements IRenderer {
 	private static Stroke railStroke = new BasicStroke(5);
 
 	@Override
-	public void render(Graphics2D g, IView view) {
+	public void render(Graphics2D g, IGameView view) {
 		g.setColor(bgColour);
 		IViewPort port = view.getViewPort();
 		for (Entry<TileCoordinate, ITile> pair : view.getModel().getTiles()) {

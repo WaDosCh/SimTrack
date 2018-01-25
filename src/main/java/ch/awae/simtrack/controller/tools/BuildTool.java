@@ -153,7 +153,7 @@ public class BuildTool implements ITool {
 	public void tick() {
 
 		IController controller = this.editor.getController();
-		IViewPort port = controller.getView().getViewPort();
+		IViewPort port = controller.getGameView().getViewPort();
 		IModel model = controller.getModel();
 		Mouse mouse = controller.getMouse();
 		Keyboard keyboard = controller.getKeyboard();

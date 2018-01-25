@@ -30,7 +30,7 @@ import ch.awae.simtrack.model.IModel;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-class GameView implements IView {
+class GameView implements IGameView {
 
 	private IModel model;
 	private ViewPort port;

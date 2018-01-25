@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import ch.awae.simtrack.model.ITrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.TrackRenderUtil;
 
 /**
@@ -66,7 +66,7 @@ public class TrackBarRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g, IView view) {
+	public void render(Graphics2D g, IGameView view) {
 		AffineTransform originalTransformation = g.getTransform();
 		g.translate(view.getHorizontalScreenSize() / 2 - 500,
 				view.getVerticalScreenSize() - 50);

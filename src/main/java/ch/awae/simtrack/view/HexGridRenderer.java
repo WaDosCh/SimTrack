@@ -32,7 +32,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 class HexGridRenderer implements IRenderer {
 
 	@Override
-	public void render(Graphics2D g, IView view) {
+	public void render(Graphics2D g, IGameView view) {
 		IViewPort port = view.getViewPort();
 		g.setColor(Color.BLACK);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));

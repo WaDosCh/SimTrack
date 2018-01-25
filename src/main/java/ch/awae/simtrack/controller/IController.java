@@ -20,7 +20,7 @@ package ch.awae.simtrack.controller;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 
 /**
  * The basic controller interface
@@ -43,7 +43,7 @@ public interface IController {
 	 * 
 	 * @return the view
 	 */
-	public IView getView();
+	public IGameView getGameView();
 
 	/**
 	 * sets the rendering frequency

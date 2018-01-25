@@ -20,7 +20,7 @@ package ch.awae.simtrack.controller;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
 
 /**
  * Factory for controller instances.
@@ -42,7 +42,7 @@ public class ControllerFactory {
 	 * @param fps
 	 * @return a new game controller instantiated with the provided params
 	 */
-	public static IController buildGameController(IModel model, IView view,
+	public static IController buildGameController(IModel model, IGameView view,
 			IGUIControllerHookup hooker, int tps, int fps) {
 		GameController c = new GameController(model, view);
 		c.setTPS(tps);

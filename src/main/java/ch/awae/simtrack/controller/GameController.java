@@ -26,7 +26,8 @@ import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.TrackBar;
 import ch.awae.simtrack.model.IModel;
-import ch.awae.simtrack.view.IView;
+import ch.awae.simtrack.view.IGameView;
+import lombok.Getter;
 
 /**
  * The game controller implementation
@@ -37,8 +38,8 @@ import ch.awae.simtrack.view.IView;
  */
 class GameController implements IController {
 
-	private IModel model;
-	private IView view;
+	private @Getter IModel model;
+	private @Getter IGameView gameView;
 	private Mouse mouse;
 	private Keyboard keyboard;
 	private Navigator navigator;
@@ -55,9 +56,9 @@ class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IView view) {
+	public GameController(IModel model, IGameView view) {
 		this.model = model;
-		this.view = view;
+		this.gameView = view;
 		this.tickTimer = new Timer(10, e -> this.tick());
 		this.tickTimer.setRepeats(true);
 		this.viewTimer = new Timer(10, e -> this.viewTick());
@@ -66,7 +67,7 @@ class GameController implements IController {
 		this.editor = new Editor(this);
 		this.trackbar = new TrackBar(this.editor);
 		this.debugTools = new DebugTools(this.editor);
-		this.view.setEditorRenderer(this::render);
+		this.gameView.setEditorRenderer(this::render);
 	}
 
 	/**
@@ -78,7 +79,7 @@ class GameController implements IController {
 	 * @param v
 	 *            the view
 	 */
-	private void render(Graphics2D g, IView v) {
+	private void render(Graphics2D g, IGameView v) {
 		this.editor.render(g, v);
 		this.trackbar.getRenderer().render(g, v);
 		this.debugTools.getRenderer().render(g, v);
@@ -102,16 +103,6 @@ class GameController implements IController {
 	 */
 	void setKeyboard(Keyboard keyboard) {
 		this.keyboard = keyboard;
-	}
-
-	@Override
-	public IModel getModel() {
-		return this.model;
-	}
-
-	@Override
-	public IView getView() {
-		return this.view;
 	}
 
 	@Override
@@ -172,7 +163,7 @@ class GameController implements IController {
 	 * controller.
 	 */
 	private void viewTick() {
-		this.view.renderView();
+		this.gameView.renderView();
 	}
 
 }
