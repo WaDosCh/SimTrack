@@ -1,7 +1,10 @@
 package ch.awae.simtrack.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import javax.json.JsonObject;
 import javax.json.spi.JsonProvider;
@@ -43,6 +46,18 @@ public final class Resource {
 	public static JsonObject getJSON(final String id) {
 		try (InputStream stream = asStream(id)) {
 			return JsonProvider.provider().createReader(stream).readObject();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String[] getText(String id) {
+		try (InputStream stream = asStream(id)) {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(stream));
+			ArrayList<String> text = new ArrayList<>();
+			reader.lines().forEach(text::add);
+			return text.toArray(new String[text.size()]);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

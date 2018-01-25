@@ -21,6 +21,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.model.ITrackTile;
@@ -66,6 +67,7 @@ public class TrackBarRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g, IView view) {
+		AffineTransform originalTransformation = g.getTransform();
 		g.translate(view.getHorizontalScreenSize() / 2 - 500,
 				view.getVerticalScreenSize() - 50);
 		g.setStroke(new BasicStroke(4));
@@ -92,6 +94,7 @@ public class TrackBarRenderer implements IRenderer {
 			}
 			g.translate(100, 0);
 		}
+		g.setTransform(originalTransformation);
 	}
 
 }
