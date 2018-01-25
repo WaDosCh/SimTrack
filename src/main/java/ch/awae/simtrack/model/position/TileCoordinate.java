@@ -20,7 +20,7 @@ package ch.awae.simtrack.model.position;
 import lombok.EqualsAndHashCode;
 
 /**
- * This class defines a hexadecimal coordinate
+ * This defines a integer coordinate on the hexagonal tiles of the game model
  * 
  * @author Andreas Wälchli
  * @version 1.1, 2015-01-16

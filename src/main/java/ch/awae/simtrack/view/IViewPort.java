@@ -40,7 +40,7 @@ public interface IViewPort {
 	 * @param p
 	 * @return the hex closest to the given scene coordinates.
 	 */
-	public TileCoordinate toHex(SceneCoordinate p);
+	public TileCoordinate toHexCoordinate(SceneCoordinate p);
 
 	/**
 	 * calculates the scene pixel coordinates of the centre of a given hex tile.
@@ -50,7 +50,7 @@ public interface IViewPort {
 	 *            the hex to convert to scene coordinates
 	 * @return the position of the hex centre on the scene.
 	 */
-	public SceneCoordinate toScene(TileCoordinate hexCoor);
+	public SceneCoordinate toSceneCoordinate(TileCoordinate hexCoor);
 	
 	/* SCENE <<====>> SCREEN */
 	
@@ -71,16 +71,16 @@ public interface IViewPort {
 	 *            the scene coordinate
 	 * @return the screen coordinate
 	 */
-	public Point toScreen(SceneCoordinate p);
+	public Point toScreenCoordinate(SceneCoordinate p);
 	
 	/* HEX <<====>> SCREEN */
 
 	default Point toScreen(TileCoordinate t) {
-		return toScreen(toScene(t));
+		return toScreenCoordinate(toSceneCoordinate(t));
 	}
 	
 	default TileCoordinate toHex(Point p) {
-		return toHex(toScene(p));
+		return toHexCoordinate(toScene(p));
 	}
 	
 	/**

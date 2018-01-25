@@ -50,7 +50,7 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public TileCoordinate toHex(SceneCoordinate p) {
+	public TileCoordinate toHexCoordinate(SceneCoordinate p) {
 		double v = (2.0 * p.y) / (SQRT3 * 100);
 		double u = (1.0 * p.x) / 100 - v / 2;
 		int baseU = (int) Math.floor(u);
@@ -88,14 +88,14 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public SceneCoordinate toScene(TileCoordinate hexCoor) {
-		double x = (2 * hexCoor.u + hexCoor.v) * 50;
-		double y = hexCoor.v * SQRT3 * 50;
+	public SceneCoordinate toSceneCoordinate(TileCoordinate tileCoor) {
+		double x = (2 * tileCoor.u + tileCoor.v) * 50;
+		double y = tileCoor.v * SQRT3 * 50;
 		return new SceneCoordinate(x, y);
 	}
 
 	@Override
-	public Point toScreen(SceneCoordinate p) {
+	public Point toScreenCoordinate(SceneCoordinate p) {
 		double x = p.x;
 		double y = p.y;
 		x *= 0.01 * this.zoom;
@@ -195,7 +195,7 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public boolean isVisible(SceneCoordinate point, int radius) {
-		Point screenPos = toScreen(point);
+		Point screenPos = toScreenCoordinate(point);
 		double screenRad = radius * 0.01 * this.zoom;
 		// above or to the left is outside
 		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
@@ -209,6 +209,6 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public boolean isVisible(TileCoordinate hex) {
-		return isVisible(toScene(hex), 60);
+		return isVisible(toSceneCoordinate(hex), 60);
 	}
 }
