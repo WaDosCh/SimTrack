@@ -33,6 +33,45 @@ import ch.awae.simtrack.controller.IGUIControllerHookup;
  */
 public class Keyboard {
 
+	public enum Mode {
+		AND, OR;
+	}
+	
+	public enum Direction {
+		ACTIVATE, DEACTIVATE;
+	}
+
+	public class KeyTrigger {
+
+		private final Mode mode;
+		private final Direction direction;
+		private final int[] keys;
+		private boolean active;
+
+		KeyTrigger(Direction direction, Mode mode, int... keys) {
+			this.direction = direction;
+			this.mode = mode;
+			this.keys = keys;
+		}
+
+		/**
+		 * Tests if the key combination newly activated or deactivated.
+		 * 
+		 * When testing for a enabling, this method will return true the first
+		 * time the combination is enabled. Any further call will return false
+		 * until the combination deactivates.
+		 * @return
+		 */
+		public boolean test() {
+			boolean current = mode == Mode.OR ? Keyboard.this.keysOr(keys) : Keyboard.this.keysAnd(keys);
+			if (current == active)
+				return false;
+			active = current;
+			return direction == Direction.ACTIVATE ? active : !active;
+		}
+
+	}
+
 	private KeyAdapter adapter = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -113,6 +152,14 @@ public class Keyboard {
 	 */
 	public void reset() {
 		this.keystates.clear();
+	}
+	
+	public KeyTrigger trigger(Direction direction, int key) {
+		return trigger(direction, Mode.OR, key);
+	}
+
+	public KeyTrigger trigger(Direction direction, Mode mode, int... keys) {
+		return new KeyTrigger(direction, mode, keys);
 	}
 
 }

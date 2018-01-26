@@ -87,8 +87,8 @@ class GameController implements IController {
 	 */
 	private void render(Graphics2D g, IGameView v) {
 		this.editor.render(g, v);
-		this.trackbar.getRenderer().render(g, v);
-		this.debugTools.getRenderer().render(g, v);
+		this.trackbar.getRenderer().renderSafe(g, v);
+		this.debugTools.getRenderer().renderSafe(g, v);
 	}
 
 	@Override

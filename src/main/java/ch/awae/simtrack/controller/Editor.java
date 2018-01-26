@@ -117,7 +117,7 @@ public class Editor implements IEditor {
 	 */
 	void render(Graphics2D g, IGameView view) {
 		if (this.renderer != null)
-			this.renderer.render((Graphics2D) g.create(), view);
+			this.renderer.renderSafe(g, view);
 	}
 
 	/**

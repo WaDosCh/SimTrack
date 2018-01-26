@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.HashSet;
 
 import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Keyboard.Direction;
+import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.view.IGameView;
 import lombok.Getter;
@@ -14,23 +16,27 @@ public class DebugTools {
 		InputGuide, Coordinates;
 	}
 
-	private Keyboard keyboard;
+	private KeyTrigger F1, F2, F12;
+	
 	@Getter
 	private DebugToolsRenderer renderer;
 	private HashSet<Option> showing;
 
 	public DebugTools(Keyboard keyboard, Mouse mouse, IGameView gameView) {
-		this.keyboard = keyboard;
+		F1 = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_F1);
+		F2 = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_F2);
+		F12 = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_F12);
+		
 		this.showing = new HashSet<Option>();
 		this.renderer = new DebugToolsRenderer(this.showing, mouse, gameView);
 	}
 
 	public void tick() {
-		if (this.keyboard.key(KeyEvent.VK_F1))
+		if (F1.test())
 			toggle(Option.InputGuide);
-		if (this.keyboard.key(KeyEvent.VK_F2))
+		if (F2.test())
 			toggle(Option.Coordinates);
-		if (this.keyboard.key(KeyEvent.VK_F12))
+		if (F12.test())
 			System.exit(0);
 	}
 
