@@ -94,6 +94,9 @@ public interface IController {
 	 * @return the keyboard observer
 	 */
 	public Keyboard getKeyboard();
-	
+
 	public PathFinding getPathfinder();
+
+	public void setWindowTitle(String string);
+	
 }

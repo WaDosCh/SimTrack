@@ -22,7 +22,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import ch.awae.simtrack.controller.IGUIControllerHookup;
-import ch.awae.simtrack.controller.Log;
+import ch.awae.simtrack.controller.input.Trigger.Direction;
 
 /**
  * Keyboard Observer. Records any keyboard actions and provides the information
@@ -36,10 +36,6 @@ public class Keyboard {
 
 	public enum Mode {
 		AND, OR;
-	}
-
-	public enum Direction {
-		ACTIVATE, DEACTIVATE;
 	}
 
 	public class KeyTrigger implements Trigger {
@@ -78,13 +74,13 @@ public class Keyboard {
 	private KeyAdapter adapter = new KeyAdapter() {
 		@Override
 		public synchronized void keyPressed(KeyEvent e) {
-			Log.info("KEY DOWN: " + e.getKeyCode());
+			//Log.info("KEY DOWN: " + e.getKeyCode());
 			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.TRUE);
 		}
 
 		@Override
 		public synchronized void keyReleased(KeyEvent e) {
-			Log.info("KEY UP:   " + e.getKeyCode());
+			//Log.info("KEY UP:   " + e.getKeyCode());
 			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.FALSE);
 		}
 	};
