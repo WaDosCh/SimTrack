@@ -22,6 +22,7 @@ import java.awt.Point;
 
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import lombok.Getter;
 
 /**
  * manages the translation between hex coordinates and screen coordinates, as
@@ -33,7 +34,9 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  */
 class ViewPort implements IViewPort {
 
-	private int minZoom = 10, zoom;
+	private int minZoom = 10;
+	private @Getter int zoom;
+
 	private Point sceneCorner, screenDimensions;
 	private SceneCoordinate sceneDimensions;
 	private static final double SQRT3 = Math.sqrt(3);
@@ -117,9 +120,9 @@ class ViewPort implements IViewPort {
 		if (minH > this.minZoom)
 			this.minZoom = (int) Math.ceil(minH);
 		this.zoom = this.minZoom;
-		this.sceneDimensions = new SceneCoordinate((this.owner.getModel()
-				.getHorizontalSize() - 1) * 100,  ((this.owner.getModel()
-				.getVerticalSize() - 1) * SQRT3 * 50));
+		this.sceneDimensions = new SceneCoordinate(
+				(this.owner.getModel().getHorizontalSize() - 1) * 100,
+				((this.owner.getModel().getVerticalSize() - 1) * SQRT3 * 50));
 		this.sceneCorner = new Point(0, 0);
 		updateCorner();
 	}
@@ -201,7 +204,8 @@ class ViewPort implements IViewPort {
 		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
 			return false;
 		// below or to the right is outside
-		if (screenPos.x > screenDimensions.x + screenRad || screenPos.y > screenDimensions.y + screenRad)
+		if (screenPos.x > screenDimensions.x + screenRad
+				|| screenPos.y > screenDimensions.y + screenRad)
 			return false;
 		// anything else is (potentially) inside
 		return true;

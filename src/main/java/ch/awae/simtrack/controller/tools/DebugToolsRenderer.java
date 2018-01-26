@@ -65,6 +65,12 @@ public class DebugToolsRenderer implements IRenderer {
 			g.drawString(tilePos.toString(), screenPos.x + 20, y);
 		y += ViewConstants.text.getSize();
 		g.drawString(screenSizeToString(), screenPos.x + 20, y);
+		y += ViewConstants.text.getSize();
+		g.drawString(zoomToString(), screenPos.x + 20, y);
+	}
+
+	public String zoomToString() {
+		return "Zoom: " + this.gameView.getViewPort().getZoom();
 	}
 
 	public String screenPositionToString(Point screenPos) {
