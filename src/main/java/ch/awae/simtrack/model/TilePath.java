@@ -29,4 +29,8 @@ public final class TilePath implements Comparable<TilePath> {
 			return high;
 	}
 
+	public TilePath swap() {
+		return new TilePath(_2, _1);
+	}
+
 }

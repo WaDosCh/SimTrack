@@ -35,4 +35,14 @@ public abstract class BasicTrackTile implements ITrackTile {
 		return false;
 	}
 
+	@Override
+	public TilePath[] getPaths() {
+		TilePath[] raw = getRailPaths();
+		TilePath[] res = new TilePath[2 * raw.length];
+		for (int i = 0; i < raw.length; i++) {
+			res[2 * i] = raw[i];
+			res[2 * i + 1] = raw[i].swap();
+		}
+		return res;
+	}
 }

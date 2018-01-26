@@ -61,6 +61,12 @@ class BorderTrackTile extends BasicTrackTile implements IDestinationTrackTile {
 	}
 
 	@Override
+	public TilePath[] getPaths() {
+		return new TilePath[] {
+				isOutput ? new TilePath(edge, edge.getOpposite()) : new TilePath(edge.getOpposite(), edge) };
+	}
+
+	@Override
 	public boolean connectsAt(Edge edge) {
 		return edge == this.edge;
 	}
