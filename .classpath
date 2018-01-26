@@ -27,5 +27,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/WaDosUtil-1.4-all.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
