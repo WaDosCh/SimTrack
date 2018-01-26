@@ -23,6 +23,7 @@ import java.util.Set;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.util.IObservable;
 import ch.awae.simtrack.util.T3;
 
 /**
@@ -30,7 +31,7 @@ import ch.awae.simtrack.util.T3;
  * @version 1.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public interface IModel {
+public interface IModel extends IObservable {
 
 	public int getHorizontalSize();
 

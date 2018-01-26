@@ -24,7 +24,9 @@ import ch.awae.simtrack.model.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.util.ObservableHandler;
 import ch.awae.simtrack.util.T3;
+import lombok.Getter;
 
 class Model implements IModel {
 
@@ -37,6 +39,9 @@ class Model implements IModel {
 
 	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
+
+	@Getter
+	private ObservableHandler observableHandler = new ObservableHandler();
 
 	@Override
 	public int getHorizontalSize() {
@@ -58,6 +63,7 @@ class Model implements IModel {
 		if (this.tiles.containsKey(position))
 			return;
 		this.tiles.put(position, tile);
+		notifyChanged();
 	}
 
 	@Override
@@ -77,6 +83,7 @@ class Model implements IModel {
 			if (signals.containsKey(tec))
 				signals.remove(tec);
 		}
+		notifyChanged();
 	}
 
 	@Override
@@ -129,6 +136,7 @@ class Model implements IModel {
 				throw new IllegalArgumentException("signal conflict");
 		}
 		signals.put(position, signal);
+		notifyChanged();
 	}
 
 	@Override
@@ -138,6 +146,7 @@ class Model implements IModel {
 		if (current == null || tile instanceof IDestinationTrackTile)
 			throw new IllegalArgumentException();
 		signals.remove(position);
+		notifyChanged();
 	}
 
 }
