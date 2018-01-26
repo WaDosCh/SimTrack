@@ -64,13 +64,13 @@ public class FreeTool implements ITool {
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
 		// ensure valid position
-		this.tile = this.owner.getController().getMouse().hexPosition();
+		this.tile = this.owner.getController().getMouse().getTileCoordinate();
 	}
 
 	@Override
 	public void tick() {
 		TileCoordinate tile = this.owner.getController().getMouse()
-				.hexPosition();
+				.getTileCoordinate();
 		if (tile != null)
 			this.tile = tile;
 	}

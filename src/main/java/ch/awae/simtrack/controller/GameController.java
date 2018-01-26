@@ -71,7 +71,8 @@ class GameController implements IController {
 		this.editor = new Editor(this);
 		this.trackbar = new TrackBar(this.editor, this.gameView, this.mouse,
 				this.keyboard);
-		this.debugTools = new DebugTools(this.keyboard);
+		this.debugTools = new DebugTools(this.keyboard, this.mouse,
+				this.gameView);
 		this.gameView.setEditorRenderer(this::render);
 	}
 

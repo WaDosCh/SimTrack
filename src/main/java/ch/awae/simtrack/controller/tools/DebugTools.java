@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.HashSet;
 
 import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.view.IGameView;
 import lombok.Getter;
 
 public class DebugTools {
@@ -17,10 +19,10 @@ public class DebugTools {
 	private DebugToolsRenderer renderer;
 	private HashSet<Option> showing;
 
-	public DebugTools(Keyboard keyboard) {
+	public DebugTools(Keyboard keyboard, Mouse mouse, IGameView gameView) {
 		this.keyboard = keyboard;
 		this.showing = new HashSet<Option>();
-		this.renderer = new DebugToolsRenderer(this.showing);
+		this.renderer = new DebugToolsRenderer(this.showing, mouse, gameView);
 	}
 
 	public void tick() {
@@ -28,6 +30,8 @@ public class DebugTools {
 			toggle(Option.InputGuide);
 		if (this.keyboard.key(KeyEvent.VK_F2))
 			toggle(Option.Coordinates);
+		if (this.keyboard.key(KeyEvent.VK_F12))
+			System.exit(0);
 	}
 
 	private void toggle(Option option) {

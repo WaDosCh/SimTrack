@@ -2,21 +2,34 @@ package ch.awae.simtrack.controller.tools;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.HashSet;
 
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.DebugTools.Option;
+import ch.awae.simtrack.model.position.SceneCoordinate;
+import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
-import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.IViewPort;
 import ch.awae.simtrack.view.ViewConstants;
 
 public class DebugToolsRenderer implements IRenderer {
 
+	public static final Color almostTransparent = new Color(255, 255, 255, 230);
+	public static final Color grayBorder = new Color(128, 128, 128);
+
 	private HashSet<Option> showing;
 	private String[] inputGuideText;
+	private Mouse mouse;
+	private IGameView gameView;
 
-	public DebugToolsRenderer(HashSet<Option> showing) {
+	public DebugToolsRenderer(HashSet<Option> showing, Mouse mouse,
+			IGameView gameView) {
 		this.showing = showing;
+		this.mouse = mouse;
+		this.gameView = gameView;
 		this.inputGuideText = Resource.getText("inputKeys.txt");
 	}
 
@@ -29,7 +42,38 @@ public class DebugToolsRenderer implements IRenderer {
 	}
 
 	private void renderCoordinate(Graphics2D g, IGameView view) {
+		Point screenPos = this.mouse.getScreenPosition();
+		TileCoordinate tilePos = this.mouse.getTileCoordinate();
+		IViewPort viewPort = this.gameView.getViewPort();
+		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
+		g.setColor(almostTransparent);
+		int y = screenPos.y + 10;
+		g.fillRect(screenPos.x + 10, y, 400, 100);
+		g.setColor(grayBorder);
+		g.drawRect(screenPos.x + 10, y, 400, 100);
+		g.setColor(Color.black);
+		g.setFont(ViewConstants.text);
+		y += ViewConstants.text.getSize();
+		g.drawString(screenPositionToString(screenPos), screenPos.x + 20, y);
+		y += ViewConstants.text.getSize();
+		g.drawString(scenePos.toString(), screenPos.x + 20, y);
+		y += ViewConstants.text.getSize();
+		if (tilePos == null)
+			g.drawString("Tile: null", screenPos.x + 20, y);
+		else
+			g.drawString(tilePos.toString(), screenPos.x + 20, y);
+		y += ViewConstants.text.getSize();
+		g.drawString(screenSizeToString(), screenPos.x + 20, y);
+	}
+
+	public String screenPositionToString(Point screenPos) {
+		return "ScreenPos: [x=" + screenPos.x + ", y=" + screenPos.y + "]";
+	}
+
+	public String screenSizeToString() {
+		Point pos = this.gameView.getViewPort().getScreenDimensions();
+		return "ScreenSize: [w=" + pos.x + ", h=" + pos.y + "]";
 	}
 
 	private void renderUserGuide(Graphics2D g, IGameView view) {

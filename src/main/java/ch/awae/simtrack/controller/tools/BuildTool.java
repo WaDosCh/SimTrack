@@ -158,7 +158,7 @@ public class BuildTool implements ITool {
 		Mouse mouse = controller.getMouse();
 		Keyboard keyboard = controller.getKeyboard();
 
-		this.position = mouse.hexPosition();
+		this.position = mouse.getTileCoordinate();
 
 		if (keyboard.key(KeyEvent.VK_ESCAPE)) {
 			this.editor.loadTool("FreeHand", null);
@@ -168,7 +168,7 @@ public class BuildTool implements ITool {
 			// PLACER
 			this.valid = canPlaceOn(this.position, model, this.track);
 			if (this.valid) {
-				if (mouse.button1() && mouse.position().y < port.getScreenDimensions().y) {
+				if (mouse.button1() && mouse.getScreenPosition().y < port.getScreenDimensions().y) {
 					this.place();
 				}
 			}
@@ -197,7 +197,7 @@ public class BuildTool implements ITool {
 			// BULLDOZE
 			this.valid = canDelete(this.position, model);
 			if (this.valid) {
-				if ((mouse.button1() || mouse.button3()) && mouse.position().y < port.getScreenDimensions().y) {
+				if ((mouse.button1() || mouse.button3()) && mouse.getScreenPosition().y < port.getScreenDimensions().y) {
 					model.removeTileAt(this.position);
 				}
 			}

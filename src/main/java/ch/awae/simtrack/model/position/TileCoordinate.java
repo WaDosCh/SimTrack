@@ -71,7 +71,7 @@ public class TileCoordinate {
 
 	@Override
 	public String toString() {
-		return "Hex[" + this.u + "," + this.v + "]";
+		return "Tile[u=" + this.u + ", v=" + this.v + "]";
 	}
 
 	public TileEdgeCoordinate getEdge(Edge edge) {

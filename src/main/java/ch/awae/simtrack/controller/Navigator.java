@@ -68,7 +68,7 @@ public class Navigator {
 	public void tick() {
 		if (!this.isActive)
 			return;
-		Point mouse = this.mouse.position();
+		Point mouse = this.mouse.getScreenPosition();
 		if (mouse == null)
 			return;
 		int dx = 0, dy = 0;

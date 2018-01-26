@@ -152,7 +152,7 @@ public class Mouse {
 	 * 
 	 * @return the tile below the mouse.
 	 */
-	public TileCoordinate hexPosition() {
+	public TileCoordinate getTileCoordinate() {
 		return this.mouseHex;
 	}
 
@@ -174,7 +174,7 @@ public class Mouse {
 	 * 
 	 * @return the current mouse positions
 	 */
-	public Point position() {
+	public Point getScreenPosition() {
 		return this.mouse.getLocation();
 	}
 

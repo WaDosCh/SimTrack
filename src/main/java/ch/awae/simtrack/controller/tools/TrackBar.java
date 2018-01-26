@@ -99,7 +99,7 @@ public class TrackBar {
 		this.index = -1;
 		if (this.checkForHotKeys(this.keyboard))
 			return;
-		Point p = this.mouse.position();
+		Point p = this.mouse.getScreenPosition();
 		if (p == null) {
 			p = new Point(0, 0);
 		}

@@ -1,5 +1,8 @@
 package ch.awae.simtrack.model.position;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public final class SceneCoordinate {
 
 	public final double x, y;
@@ -15,6 +18,11 @@ public final class SceneCoordinate {
 
 	public double distance(SceneCoordinate other) {
 		return Math.sqrt(distanceSquared(other));
+	}
+
+	public String toString() {
+		return String.format("SceneCoordinate[s=%1$,.1f, t=%2$,.1f]", this.x,
+				this.y);
 	}
 
 }

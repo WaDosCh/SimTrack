@@ -61,7 +61,7 @@ public interface IViewPort {
 	 *            the screen coordinate
 	 * @return the scene coordinate
 	 */
-	public SceneCoordinate toScene(Point p);
+	public SceneCoordinate toSceneCoordinate(Point p);
 
 	
 	/**
@@ -80,7 +80,7 @@ public interface IViewPort {
 	}
 	
 	default TileCoordinate toHex(Point p) {
-		return toHexCoordinate(toScene(p));
+		return toHexCoordinate(toSceneCoordinate(p));
 	}
 	
 	/**

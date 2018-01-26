@@ -79,7 +79,7 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public SceneCoordinate toScene(Point p) {
+	public SceneCoordinate toSceneCoordinate(Point p) {
 		double x = p.x - this.sceneCorner.x;
 		double y = p.y - this.sceneCorner.y;
 		x /= 0.01 * this.zoom;
