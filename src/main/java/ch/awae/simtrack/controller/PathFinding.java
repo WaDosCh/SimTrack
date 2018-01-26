@@ -106,6 +106,6 @@ public class PathFinding {
 			T2<TileEdgeCoordinate, Float> arg1, TileCoordinate target) {
 		double dist1 = arg0._2 + arg0._1.tile.distanceTo(target);
 		double dist2 = arg1._2 + arg1._1.tile.distanceTo(target);
-		return Double.compare(dist1, dist2);
+		return (int) (dist1 - dist2);
 	}
 }
