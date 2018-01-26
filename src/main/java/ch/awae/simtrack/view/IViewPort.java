@@ -33,7 +33,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 public interface IViewPort {
 
 	/* HEX <<====>> SCENE */
-	
+
 	/**
 	 * calculates the closest hex tile for any given scene coordinates.
 	 * 
@@ -51,9 +51,9 @@ public interface IViewPort {
 	 * @return the position of the hex centre on the scene.
 	 */
 	public SceneCoordinate toSceneCoordinate(TileCoordinate hexCoor);
-	
+
 	/* SCENE <<====>> SCREEN */
-	
+
 	/**
 	 * returns the scene coordinate for a given screen coordinate
 	 * 
@@ -63,7 +63,6 @@ public interface IViewPort {
 	 */
 	public SceneCoordinate toSceneCoordinate(Point p);
 
-	
 	/**
 	 * returns the screen coordinate for a given scene coordinate
 	 * 
@@ -72,17 +71,17 @@ public interface IViewPort {
 	 * @return the screen coordinate
 	 */
 	public Point toScreenCoordinate(SceneCoordinate p);
-	
+
 	/* HEX <<====>> SCREEN */
 
 	default Point toScreen(TileCoordinate t) {
 		return toScreenCoordinate(toSceneCoordinate(t));
 	}
-	
+
 	default TileCoordinate toHex(Point p) {
 		return toHexCoordinate(toSceneCoordinate(p));
 	}
-	
+
 	/**
 	 * focuses the given hex
 	 * 
@@ -131,5 +130,7 @@ public interface IViewPort {
 	 * @see #isVisible(Point, int)
 	 */
 	public boolean isVisible(TileCoordinate hex);
+
+	public int getZoom();
 
 }
