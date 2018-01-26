@@ -23,7 +23,7 @@ import java.util.Set;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.util.Tuple;
+import ch.awae.simtrack.util.T3;
 
 /**
  * @author Andreas Wälchli
@@ -42,12 +42,14 @@ public interface IModel {
 
 	public Set<Map.Entry<TileCoordinate, ITile>> getTiles();
 
-	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException;
+	public void removeTileAt(TileCoordinate position)
+			throws IllegalArgumentException;
 
 	public void update();
 
 	public void tick();
 
-	public List<Tuple<Tuple<TileEdgeCoordinate, TileEdgeCoordinate>, Float>> getPaths(TileCoordinate position);
+	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(
+			TileCoordinate position);
 
 }

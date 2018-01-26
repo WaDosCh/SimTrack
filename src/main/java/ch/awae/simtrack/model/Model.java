@@ -17,16 +17,11 @@
  */
 package ch.awae.simtrack.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.util.Tuple;
+import ch.awae.simtrack.util.T3;
 
 class Model implements IModel {
 
@@ -67,7 +62,8 @@ class Model implements IModel {
 	}
 
 	@Override
-	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException {
+	public void removeTileAt(TileCoordinate position)
+			throws IllegalArgumentException {
 		ITile tile = this.tiles.get(position);
 		if (tile == null || tile instanceof IFixedTile)
 			throw new IllegalArgumentException();
@@ -87,18 +83,20 @@ class Model implements IModel {
 	}
 
 	@Override
-	public List<Tuple<Tuple<TileEdgeCoordinate, TileEdgeCoordinate>, Float>> getPaths(TileCoordinate position) {
+	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(
+			TileCoordinate position) {
 		ITile tile = tiles.get(position);
 		if (tile instanceof ITrackTile) {
-			List<Tuple<Tuple<TileEdgeCoordinate, TileEdgeCoordinate>, Float>> list = new ArrayList<>();
+			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = new ArrayList<>();
 			ITrackTile tt = (ITrackTile) tile;
 			for (TilePath p : tt.getRailPaths()) {
-				TileEdgeCoordinate from = new TileEdgeCoordinate(position, p._1);
+				TileEdgeCoordinate from = new TileEdgeCoordinate(position,
+						p._1);
 				TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
 				float cost = tt.getTravelCost();
 				// fill
-				list.add(new Tuple<>(new Tuple<>(from.getOppositeDirection(), to), cost));
-				list.add(new Tuple<>(new Tuple<>(to.getOppositeDirection(), from), cost));
+				list.add(new T3<>(from.getOppositeDirection(), to, cost));
+				list.add(new T3<>(to.getOppositeDirection(), from, cost));
 			}
 			return list;
 		} else {

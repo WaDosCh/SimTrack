@@ -49,6 +49,7 @@ class GameController implements IController {
 
 	private Timer tickTimer, viewTimer;
 	private DebugTools debugTools;
+	private PathFinding pathFinding;
 
 	/**
 	 * instantiates a new controller instance
@@ -66,6 +67,7 @@ class GameController implements IController {
 		this.tickTimer.setRepeats(true);
 		this.viewTimer = new Timer(10, e -> this.viewTick());
 		this.viewTimer.setRepeats(true);
+		this.pathFinding = new PathFinding(this.model);
 		this.navigator = new Navigator(this.gameView, this.mouse,
 				this.keyboard);
 		this.editor = new Editor(this);
