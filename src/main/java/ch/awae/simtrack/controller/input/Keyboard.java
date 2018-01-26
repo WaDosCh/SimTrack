@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import ch.awae.simtrack.controller.IGUIControllerHookup;
+import ch.awae.simtrack.controller.Log;
 
 /**
  * Keyboard Observer. Records any keyboard actions and provides the information
@@ -36,7 +37,7 @@ public class Keyboard {
 	public enum Mode {
 		AND, OR;
 	}
-	
+
 	public enum Direction {
 		ACTIVATE, DEACTIVATE;
 	}
@@ -60,16 +61,18 @@ public class Keyboard {
 		 * When testing for a enabling, this method will return true the first
 		 * time the combination is enabled. Any further call will return false
 		 * until the combination deactivates.
+		 * 
 		 * @return
 		 */
 		public boolean test() {
-			boolean current = mode == Mode.OR ? Keyboard.this.keysOr(keys) : Keyboard.this.keysAnd(keys);
+			boolean current = mode == Mode.OR ? Keyboard.this.keysOr(keys)
+					: Keyboard.this.keysAnd(keys);
 			if (current == active)
 				return false;
 			active = current;
 			return direction == Direction.ACTIVATE ? active : !active;
 		}
-		
+
 		public void test(Runnable handler) {
 			if (test())
 				handler.run();
@@ -80,13 +83,13 @@ public class Keyboard {
 	private KeyAdapter adapter = new KeyAdapter() {
 		@Override
 		public synchronized void keyPressed(KeyEvent e) {
-			System.out.println("KEY DOWN: " + e.getKeyCode());
+			Log.info("KEY DOWN: " + e.getKeyCode());
 			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.TRUE);
 		}
 
 		@Override
 		public synchronized void keyReleased(KeyEvent e) {
-			System.out.println("KEY UP:   " + e.getKeyCode());
+			Log.info("KEY UP:   " + e.getKeyCode());
 			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.FALSE);
 		}
 	};
@@ -160,7 +163,7 @@ public class Keyboard {
 	public void reset() {
 		this.keystates.clear();
 	}
-	
+
 	public KeyTrigger trigger(Direction direction, int key) {
 		return trigger(direction, Mode.OR, key);
 	}
