@@ -42,14 +42,18 @@ public interface IModel {
 
 	public Set<Map.Entry<TileCoordinate, ITile>> getTiles();
 
-	public void removeTileAt(TileCoordinate position)
-			throws IllegalArgumentException;
+	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException;
 
-	public void update();
+	default void update() {}
 
-	public void tick();
+	default void tick() {}
 
-	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(
-			TileCoordinate position);
+	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position);
+
+	public Set<Map.Entry<TileEdgeCoordinate, Signal>> getSignals();
+	
+	Signal getSignalAt(TileEdgeCoordinate position);
+	
+	void setSignalAt(TileEdgeCoordinate position, Signal signal);
 
 }
