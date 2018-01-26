@@ -1,6 +1,7 @@
 Input keys
 F1 = show this guide ingame
 F2 = show coordinates
+F3 = select pathfinding tool
 F12 = end game
 ESC = deselect current tool
 1-9 = select tools in hotbar

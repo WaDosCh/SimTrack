@@ -17,6 +17,7 @@ public class ObservableHandler {
 	}
 
 	public void notifyObservers() {
+		// Log.info("notifying observers.");
 		for (Observer o : observers)
 			o.notifyChange();
 	}

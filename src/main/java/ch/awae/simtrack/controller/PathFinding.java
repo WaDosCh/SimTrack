@@ -7,6 +7,7 @@ import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.util.T3;
 import ch.judos.generic.data.HashMapList;
@@ -15,16 +16,18 @@ public class PathFinding {
 
 	private IModel model;
 	private HashMapList<TileEdgeCoordinate, T2<TileEdgeCoordinate, Float>> connectionCache;
+	private Observer modelObserver;
 
 	public PathFinding(IModel model) {
 		this.model = model;
 		this.connectionCache = new HashMapList<>();
+		this.modelObserver = this.model.createObserver();
 	}
 
 	/**
 	 * forces a full rebuild of the connection graph
 	 */
-	public void buildGraph() {
+	private void buildGraph() {
 		this.connectionCache.clear();
 		for (Entry<TileCoordinate, ITile> entry : this.model.getTiles()) {
 			TileCoordinate tileCoordinate = entry.getKey();
@@ -51,6 +54,8 @@ public class PathFinding {
 	 */
 	public Stack<TileEdgeCoordinate> findPath(TileEdgeCoordinate start,
 			TileEdgeCoordinate end) {
+		this.modelObserver.ifChanged(this::buildGraph);
+
 		// active search elements
 		SortedSet<T2<TileEdgeCoordinate, Float>> searchGraph = new TreeSet<>(
 				(_1, _2) -> this.searchComparator(_1, _2, end.tile));

@@ -183,7 +183,7 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
-		Point p = toScreen(hex);
+		Point p = toScreenCoordinate(hex);
 		double zoomFac = 0.01 * this.zoom;
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.translate(p.x, p.y);

@@ -74,7 +74,7 @@ public interface IViewPort {
 
 	/* HEX <<====>> SCREEN */
 
-	default Point toScreen(TileCoordinate t) {
+	default Point toScreenCoordinate(TileCoordinate t) {
 		return toScreenCoordinate(toSceneCoordinate(t));
 	}
 

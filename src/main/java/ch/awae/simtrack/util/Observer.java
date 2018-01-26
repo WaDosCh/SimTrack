@@ -11,7 +11,13 @@ public class Observer {
 		}
 		return false;
 	}
-	
+
+	public void ifChanged(Runnable runner) {
+		if (this.isChanged()) {
+			runner.run();
+		}
+	}
+
 	public synchronized void notifyChange() {
 		changed = true;
 	}

@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
+import ch.awae.simtrack.controller.tools.PathFindingTool;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
 
@@ -78,6 +79,7 @@ public class Editor implements IEditor {
 
 	@Override
 	public boolean loadTool(String name, Object[] args) {
+		Log.info("Load tool: ", name);
 		ITool next = this.tools.get(name);
 		if (next == null)
 			return false;
@@ -105,6 +107,7 @@ public class Editor implements IEditor {
 	private void loadTools() {
 		addTool(new FreeTool(this));
 		addTool(new BuildTool(this));
+		addTool(new PathFindingTool(this));
 	}
 
 	/**
