@@ -89,7 +89,6 @@ public class PathFinding {
 						searchGraph.add(new T2<>(connection._1,
 								current._2 + connection._2));
 					}
-
 				}
 			}
 
@@ -105,6 +104,26 @@ public class PathFinding {
 			current = wayBack.get(current)._1;
 		} while (!current.equals(start));
 		return path;
+	}
+
+	/**
+	 * cheapests (not performance!) implementation ever!
+	 * 
+	 * @param start
+	 * @param possibleTargets
+	 * @return
+	 */
+	public HashMap<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> findPathForTiles(
+			TileEdgeCoordinate start,
+			List<TileEdgeCoordinate> possibleTargets) {
+		HashMap<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> result = new HashMap<>();
+		for (TileEdgeCoordinate target : possibleTargets) {
+			Stack<TileEdgeCoordinate> path = findPath(start, target);
+			if (path != null) {
+				result.put(target, path);
+			}
+		}
+		return result;
 	}
 
 	public int searchComparator(T2<TileEdgeCoordinate, Float> arg0,
