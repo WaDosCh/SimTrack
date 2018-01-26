@@ -54,8 +54,8 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public TileCoordinate toHexCoordinate(SceneCoordinate p) {
-		double v = (2.0 * p.y) / (SQRT3 * 100);
-		double u = (1.0 * p.x) / 100 - v / 2;
+		double v = (2.0 * p.t) / (SQRT3 * 100);
+		double u = (1.0 * p.s) / 100 - v / 2;
 		int baseU = (int) Math.floor(u);
 		int baseV = (int) Math.floor(v);
 		u -= baseU;
@@ -99,8 +99,8 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public Point toScreenCoordinate(SceneCoordinate p) {
-		double x = p.x;
-		double y = p.y;
+		double x = p.s;
+		double y = p.t;
 		x *= 0.01 * this.zoom;
 		y *= 0.01 * this.zoom; // here : screen scaled scene coordinate
 		x += this.sceneCorner.x;
@@ -141,9 +141,9 @@ class ViewPort implements IViewPort {
 
 	private void updateCorner() {
 		double minX = this.screenDimensions.x
-				- (0.01 * this.zoom * this.sceneDimensions.x);
+				- (0.01 * this.zoom * this.sceneDimensions.s);
 		double minY = this.screenDimensions.y
-				- (0.01 * this.zoom * this.sceneDimensions.y);
+				- (0.01 * this.zoom * this.sceneDimensions.t);
 		int x = this.sceneCorner.x;
 		int y = this.sceneCorner.y;
 		if (x > 0)
