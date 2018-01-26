@@ -89,14 +89,13 @@ class Model implements IModel {
 		if (tile instanceof ITrackTile) {
 			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = new ArrayList<>();
 			ITrackTile tt = (ITrackTile) tile;
-			for (TilePath p : tt.getRailPaths()) {
+			for (TilePath p : tt.getPaths()) {
 				TileEdgeCoordinate from = new TileEdgeCoordinate(position,
 						p._1);
 				TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
 				float cost = tt.getTravelCost();
 				// fill
 				list.add(new T3<>(from.getOppositeDirection(), to, cost));
-				list.add(new T3<>(to.getOppositeDirection(), from, cost));
 			}
 			return list;
 		} else {
