@@ -17,11 +17,16 @@
  */
 package ch.awae.simtrack.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.util.Tuple;
 
 class Model implements IModel {
 
@@ -79,6 +84,26 @@ class Model implements IModel {
 	public void tick() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<Tuple<Tuple<TileEdgeCoordinate, TileEdgeCoordinate>, Float>> getPaths(TileCoordinate position) {
+		ITile tile = tiles.get(position);
+		if (tile instanceof ITrackTile) {
+			List<Tuple<Tuple<TileEdgeCoordinate, TileEdgeCoordinate>, Float>> list = new ArrayList<>();
+			ITrackTile tt = (ITrackTile) tile;
+			for (TilePath p : tt.getRailPaths()) {
+				TileEdgeCoordinate from = new TileEdgeCoordinate(position, p._1);
+				TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
+				float cost = tt.getTravelCost();
+				// fill
+				list.add(new Tuple<>(new Tuple<>(from.getOppositeDirection(), to), cost));
+				list.add(new Tuple<>(new Tuple<>(to.getOppositeDirection(), from), cost));
+			}
+			return list;
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 }

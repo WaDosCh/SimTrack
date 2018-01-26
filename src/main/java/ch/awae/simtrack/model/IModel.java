@@ -17,10 +17,13 @@
  */
 package ch.awae.simtrack.model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.util.Tuple;
 
 /**
  * @author Andreas Wälchli
@@ -44,5 +47,7 @@ public interface IModel {
 	public void update();
 
 	public void tick();
+
+	public List<Tuple<Tuple<TileEdgeCoordinate, TileEdgeCoordinate>, Float>> getPaths(TileCoordinate position);
 
 }
