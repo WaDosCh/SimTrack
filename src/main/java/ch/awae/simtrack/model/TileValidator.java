@@ -17,12 +17,9 @@
  */
 package ch.awae.simtrack.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import ch.awae.simtrack.controller.Log;
 import ch.awae.simtrack.model.track.TrackProvider;
 
 /**
@@ -104,7 +101,7 @@ public class TileValidator {
 		ITrackTile res = tileCache.get(key);
 		if (res == null) {
 			tileCache.put(key, tile);
-			System.out.println("added new tile to cache with hash: " + key);
+			Log.info("added new tile to cache with hash: " + key);
 			res = tile;
 		}
 		return res;
