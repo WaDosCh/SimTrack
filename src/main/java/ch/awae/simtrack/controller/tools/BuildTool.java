@@ -23,6 +23,8 @@ import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.IController;
 import ch.awae.simtrack.controller.ITool;
 import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Keyboard.Direction;
+import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IFixedTile;
 import ch.awae.simtrack.model.IModel;
@@ -47,7 +49,11 @@ public class BuildTool implements ITool {
 
 	@Getter
 	private boolean bulldoze;
-	private boolean isQ, isE, isTab;
+	
+	private KeyTrigger Q, E, TAB;
+	private Keyboard keyboard;
+	private Mouse mouse;
+	
 	@Getter
 	private boolean valid = false;
 	private Editor editor;
@@ -66,6 +72,13 @@ public class BuildTool implements ITool {
 	 */
 	public BuildTool(Editor editor) {
 		this.editor = editor;
+		mouse = editor.getController().getMouse();
+		keyboard = editor.getController().getKeyboard();
+
+		Q = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_Q);
+		E = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_E);
+		TAB = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_TAB);
+		
 		this.renderer = new BuildToolRenderer(this);
 	}
 
@@ -155,9 +168,7 @@ public class BuildTool implements ITool {
 		IController controller = this.editor.getController();
 		IViewPort port = controller.getGameView().getViewPort();
 		IModel model = controller.getModel();
-		Mouse mouse = controller.getMouse();
-		Keyboard keyboard = controller.getKeyboard();
-
+		
 		this.position = mouse.getTileCoordinate();
 
 		if (keyboard.key(KeyEvent.VK_ESCAPE)) {
@@ -172,27 +183,11 @@ public class BuildTool implements ITool {
 					this.place();
 				}
 			}
-			if (keyboard.key(KeyEvent.VK_Q)) {
-				if (!this.isQ) {
-					this.track = track.rotated(false);
-				}
-				this.isQ = true;
-			} else
-				this.isQ = false;
-			if (keyboard.key(KeyEvent.VK_E)) {
-				if (!this.isE) {
-					this.track = track.rotated(true);
-				}
-				this.isE = true;
-			} else
-				this.isE = false;
-			if (keyboard.key(KeyEvent.VK_TAB)) {
-				if (!this.isTab) {
-					this.track = track.mirrored();
-				}
-				this.isTab = true;
-			} else
-				this.isTab = false;
+			
+			Q.test(() -> track = track.rotated(false));
+			E.test(() -> track = track.rotated(true));
+			TAB.test(() -> track = track.mirrored());
+			
 		} else {
 			// BULLDOZE
 			this.valid = canDelete(this.position, model);

@@ -69,17 +69,24 @@ public class Keyboard {
 			active = current;
 			return direction == Direction.ACTIVATE ? active : !active;
 		}
+		
+		public void test(Runnable handler) {
+			if (test())
+				handler.run();
+		}
 
 	}
 
 	private KeyAdapter adapter = new KeyAdapter() {
 		@Override
-		public void keyPressed(KeyEvent e) {
+		public synchronized void keyPressed(KeyEvent e) {
+			System.out.println("KEY DOWN: " + e.getKeyCode());
 			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.TRUE);
 		}
 
 		@Override
-		public void keyReleased(KeyEvent e) {
+		public synchronized void keyReleased(KeyEvent e) {
+			System.out.println("KEY UP:   " + e.getKeyCode());
 			Keyboard.this.keystates.put(e.getKeyCode(), Boolean.FALSE);
 		}
 	};

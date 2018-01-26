@@ -32,12 +32,9 @@ public class DebugTools {
 	}
 
 	public void tick() {
-		if (F1.test())
-			toggle(Option.InputGuide);
-		if (F2.test())
-			toggle(Option.Coordinates);
-		if (F12.test())
-			System.exit(0);
+		F1.test(() -> toggle(Option.InputGuide));
+		F2.test(() -> toggle(Option.Coordinates));
+		F12.test(() -> System.exit(0));
 	}
 
 	private void toggle(Option option) {
