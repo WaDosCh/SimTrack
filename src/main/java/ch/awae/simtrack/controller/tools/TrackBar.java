@@ -20,9 +20,11 @@ package ch.awae.simtrack.controller.tools;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import ch.awae.simtrack.controller.Editor;
+import ch.awae.simtrack.controller.IEditor;
 import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.track.TrackProvider;
+import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
 
 /**
@@ -37,7 +39,10 @@ public class TrackBar {
 	private int index;
 	private boolean isPressed = false;
 	private IRenderer rend;
-	private Editor editor;
+	private IEditor editor;
+	private Keyboard keyboard;
+	private Mouse mouse;
+	private IGameView gameView;
 
 	/**
 	 * creates a new track-bar instance
@@ -45,8 +50,12 @@ public class TrackBar {
 	 * @param editor
 	 *            the editor owning the build tool
 	 */
-	public TrackBar(Editor editor) {
+	public TrackBar(IEditor editor, IGameView gameView, Mouse mouse,
+			Keyboard keyboard) {
 		this.editor = editor;
+		this.gameView = gameView;
+		this.mouse = mouse;
+		this.keyboard = keyboard;
 		this.rend = new TrackBarRenderer(this);
 	}
 
@@ -77,8 +86,8 @@ public class TrackBar {
 		} else {
 			if (this.index <= TrackProvider.getTileCount()) {
 				// TrackTile t = this.tracks.get(this.index - 1).cloneTrack();
-				this.editor.loadTool("Builder", new Object[] { TrackProvider
-						.getTileInstance(this.index - 1) });
+				this.editor.loadTool("Builder", new Object[] {
+						TrackProvider.getTileInstance(this.index - 1) });
 			}
 		}
 	}
@@ -88,16 +97,16 @@ public class TrackBar {
 	 */
 	public void tick() {
 		this.index = -1;
-		if (this.checkForHotKeys(this.editor.getController().getKeyboard()))
+		if (this.checkForHotKeys(this.keyboard))
 			return;
-		Point p = this.editor.getController().getMouse().position();
+		Point p = this.mouse.position();
 		if (p == null) {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= this.editor.getController().getGameView().getHorizontalScreenSize() / 2;
+		p.x -= this.gameView.getHorizontalScreenSize() / 2;
 		p.x += 550;
-		p.y -= this.editor.getController().getGameView().getVerticalScreenSize();
+		p.y -= this.gameView.getVerticalScreenSize();
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;
@@ -106,7 +115,7 @@ public class TrackBar {
 			return;
 		this.index = index;
 		// index holds the track in the menu
-		boolean button = this.editor.getController().getMouse().button1();
+		boolean button = this.mouse.button1();
 		if (button && !this.isPressed) {
 			this.isPressed = true;
 			this.select();

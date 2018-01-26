@@ -64,7 +64,7 @@ public class FreeTool implements ITool {
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
 		// ensure valid position
-		this.tile = new TileCoordinate(0, 0);
+		this.tile = this.owner.getController().getMouse().hexPosition();
 	}
 
 	@Override
@@ -73,7 +73,6 @@ public class FreeTool implements ITool {
 				.hexPosition();
 		if (tile != null)
 			this.tile = tile;
-		// TODO: onClick
 	}
 
 }

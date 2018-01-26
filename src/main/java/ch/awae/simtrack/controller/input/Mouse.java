@@ -22,9 +22,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import ch.awae.simtrack.controller.IController;
 import ch.awae.simtrack.controller.IGUIControllerHookup;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IViewPort;
 
 /**
@@ -37,7 +37,6 @@ import ch.awae.simtrack.view.IViewPort;
 @SuppressWarnings("javadoc")
 public class Mouse {
 
-	IController owner;
 	boolean b1, b2, b3;
 	long lastScrollUpdate;
 	Point mouse;
@@ -46,6 +45,7 @@ public class Mouse {
 
 	private MouseAdapter adapter;
 	private final long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
+	private IGameView gameView;
 
 	// BASIC SETUP
 	{
@@ -70,7 +70,7 @@ public class Mouse {
 				if (p == null)
 					return;
 				Mouse.this.mouse = p;
-				IViewPort port = Mouse.this.owner.getGameView().getViewPort();
+				IViewPort port = Mouse.this.gameView.getViewPort();
 				Mouse.this.mouseHex = port.toHex(p);
 			}
 
@@ -142,8 +142,9 @@ public class Mouse {
 	 * @return the current scroll speed.
 	 */
 	public double getScroll() {
-		return (this.lastScrollUpdate + this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System
-				.currentTimeMillis()) ? 0 : this.scroll;
+		return (this.lastScrollUpdate
+				+ this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System
+						.currentTimeMillis()) ? 0 : this.scroll;
 	}
 
 	/**
@@ -163,8 +164,8 @@ public class Mouse {
 	 * @param hooker
 	 *            the hook-up for the mouse observer
 	 */
-	public Mouse(IController owner, IGUIControllerHookup hooker) {
-		this.owner = owner;
+	public Mouse(IGameView gameView, IGUIControllerHookup hooker) {
+		this.gameView = gameView;
 		hooker.getMouseHookup().accept(this.adapter);
 	}
 

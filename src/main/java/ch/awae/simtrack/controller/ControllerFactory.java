@@ -44,11 +44,11 @@ public class ControllerFactory {
 	 */
 	public static IController buildGameController(IModel model, IGameView view,
 			IGUIControllerHookup hooker, int tps, int fps) {
-		GameController c = new GameController(model, view);
+		Mouse mouse = new Mouse(view, hooker);
+		Keyboard keyboard = new Keyboard(hooker);
+		GameController c = new GameController(model, view, mouse, keyboard);
 		c.setTPS(tps);
 		c.setFPS(fps);
-		c.setMouse(new Mouse(c, hooker));
-		c.setKeyboard(new Keyboard(hooker));
 		return c;
 	}
 

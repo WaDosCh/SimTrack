@@ -29,13 +29,6 @@ import ch.awae.simtrack.model.IModel;
 public interface IGameView {
 
 	/**
-	 * sets the model associated with the view
-	 * 
-	 * @param model
-	 */
-	public void setModel(IModel model);
-
-	/**
 	 * moves the view by the given amount
 	 * 
 	 * @param dx

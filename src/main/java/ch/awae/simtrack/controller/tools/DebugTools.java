@@ -3,7 +3,6 @@ package ch.awae.simtrack.controller.tools;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 
-import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.input.Keyboard;
 import lombok.Getter;
 
@@ -13,22 +12,21 @@ public class DebugTools {
 		InputGuide, Coordinates;
 	}
 
-	private Editor editor;
+	private Keyboard keyboard;
 	@Getter
 	private DebugToolsRenderer renderer;
 	private HashSet<Option> showing;
 
-	public DebugTools(Editor editor) {
-		this.editor = editor;
+	public DebugTools(Keyboard keyboard) {
+		this.keyboard = keyboard;
 		this.showing = new HashSet<Option>();
 		this.renderer = new DebugToolsRenderer(this.showing);
 	}
 
 	public void tick() {
-		Keyboard keyboard = this.editor.getController().getKeyboard();
-		if (keyboard.key(KeyEvent.VK_F1))
+		if (this.keyboard.key(KeyEvent.VK_F1))
 			toggle(Option.InputGuide);
-		if (keyboard.key(KeyEvent.VK_F2))
+		if (this.keyboard.key(KeyEvent.VK_F2))
 			toggle(Option.Coordinates);
 	}
 

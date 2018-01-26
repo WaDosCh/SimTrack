@@ -33,7 +33,7 @@ import ch.awae.simtrack.model.IModel;
 class GameView implements IGameView {
 
 	private IModel model;
-	private ViewPort port;
+	private ViewPort viewPort;
 	private int screenX, screenY;
 	private Runnable delegate;
 
@@ -53,7 +53,7 @@ class GameView implements IGameView {
 		this.model = model;
 		this.screenX = screenX;
 		this.screenY = screenY;
-		this.port = new ViewPort(this);
+		this.viewPort = new ViewPort(this);
 	}
 
 	/**
@@ -66,19 +66,13 @@ class GameView implements IGameView {
 	}
 
 	@Override
-	public void setModel(IModel model) {
-		this.model = model;
-		this.port.init();
-	}
-
-	@Override
 	public void moveScene(int dx, int dy) {
-		this.port.moveScene(dx, dy);
+		this.viewPort.moveScene(dx, dy);
 	}
 
 	@Override
 	public void zoom(float dzoom, int fixX, int fixY) {
-		this.port.zoom((int) (100 * dzoom), fixX, fixY);
+		this.viewPort.zoom((int) (100 * dzoom), fixX, fixY);
 	}
 
 	/**
@@ -88,8 +82,8 @@ class GameView implements IGameView {
 	 *            the graphics instance to render onto
 	 */
 	void render(Graphics2D graphics) {
-		this.renderers.forEach(r -> r.render((Graphics2D) graphics.create(),
-				this));
+		this.renderers
+				.forEach(r -> r.render((Graphics2D) graphics.create(), this));
 		this.editorRenderer.render((Graphics2D) graphics.create(), this);
 	}
 
@@ -97,7 +91,7 @@ class GameView implements IGameView {
 	public void setScreenDimensions(int width, int height) {
 		this.screenX = width;
 		this.screenY = height;
-		this.port.init();
+		this.viewPort.init();
 	}
 
 	@Override
@@ -136,7 +130,7 @@ class GameView implements IGameView {
 
 	@Override
 	public IViewPort getViewPort() {
-		return this.port;
+		return this.viewPort;
 	}
 
 }

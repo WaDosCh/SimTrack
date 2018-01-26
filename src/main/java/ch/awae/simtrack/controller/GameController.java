@@ -40,8 +40,8 @@ class GameController implements IController {
 
 	private @Getter IModel model;
 	private @Getter IGameView gameView;
-	private Mouse mouse;
-	private Keyboard keyboard;
+	private @Getter Mouse mouse;
+	private @Getter Keyboard keyboard;
 	private Navigator navigator;
 	private TrackBar trackbar;
 	private Editor editor;
@@ -56,17 +56,22 @@ class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IGameView view) {
+	public GameController(IModel model, IGameView gameView, Mouse mouse,
+			Keyboard keyboard) {
 		this.model = model;
-		this.gameView = view;
+		this.gameView = gameView;
+		this.mouse = mouse;
+		this.keyboard = keyboard;
 		this.tickTimer = new Timer(10, e -> this.tick());
 		this.tickTimer.setRepeats(true);
 		this.viewTimer = new Timer(10, e -> this.viewTick());
 		this.viewTimer.setRepeats(true);
-		this.navigator = new Navigator(this);
+		this.navigator = new Navigator(this.gameView, this.mouse,
+				this.keyboard);
 		this.editor = new Editor(this);
-		this.trackbar = new TrackBar(this.editor);
-		this.debugTools = new DebugTools(this.editor);
+		this.trackbar = new TrackBar(this.editor, this.gameView, this.mouse,
+				this.keyboard);
+		this.debugTools = new DebugTools(this.keyboard);
 		this.gameView.setEditorRenderer(this::render);
 	}
 
@@ -83,26 +88,6 @@ class GameController implements IController {
 		this.editor.render(g, v);
 		this.trackbar.getRenderer().render(g, v);
 		this.debugTools.getRenderer().render(g, v);
-	}
-
-	/**
-	 * sets the controller's mouse observer instance
-	 * 
-	 * @param mouse
-	 *            the mouse observer
-	 */
-	void setMouse(Mouse mouse) {
-		this.mouse = mouse;
-	}
-
-	/**
-	 * sets the controller's keyboard observer instance
-	 * 
-	 * @param keyboard
-	 *            the keyboard observer
-	 */
-	void setKeyboard(Keyboard keyboard) {
-		this.keyboard = keyboard;
 	}
 
 	@Override
@@ -135,16 +120,6 @@ class GameController implements IController {
 	@Override
 	public void stopView() {
 		this.viewTimer.stop();
-	}
-
-	@Override
-	public Mouse getMouse() {
-		return this.mouse;
-	}
-
-	@Override
-	public Keyboard getKeyboard() {
-		return this.keyboard;
 	}
 
 	/**

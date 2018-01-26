@@ -22,8 +22,8 @@ import java.util.HashMap;
 
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
-import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.IRenderer;
 
 /**
  * top-level management of the active side of the user interface. It manages the
@@ -34,7 +34,7 @@ import ch.awae.simtrack.view.IGameView;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class Editor {
+public class Editor implements IEditor {
 
 	private IController owner;
 
@@ -60,7 +60,7 @@ public class Editor {
 	 * @param tool
 	 *            the tool to add.
 	 */
-	public void addTool(ITool tool) {
+	private void addTool(ITool tool) {
 		this.tools.put(tool.getToolName(), tool);
 		if (this.currentTool == null) {
 			loadTool(tool.getToolName(), null);
@@ -76,16 +76,7 @@ public class Editor {
 		return this.owner;
 	}
 
-	/**
-	 * loads a tool and unloads the current one. If the new tool cannot be
-	 * loaded, the current one will not be unloaded and stays active.
-	 * 
-	 * @param name
-	 *            the identifier string of the new tool
-	 * @param args
-	 *            additional arguments to hand over to the new tool
-	 * @return {@code true} if the tool switch was successful
-	 */
+	@Override
 	public boolean loadTool(String name, Object[] args) {
 		ITool next = this.tools.get(name);
 		if (next == null)
