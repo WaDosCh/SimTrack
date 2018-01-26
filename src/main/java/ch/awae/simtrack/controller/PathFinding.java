@@ -57,8 +57,7 @@ public class PathFinding {
 		this.modelObserver.ifChanged(this::buildGraph);
 
 		// active search elements
-		SortedSet<T2<TileEdgeCoordinate, Float>> searchGraph = new TreeSet<>(
-				(_1, _2) -> this.searchComparator(_1, _2, end.tile));
+		ArrayList<T2<TileEdgeCoordinate, Float>> searchGraph = new ArrayList<>();
 		searchGraph.add(new T2<>(start, 0f));
 
 		// how did I get here, and how much did it cost *to* here
@@ -67,8 +66,7 @@ public class PathFinding {
 		while (true) {
 			// check outgoing paths from the best tile (shortest path + dist to
 			// target)
-			T2<TileEdgeCoordinate, Float> current = searchGraph.first();
-			searchGraph.remove(current);
+			T2<TileEdgeCoordinate, Float> current = searchGraph.remove(0);
 
 			// goal reached?
 			if (current._1.equals(end))
@@ -86,14 +84,25 @@ public class PathFinding {
 							|| cost < wayBack.get(connection._1)._2) {
 
 						wayBack.put(connection._1, new T2<>(current._1, cost));
-						searchGraph.add(new T2<>(connection._1,
-								current._2 + connection._2));
+
+						// TODO: for debugging!!
+						T2<TileEdgeCoordinate, Float> existing = null;
+						if (searchGraph.size() > 0) {
+							existing = searchGraph.get(0);
+						}
+						T2<TileEdgeCoordinate, Float> newElem = new T2<>(
+								connection._1, current._2 + connection._2);
+						searchGraph.add(newElem);
+						existing = null;
 					}
 				}
 			}
 
 			if (searchGraph.size() == 0)
 				return null;
+
+			Collections.sort(searchGraph,
+					(_1, _2) -> this.searchComparator(_1, _2, end.tile));
 		}
 
 		// track back found path

@@ -20,4 +20,9 @@ public @Data class TileEdgeCoordinate {
 		return outbound(tile, edge).getOppositeDirection();
 	}
 
+	public String toString() {
+		return "TileEdgeCoordinate[u=" + tile.u + ", v=" + tile.v + ", edge="
+				+ edge + "]";
+	}
+
 }
