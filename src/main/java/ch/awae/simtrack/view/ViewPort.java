@@ -209,6 +209,6 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public boolean isVisible(TileCoordinate hex) {
-		return isVisible(toSceneCoordinate(hex), 60);
+		return isVisible(toSceneCoordinate(hex), 80);
 	}
 }
