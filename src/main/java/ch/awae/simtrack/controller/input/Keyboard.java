@@ -42,7 +42,7 @@ public class Keyboard {
 		ACTIVATE, DEACTIVATE;
 	}
 
-	public class KeyTrigger {
+	public class KeyTrigger implements Trigger {
 
 		private final Mode mode;
 		private final Direction direction;
@@ -53,6 +53,7 @@ public class Keyboard {
 			this.direction = direction;
 			this.mode = mode;
 			this.keys = keys;
+			active = true;
 		}
 
 		/**
@@ -65,17 +66,11 @@ public class Keyboard {
 		 * @return
 		 */
 		public boolean test() {
-			boolean current = mode == Mode.OR ? Keyboard.this.keysOr(keys)
-					: Keyboard.this.keysAnd(keys);
+			boolean current = mode == Mode.OR ? Keyboard.this.keysOr(keys) : Keyboard.this.keysAnd(keys);
 			if (current == active)
 				return false;
 			active = current;
 			return direction == Direction.ACTIVATE ? active : !active;
-		}
-
-		public void test(Runnable handler) {
-			if (test())
-				handler.run();
 		}
 
 	}
@@ -121,8 +116,7 @@ public class Keyboard {
 	 *         currently pressed.
 	 */
 	public boolean key(int keyCode) {
-		return this.keystates.getOrDefault(keyCode, Boolean.FALSE)
-				.booleanValue();
+		return this.keystates.getOrDefault(keyCode, Boolean.FALSE).booleanValue();
 	}
 
 	/**

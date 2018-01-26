@@ -118,12 +118,20 @@ public class Mouse {
 		return this.b1;
 	}
 
+	public boolean left() {
+		return this.b1;
+	}
+
 	/**
 	 * indicates whether or not the secondary mouse button is pressed.
 	 * 
 	 * @return {@code true} if and only if the 2nd button is pressed.
 	 */
 	public boolean button2() {
+		return this.b2;
+	}
+
+	public boolean middle() {
 		return this.b2;
 	}
 
@@ -136,15 +144,18 @@ public class Mouse {
 		return this.b3;
 	}
 
+	public boolean right() {
+		return this.b3;
+	}
+
 	/**
 	 * provides the current mouse scroll speed.
 	 * 
 	 * @return the current scroll speed.
 	 */
 	public double getScroll() {
-		return (this.lastScrollUpdate
-				+ this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System
-						.currentTimeMillis()) ? 0 : this.scroll;
+		return (this.lastScrollUpdate + this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System.currentTimeMillis()) ? 0
+				: this.scroll;
 	}
 
 	/**
@@ -176,6 +187,49 @@ public class Mouse {
 	 */
 	public Point getScreenPosition() {
 		return this.mouse.getLocation();
+	}
+
+	public enum Direction {
+		ACTIVATE, DEACTIVATE;
+	}
+
+	public enum Button {
+		LEFT, MIDDLE, RIGHT;
+	}
+
+	public class MouseTrigger implements Trigger {
+
+		private final Button button;
+		private final Direction direction;
+		private boolean active;
+
+		MouseTrigger(Direction direction, Button button) {
+			this.direction = direction;
+			this.button = button;
+			active = true;
+		}
+
+		@Override
+		public boolean test() {
+			boolean current = Mouse.this.test(button);
+			if (current == active)
+				return false;
+			active = current;
+			return direction == Direction.ACTIVATE ? active : !active;
+		}
+	}
+
+	public boolean test(Button button) {
+		switch (button) {
+		case LEFT:
+			return button1();
+		case MIDDLE:
+			return button2();
+		case RIGHT:
+			return button3();
+		default:
+			return false;
+		}
 	}
 
 }
