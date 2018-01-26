@@ -20,8 +20,10 @@ package ch.awae.simtrack.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import ch.awae.simtrack.model.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 
 /**
  * This basic implementation spawns connections on the edges with a random
@@ -80,8 +82,14 @@ class ConnectionSpawner {
 
 			TileCoordinate pos = new TileCoordinate(u, v);
 			if (!list.contains(pos)) {
-				BorderTrackTile tile = BorderTrackTile.getInstance(Edge.byIndex(edge), RAND.nextBoolean());
+				boolean output = RAND.nextBoolean();
+				BorderTrackTile tile = BorderTrackTile.getInstance(Edge.byIndex(edge), output);
 				model.setTileAt(pos, tile);
+				if (!output) {
+					TileEdgeCoordinate tec = new TileEdgeCoordinate(pos, Edge.byIndex(edge));
+					Signal signal = new Signal(tec, Type.ONE_WAY);
+					model.setSignalAt(tec, signal);
+				}
 				list.add(pos);
 			} else {
 				i--;

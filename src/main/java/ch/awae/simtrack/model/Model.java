@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.model.Signal.Type;
+import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.util.T3;
@@ -70,6 +71,12 @@ class Model implements IModel {
 		if (tile == null || tile instanceof IFixedTile)
 			throw new IllegalArgumentException();
 		this.tiles.remove(position);
+		// remove any signals
+		for (Edge e : Edge.values()) {
+			TileEdgeCoordinate tec = new TileEdgeCoordinate(position, e);
+			if (signals.containsKey(tec))
+				signals.remove(tec);
+		}
 	}
 
 	@Override
@@ -111,12 +118,26 @@ class Model implements IModel {
 		if (signals.containsKey(position))
 			throw new IllegalArgumentException("signal position already occupied");
 		// check if signal position is valid
+		ITile tile = tiles.get(position.tile);
+		if (tile == null
+				|| (tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination())
+				|| !(tile instanceof ITrackTile))
+			throw new IllegalArgumentException("invalid tile");
 		Signal opponent = getSignalAt(position.getOppositeDirection());
 		if (opponent != null) {
 			if (opponent.getType() == Type.ONE_WAY || signal.getType() == Type.ONE_WAY)
 				throw new IllegalArgumentException("signal conflict");
 		}
 		signals.put(position, signal);
+	}
+
+	@Override
+	public void removeSignalAt(TileEdgeCoordinate position) {
+		Signal current = signals.get(position);
+		ITrackTile tile = (ITrackTile) tiles.get(position.tile);
+		if (current == null || tile instanceof IDestinationTrackTile)
+			throw new IllegalArgumentException();
+		signals.remove(position);
 	}
 
 }

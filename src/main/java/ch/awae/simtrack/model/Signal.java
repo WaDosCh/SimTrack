@@ -5,7 +5,7 @@ import lombok.Getter;
 
 public class Signal implements IEntity {
 
-	enum Type {
+	public enum Type {
 		TWO_WAY, ONE_WAY;
 	}
 

@@ -44,16 +44,20 @@ public interface IModel {
 
 	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException;
 
-	default void update() {}
+	default void update() {
+	}
 
-	default void tick() {}
+	default void tick() {
+	}
 
 	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position);
 
 	public Set<Map.Entry<TileEdgeCoordinate, Signal>> getSignals();
-	
-	Signal getSignalAt(TileEdgeCoordinate position);
-	
-	void setSignalAt(TileEdgeCoordinate position, Signal signal);
 
+	Signal getSignalAt(TileEdgeCoordinate position);
+
+	void setSignalAt(TileEdgeCoordinate position, Signal signal);
+	
+	void removeSignalAt(TileEdgeCoordinate position);
+	
 }
