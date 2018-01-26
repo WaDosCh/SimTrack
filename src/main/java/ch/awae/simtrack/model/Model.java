@@ -18,7 +18,9 @@
 package ch.awae.simtrack.model;
 
 import java.util.*;
+import java.util.Map.Entry;
 
+import ch.awae.simtrack.model.Signal.Type;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.util.T3;
@@ -33,6 +35,7 @@ class Model implements IModel {
 	}
 
 	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
+	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
 
 	@Override
 	public int getHorizontalSize() {
@@ -62,8 +65,7 @@ class Model implements IModel {
 	}
 
 	@Override
-	public void removeTileAt(TileCoordinate position)
-			throws IllegalArgumentException {
+	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException {
 		ITile tile = this.tiles.get(position);
 		if (tile == null || tile instanceof IFixedTile)
 			throw new IllegalArgumentException();
@@ -71,36 +73,50 @@ class Model implements IModel {
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void tick() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(
-			TileCoordinate position) {
+	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position) {
 		ITile tile = tiles.get(position);
 		if (tile instanceof ITrackTile) {
 			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = new ArrayList<>();
 			ITrackTile tt = (ITrackTile) tile;
 			for (TilePath p : tt.getPaths()) {
-				TileEdgeCoordinate from = new TileEdgeCoordinate(position,
-						p._1);
+				TileEdgeCoordinate from = new TileEdgeCoordinate(position, p._1);
 				TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
 				float cost = tt.getTravelCost();
-				// fill
+				// if there is a one-way signal at FROM, then omit the link
+				Signal s = signals.get(from);
+				if (s != null && s.getType() == Type.ONE_WAY)
+					continue;
+				// fill list
 				list.add(new T3<>(from.getOppositeDirection(), to, cost));
 			}
+			// list OK
 			return list;
 		} else {
 			return Collections.emptyList();
 		}
+	}
+
+	@Override
+	public Set<Entry<TileEdgeCoordinate, Signal>> getSignals() {
+		return signals.entrySet();
+	}
+
+	@Override
+	public Signal getSignalAt(TileEdgeCoordinate position) {
+		return signals.get(position);
+	}
+
+	@Override
+	public void setSignalAt(TileEdgeCoordinate position, Signal signal) {
+		if (signals.containsKey(position))
+			throw new IllegalArgumentException("signal position already occupied");
+		// check if signal position is valid
+		Signal opponent = getSignalAt(position.getOppositeDirection());
+		if (opponent != null) {
+			if (opponent.getType() == Type.ONE_WAY || signal.getType() == Type.ONE_WAY)
+				throw new IllegalArgumentException("signal conflict");
+		}
+		signals.put(position, signal);
 	}
 
 }
