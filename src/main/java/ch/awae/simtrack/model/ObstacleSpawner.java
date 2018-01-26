@@ -16,7 +16,7 @@ public class ObstacleSpawner {
 
 			TileCoordinate tileCoordinate = new TileCoordinate(u - (v / 2), v);
 
-			model.setTileAt(tileCoordinate, BasicTile.getInstance(TileType.OBSTACLE));
+			model.setTileAt(tileCoordinate, BasicFixedTile.getInstance(TileType.OBSTACLE));
 		}
 	}
 }
