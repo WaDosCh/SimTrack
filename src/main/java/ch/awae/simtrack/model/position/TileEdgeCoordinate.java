@@ -1,20 +1,15 @@
 package ch.awae.simtrack.model.position;
 
-import lombok.EqualsAndHashCode;
+import lombok.Data;
 
-@EqualsAndHashCode
-public class TileEdgeCoordinate {
+public @Data class TileEdgeCoordinate {
 
 	public final TileCoordinate tile;
 	public final Edge edge;
 
-	public TileEdgeCoordinate(TileCoordinate tile, Edge edge) {
-		this.tile = tile;
-		this.edge = edge;
-	}
-
 	public TileEdgeCoordinate getOppositeDirection() {
-		return new TileEdgeCoordinate(tile.getNeighbour(edge), edge.getOpposite());
+		return new TileEdgeCoordinate(tile.getNeighbour(edge),
+				edge.getOpposite());
 	}
 
 	public static TileEdgeCoordinate outbound(TileCoordinate tile, Edge edge) {
