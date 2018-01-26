@@ -5,15 +5,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public final class SceneCoordinate {
 
-	public final double x, y;
+	public final double s, t;
 
 	public SceneCoordinate(double x, double y) {
-		this.x = x;
-		this.y = y;
+		this.s = x;
+		this.t = y;
 	}
 
 	public double distanceSquared(SceneCoordinate other) {
-		return (x * other.x) + (y * other.y);
+		return (s * other.s) + (t * other.t);
 	}
 
 	public double distance(SceneCoordinate other) {
@@ -21,8 +21,8 @@ public final class SceneCoordinate {
 	}
 
 	public String toString() {
-		return String.format("SceneCoordinate[s=%1$,.1f, t=%2$,.1f]", this.x,
-				this.y);
+		return String.format("SceneCoordinate[s=%1$,.1f, t=%2$,.1f]", this.s,
+				this.t);
 	}
 
 }
