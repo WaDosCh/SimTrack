@@ -18,6 +18,7 @@
 package ch.awae.simtrack.controller;
 
 import java.awt.Graphics2D;
+import java.util.function.Consumer;
 
 import javax.swing.Timer;
 
@@ -50,6 +51,7 @@ class GameController implements IController {
 	private Timer tickTimer, viewTimer;
 	private DebugTools debugTools;
 	private @Getter PathFinding pathfinder;
+	private Consumer<String> titleUpdater;
 
 	/**
 	 * instantiates a new controller instance
@@ -57,8 +59,9 @@ class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IGameView gameView, Mouse mouse,
+	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker, Mouse mouse,
 			Keyboard keyboard) {
+		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
 		this.gameView = gameView;
 		this.mouse = mouse;
@@ -142,6 +145,11 @@ class GameController implements IController {
 	 */
 	private void viewTick() {
 		this.gameView.renderView();
+	}
+
+	@Override
+	public void setWindowTitle(String string) {
+		titleUpdater.accept(string);
 	}
 
 }

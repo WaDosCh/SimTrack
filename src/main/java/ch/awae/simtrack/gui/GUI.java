@@ -84,4 +84,9 @@ public class GUI implements IGUIControllerHookup, IGUIHookProvider {
 		return this.window::addKeyListener;
 	}
 
+	@Override
+	public Consumer<String> getWindowTitleHookup() {
+		return s -> window.setTitle("Simtrack : " + s);
+	}
+
 }

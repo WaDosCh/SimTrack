@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import ch.awae.simtrack.controller.IGUIControllerHookup;
+import ch.awae.simtrack.controller.input.Trigger.Direction;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IViewPort;
@@ -189,10 +190,6 @@ public class Mouse {
 		return this.mouse.getLocation();
 	}
 
-	public enum Direction {
-		ACTIVATE, DEACTIVATE;
-	}
-
 	public enum Button {
 		LEFT, MIDDLE, RIGHT;
 	}
@@ -230,6 +227,10 @@ public class Mouse {
 		default:
 			return false;
 		}
+	}
+
+	public MouseTrigger trigger(Direction direction, Button button) {
+		return new MouseTrigger(direction, button);
 	}
 
 }

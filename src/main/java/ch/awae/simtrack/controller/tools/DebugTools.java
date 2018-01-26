@@ -5,9 +5,9 @@ import java.util.HashSet;
 
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Keyboard.Direction;
 import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
 import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.input.Trigger.Direction;
 import ch.awae.simtrack.view.IGameView;
 import lombok.Getter;
 

@@ -46,7 +46,7 @@ public class ControllerFactory {
 			IGUIControllerHookup hooker, int tps, int fps) {
 		Mouse mouse = new Mouse(view, hooker);
 		Keyboard keyboard = new Keyboard(hooker);
-		GameController c = new GameController(model, view, mouse, keyboard);
+		GameController c = new GameController(model, view, hooker, mouse, keyboard);
 		c.setTPS(tps);
 		c.setFPS(fps);
 		return c;

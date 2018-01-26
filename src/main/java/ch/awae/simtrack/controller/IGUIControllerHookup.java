@@ -45,5 +45,7 @@ public interface IGUIControllerHookup {
 	 * @return the keyboard hook-up method
 	 */
 	public Consumer<KeyAdapter> getKeyboardHookup();
+	
+	public Consumer<String> getWindowTitleHookup();
 
 }

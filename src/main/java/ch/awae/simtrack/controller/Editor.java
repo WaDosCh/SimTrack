@@ -98,6 +98,7 @@ public class Editor implements IEditor {
 			this.currentTool.unload();
 		this.currentTool = next;
 		this.renderer = this.currentTool.getRenderer();
+		this.getController().setWindowTitle(name);
 		return true;
 	}
 

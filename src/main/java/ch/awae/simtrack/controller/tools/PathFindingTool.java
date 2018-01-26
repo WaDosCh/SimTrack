@@ -1,9 +1,6 @@
 package ch.awae.simtrack.controller.tools;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Stack;
 
@@ -12,9 +9,10 @@ import ch.awae.simtrack.controller.ITool;
 import ch.awae.simtrack.controller.Log;
 import ch.awae.simtrack.controller.PathFinding;
 import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Keyboard.Direction;
-import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
 import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.input.Mouse.Button;
+import ch.awae.simtrack.controller.input.Trigger;
+import ch.awae.simtrack.controller.input.Trigger.Direction;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
@@ -25,7 +23,6 @@ import ch.awae.simtrack.view.IViewPort;
 public class PathFindingTool implements ITool, IRenderer {
 
 	private Editor editor;
-	private KeyTrigger ESC;
 	private Keyboard keyboard;
 	private Mouse mouse;
 	private TileCoordinate start;
@@ -36,6 +33,8 @@ public class PathFindingTool implements ITool, IRenderer {
 	private Stack<TileEdgeCoordinate> path;
 	private IViewPort viewPort;
 
+	private Trigger ESC, M_LEFT, M_RIGHT;
+
 	public PathFindingTool(Editor editor) {
 		this.editor = editor;
 		this.keyboard = editor.getController().getKeyboard();
@@ -45,6 +44,9 @@ public class PathFindingTool implements ITool, IRenderer {
 
 		this.ESC = this.keyboard.trigger(Direction.ACTIVATE,
 				KeyEvent.VK_ESCAPE);
+
+		M_LEFT = mouse.trigger(Direction.ACTIVATE, Button.LEFT);
+		M_RIGHT = mouse.trigger(Direction.DEACTIVATE, Button.RIGHT);
 
 		this.startEdge = Edge.RIGHT;
 		this.endEdge = Edge.RIGHT;
@@ -68,13 +70,13 @@ public class PathFindingTool implements ITool, IRenderer {
 	public void tick() {
 		this.ESC.test(() -> editor.loadTool("FreeHand", null));
 
-		if (this.mouse.button1()) {
+		if (M_LEFT.test()) {
 			this.start = this.mouse.getTileCoordinate();
 			this.startEdge = this.startEdge.getNeighbour(true);
 			Log.info("Start:",
 					new TileEdgeCoordinate(this.start, this.startEdge));
 		}
-		if (this.mouse.button3()) {
+		if (M_RIGHT.test()) {
 			this.end = this.mouse.getTileCoordinate();
 			this.endEdge = this.endEdge.getNeighbour(true);
 			Log.info("Ende: ", new TileEdgeCoordinate(this.end, this.endEdge));
@@ -86,6 +88,9 @@ public class PathFindingTool implements ITool, IRenderer {
 					new TileEdgeCoordinate(this.end, this.endEdge));
 		}
 	}
+
+	private final static Stroke borderStroke = new BasicStroke(6);
+	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	@Override
 	public void render(Graphics2D g, IGameView view) {
@@ -99,9 +104,35 @@ public class PathFindingTool implements ITool, IRenderer {
 				Point p2 = this.viewPort.toScreenCoordinate(tile2);
 
 				g.drawLine(p1.x, p1.y, p2.x, p2.y);
-
 			}
 		}
+
+		if (start != null) {
+			g.setStroke(borderStroke);
+			Graphics2D g2 = view.getViewPort().focusHex(start, g);
+			g2.setColor(Color.GREEN);
+			double angle = Math.PI / 3;
+			for (int i = 0; i < 6; i++) {
+				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+				g2.rotate(angle);
+			}
+			for (int i = 0; i < startEdge.ordinal(); i++) {
+				g2.rotate(angle);
+			}
+			// g2.fillOval(-10, 10, 20, 20);
+		}
+
+		if (end != null) {
+			g.setStroke(borderStroke);
+			Graphics2D g2 = view.getViewPort().focusHex(end, g);
+			g2.setColor(Color.ORANGE);
+			double angle = Math.PI / 3;
+			for (int i = 0; i < 6; i++) {
+				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+				g2.rotate(angle);
+			}
+		}
+
 	}
 
 }
