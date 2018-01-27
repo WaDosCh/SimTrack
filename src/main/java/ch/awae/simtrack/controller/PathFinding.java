@@ -54,6 +54,10 @@ public class PathFinding {
 	 */
 	public Stack<TileEdgeCoordinate> findPath(TileEdgeCoordinate start,
 			TileEdgeCoordinate end) {
+		if (start.equals(end)) {
+			Log.info("start==end for pathfinding");
+			return null;
+		}
 		this.modelObserver.ifChanged(this::buildGraph);
 
 		// active search elements
@@ -110,7 +114,12 @@ public class PathFinding {
 		TileEdgeCoordinate current = end;
 		do {
 			path.push(current);
-			current = wayBack.get(current)._1;
+			T2<TileEdgeCoordinate, Float> last = wayBack.get(current);
+			if (last == null) {
+				Log.err("Found target, but could not trace back to start");
+				return null;
+			}
+			current = last._1;
 		} while (!current.equals(start));
 		return path;
 	}
