@@ -73,13 +73,17 @@ public class PathFindingTool implements ITool, IRenderer {
 		if (M_LEFT.test()) {
 			this.start = this.mouse.getTileCoordinate();
 			this.startEdge = this.startEdge.getNeighbour(true);
-			Log.info("Start:",
-					new TileEdgeCoordinate(this.start, this.startEdge));
+			if (this.start != null) {
+				Log.info("Start:",
+						new TileEdgeCoordinate(this.start, this.startEdge));
+			}
 		}
 		if (M_RIGHT.test()) {
 			this.end = this.mouse.getTileCoordinate();
 			this.endEdge = this.endEdge.getNeighbour(true);
-			Log.info("Ende: ", new TileEdgeCoordinate(this.end, this.endEdge));
+			if (this.end != null)
+				Log.info("Ende: ",
+						new TileEdgeCoordinate(this.end, this.endEdge));
 		}
 
 		if (this.start != null && this.end != null) {

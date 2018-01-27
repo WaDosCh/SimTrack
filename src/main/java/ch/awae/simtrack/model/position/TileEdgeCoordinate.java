@@ -7,6 +7,13 @@ public @Data class TileEdgeCoordinate {
 	public final TileCoordinate tile;
 	public final Edge edge;
 
+	public TileEdgeCoordinate(TileCoordinate tile, Edge edge) {
+		if (tile == null)
+			throw new RuntimeException("tile may not be null");
+		this.tile = tile;
+		this.edge = edge;
+	}
+
 	public TileEdgeCoordinate getOppositeDirection() {
 		return new TileEdgeCoordinate(tile.getNeighbour(edge),
 				edge.getOpposite());
