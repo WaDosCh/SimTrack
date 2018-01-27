@@ -120,7 +120,7 @@ public class PathFindingTool implements ITool, IRenderer {
 			for (int i = 0; i < startEdge.ordinal(); i++) {
 				g2.rotate(angle);
 			}
-//			g2.fillOval(-10, 10, 20, 20);
+			g2.fillOval(30, -20, 40, 40);
 		}
 
 		if (end != null) {
@@ -132,6 +132,10 @@ public class PathFindingTool implements ITool, IRenderer {
 				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
 				g2.rotate(angle);
 			}
+			for (int i = 0; i < endEdge.ordinal(); i++) {
+				g2.rotate(angle);
+			}
+			g2.fillOval(30, -20, 40, 40);
 		}
 
 	}
