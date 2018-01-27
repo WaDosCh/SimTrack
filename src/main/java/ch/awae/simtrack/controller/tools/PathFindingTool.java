@@ -1,10 +1,6 @@
 package ch.awae.simtrack.controller.tools;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Stack;
 
@@ -46,7 +42,8 @@ public class PathFindingTool implements ITool, IRenderer {
 		this.pathFinder = this.editor.getController().getPathfinder();
 		this.viewPort = this.editor.getController().getGameView().getViewPort();
 
-		this.ESC = this.keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_ESCAPE);
+		this.ESC = this.keyboard.trigger(Direction.ACTIVATE,
+				KeyEvent.VK_ESCAPE);
 
 		M_LEFT = mouse.trigger(Direction.ACTIVATE, Button.LEFT);
 		M_RIGHT = mouse.trigger(Direction.DEACTIVATE, Button.RIGHT);
@@ -76,7 +73,8 @@ public class PathFindingTool implements ITool, IRenderer {
 		if (M_LEFT.test()) {
 			this.start = this.mouse.getTileCoordinate();
 			this.startEdge = this.startEdge.getNeighbour(true);
-			Log.info("Start: ", new TileEdgeCoordinate(this.start, this.startEdge));
+			Log.info("Start:",
+					new TileEdgeCoordinate(this.start, this.startEdge));
 		}
 		if (M_RIGHT.test()) {
 			this.end = this.mouse.getTileCoordinate();
@@ -85,7 +83,8 @@ public class PathFindingTool implements ITool, IRenderer {
 		}
 
 		if (this.start != null && this.end != null) {
-			this.path = this.pathFinder.findPath(new TileEdgeCoordinate(this.start, this.startEdge),
+			this.path = this.pathFinder.findPath(
+					new TileEdgeCoordinate(this.start, this.startEdge),
 					new TileEdgeCoordinate(this.end, this.endEdge));
 		}
 	}
