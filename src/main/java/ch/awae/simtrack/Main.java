@@ -43,7 +43,8 @@ public class Main {
 		GUI gui = new GUI(1200, 800);
 		IModel model = ModelFactory.getModel(25, 13, 20);
 		IGameView gameView = ViewFactory.createGameView(model, gui);
-		IController c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
+		IController c = ControllerFactory.buildGameController(model, gameView,
+				gui, 50, 50);
 		c.startView();
 		c.start();
 	}

@@ -17,6 +17,9 @@
  */
 package ch.awae.simtrack.gui;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 /**
@@ -46,7 +49,12 @@ class Window extends JFrame {
 		this.add(this.surface = new Surface(x, y));
 		this.pack();
 		this.setResizable(false);
-		this.setLocationRelativeTo(null);
+
+		// Note: just for debugging / nice to have
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+
+		this.setLocation((int) (width / 2 - this.getWidth() / 2), 0);
 		this.setFocusTraversalKeysEnabled(false);
 		this.setVisible(true);
 	}
