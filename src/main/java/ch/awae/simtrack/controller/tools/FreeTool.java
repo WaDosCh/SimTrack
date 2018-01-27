@@ -17,8 +17,8 @@
  */
 package ch.awae.simtrack.controller.tools;
 
-import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.ITool;
+import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import lombok.Getter;
 
@@ -34,7 +34,7 @@ public class FreeTool implements ITool {
 	@Getter
 	private final FreeToolRenderer renderer;
 	private TileCoordinate tile;
-	private Editor owner;
+	private Mouse mouse;
 
 	/**
 	 * provides the current tool position
@@ -51,9 +51,9 @@ public class FreeTool implements ITool {
 	 * @param e
 	 *            the editor owning the tool
 	 */
-	public FreeTool(Editor e) {
+	public FreeTool(Mouse mouse) {
 		this.renderer = new FreeToolRenderer(this);
-		this.owner = e;
+		this.mouse = mouse;
 	}
 
 	@Override
@@ -64,13 +64,12 @@ public class FreeTool implements ITool {
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
 		// ensure valid position
-		this.tile = this.owner.getController().getMouse().getTileCoordinate();
+		this.tile = this.mouse.getTileCoordinate();
 	}
 
 	@Override
 	public void tick() {
-		TileCoordinate tile = this.owner.getController().getMouse()
-				.getTileCoordinate();
+		TileCoordinate tile = this.mouse.getTileCoordinate();
 		if (tile != null)
 			this.tile = tile;
 	}

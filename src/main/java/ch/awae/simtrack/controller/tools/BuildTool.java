@@ -26,12 +26,7 @@ import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.input.Trigger.Direction;
-import ch.awae.simtrack.model.IFixedTile;
-import ch.awae.simtrack.model.IModel;
-import ch.awae.simtrack.model.ITile;
-import ch.awae.simtrack.model.ITrackTile;
-import ch.awae.simtrack.model.ITransformableTrackTile;
-import ch.awae.simtrack.model.TileValidator;
+import ch.awae.simtrack.model.*;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
 import ch.awae.simtrack.view.IRenderer;
@@ -48,12 +43,12 @@ import lombok.Getter;
 public class BuildTool implements ITool {
 
 	@Getter
-	private boolean bulldoze;
-	
+	private boolean isBulldozeTool;
+
 	private KeyTrigger Q, E, TAB;
 	private Keyboard keyboard;
 	private Mouse mouse;
-	
+
 	@Getter
 	private boolean valid = false;
 	private Editor editor;
@@ -78,7 +73,7 @@ public class BuildTool implements ITool {
 		Q = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_Q);
 		E = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_E);
 		TAB = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_TAB);
-		
+
 		this.renderer = new BuildToolRenderer(this);
 	}
 
@@ -90,10 +85,10 @@ public class BuildTool implements ITool {
 	@Override
 	public void load(Object[] args) throws IllegalStateException {
 		if (args == null) {
-			this.bulldoze = true;
+			this.isBulldozeTool = true;
 		} else {
 			this.track = (ITransformableTrackTile) args[0];
-			this.bulldoze = false;
+			this.isBulldozeTool = false;
 		}
 	}
 
@@ -110,7 +105,8 @@ public class BuildTool implements ITool {
 	 *         provided position in the provided model, or if it can be fused
 	 *         with the currently present tile.
 	 */
-	private static boolean canPlaceOn(TileCoordinate c, IModel m, ITrackTile t) {
+	private static boolean canPlaceOn(TileCoordinate c, IModel m,
+			ITrackTile t) {
 		if (c == null)
 			return false;
 		ITile tile = m.getTileAt(c);
@@ -119,7 +115,8 @@ public class BuildTool implements ITool {
 				return false;
 			if (tile instanceof ITrackTile) {
 				ITrackTile ttile = (ITrackTile) tile;
-				if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(ttile, t)))
+				if (TileValidator.isValidTrack(
+						FusedTrackFactory.createFusedTrack(ttile, t)))
 					return true;
 			}
 			return false;
@@ -157,8 +154,8 @@ public class BuildTool implements ITool {
 		else {
 			ITrackTile oldTile = (ITrackTile) model.getTileAt(this.position);
 			model.removeTileAt(this.position);
-			model.setTileAt(this.position,
-					TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));
+			model.setTileAt(this.position, TileValidator.intern(
+					FusedTrackFactory.createFusedTrack(oldTile, this.track)));
 		}
 	}
 
@@ -168,31 +165,32 @@ public class BuildTool implements ITool {
 		IController controller = this.editor.getController();
 		IViewPort port = controller.getGameView().getViewPort();
 		IModel model = controller.getModel();
-		
+
 		this.position = mouse.getTileCoordinate();
 
 		if (keyboard.key(KeyEvent.VK_ESCAPE)) {
 			this.editor.loadTool("FreeHand", null);
 			return;
 		}
-		if (!this.bulldoze && !mouse.button3()) {
 			// PLACER
 			this.valid = canPlaceOn(this.position, model, this.track);
 			if (this.valid) {
-				if (mouse.button1() && mouse.getScreenPosition().y < port.getScreenDimensions().y) {
+				if (mouse.button1() && mouse.getScreenPosition().y < port
+						.getScreenDimensions().y) {
 					this.place();
 				}
 			}
-			
+
 			Q.test(() -> track = track.rotated(false));
 			E.test(() -> track = track.rotated(true));
 			TAB.test(() -> track = track.mirrored());
-			
+
 		} else {
 			// BULLDOZE
 			this.valid = canDelete(this.position, model);
 			if (this.valid) {
-				if ((mouse.button1() || mouse.button3()) && mouse.getScreenPosition().y < port.getScreenDimensions().y) {
+				if ((mouse.button1() || mouse.button3()) && mouse
+						.getScreenPosition().y < port.getScreenDimensions().y) {
 					model.removeTileAt(this.position);
 				}
 			}

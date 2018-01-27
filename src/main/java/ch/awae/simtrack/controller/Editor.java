@@ -106,7 +106,7 @@ public class Editor implements IEditor {
 	 * initialise all available tools
 	 */
 	private void loadTools() {
-		addTool(new FreeTool(this));
+		addTool(new FreeTool(this.getController().getMouse()));
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
 	}
