@@ -172,6 +172,7 @@ public class BuildTool implements ITool {
 			this.editor.loadTool("FreeHand", null);
 			return;
 		}
+		if (!this.isBulldozeTool && !mouse.button3()) {
 			// PLACER
 			this.valid = canPlaceOn(this.position, model, this.track);
 			if (this.valid) {
