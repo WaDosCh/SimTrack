@@ -18,7 +18,7 @@ public class TrackRenderUtil {
 	private final static int sleeperCount = 8;
 	private final static int sleeperWidth = 5;
 	private final static int sleeperHeight = 45;
-	private final static int railGauge = 35;
+	private final static int railGauge = 28;
 
 	private final static int halfSide = (int) (50 / Math.sqrt(3));
 
