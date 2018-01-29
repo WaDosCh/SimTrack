@@ -1,5 +1,5 @@
 /*
- * SimTrack - Railway Planning and Simulation Game
+w * SimTrack - Railway Planning and Simulation Game
  * Copyright (C) 2015 Andreas Wälchli
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ package ch.awae.simtrack.controller;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.controller.tools.PathFindingTool;
@@ -54,6 +55,10 @@ public class Editor implements IEditor {
 		loadTools();
 	}
 
+	public Input getInput() {
+		return owner.getInput();
+	}
+
 	/**
 	 * adds a new tool to the editor. If this is the first tool added to the
 	 * editor, it will be directly activated with a {@code null} argument.
@@ -64,7 +69,7 @@ public class Editor implements IEditor {
 	private void addTool(ITool tool) {
 		this.tools.put(tool.getToolName(), tool);
 		if (this.currentTool == null) {
-			loadTool(tool.getToolName(), null);
+			loadTool(tool.getToolName());
 		}
 	}
 
@@ -78,13 +83,15 @@ public class Editor implements IEditor {
 	}
 
 	@Override
-	public boolean loadTool(String name, Object[] args) {
+	public boolean loadTool(String name, Object... args) {
+		if (name == null)
+			name = "FreeHand";
 		Log.info("Load tool: ", name);
 		ITool next = this.tools.get(name);
 		if (next == null)
 			return false;
 		if (this.currentTool == next) {
-			next.unload();
+			next.onUnload();
 			next.load(args);
 			return true;
 		}
@@ -95,7 +102,7 @@ public class Editor implements IEditor {
 			return false;
 		}
 		if (this.currentTool != null)
-			this.currentTool.unload();
+			this.currentTool.onUnload();
 		this.currentTool = next;
 		this.renderer = this.currentTool.getRenderer();
 		this.getController().setWindowTitle(name);
@@ -106,7 +113,7 @@ public class Editor implements IEditor {
 	 * initialise all available tools
 	 */
 	private void loadTools() {
-		addTool(new FreeTool(this.getController().getMouse()));
+		addTool(new FreeTool(this));
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
 	}

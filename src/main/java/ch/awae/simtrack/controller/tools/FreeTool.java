@@ -17,6 +17,7 @@
  */
 package ch.awae.simtrack.controller.tools;
 
+import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.ITool;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -51,9 +52,9 @@ public class FreeTool implements ITool {
 	 * @param e
 	 *            the editor owning the tool
 	 */
-	public FreeTool(Mouse mouse) {
+	public FreeTool(Editor editor) {
 		this.renderer = new FreeToolRenderer(this);
-		this.mouse = mouse;
+		this.mouse = editor.getController().getMouse();
 	}
 
 	@Override

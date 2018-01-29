@@ -1,5 +1,6 @@
 package ch.awae.simtrack.controller.input;
 
+@Deprecated
 public interface Trigger {
 
 	boolean test();

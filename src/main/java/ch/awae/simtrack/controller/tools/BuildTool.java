@@ -1,59 +1,34 @@
-/*
- * SimTrack - Railway Planning and Simulation Game
- * Copyright (C) 2015 Andreas Wälchli
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package ch.awae.simtrack.controller.tools;
 
-import java.awt.event.KeyEvent;
+import java.awt.Graphics2D;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.IController;
-import ch.awae.simtrack.controller.ITool;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
-import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.controller.input.Trigger.Direction;
-import ch.awae.simtrack.model.*;
+import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.input.Action;
+import ch.awae.simtrack.model.IFixedTile;
+import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.ITrackTile;
+import ch.awae.simtrack.model.ITransformableTrackTile;
+import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
+import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.IViewPort;
 import lombok.Getter;
 
 /**
  * Build Tool. Used for placing and deleting track tiles
  * 
  * @author Andreas Wälchli
- * @version 1.5, 2015-01-26
- * @since SimTrack 0.2.2
  */
-public class BuildTool implements ITool {
+public class BuildTool extends EventDrivenTool {
 
 	@Getter
 	private boolean isBulldozeTool;
-
-	private KeyTrigger Q, E, TAB;
-	private Keyboard keyboard;
-	private Mouse mouse;
-
 	@Getter
 	private boolean valid = false;
-	private Editor editor;
-	@Getter
-	private IRenderer renderer;
+	private IRenderer renderer = new BuildToolRenderer(this);
 	@Getter
 	private TileCoordinate position = null;
 	@Getter
@@ -66,15 +41,23 @@ public class BuildTool implements ITool {
 	 *            the editor the build tool will operate under
 	 */
 	public BuildTool(Editor editor) {
-		this.editor = editor;
-		mouse = editor.getController().getMouse();
-		keyboard = editor.getController().getKeyboard();
+		super(editor, UnloadAction.UNLOAD);
 
-		Q = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_Q);
-		E = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_E);
-		TAB = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_TAB);
+		onTick(() -> position = viewPort.toHex(input.getMousePosition()));
+		onTick(this::checkValid);
 
-		this.renderer = new BuildToolRenderer(this);
+		onPress(Action.BT_ROTATE_LEFT, this::rotateLeft);
+		onPress(Action.BT_ROTATE_RIGHT, this::rotateRight);
+		onPress(Action.BT_MIRROR, this::mirror);
+
+		ifPressed(Action.BT_DELETE_TILE, this::bulldoze);
+		ifPressed(Action.BT_BUILD_TILE, () -> {
+			if (isBulldozeTool)
+				bulldoze();
+			else
+				place();
+		});
+
 	}
 
 	@Override
@@ -92,6 +75,11 @@ public class BuildTool implements ITool {
 		}
 	}
 
+	private void checkValid() {
+		this.valid = this.isBulldozeTool ? canDelete(this.position, controller.getModel())
+				: canPlaceOn(this.position, controller.getModel(), this.track);
+	}
+
 	/**
 	 * checks if a given tile can be placed at a given location in a given model
 	 * 
@@ -105,8 +93,7 @@ public class BuildTool implements ITool {
 	 *         provided position in the provided model, or if it can be fused
 	 *         with the currently present tile.
 	 */
-	private static boolean canPlaceOn(TileCoordinate c, IModel m,
-			ITrackTile t) {
+	private static boolean canPlaceOn(TileCoordinate c, IModel m, ITrackTile t) {
 		if (c == null)
 			return false;
 		ITile tile = m.getTileAt(c);
@@ -115,8 +102,7 @@ public class BuildTool implements ITool {
 				return false;
 			if (tile instanceof ITrackTile) {
 				ITrackTile ttile = (ITrackTile) tile;
-				if (TileValidator.isValidTrack(
-						FusedTrackFactory.createFusedTrack(ttile, t)))
+				if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(ttile, t)))
 					return true;
 			}
 			return false;
@@ -143,59 +129,55 @@ public class BuildTool implements ITool {
 		return true;
 	}
 
+	private void bulldoze() {
+		IModel model = this.editor.getController().getModel();
+		if (canDelete(this.position, model)) {
+			if (input.getMousePosition().y < editor.getController().getGameView().getViewPort()
+					.getScreenDimensions().y) {
+				model.removeTileAt(this.position);
+			}
+		}
+	}
+
 	/**
 	 * places the tile at the current location or (if applicable) fuses the new
 	 * tile onto the current one.
 	 */
 	private void place() {
 		IModel model = this.editor.getController().getModel();
-		if (model.getTileAt(this.position) == null)
-			model.setTileAt(this.position, TileValidator.intern(track));
-		else {
-			ITrackTile oldTile = (ITrackTile) model.getTileAt(this.position);
-			model.removeTileAt(this.position);
-			model.setTileAt(this.position, TileValidator.intern(
-					FusedTrackFactory.createFusedTrack(oldTile, this.track)));
+		if (canPlaceOn(this.position, model, this.track)) {
+			if (input.getMousePosition().y < editor.getController().getGameView().getViewPort()
+					.getScreenDimensions().y) {
+				if (model.getTileAt(this.position) == null)
+					model.setTileAt(this.position, TileValidator.intern(track));
+				else {
+					ITrackTile oldTile = (ITrackTile) model.getTileAt(this.position);
+					model.removeTileAt(this.position);
+					model.setTileAt(this.position,
+							TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));
+				}
+			}
 		}
 	}
 
+	private void rotateLeft() {
+		if (!isBulldozeTool)
+			track = track.rotated(false);
+	}
+
+	private void rotateRight() {
+		if (!isBulldozeTool)
+			track = track.rotated(true);
+	}
+
+	private void mirror() {
+		if (!isBulldozeTool)
+			track = track.mirrored();
+	}
+
 	@Override
-	public void tick() {
-
-		IController controller = this.editor.getController();
-		IViewPort port = controller.getGameView().getViewPort();
-		IModel model = controller.getModel();
-
-		this.position = mouse.getTileCoordinate();
-
-		if (keyboard.key(KeyEvent.VK_ESCAPE)) {
-			this.editor.loadTool("FreeHand", null);
-			return;
-		}
-		if (!this.isBulldozeTool && !mouse.button3()) {
-			// PLACER
-			this.valid = canPlaceOn(this.position, model, this.track);
-			if (this.valid) {
-				if (mouse.button1() && mouse.getScreenPosition().y < port
-						.getScreenDimensions().y) {
-					this.place();
-				}
-			}
-
-			Q.test(() -> track = track.rotated(false));
-			E.test(() -> track = track.rotated(true));
-			TAB.test(() -> track = track.mirrored());
-
-		} else {
-			// BULLDOZE
-			this.valid = canDelete(this.position, model);
-			if (this.valid) {
-				if ((mouse.button1() || mouse.button3()) && mouse
-						.getScreenPosition().y < port.getScreenDimensions().y) {
-					model.removeTileAt(this.position);
-				}
-			}
-		}
+	public void render(Graphics2D g, IGameView view) {
+		renderer.render(g, view);
 	}
 
 }

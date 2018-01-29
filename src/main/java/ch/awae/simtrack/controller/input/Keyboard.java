@@ -32,6 +32,7 @@ import ch.awae.simtrack.controller.input.Trigger.Direction;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
+@Deprecated
 public class Keyboard {
 
 	public enum Mode {
