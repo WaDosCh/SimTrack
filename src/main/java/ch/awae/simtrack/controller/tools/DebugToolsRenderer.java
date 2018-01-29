@@ -42,25 +42,25 @@ public class DebugToolsRenderer implements IRenderer {
 		IViewPort viewPort = this.gameView.getViewPort();
 		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
-		g.setColor(Design.almostTransparent);
+		g.setColor(Design.almostOpaque);
 		int y = screenPos.y + 10;
 		g.fillRect(screenPos.x + 10, y, 400, 100);
 		g.setColor(Design.grayBorder);
 		g.drawRect(screenPos.x + 10, y, 400, 100);
 		g.setColor(Color.black);
-		g.setFont(Design.text);
-		y += Design.text.getSize();
+		g.setFont(Design.textFont);
+		y += Design.textFont.getSize();
 		g.drawString(screenPositionToString(screenPos), screenPos.x + 20, y);
-		y += Design.text.getSize();
+		y += Design.textFont.getSize();
 		g.drawString(scenePos.toString(), screenPos.x + 20, y);
-		y += Design.text.getSize();
+		y += Design.textFont.getSize();
 		if (tilePos == null)
 			g.drawString("Tile: null", screenPos.x + 20, y);
 		else
 			g.drawString(tilePos.toString(), screenPos.x + 20, y);
-		y += Design.text.getSize();
+		y += Design.textFont.getSize();
 		g.drawString(screenSizeToString(), screenPos.x + 20, y);
-		y += Design.text.getSize();
+		y += Design.textFont.getSize();
 		g.drawString(zoomToString(), screenPos.x + 20, y);
 	}
 
@@ -87,10 +87,10 @@ public class DebugToolsRenderer implements IRenderer {
 
 		int y = 80;
 		g.setColor(Color.black);
-		g.setFont(Design.text);
+		g.setFont(Design.textFont);
 		for (String s : this.inputGuideText) {
 			g.drawString(s, 60, y);
-			y += Design.text.getSize();
+			y += Design.textFont.getSize();
 		}
 	}
 

@@ -24,12 +24,22 @@ public class InGameMenu implements ITool {
 		this.editor = editor;
 		this.esc = this.keyboard.trigger(Direction.ACTIVATE,
 				KeyEvent.VK_ESCAPE);
-		this.renderer = new InGameMenuRenderer();
+		this.renderer = new InGameMenuRenderer(this.mouse);
+		this.renderer.addButton("Resume", this::resume);
+		this.renderer.addButton("Save", () -> {
+		});
+		this.renderer.addButton("Load", () -> {
+		});
+		this.renderer.addButton("Quit Game", () -> System.exit(0));
+	}
+
+	private void resume() {
+		this.editor.loadTool(FreeTool.class);
 	}
 
 	@Override
 	public IRenderer getRenderer() {
-		return new InGameMenuRenderer();
+		return this.renderer;
 	}
 
 	@Override
