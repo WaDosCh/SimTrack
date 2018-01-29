@@ -23,7 +23,11 @@ import java.util.HashMap;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.controller.tools.*;
+import ch.awae.simtrack.controller.tools.BuildTool;
+import ch.awae.simtrack.controller.tools.FreeTool;
+import ch.awae.simtrack.controller.tools.InGameMenu;
+import ch.awae.simtrack.controller.tools.PathFindingTool;
+import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
 
@@ -48,6 +52,10 @@ public class Editor implements IEditor {
 	private Input input;
 	private Mouse mouse;
 
+	private IModel model;
+
+	private InGameMenu ingameMenu;
+
 	/**
 	 * instantiates a new editor for the given controller.
 	 * 
@@ -59,6 +67,7 @@ public class Editor implements IEditor {
 		this.mouse = c.getMouse();
 		this.keyboard = c.getKeyboard();
 		this.input = c.getInput();
+		this.model = c.getModel();
 		loadTools();
 	}
 
@@ -106,7 +115,8 @@ public class Editor implements IEditor {
 		}
 		try {
 			next.load(args);
-		} catch (IllegalStateException ex) {
+		}
+		catch (IllegalStateException ex) {
 			Log.err("Error loading tool", ex.getMessage());
 			// could not load. do not make the switch and leave old tool on!
 			return false;
@@ -126,7 +136,9 @@ public class Editor implements IEditor {
 		addTool(new FreeTool(this));
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
-		addTool(new InGameMenu(this.mouse, this.keyboard, (IEditor) this));
+		this.ingameMenu = new InGameMenu(this.mouse, this.keyboard, (IEditor) this, this.model,
+			this.owner);
+		addTool(this.ingameMenu);
 	}
 
 	/**
@@ -148,6 +160,11 @@ public class Editor implements IEditor {
 	void tick() {
 		if (this.currentTool != null)
 			this.currentTool.tick();
+	}
+
+	public void setModel(IModel model) {
+		this.model = model;
+		this.ingameMenu.setModel(this.model);
 	}
 
 }

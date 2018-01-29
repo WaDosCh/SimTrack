@@ -28,6 +28,7 @@ import ch.awae.simtrack.model.position.Edge;
  */
 class BorderTrackTile extends BasicTrackTile implements IDestinationTrackTile {
 
+	private static final long serialVersionUID = -2434920987381887298L;
 	private final Edge edge;
 	private final boolean isOutput;
 
@@ -57,13 +58,13 @@ class BorderTrackTile extends BasicTrackTile implements IDestinationTrackTile {
 
 	@Override
 	public TilePath[] getRailPaths() {
-		return new TilePath[] { new TilePath(edge, edge.getOpposite()) };
+		return new TilePath[]{new TilePath(edge, edge.getOpposite())};
 	}
 
 	@Override
 	public TilePath[] getPaths() {
-		return new TilePath[] {
-				isOutput ? new TilePath(edge, edge.getOpposite()) : new TilePath(edge.getOpposite(), edge) };
+		return new TilePath[]{isOutput ? new TilePath(edge, edge.getOpposite()) : new TilePath(
+			edge.getOpposite(), edge)};
 	}
 
 	@Override

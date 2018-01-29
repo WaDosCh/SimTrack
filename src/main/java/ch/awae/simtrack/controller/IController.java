@@ -97,11 +97,13 @@ public interface IController {
 	 */
 	@Deprecated
 	public Keyboard getKeyboard();
-	
+
 	public Input getInput();
 
 	public PathFinding getPathfinder();
 
 	public void setWindowTitle(String string);
-	
+
+	public void loadModel(IModel model);
+
 }

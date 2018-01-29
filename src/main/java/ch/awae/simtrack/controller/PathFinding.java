@@ -11,10 +11,13 @@ import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.util.T3;
 import ch.judos.generic.data.HashMapList;
+import lombok.Getter;
 
 public class PathFinding {
 
+	@Getter
 	private IModel model;
+
 	private HashMapList<TileEdgeCoordinate, T2<TileEdgeCoordinate, Float>> connectionCache;
 	private Observer modelObserver;
 
@@ -36,8 +39,8 @@ public class PathFinding {
 	}
 
 	private void buildGraphForTileCoordinate(TileCoordinate tileCoordinate) {
-		List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> paths = this.model
-				.getPaths(tileCoordinate);
+		List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> paths = this.model.getPaths(
+			tileCoordinate);
 		for (T3<TileEdgeCoordinate, TileEdgeCoordinate, Float> path : paths) {
 			this.connectionCache.put(path._1, new T2<>(path._2, path._3));
 		}
@@ -53,7 +56,7 @@ public class PathFinding {
 	 *         <b>Note:</b> If there is no path, null will be returned.
 	 */
 	public Stack<TileEdgeCoordinate> findPath(TileEdgeCoordinate start,
-			TileEdgeCoordinate end) {
+		TileEdgeCoordinate end) {
 		if (start.equals(end)) {
 			Log.info("start==end for pathfinding");
 			return null;
@@ -79,18 +82,18 @@ public class PathFinding {
 			// search all paths from here
 			if (this.connectionCache.containsKey(current._1)) {
 				ArrayList<T2<TileEdgeCoordinate, Float>> connections = this.connectionCache
-						.getList(current._1);
+					.getList(current._1);
 				for (T2<TileEdgeCoordinate, Float> connection : connections) {
 					float cost = current._2 + connection._2;
 					// only use this connection if there is no previous to this
 					// edge, or this path is shorter
-					if (!wayBack.containsKey(connection._1)
-							|| cost < wayBack.get(connection._1)._2) {
+					if (!wayBack.containsKey(connection._1) || cost < wayBack.get(
+						connection._1)._2) {
 
 						wayBack.put(connection._1, new T2<>(current._1, cost));
 
-						T2<TileEdgeCoordinate, Float> newElem = new T2<>(
-								connection._1, current._2 + connection._2);
+						T2<TileEdgeCoordinate, Float> newElem = new T2<>(connection._1,
+							current._2 + connection._2);
 						searchGraph.add(newElem);
 					}
 				}
@@ -99,8 +102,7 @@ public class PathFinding {
 			if (searchGraph.size() == 0)
 				return null;
 
-			Collections.sort(searchGraph,
-					(_1, _2) -> this.searchComparator(_1, _2, end.tile));
+			Collections.sort(searchGraph, (_1, _2) -> this.searchComparator(_1, _2, end.tile));
 		}
 
 		// track back found path
@@ -126,8 +128,7 @@ public class PathFinding {
 	 * @return
 	 */
 	public HashMap<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> findPathForTiles(
-			TileEdgeCoordinate start,
-			List<TileEdgeCoordinate> possibleTargets) {
+		TileEdgeCoordinate start, List<TileEdgeCoordinate> possibleTargets) {
 		HashMap<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> result = new HashMap<>();
 		for (TileEdgeCoordinate target : possibleTargets) {
 			Stack<TileEdgeCoordinate> path = findPath(start, target);
@@ -139,9 +140,14 @@ public class PathFinding {
 	}
 
 	public int searchComparator(T2<TileEdgeCoordinate, Float> arg0,
-			T2<TileEdgeCoordinate, Float> arg1, TileCoordinate target) {
+		T2<TileEdgeCoordinate, Float> arg1, TileCoordinate target) {
 		double dist1 = arg0._2 + arg0._1.tile.distanceTo(target);
 		double dist2 = arg1._2 + arg1._1.tile.distanceTo(target);
 		return (int) (dist1 - dist2);
+	}
+
+	public void setModel(IModel model) {
+		this.model = model;
+		this.modelObserver = this.model.createObserver();
 	}
 }

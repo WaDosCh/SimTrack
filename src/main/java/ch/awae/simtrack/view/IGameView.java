@@ -94,4 +94,6 @@ public interface IGameView {
 	 */
 	public IViewPort getViewPort();
 
+	public void setModel(IModel model);
+
 }

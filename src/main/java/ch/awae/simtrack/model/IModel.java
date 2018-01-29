@@ -17,6 +17,7 @@
  */
 package ch.awae.simtrack.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +32,7 @@ import ch.awae.simtrack.util.T3;
  * @version 1.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public interface IModel extends IObservable {
+public interface IModel extends IObservable, Serializable {
 
 	public int getHorizontalSize();
 
@@ -51,14 +52,20 @@ public interface IModel extends IObservable {
 	default void tick() {
 	}
 
-	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position);
+	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(
+		TileCoordinate position);
 
 	public Set<Map.Entry<TileEdgeCoordinate, Signal>> getSignals();
 
 	Signal getSignalAt(TileEdgeCoordinate position);
 
 	void setSignalAt(TileEdgeCoordinate position, Signal signal);
-	
+
 	void removeSignalAt(TileEdgeCoordinate position);
-	
+
+	/**
+	 * called when a model is created or loaded from file.
+	 */
+	public void load();
+
 }

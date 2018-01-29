@@ -82,8 +82,7 @@ class GameView implements IGameView {
 	 *            the graphics instance to render onto
 	 */
 	void render(Graphics2D graphics) {
-		this.renderers
-				.forEach(r -> r.render((Graphics2D) graphics.create(), this));
+		this.renderers.forEach(r -> r.render((Graphics2D) graphics.create(), this));
 		this.editorRenderer.render((Graphics2D) graphics.create(), this);
 	}
 
@@ -131,6 +130,11 @@ class GameView implements IGameView {
 	@Override
 	public IViewPort getViewPort() {
 		return this.viewPort;
+	}
+
+	@Override
+	public void setModel(IModel model) {
+		this.model = model;
 	}
 
 }

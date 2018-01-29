@@ -61,8 +61,8 @@ class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker, Mouse mouse,
-			Keyboard keyboard, Input input) {
+	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker,
+		Mouse mouse, Keyboard keyboard, Input input) {
 		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
@@ -74,13 +74,10 @@ class GameController implements IController {
 		this.viewTimer = new Timer(10, e -> this.viewTick());
 		this.viewTimer.setRepeats(true);
 		this.pathfinder = new PathFinding(this.model);
-		this.navigator = new Navigator(this.gameView, this.mouse,
-				this.keyboard);
+		this.navigator = new Navigator(this.gameView, this.mouse, this.keyboard);
 		this.editor = new Editor(this);
-		this.trackbar = new TrackBar(this.editor, this.gameView, this.mouse,
-				this.keyboard);
-		this.debugTools = new DebugTools(this.keyboard, this.mouse,
-				this.editor);
+		this.trackbar = new TrackBar(this.editor, this.gameView, this.mouse, this.keyboard);
+		this.debugTools = new DebugTools(this.keyboard, this.mouse, this.editor);
 		this.gameView.setEditorRenderer(this::render);
 	}
 
@@ -153,6 +150,15 @@ class GameController implements IController {
 	@Override
 	public void setWindowTitle(String string) {
 		titleUpdater.accept(string);
+	}
+
+	@Override
+	public void loadModel(IModel model) {
+		this.model = model;
+		this.model.load();
+		this.pathfinder.setModel(this.model);
+		this.gameView.setModel(this.model);
+		this.editor.setModel(this.model);
 	}
 
 }

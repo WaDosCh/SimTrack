@@ -26,6 +26,8 @@ import ch.awae.simtrack.model.position.Edge;
  */
 public abstract class BasicTrackTile implements ITrackTile {
 
+	private static final long serialVersionUID = 3482264021238974251L;
+
 	@Override
 	public boolean connectsAt(Edge edge) {
 		TilePath[] paths = this.getRailPaths();

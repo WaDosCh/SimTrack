@@ -17,6 +17,8 @@
  */
 package ch.awae.simtrack.model.position;
 
+import java.io.Serializable;
+
 import lombok.EqualsAndHashCode;
 
 /**
@@ -27,12 +29,13 @@ import lombok.EqualsAndHashCode;
  * @since SimTrack 0.0.1
  */
 @EqualsAndHashCode
-public class TileCoordinate {
+public class TileCoordinate implements Serializable {
 
-	/*
+	private static final long serialVersionUID = -1177199223722620095L;
+
+	/**
 	 * exact value of the sine of 60 degrees (pi/3)
 	 */
-
 	private static final double SQRT3DIV2 = Math.sqrt(3) / 2;
 
 	public final int u, v;
