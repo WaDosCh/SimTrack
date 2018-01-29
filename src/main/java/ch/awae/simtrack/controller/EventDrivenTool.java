@@ -53,6 +53,18 @@ public abstract class EventDrivenTool implements ITool, IRenderer {
 
 	/**
 	 * Registers the Runnable to be executed on every tick where the key bound
+	 * to the given key is pressed
+	 * 
+	 * @param keycode
+	 * @param r
+	 */
+	protected void ifPressed(int keycode, Runnable r) {
+		Binding binding = input.getBinding(keycode);
+		drivers.add(() -> binding.ifPressed(r));
+	}
+
+	/**
+	 * Registers the Runnable to be executed on every tick where the key bound
 	 * to the given action is released
 	 * 
 	 * @param action
@@ -60,6 +72,18 @@ public abstract class EventDrivenTool implements ITool, IRenderer {
 	 */
 	protected void ifReleased(Action action, Runnable r) {
 		Binding binding = input.getBinding(action);
+		drivers.add(() -> binding.ifPressed(r));
+	}
+
+	/**
+	 * Registers the Runnable to be executed on every tick where the key bound
+	 * to the given key is released
+	 * 
+	 * @param keycode
+	 * @param r
+	 */
+	protected void ifReleased(int keycode, Runnable r) {
+		Binding binding = input.getBinding(keycode);
 		drivers.add(() -> binding.ifPressed(r));
 	}
 
@@ -77,6 +101,18 @@ public abstract class EventDrivenTool implements ITool, IRenderer {
 
 	/**
 	 * Registers the Runnable to be executed on every tick where the key bound
+	 * to the key is newly pressed. The edge is consumed.
+	 * 
+	 * @param keycode
+	 * @param r
+	 */
+	protected void onPress(int keycode, Runnable r) {
+		Binding binding = input.getBinding(keycode);
+		drivers.add(() -> binding.onPress(r));
+	}
+
+	/**
+	 * Registers the Runnable to be executed on every tick where the key bound
 	 * to the action is newly released. The edge is consumed.
 	 * 
 	 * @param action
@@ -84,6 +120,18 @@ public abstract class EventDrivenTool implements ITool, IRenderer {
 	 */
 	protected void onRelease(Action action, Runnable r) {
 		Binding binding = input.getBinding(action);
+		drivers.add(() -> binding.onRelease(r));
+	}
+
+	/**
+	 * Registers the Runnable to be executed on every tick where the key bound
+	 * to the key is newly released. The edge is consumed.
+	 * 
+	 * @param keycode
+	 * @param r
+	 */
+	protected void onRelease(int keycode, Runnable r) {
+		Binding binding = input.getBinding(keycode);
 		drivers.add(() -> binding.onRelease(r));
 	}
 
