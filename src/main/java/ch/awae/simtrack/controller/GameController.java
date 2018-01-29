@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 import javax.swing.Timer;
 
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.DebugTools;
@@ -43,6 +44,7 @@ class GameController implements IController {
 	private @Getter IGameView gameView;
 	private @Getter Mouse mouse;
 	private @Getter Keyboard keyboard;
+	private @Getter Input input;
 	private Navigator navigator;
 	private TrackBar trackbar;
 	private Editor editor;
@@ -59,8 +61,9 @@ class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IGameView gameView,
-			IGUIControllerHookup hooker, Mouse mouse, Keyboard keyboard) {
+	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker, Mouse mouse,
+			Keyboard keyboard, Input input) {
+		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
 		this.gameView = gameView;

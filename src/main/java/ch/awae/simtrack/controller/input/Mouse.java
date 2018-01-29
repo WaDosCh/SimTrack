@@ -36,6 +36,7 @@ import ch.awae.simtrack.view.IViewPort;
  * @since SimTrack 0.2.1
  */
 @SuppressWarnings("javadoc")
+@Deprecated
 public class Mouse {
 
 	boolean b1, b2, b3;

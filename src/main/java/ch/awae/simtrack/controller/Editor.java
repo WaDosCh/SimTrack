@@ -1,5 +1,5 @@
 /*
- * SimTrack - Railway Planning and Simulation Game
+w * SimTrack - Railway Planning and Simulation Game
  * Copyright (C) 2015 Andreas Wälchli
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ package ch.awae.simtrack.controller;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.*;
@@ -44,7 +45,7 @@ public class Editor implements IEditor {
 	private HashMap<Class<? extends ITool>, ITool> tools = new HashMap<>();
 
 	private Keyboard keyboard;
-
+	private Input input;
 	private Mouse mouse;
 
 	/**
@@ -57,7 +58,12 @@ public class Editor implements IEditor {
 		this.owner = c;
 		this.mouse = c.getMouse();
 		this.keyboard = c.getKeyboard();
+		this.input = c.getInput();
 		loadTools();
+	}
+
+	public Input getInput() {
+		return owner.getInput();
 	}
 
 	/**
@@ -85,6 +91,8 @@ public class Editor implements IEditor {
 
 	@Override
 	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
+		if (toolClass == null)
+			toolClass = FreeTool.class;
 		Log.info("Load tool: ", toolClass.getSimpleName());
 		ITool next = this.tools.get(toolClass);
 		if (next == null) {
@@ -92,7 +100,7 @@ public class Editor implements IEditor {
 			return false;
 		}
 		if (this.currentTool == next) {
-			next.unload();
+			next.onUnload();
 			next.load(args);
 			return true;
 		}
@@ -104,7 +112,7 @@ public class Editor implements IEditor {
 			return false;
 		}
 		if (this.currentTool != null)
-			this.currentTool.unload();
+			this.currentTool.onUnload();
 		this.currentTool = next;
 		this.renderer = this.currentTool.getRenderer();
 		this.getController().setWindowTitle(toolClass.getSimpleName());
@@ -115,7 +123,7 @@ public class Editor implements IEditor {
 	 * initialise all available tools
 	 */
 	private void loadTools() {
-		addTool(new FreeTool(this.mouse, this.keyboard, (IEditor) this));
+		addTool(new FreeTool(this));
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
 		addTool(new InGameMenu(this.mouse, this.keyboard, (IEditor) this));
