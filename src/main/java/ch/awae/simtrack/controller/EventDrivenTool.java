@@ -1,21 +1,27 @@
 package ch.awae.simtrack.controller;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IViewPort;
+import lombok.Getter;
 
-public abstract class EventDrivenTool implements ITool, IRenderer {
+public abstract class EventDrivenTool implements ITool {
 
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
 	protected final Editor editor;
 	protected final IController controller;
 	protected final IViewPort viewPort;
+	protected @Getter Point mousePosition = new Point(0, 0);
+	protected @Getter TileCoordinate mouseTile = null;
+	protected IModel model = null;
 	private final Binding drop;
 	private final boolean autoUnload;
 
@@ -30,6 +36,13 @@ public abstract class EventDrivenTool implements ITool, IRenderer {
 		this.editor = editor;
 		this.controller = editor.getController();
 		this.viewPort = this.controller.getGameView().getViewPort();
+		onTick(this::preTick);
+	}
+	
+	private void preTick() {
+	    model = controller.getModel();
+	    mousePosition = input.getMousePosition();
+	    mouseTile = viewPort.toHex(mousePosition);
 	}
 
 	/**
@@ -138,15 +151,11 @@ public abstract class EventDrivenTool implements ITool, IRenderer {
 	@Override
 	public void tick() {
 		if (autoUnload && drop.isPressed() && drop.isEdge()) {
+		    drop.consume();
 			editor.loadTool(null);
 			return;
 		}
 		drivers.forEach(Runnable::run);
-	}
-
-	@Override
-	public IRenderer getRenderer() {
-		return this;
 	}
 
 }

@@ -21,9 +21,10 @@ import java.awt.Graphics2D;
 import java.util.HashMap;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.controller.tools.*;
+import ch.awae.simtrack.controller.tools.BuildTool;
+import ch.awae.simtrack.controller.tools.FreeTool;
+import ch.awae.simtrack.controller.tools.InGameMenu;
+import ch.awae.simtrack.controller.tools.PathFindingTool;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
 
@@ -44,10 +45,6 @@ public class Editor implements IEditor {
 	private IRenderer renderer;
 	private HashMap<Class<? extends ITool>, ITool> tools = new HashMap<>();
 
-	private Keyboard keyboard;
-	private Input input;
-	private Mouse mouse;
-
 	/**
 	 * instantiates a new editor for the given controller.
 	 * 
@@ -56,9 +53,6 @@ public class Editor implements IEditor {
 	 */
 	Editor(IController c) {
 		this.owner = c;
-		this.mouse = c.getMouse();
-		this.keyboard = c.getKeyboard();
-		this.input = c.getInput();
 		loadTools();
 	}
 
@@ -126,7 +120,7 @@ public class Editor implements IEditor {
 		addTool(new FreeTool(this));
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
-		addTool(new InGameMenu(this.mouse, this.keyboard, (IEditor) this));
+		addTool(new InGameMenu(this));
 	}
 
 	/**

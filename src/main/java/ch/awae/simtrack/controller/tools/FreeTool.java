@@ -17,16 +17,16 @@
  */
 package ch.awae.simtrack.controller.tools;
 
-import java.awt.event.KeyEvent;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.IEditor;
-import ch.awae.simtrack.controller.ITool;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
-import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.controller.input.Trigger.Direction;
-import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.input.Action;
+import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.IRenderer;
 import lombok.Getter;
 
 /**
@@ -36,53 +36,36 @@ import lombok.Getter;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class FreeTool implements ITool {
+public class FreeTool extends EventDrivenTool implements IRenderer {
 
-	@Getter
-	private final FreeToolRenderer renderer;
-	private TileCoordinate tile;
-	private Mouse mouse;
-	private Keyboard keyboard;
-	private Editor editor;
-	private KeyTrigger esc;
+    private final static Stroke borderStroke = new BasicStroke(6);
+    private final static int    hexSideHalf  = (int) (50 / Math.sqrt(3));
 
-	/**
-	 * creates a new tool instance.
-	 * 
-	 * @param e
-	 *            the editor owning the tool
-	 */
-	public FreeTool(Editor editor) {
-		this.renderer = new FreeToolRenderer(this);
-		this.editor = editor;
-		this.mouse = editor.getController().getMouse();
-		this.keyboard = editor.getController().getKeyboard();
-		this.esc = this.keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_ESCAPE);
-	}
+    private @Getter IRenderer renderer = this;
 
-	/**
-	 * provides the current tool position
-	 * 
-	 * @return the current position
-	 */
-	TileCoordinate getTileCoordinate() {
-		return this.tile;
-	}
+    /**
+     * creates a new tool instance.
+     * 
+     * @param e
+     *            the editor owning the tool
+     */
+    public FreeTool(Editor editor) {
+        super(editor, UnloadAction.IGNORE);
+        onPress(Action.DROP_TOOL, () -> editor.loadTool(InGameMenu.class));
+    }
 
-	@Override
-	public void load(Object[] args) throws IllegalStateException {
-		// ensure valid position
-		this.tile = this.mouse.getTileCoordinate();
-	}
-
-	@Override
-	public void tick() {
-		TileCoordinate tile = this.mouse.getTileCoordinate();
-		if (tile != null)
-			this.tile = tile;
-		if (this.esc.test()) {
-			this.editor.loadTool(InGameMenu.class);
-		}
-	}
+    @Override
+    public void render(Graphics2D g, IGameView view) {
+        if (mouseTile != null) {
+            g.setStroke(borderStroke);
+            Graphics2D g2 = view.getViewPort().focusHex(mouseTile, g);
+            g2.setColor(Color.ORANGE);
+            double angle = Math.PI / 3;
+            for (int i = 0; i < 6; i++) {
+                g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+                g2.rotate(angle);
+            }
+        }
+    }
 
 }

@@ -3,7 +3,7 @@ package ch.awae.simtrack.gui;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.IGameView;
 import lombok.Data;
@@ -14,17 +14,17 @@ import lombok.EqualsAndHashCode;
 public class Button extends Label {
 
 	public final Runnable action;
-	public final Mouse mouse;
+	public final Input input;
 
-	public Button(String title, Mouse mouse, Runnable action) {
+	public Button(String title, Input input, Runnable action) {
 		super(title);
-		this.mouse = mouse;
+		this.input = input;
 		this.action = action;
 	}
 
 	public void render(Graphics2D g, IGameView view) {
 		g.setColor(Design.buttonBackground);
-		if (test(this.mouse.getScreenPosition()))
+		if (test(this.input.getMousePosition()))
 			g.setColor(Design.buttonHover);
 		g.fillRect(pos.x, pos.y, size.width, size.height);
 		g.setColor(Design.buttonBorder);

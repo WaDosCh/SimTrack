@@ -18,8 +18,6 @@
 package ch.awae.simtrack.controller;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IGameView;
 
@@ -45,10 +43,8 @@ public class ControllerFactory {
 	 */
 	public static IController buildGameController(IModel model, IGameView view,
 			IGUIControllerHookup hooker, int tps, int fps) {
-		Mouse mouse = new Mouse(view, hooker);
-		Keyboard keyboard = new Keyboard(hooker);
 		Input input = new Input(hooker);
-		GameController c = new GameController(model, view, hooker, mouse, keyboard, input);
+		GameController c = new GameController(model, view, hooker, input);
 		c.setTPS(tps);
 		c.setFPS(fps);
 		return c;

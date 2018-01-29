@@ -11,10 +11,10 @@
 package ch.awae.simtrack.controller;
 
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.input.Action;
+import ch.awae.simtrack.controller.input.Binding;
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.IGameView;
 
 /**
@@ -26,17 +26,23 @@ import ch.awae.simtrack.view.IGameView;
  */
 public class Navigator {
 
-	private Keyboard keyboard;
-	private Mouse mouse;
+	private Input input;
 	private IGameView gameView;
+	
+	private Binding A, S, D, W;
 
 	/**
 	 * instantiates a new navigator
 	 */
-	public Navigator(IGameView gameView, Mouse mouse, Keyboard keyboard) {
+	public Navigator(IGameView gameView, Input input) {
 		this.gameView = gameView;
-		this.mouse = mouse;
-		this.keyboard = keyboard;
+		this.input = input;
+		
+		A = input.getBinding(Action.PAN_LEFT);
+		S = input.getBinding(Action.PAN_DOWN);
+		D = input.getBinding(Action.PAN_RIGHT);
+		W = input.getBinding(Action.PAN_UP);
+        
 	}
 
 	private final static int BORDER = 40;
@@ -68,27 +74,27 @@ public class Navigator {
 	public void tick() {
 		if (!this.isActive)
 			return;
-		Point mouse = this.mouse.getScreenPosition();
+		Point mouse = input.getMousePosition();
 		if (mouse == null)
 			return;
 		int dx = 0, dy = 0;
 		if (mouse.x < BORDER
-				|| this.keyboard.keysOr(KeyEvent.VK_A, KeyEvent.VK_LEFT))
+				|| A.isPressed())
 			dx = 1;
 		if (mouse.y < BORDER
-				|| this.keyboard.keysOr(KeyEvent.VK_W, KeyEvent.VK_UP))
+				|| W.isPressed())
 			dy = 1;
 		if (mouse.x > this.gameView.getHorizontalScreenSize() - BORDER
-				|| this.keyboard.keysOr(KeyEvent.VK_D, KeyEvent.VK_RIGHT))
+				|| D.isPressed())
 			dx = -1;
 		if (mouse.y > this.gameView.getVerticalScreenSize() - BORDER
-				|| this.keyboard.keysOr(KeyEvent.VK_S, KeyEvent.VK_DOWN))
+				|| S.isPressed())
 			dy = -1;
 		dx *= MOVE_SPEED;
 		dy *= MOVE_SPEED;
 		this.gameView.moveScene(dx, dy);
 
-		double amount = this.mouse.getScroll();
+		double amount = input.getScroll();
 		this.gameView.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
 	}
 }

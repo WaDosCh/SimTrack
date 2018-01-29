@@ -18,8 +18,6 @@
 package ch.awae.simtrack.controller;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.IGameView;
 
@@ -82,21 +80,6 @@ public interface IController {
 	 */
 	public void stopView();
 
-	/**
-	 * retrieves the controller's mouse observer instance
-	 * 
-	 * @return the mouse observer
-	 */
-	@Deprecated
-	public Mouse getMouse();
-
-	/**
-	 * retrieves the controller's keyboard observer instance
-	 * 
-	 * @return the keyboard observer
-	 */
-	@Deprecated
-	public Keyboard getKeyboard();
 	
 	public Input getInput();
 

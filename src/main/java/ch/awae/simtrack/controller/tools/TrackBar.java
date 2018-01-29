@@ -20,12 +20,12 @@ package ch.awae.simtrack.controller.tools;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import ch.awae.simtrack.controller.IEditor;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.Editor;
+import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.track.TrackProvider;
-import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
+import lombok.Getter;
 
 /**
  * Track tool-bar used for track selection while editing the board
@@ -34,52 +34,47 @@ import ch.awae.simtrack.view.IRenderer;
  * @version 1.5, 2015-01-26
  * @since SimTrack 0.2.2 (0.2.1)
  */
-public class TrackBar {
+public class TrackBar extends EventDrivenTool {
 
 	private int index;
-	private boolean isPressed = false;
-	private IRenderer rend;
-	private IEditor editor;
-	private Keyboard keyboard;
-	private Mouse mouse;
-	private IGameView gameView;
-
+	private @Getter IRenderer renderer = new TrackBarRenderer(this);
+	
+	
 	/**
 	 * creates a new track-bar instance
 	 * 
 	 * @param editor
 	 *            the editor owning the build tool
 	 */
-	public TrackBar(IEditor editor, IGameView gameView, Mouse mouse,
-			Keyboard keyboard) {
-		this.editor = editor;
-		this.gameView = gameView;
-		this.mouse = mouse;
-		this.keyboard = keyboard;
-		this.rend = new TrackBarRenderer(this);
+	public TrackBar(Editor editor) {
+	    super(editor, UnloadAction.IGNORE);
+	    
+	    onPress(KeyEvent.VK_MINUS, () -> select(0));
+        onPress(KeyEvent.VK_1, () -> select(1));
+        onPress(KeyEvent.VK_2, () -> select(2));
+        onPress(KeyEvent.VK_3, () -> select(3));
+        onPress(KeyEvent.VK_4, () -> select(4));
+        onPress(KeyEvent.VK_5, () -> select(5));
+        onPress(KeyEvent.VK_6, () -> select(6));
+        onPress(KeyEvent.VK_7, () -> select(7));
+        onPress(KeyEvent.VK_8, () -> select(8));
+        onPress(KeyEvent.VK_9, () -> select(9));
+        onPress(KeyEvent.VK_0, () -> select(10));
+        
+        onTick(this::updateByMouse);
+        
+        onPress(Input.MOUSE_LEFT, this::select);
 	}
 
-	/**
-	 * provides the index of the currently selected tile
-	 * 
-	 * @return the current tile index
-	 */
 	int getIndex() {
 		return this.index;
 	}
 
-	/**
-	 * provides the renderer responsible for rendering the track-bar
-	 * 
-	 * @return the renderer
-	 */
-	public IRenderer getRenderer() {
-		return this.rend;
+	private void select(int index) {
+	    this.index = index;
+	    select();
 	}
-
-	/**
-	 * activates the build tool with the currently selected tile
-	 */
+	
 	private void select() {
 		if (this.index == 0) {
 			this.editor.loadTool(BuildTool.class);
@@ -92,21 +87,16 @@ public class TrackBar {
 		}
 	}
 
-	/**
-	 * performs an update tick on the "tool"
-	 */
-	public void tick() {
+	public void updateByMouse() {
 		this.index = -1;
-		if (this.checkForHotKeys(this.keyboard))
-			return;
-		Point p = this.mouse.getScreenPosition();
+		Point p = mousePosition;
 		if (p == null) {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= this.gameView.getHorizontalScreenSize() / 2;
+		p.x -= controller.getGameView().getHorizontalScreenSize() / 2;
 		p.x += 550;
-		p.y -= this.gameView.getVerticalScreenSize();
+		p.y -= controller.getGameView().getVerticalScreenSize();
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;
@@ -114,54 +104,6 @@ public class TrackBar {
 		if (index > 10)
 			return;
 		this.index = index;
-		// index holds the track in the menu
-		boolean button = this.mouse.button1();
-		if (button && !this.isPressed) {
-			this.isPressed = true;
-			this.select();
-		} else if (!button && this.isPressed) {
-			this.isPressed = false;
-		}
-
-	}
-
-	/**
-	 * performs hotkey checks for quick track piece access
-	 * 
-	 * @param k
-	 *            the keyboard to operate with
-	 * @return {@code true} if a hotkey was used (terminates tick),
-	 *         {@code false} otherwise
-	 * @since 1.4 (SimTrack 0.2.2)
-	 */
-	private boolean checkForHotKeys(Keyboard k) {
-		if (k.key(KeyEvent.VK_MINUS))
-			this.index = 0;
-		else if (k.key(KeyEvent.VK_1))
-			this.index = 1;
-		else if (k.key(KeyEvent.VK_2))
-			this.index = 2;
-		else if (k.key(KeyEvent.VK_3))
-			this.index = 3;
-		else if (k.key(KeyEvent.VK_4))
-			this.index = 4;
-		else if (k.key(KeyEvent.VK_5))
-			this.index = 5;
-		else if (k.key(KeyEvent.VK_6))
-			this.index = 6;
-		else if (k.key(KeyEvent.VK_7))
-			this.index = 7;
-		else if (k.key(KeyEvent.VK_8))
-			this.index = 8;
-		else if (k.key(KeyEvent.VK_9))
-			this.index = 9;
-		else if (k.key(KeyEvent.VK_0))
-			this.index = 10;
-		else
-			return false;
-		this.select();
-		return true;
-
 	}
 
 }

@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.HashSet;
 
-import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -19,12 +18,12 @@ public class DebugToolsRenderer implements IRenderer {
 
 	private HashSet<Option> showing;
 	private String[] inputGuideText;
-	private Mouse mouse;
 	private IGameView gameView;
+    private DebugTools tools;
 
-	public DebugToolsRenderer(HashSet<Option> showing, Mouse mouse) {
+	public DebugToolsRenderer(HashSet<Option> showing, DebugTools tools) {
 		this.showing = showing;
-		this.mouse = mouse;
+		this.tools = tools;
 		this.inputGuideText = Resource.getText("inputKeys.txt");
 	}
 
@@ -37,9 +36,10 @@ public class DebugToolsRenderer implements IRenderer {
 	}
 
 	private void renderCoordinate(Graphics2D g, IGameView view) {
-		Point screenPos = this.mouse.getScreenPosition();
-		TileCoordinate tilePos = this.mouse.getTileCoordinate();
-		IViewPort viewPort = this.gameView.getViewPort();
+		Point screenPos = tools.getMousePosition();
+		gameView = view;
+        IViewPort viewPort = view.getViewPort();
+		TileCoordinate tilePos = viewPort.toHex(screenPos);
 		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
 		g.setColor(Design.almostOpaque);

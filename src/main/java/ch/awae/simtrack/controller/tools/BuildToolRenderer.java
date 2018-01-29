@@ -55,7 +55,7 @@ class BuildToolRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g, IGameView view) {
-		TileCoordinate c = this.tool.getPosition();
+		TileCoordinate c = this.tool.getMouseTile();
 		if (c == null)
 			return;
 		if (this.tool.isBulldozeTool()) {

@@ -5,58 +5,60 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.controller.input.Mouse;
-import ch.awae.simtrack.controller.input.Mouse.MouseTrigger;
-import ch.awae.simtrack.controller.input.Trigger.Direction;
+import ch.awae.simtrack.controller.input.Binding;
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
 
 public class BasePanel implements IRenderer, IComponent {
 
-	private ArrayList<IComponent> components;
-	private Mouse mouse;
-	private boolean needsLayout;
-	private Rectangle rect;
-	private MouseTrigger click;
+    private ArrayList<IComponent> components;
+    private Input                 input;
+    private boolean               needsLayout;
+    private Rectangle             rect;
+    private Binding               click;
 
-	public BasePanel(String title, Mouse mouse) {
-		this.mouse = mouse;
-		this.components = new ArrayList<>();
-		this.components.add(new Label(title, true));
-		this.click = this.mouse.trigger(Direction.ACTIVATE,
-				ch.awae.simtrack.controller.input.Mouse.Button.LEFT);
-		this.needsLayout = true;
-	}
+    public BasePanel(String title, Input input) {
+        this.input = input;
+        this.components = new ArrayList<>();
+        this.components.add(new Label(title, true));
+        this.click = input.getBinding(Input.MOUSE_LEFT);
+        this.needsLayout = true;
+    }
 
-	public void addButton(String title, Runnable action) {
-		this.components.add(new Button(title, this.mouse, action));
-		this.needsLayout = true;
-	}
+    public void addButton(String title, Runnable action) {
+        this.components.add(new Button(title, input, action));
+        this.needsLayout = true;
+    }
 
-	@Override
-	public void render(Graphics2D g, IGameView view) {
-		if (this.needsLayout)
-			layout(0, 0, view.getHorizontalScreenSize(),
-					view.getVerticalScreenSize() - Design.toolbarHeight);
+    @Override
+    public void render(Graphics2D g, IGameView view) {
+        if (this.needsLayout)
+            layout(0, 0, view.getHorizontalScreenSize(), view.getVerticalScreenSize() - Design.toolbarHeight);
 
-		g.setColor(Design.almostOpaque);
-		g.draw(this.rect);
-		g.setColor(Design.grayBorder);
-		g.fill(this.rect);
+        g.setColor(Design.almostOpaque);
+        g.draw(this.rect);
+        g.setColor(Design.grayBorder);
+        g.fill(this.rect);
+
+        for (IComponent b : this.components) {
+            b.render(g, view);
+        }
 
 		for (IComponent b : this.components) {
 			b.render(g, view);
 		}
-		if (this.click.test()) {
+		
+		click.onPress(() -> {
 			for (IComponent b : this.components) {
 				if (b instanceof Button) {
 					Button button = (Button) b;
-					if (button.test(this.mouse.getScreenPosition()))
+					if (button.test(input.getMousePosition()))
 						button.action.run();
 				}
 			}
-		}
+		});
 	}
 
 	@Override

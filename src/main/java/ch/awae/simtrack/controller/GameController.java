@@ -23,8 +23,6 @@ import java.util.function.Consumer;
 import javax.swing.Timer;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.controller.input.Keyboard;
-import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.TrackBar;
 import ch.awae.simtrack.model.IModel;
@@ -42,8 +40,6 @@ class GameController implements IController {
 
 	private @Getter IModel model;
 	private @Getter IGameView gameView;
-	private @Getter Mouse mouse;
-	private @Getter Keyboard keyboard;
 	private @Getter Input input;
 	private Navigator navigator;
 	private TrackBar trackbar;
@@ -61,26 +57,20 @@ class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker, Mouse mouse,
-			Keyboard keyboard, Input input) {
+	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker, Input input) {
 		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
 		this.gameView = gameView;
-		this.mouse = mouse;
-		this.keyboard = keyboard;
 		this.tickTimer = new Timer(10, e -> this.tick());
 		this.tickTimer.setRepeats(true);
 		this.viewTimer = new Timer(10, e -> this.viewTick());
 		this.viewTimer.setRepeats(true);
 		this.pathfinder = new PathFinding(this.model);
-		this.navigator = new Navigator(this.gameView, this.mouse,
-				this.keyboard);
+		this.navigator = new Navigator(this.gameView, input);
 		this.editor = new Editor(this);
-		this.trackbar = new TrackBar(this.editor, this.gameView, this.mouse,
-				this.keyboard);
-		this.debugTools = new DebugTools(this.keyboard, this.mouse,
-				this.editor);
+		this.trackbar = new TrackBar(editor);
+		this.debugTools = new DebugTools(editor);
 		this.gameView.setEditorRenderer(this::render);
 	}
 
