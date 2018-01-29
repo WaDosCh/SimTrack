@@ -67,7 +67,7 @@ class GameController implements IController {
 		this.viewTimer = new Timer(10, e -> this.viewTick());
 		this.viewTimer.setRepeats(true);
 		this.pathfinder = new PathFinding(this.model);
-		this.navigator = new Navigator(this.gameView, input);
+		this.navigator = new Navigator(this.gameView,input);
 		this.editor = new Editor(this);
 		this.trackbar = new TrackBar(editor);
 		this.debugTools = new DebugTools(editor);
@@ -85,8 +85,8 @@ class GameController implements IController {
 	 */
 	private void render(Graphics2D g, IGameView v) {
 		this.editor.render(g, v);
-		this.trackbar.getRenderer().renderSafe(g, v);
 		this.debugTools.getRenderer().renderSafe(g, v);
+        this.trackbar.getRenderer().renderSafe(g, v);
 	}
 
 	@Override
@@ -143,6 +143,14 @@ class GameController implements IController {
 	@Override
 	public void setWindowTitle(String string) {
 		titleUpdater.accept(string);
+	}
+
+	@Override
+	public void loadModel(IModel model) {
+		this.model = model;
+		this.model.load();
+		this.pathfinder.setModel(this.model);
+		this.gameView.setModel(this.model);
 	}
 
 }

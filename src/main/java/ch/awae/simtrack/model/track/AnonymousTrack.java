@@ -28,6 +28,7 @@ import lombok.Getter;
  */
 class AnonymousTrack extends BasicTrackTile {
 
+	private static final long serialVersionUID = 1078822789992674066L;
 	private float cost;
 	@Getter
 	private TilePath[] railPaths;

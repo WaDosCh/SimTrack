@@ -12,6 +12,7 @@ import lombok.Getter;
  */
 public final class BasicFixedTile implements IFixedTile {
 
+	private static final long serialVersionUID = 4292032135599648285L;
 	@Getter
 	private final TileType type;
 

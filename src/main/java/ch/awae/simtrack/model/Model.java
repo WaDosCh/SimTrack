@@ -30,6 +30,7 @@ import lombok.Getter;
 
 class Model implements IModel {
 
+	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
 
 	Model(int sizeX, int sizeY) {
@@ -41,7 +42,7 @@ class Model implements IModel {
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
 
 	@Getter
-	private ObservableHandler observableHandler = new ObservableHandler();
+	private transient ObservableHandler observableHandler;
 
 	@Override
 	public int getHorizontalSize() {
@@ -87,7 +88,8 @@ class Model implements IModel {
 	}
 
 	@Override
-	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position) {
+	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(
+		TileCoordinate position) {
 		ITile tile = tiles.get(position);
 		if (tile instanceof ITrackTile) {
 			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = new ArrayList<>();
@@ -105,7 +107,8 @@ class Model implements IModel {
 			}
 			// list OK
 			return list;
-		} else {
+		}
+		else {
 			return Collections.emptyList();
 		}
 	}
@@ -126,9 +129,9 @@ class Model implements IModel {
 			throw new IllegalArgumentException("signal position already occupied");
 		// check if signal position is valid
 		ITile tile = tiles.get(position.tile);
-		if (tile == null
-				|| (tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination())
-				|| !(tile instanceof ITrackTile))
+		if (tile == null || (tile instanceof IDestinationTrackTile
+			&& ((IDestinationTrackTile) tile).isTrainDestination())
+			|| !(tile instanceof ITrackTile))
 			throw new IllegalArgumentException("invalid tile");
 		Signal opponent = getSignalAt(position.getOppositeDirection());
 		if (opponent != null) {
@@ -147,6 +150,11 @@ class Model implements IModel {
 			throw new IllegalArgumentException();
 		signals.remove(position);
 		notifyChanged();
+	}
+
+	@Override
+	public void load() {
+		observableHandler = new ObservableHandler();
 	}
 
 }

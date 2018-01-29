@@ -1,11 +1,14 @@
 package ch.awae.simtrack.model;
 
+import java.io.Serializable;
+
 import ch.awae.simtrack.model.position.Edge;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-public final class TilePath implements Comparable<TilePath> {
+public final class TilePath implements Comparable<TilePath>, Serializable {
 
+	private static final long serialVersionUID = 9173421190168686602L;
 	public final Edge _1, _2;
 
 	public TilePath(Edge _1, Edge _2) {

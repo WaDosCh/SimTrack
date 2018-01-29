@@ -1,9 +1,12 @@
 package ch.awae.simtrack.model.position;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
-public @Data class TileEdgeCoordinate {
+public @Data class TileEdgeCoordinate implements Serializable {
 
+	private static final long serialVersionUID = -4110990467436553909L;
 	public final TileCoordinate tile;
 	public final Edge edge;
 
@@ -15,8 +18,7 @@ public @Data class TileEdgeCoordinate {
 	}
 
 	public TileEdgeCoordinate getOppositeDirection() {
-		return new TileEdgeCoordinate(tile.getNeighbour(edge),
-				edge.getOpposite());
+		return new TileEdgeCoordinate(tile.getNeighbour(edge), edge.getOpposite());
 	}
 
 	public static TileEdgeCoordinate outbound(TileCoordinate tile, Edge edge) {
@@ -28,8 +30,7 @@ public @Data class TileEdgeCoordinate {
 	}
 
 	public String toString() {
-		return "TileEdgeCoordinate[u=" + tile.u + ", v=" + tile.v + ", edge="
-				+ edge + "]";
+		return "TileEdgeCoordinate[u=" + tile.u + ", v=" + tile.v + ", edge=" + edge + "]";
 	}
 
 }

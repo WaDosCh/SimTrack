@@ -100,7 +100,8 @@ public class Editor implements IEditor {
 		}
 		try {
 			next.load(args);
-		} catch (IllegalStateException ex) {
+		}
+		catch (IllegalStateException ex) {
 			Log.err("Error loading tool", ex.getMessage());
 			// could not load. do not make the switch and leave old tool on!
 			return false;

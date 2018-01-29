@@ -86,5 +86,7 @@ public interface IController {
 	public PathFinding getPathfinder();
 
 	public void setWindowTitle(String string);
-	
+
+	public void loadModel(IModel model);
+
 }
