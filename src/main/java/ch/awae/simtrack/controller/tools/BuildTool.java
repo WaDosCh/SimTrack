@@ -34,8 +34,6 @@ public class BuildTool extends EventDrivenTool {
 	@Getter
 	private ITransformableTrackTile track;
 
-	private KeyTrigger ESC;
-
 	/**
 	 * instantiates a new build tool
 	 * 
@@ -45,9 +43,8 @@ public class BuildTool extends EventDrivenTool {
 	public BuildTool(Editor editor) {
 		super(editor, UnloadAction.UNLOAD);
 
-		Q = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_Q);
-		E = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_E);
-		TAB = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_TAB);
+		onTick(() -> position = viewPort.toHex(input.getMousePosition()));
+		onTick(this::checkValid);
 
 		onPress(Action.BT_ROTATE_LEFT, this::rotateLeft);
 		onPress(Action.BT_ROTATE_RIGHT, this::rotateRight);

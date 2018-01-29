@@ -20,6 +20,7 @@ package ch.awae.simtrack.controller;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
+import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.tools.*;
@@ -44,7 +45,7 @@ public class Editor implements IEditor {
 	private HashMap<Class<? extends ITool>, ITool> tools = new HashMap<>();
 
 	private Keyboard keyboard;
-
+	private Input input;
 	private Mouse mouse;
 
 	/**
@@ -57,6 +58,7 @@ public class Editor implements IEditor {
 		this.owner = c;
 		this.mouse = c.getMouse();
 		this.keyboard = c.getKeyboard();
+		this.input = c.getInput();
 		loadTools();
 	}
 
@@ -74,7 +76,7 @@ public class Editor implements IEditor {
 	private void addTool(ITool tool) {
 		this.tools.put(tool.getClass(), tool);
 		if (this.currentTool == null) {
-			loadTool(tool.getToolName());
+			loadTool(tool.getClass());
 		}
 	}
 
@@ -89,7 +91,7 @@ public class Editor implements IEditor {
 
 	@Override
 	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
-		if (toolClass = null)
+		if (toolClass == null)
 			toolClass = FreeTool.class;
 		Log.info("Load tool: ", toolClass.getSimpleName());
 		ITool next = this.tools.get(toolClass);
