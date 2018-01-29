@@ -20,10 +20,9 @@ package ch.awae.simtrack.controller;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.controller.tools.BuildTool;
-import ch.awae.simtrack.controller.tools.FreeTool;
-import ch.awae.simtrack.controller.tools.PathFindingTool;
+import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.tools.*;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
 
@@ -42,7 +41,11 @@ public class Editor implements IEditor {
 
 	private ITool currentTool;
 	private IRenderer renderer;
-	private HashMap<String, ITool> tools = new HashMap<>();
+	private HashMap<Class<? extends ITool>, ITool> tools = new HashMap<>();
+
+	private Keyboard keyboard;
+
+	private Mouse mouse;
 
 	/**
 	 * instantiates a new editor for the given controller.
@@ -52,6 +55,8 @@ public class Editor implements IEditor {
 	 */
 	Editor(IController c) {
 		this.owner = c;
+		this.mouse = c.getMouse();
+		this.keyboard = c.getKeyboard();
 		loadTools();
 	}
 
@@ -67,7 +72,7 @@ public class Editor implements IEditor {
 	 *            the tool to add.
 	 */
 	private void addTool(ITool tool) {
-		this.tools.put(tool.getToolName(), tool);
+		this.tools.put(tool.getClass(), tool);
 		if (this.currentTool == null) {
 			loadTool(tool.getToolName());
 		}
@@ -83,13 +88,15 @@ public class Editor implements IEditor {
 	}
 
 	@Override
-	public boolean loadTool(String name, Object... args) {
-		if (name == null)
-			name = "FreeHand";
-		Log.info("Load tool: ", name);
-		ITool next = this.tools.get(name);
-		if (next == null)
+	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
+		if (toolClass = null)
+			toolClass = FreeTool.class;
+		Log.info("Load tool: ", toolClass.getSimpleName());
+		ITool next = this.tools.get(toolClass);
+		if (next == null) {
+			Log.warn("Tool " + toolClass.getSimpleName() + " was not found.");
 			return false;
+		}
 		if (this.currentTool == next) {
 			next.onUnload();
 			next.load(args);
@@ -98,6 +105,7 @@ public class Editor implements IEditor {
 		try {
 			next.load(args);
 		} catch (IllegalStateException ex) {
+			Log.err("Error loading tool", ex.getMessage());
 			// could not load. do not make the switch and leave old tool on!
 			return false;
 		}
@@ -105,7 +113,7 @@ public class Editor implements IEditor {
 			this.currentTool.onUnload();
 		this.currentTool = next;
 		this.renderer = this.currentTool.getRenderer();
-		this.getController().setWindowTitle(name);
+		this.getController().setWindowTitle(toolClass.getSimpleName());
 		return true;
 	}
 
@@ -116,6 +124,7 @@ public class Editor implements IEditor {
 		addTool(new FreeTool(this));
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
+		addTool(new InGameMenu(this.mouse, this.keyboard, (IEditor) this));
 	}
 
 	/**

@@ -89,15 +89,9 @@ public class PathFinding {
 
 						wayBack.put(connection._1, new T2<>(current._1, cost));
 
-						// TODO: for debugging!!
-						T2<TileEdgeCoordinate, Float> existing = null;
-						if (searchGraph.size() > 0) {
-							existing = searchGraph.get(0);
-						}
 						T2<TileEdgeCoordinate, Float> newElem = new T2<>(
 								connection._1, current._2 + connection._2);
 						searchGraph.add(newElem);
-						existing = null;
 					}
 				}
 			}

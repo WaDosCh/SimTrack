@@ -34,6 +34,8 @@ public class BuildTool extends EventDrivenTool {
 	@Getter
 	private ITransformableTrackTile track;
 
+	private KeyTrigger ESC;
+
 	/**
 	 * instantiates a new build tool
 	 * 
@@ -43,8 +45,9 @@ public class BuildTool extends EventDrivenTool {
 	public BuildTool(Editor editor) {
 		super(editor, UnloadAction.UNLOAD);
 
-		onTick(() -> position = viewPort.toHex(input.getMousePosition()));
-		onTick(this::checkValid);
+		Q = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_Q);
+		E = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_E);
+		TAB = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_TAB);
 
 		onPress(Action.BT_ROTATE_LEFT, this::rotateLeft);
 		onPress(Action.BT_ROTATE_RIGHT, this::rotateRight);
@@ -61,13 +64,8 @@ public class BuildTool extends EventDrivenTool {
 	}
 
 	@Override
-	public String getToolName() {
-		return "Builder";
-	}
-
-	@Override
 	public void load(Object[] args) throws IllegalStateException {
-		if (args == null) {
+		if (args.length == 0) {
 			this.isBulldozeTool = true;
 		} else {
 			this.track = (ITransformableTrackTile) args[0];

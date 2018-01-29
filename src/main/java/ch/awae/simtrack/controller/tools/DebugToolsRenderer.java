@@ -10,26 +10,21 @@ import ch.awae.simtrack.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IViewPort;
-import ch.awae.simtrack.view.ViewConstants;
 
 public class DebugToolsRenderer implements IRenderer {
-
-	public static final Color almostTransparent = new Color(255, 255, 255, 230);
-	public static final Color grayBorder = new Color(128, 128, 128);
 
 	private HashSet<Option> showing;
 	private String[] inputGuideText;
 	private Mouse mouse;
 	private IGameView gameView;
 
-	public DebugToolsRenderer(HashSet<Option> showing, Mouse mouse,
-			IGameView gameView) {
+	public DebugToolsRenderer(HashSet<Option> showing, Mouse mouse) {
 		this.showing = showing;
 		this.mouse = mouse;
-		this.gameView = gameView;
 		this.inputGuideText = Resource.getText("inputKeys.txt");
 	}
 
@@ -47,25 +42,25 @@ public class DebugToolsRenderer implements IRenderer {
 		IViewPort viewPort = this.gameView.getViewPort();
 		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
-		g.setColor(almostTransparent);
+		g.setColor(Design.almostOpaque);
 		int y = screenPos.y + 10;
 		g.fillRect(screenPos.x + 10, y, 400, 100);
-		g.setColor(grayBorder);
+		g.setColor(Design.grayBorder);
 		g.drawRect(screenPos.x + 10, y, 400, 100);
 		g.setColor(Color.black);
-		g.setFont(ViewConstants.text);
-		y += ViewConstants.text.getSize();
+		g.setFont(Design.textFont);
+		y += Design.textFont.getSize();
 		g.drawString(screenPositionToString(screenPos), screenPos.x + 20, y);
-		y += ViewConstants.text.getSize();
+		y += Design.textFont.getSize();
 		g.drawString(scenePos.toString(), screenPos.x + 20, y);
-		y += ViewConstants.text.getSize();
+		y += Design.textFont.getSize();
 		if (tilePos == null)
 			g.drawString("Tile: null", screenPos.x + 20, y);
 		else
 			g.drawString(tilePos.toString(), screenPos.x + 20, y);
-		y += ViewConstants.text.getSize();
+		y += Design.textFont.getSize();
 		g.drawString(screenSizeToString(), screenPos.x + 20, y);
-		y += ViewConstants.text.getSize();
+		y += Design.textFont.getSize();
 		g.drawString(zoomToString(), screenPos.x + 20, y);
 	}
 
@@ -86,16 +81,16 @@ public class DebugToolsRenderer implements IRenderer {
 		int w = view.getHorizontalScreenSize();
 		int h = view.getVerticalScreenSize();
 		g.setColor(new Color(255, 255, 255, 225));
-		g.fillRect(50, 50, w - 100, h - 100 - ViewConstants.toolbarHeight);
+		g.fillRect(50, 50, w - 100, h - 100 - Design.toolbarHeight);
 		g.setColor(new Color(128, 128, 128, 255));
-		g.drawRect(50, 50, w - 100, h - 100 - ViewConstants.toolbarHeight);
+		g.drawRect(50, 50, w - 100, h - 100 - Design.toolbarHeight);
 
 		int y = 80;
 		g.setColor(Color.black);
-		g.setFont(ViewConstants.text);
+		g.setFont(Design.textFont);
 		for (String s : this.inputGuideText) {
 			g.drawString(s, 60, y);
-			y += ViewConstants.text.getSize();
+			y += Design.textFont.getSize();
 		}
 	}
 

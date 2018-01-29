@@ -8,7 +8,6 @@ import ch.awae.simtrack.controller.input.Keyboard;
 import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
 import ch.awae.simtrack.controller.input.Mouse;
 import ch.awae.simtrack.controller.input.Trigger.Direction;
-import ch.awae.simtrack.view.IGameView;
 import lombok.Getter;
 
 public class DebugTools {
@@ -25,8 +24,7 @@ public class DebugTools {
 
 	private Editor editor;
 
-	public DebugTools(Keyboard keyboard, Mouse mouse, IGameView gameView,
-			Editor editor) {
+	public DebugTools(Keyboard keyboard, Mouse mouse, Editor editor) {
 		this.editor = editor;
 		F1 = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_F1);
 		F2 = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_F2);
@@ -34,14 +32,14 @@ public class DebugTools {
 		F12 = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_F12);
 
 		this.showing = new HashSet<Option>();
-		this.renderer = new DebugToolsRenderer(this.showing, mouse, gameView);
+		this.renderer = new DebugToolsRenderer(this.showing, mouse);
 	}
 
 	public void tick() {
 		F1.test(() -> toggle(Option.InputGuide));
 		F2.test(() -> toggle(Option.Coordinates));
 		F3.test(() -> {
-			this.editor.loadTool("PathFindingTool", null);
+			this.editor.loadTool(PathFindingTool.class);
 		});
 		F12.test(() -> System.exit(0));
 	}

@@ -22,8 +22,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.IRenderer;
 
 /**
  * Render For the "Free Hand" Tool
@@ -50,14 +50,16 @@ class FreeToolRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g, IGameView view) {
-		g.setStroke(borderStroke);
-		Graphics2D g2 = view.getViewPort()
-				.focusHex(this.tool.getTileCoordinate(), g);
-		g2.setColor(Color.ORANGE);
-		double angle = Math.PI / 3;
-		for (int i = 0; i < 6; i++) {
-			g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-			g2.rotate(angle);
+		if (this.tool.getTileCoordinate() != null) {
+			g.setStroke(borderStroke);
+			Graphics2D g2 = view.getViewPort()
+					.focusHex(this.tool.getTileCoordinate(), g);
+			g2.setColor(Color.ORANGE);
+			double angle = Math.PI / 3;
+			for (int i = 0; i < 6; i++) {
+				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+				g2.rotate(angle);
+			}
 		}
 	}
 }

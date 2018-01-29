@@ -12,5 +12,5 @@ public interface IEditor {
 	 *            additional arguments to hand over to the new tool
 	 * @return {@code true} if the tool switch was successful
 	 */
-	public boolean loadTool(String name, Object... args);
+	public boolean loadTool(Class<? extends ITool> name, Object... args);
 }
