@@ -20,7 +20,6 @@ public class DebugToolsRenderer implements IRenderer {
 	private HashSet<Option> showing;
 	private String[] inputGuideText;
 	private Mouse mouse;
-	private IGameView gameView;
 
 	public DebugToolsRenderer(HashSet<Option> showing, Mouse mouse) {
 		this.showing = showing;
@@ -39,7 +38,7 @@ public class DebugToolsRenderer implements IRenderer {
 	private void renderCoordinate(Graphics2D g, IGameView view) {
 		Point screenPos = this.mouse.getScreenPosition();
 		TileCoordinate tilePos = this.mouse.getTileCoordinate();
-		IViewPort viewPort = this.gameView.getViewPort();
+		IViewPort viewPort = view.getViewPort();
 		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
 		g.setColor(Design.almostOpaque);
@@ -59,21 +58,21 @@ public class DebugToolsRenderer implements IRenderer {
 		else
 			g.drawString(tilePos.toString(), screenPos.x + 20, y);
 		y += Design.textFont.getSize();
-		g.drawString(screenSizeToString(), screenPos.x + 20, y);
+		g.drawString(screenSizeToString(view), screenPos.x + 20, y);
 		y += Design.textFont.getSize();
-		g.drawString(zoomToString(), screenPos.x + 20, y);
+		g.drawString(zoomToString(view), screenPos.x + 20, y);
 	}
 
-	public String zoomToString() {
-		return "Zoom: " + this.gameView.getViewPort().getZoom();
+	public String zoomToString(IGameView view) {
+		return "Zoom: " + view.getViewPort().getZoom();
 	}
 
 	public String screenPositionToString(Point screenPos) {
 		return "ScreenPos: [x=" + screenPos.x + ", y=" + screenPos.y + "]";
 	}
 
-	public String screenSizeToString() {
-		Point pos = this.gameView.getViewPort().getScreenDimensions();
+	public String screenSizeToString(IGameView view) {
+		Point pos = view.getViewPort().getScreenDimensions();
 		return "ScreenSize: [w=" + pos.x + ", h=" + pos.y + "]";
 	}
 
