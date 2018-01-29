@@ -23,7 +23,7 @@ public class BasePanel implements IRenderer, IComponent {
 	public BasePanel(String title, Mouse mouse) {
 		this.mouse = mouse;
 		this.components = new ArrayList<>();
-		this.components.add(new Label(title));
+		this.components.add(new Label(title, true));
 		this.click = this.mouse.trigger(Direction.ACTIVATE,
 				ch.awae.simtrack.controller.input.Mouse.Button.LEFT);
 		this.needsLayout = true;

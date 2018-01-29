@@ -22,8 +22,15 @@ public @Data class Label implements IRenderer, IComponent {
 	private Dimension bounds;
 	public Dimension size;
 
+	private Font font;
+
 	public Label(String title) {
+		this(title, false);
+	}
+
+	public Label(String title, boolean isTitle) {
 		this.title = title;
+		this.font = isTitle ? Design.titleFont : Design.textFont;
 		this.size = new Dimension(getPreferedWidth(), getPreferedHeight());
 	}
 
@@ -40,14 +47,14 @@ public @Data class Label implements IRenderer, IComponent {
 	}
 
 	public void render(Graphics2D g, IGameView view) {
-		g.setFont(Design.textFont);
+		g.setFont(this.font);
 		g.setColor(Design.textColor);
 		g.drawString(this.title, pos.x + Design.buttonTextMarginX,
-				pos.y + this.size.height / 2);
+				pos.y + Design.buttonTextMarginY + this.size.height / 2);
 	}
 
 	private void loadDimension() {
-		Font f = Design.textFont;
+		Font f = this.font;
 		FontRenderContext frc = new FontRenderContext(new AffineTransform(),
 				true, true);
 		Rectangle2D bounds = f.getStringBounds(this.title, frc);

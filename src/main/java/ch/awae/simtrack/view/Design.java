@@ -8,6 +8,7 @@ public class Design {
 	public static final Color grayBorder = new Color(128, 128, 128);
 
 	public static final Font textFont = new Font("Arial", 0, 18);
+	public static final Font titleFont = new Font("Arial", 0, 36);
 	public static final Color textColor = Color.black;
 
 	public static final int toolbarHeight = 100;
