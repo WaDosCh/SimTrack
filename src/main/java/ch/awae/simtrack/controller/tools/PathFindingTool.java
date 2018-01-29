@@ -58,17 +58,12 @@ public class PathFindingTool implements ITool, IRenderer {
 	}
 
 	@Override
-	public String getToolName() {
-		return "PathFindingTool";
-	}
-
-	@Override
 	public void load(Object[] args) throws IllegalStateException {
 	}
 
 	@Override
 	public void tick() {
-		this.ESC.test(() -> editor.loadTool("FreeHand", null));
+		this.ESC.test(() -> editor.loadTool(FreeTool.class));
 
 		if (M_LEFT.test()) {
 			this.start = this.mouse.getTileCoordinate();

@@ -59,8 +59,8 @@ class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker, Mouse mouse,
-			Keyboard keyboard) {
+	public GameController(IModel model, IGameView gameView,
+			IGUIControllerHookup hooker, Mouse mouse, Keyboard keyboard) {
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
 		this.gameView = gameView;
@@ -77,7 +77,7 @@ class GameController implements IController {
 		this.trackbar = new TrackBar(this.editor, this.gameView, this.mouse,
 				this.keyboard);
 		this.debugTools = new DebugTools(this.keyboard, this.mouse,
-				this.gameView, this.editor);
+				this.editor);
 		this.gameView.setEditorRenderer(this::render);
 	}
 

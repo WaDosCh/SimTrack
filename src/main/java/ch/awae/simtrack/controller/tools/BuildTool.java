@@ -59,6 +59,8 @@ public class BuildTool implements ITool {
 	@Getter
 	private ITransformableTrackTile track;
 
+	private KeyTrigger ESC;
+
 	/**
 	 * instantiates a new build tool
 	 * 
@@ -73,18 +75,14 @@ public class BuildTool implements ITool {
 		Q = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_Q);
 		E = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_E);
 		TAB = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_TAB);
+		ESC = keyboard.trigger(Direction.ACTIVATE, KeyEvent.VK_ESCAPE);
 
 		this.renderer = new BuildToolRenderer(this);
 	}
 
 	@Override
-	public String getToolName() {
-		return "Builder";
-	}
-
-	@Override
 	public void load(Object[] args) throws IllegalStateException {
-		if (args == null) {
+		if (args.length == 0) {
 			this.isBulldozeTool = true;
 		} else {
 			this.track = (ITransformableTrackTile) args[0];
@@ -168,8 +166,8 @@ public class BuildTool implements ITool {
 
 		this.position = mouse.getTileCoordinate();
 
-		if (keyboard.key(KeyEvent.VK_ESCAPE)) {
-			this.editor.loadTool("FreeHand", null);
+		if (this.ESC.test()) {
+			this.editor.loadTool(FreeTool.class);
 			return;
 		}
 		if (!this.isBulldozeTool && !mouse.button3()) {

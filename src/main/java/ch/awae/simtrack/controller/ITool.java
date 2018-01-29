@@ -37,19 +37,12 @@ public interface ITool {
 	public IRenderer getRenderer();
 
 	/**
-	 * provides the tool identification string. This will be used to identify
-	 * tools for loading them
-	 * 
-	 * @return the tool identifier
-	 */
-	public String getToolName();
-
-	/**
 	 * Loads the tool. This method should be used in case a tool requires setup
 	 * of other external elements.
 	 * 
 	 * @param args
-	 *            additional parameters
+	 *            additional parameters, always an array, but might have length
+	 *            0.
 	 * @throws IllegalStateException
 	 *             if the tool cannot be loaded at the moment. The editor will
 	 *             fall back to the last tool used.
@@ -66,6 +59,7 @@ public interface ITool {
 	 * deactivated. Any external cleanups should occur here. Other than the
 	 * {@link #load(Object[])} method, this method cannot deny deactivation.
 	 */
-	default void unload() {};
+	default void unload() {
+	};
 
 }

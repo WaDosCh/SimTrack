@@ -82,11 +82,11 @@ public class TrackBar {
 	 */
 	private void select() {
 		if (this.index == 0) {
-			this.editor.loadTool("Builder", null);
+			this.editor.loadTool(BuildTool.class);
 		} else {
 			if (this.index <= TrackProvider.getTileCount()) {
 				// TrackTile t = this.tracks.get(this.index - 1).cloneTrack();
-				this.editor.loadTool("Builder", new Object[] {
+				this.editor.loadTool(BuildTool.class, new Object[] {
 						TrackProvider.getTileInstance(this.index - 1) });
 			}
 		}

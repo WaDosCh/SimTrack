@@ -17,8 +17,14 @@
  */
 package ch.awae.simtrack.controller.tools;
 
+import java.awt.event.KeyEvent;
+
+import ch.awae.simtrack.controller.IEditor;
 import ch.awae.simtrack.controller.ITool;
+import ch.awae.simtrack.controller.input.Keyboard;
+import ch.awae.simtrack.controller.input.Keyboard.KeyTrigger;
 import ch.awae.simtrack.controller.input.Mouse;
+import ch.awae.simtrack.controller.input.Trigger.Direction;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import lombok.Getter;
 
@@ -35,6 +41,24 @@ public class FreeTool implements ITool {
 	private final FreeToolRenderer renderer;
 	private TileCoordinate tile;
 	private Mouse mouse;
+	private Keyboard keyboard;
+	private IEditor editor;
+	private KeyTrigger esc;
+
+	/**
+	 * creates a new tool instance.
+	 * 
+	 * @param e
+	 *            the editor owning the tool
+	 */
+	public FreeTool(Mouse mouse, Keyboard keyboard, IEditor iEditor) {
+		this.renderer = new FreeToolRenderer(this);
+		this.mouse = mouse;
+		this.keyboard = keyboard;
+		this.editor = iEditor;
+		this.esc = this.keyboard.trigger(Direction.ACTIVATE,
+				KeyEvent.VK_ESCAPE);
+	}
 
 	/**
 	 * provides the current tool position
@@ -43,22 +67,6 @@ public class FreeTool implements ITool {
 	 */
 	TileCoordinate getTileCoordinate() {
 		return this.tile;
-	}
-
-	/**
-	 * creates a new tool instance.
-	 * 
-	 * @param e
-	 *            the editor owning the tool
-	 */
-	public FreeTool(Mouse mouse) {
-		this.renderer = new FreeToolRenderer(this);
-		this.mouse = mouse;
-	}
-
-	@Override
-	public String getToolName() {
-		return "FreeHand";
 	}
 
 	@Override
@@ -72,6 +80,9 @@ public class FreeTool implements ITool {
 		TileCoordinate tile = this.mouse.getTileCoordinate();
 		if (tile != null)
 			this.tile = tile;
+		if (this.esc.test()) {
+			this.editor.loadTool(InGameMenu.class);
+		}
 	}
 
 }
