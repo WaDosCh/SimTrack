@@ -125,17 +125,17 @@ public class Input {
 
 		private void setBtn(int button, boolean value) {
 			switch (button) {
-			case MouseEvent.BUTTON1:
-				handle(MOUSE_LEFT, value);
-				break;
-			case MouseEvent.BUTTON2:
-				handle(MOUSE_CENTER, value);
-				break;
-			case MouseEvent.BUTTON3:
-				handle(MOUSE_RIGHT, value);
-				break;
-			default:
-				break;
+				case MouseEvent.BUTTON1:
+					handle(MOUSE_LEFT, value);
+					break;
+				case MouseEvent.BUTTON2:
+					handle(MOUSE_CENTER, value);
+					break;
+				case MouseEvent.BUTTON3:
+					handle(MOUSE_RIGHT, value);
+					break;
+				default:
+					break;
 			}
 		}
 

@@ -53,8 +53,7 @@ public final class Resource {
 
 	public static String[] getText(String id) {
 		try (InputStream stream = asStream(id)) {
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(stream));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			ArrayList<String> text = new ArrayList<>();
 			reader.lines().forEach(text::add);
 			return text.toArray(new String[text.size()]);

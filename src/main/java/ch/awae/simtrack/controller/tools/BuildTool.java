@@ -21,6 +21,7 @@ public class BuildTool extends EventDrivenTool {
 
 	private @Getter boolean isBulldozeTool;
 	private @Getter boolean valid = false;
+
 	private @Getter IRenderer renderer = new BuildToolRenderer(this);
 	private @Getter ITransformableTrackTile track;
 
@@ -60,11 +61,9 @@ public class BuildTool extends EventDrivenTool {
 	}
 
 	private void checkValid() {
-		this.valid = this.isBulldozeTool ? canDelete()
-				: canPlace();
+		this.valid = this.isBulldozeTool ? canDelete() : canPlace();
 	}
 
-	
 	private boolean canPlace() {
 		if (mouseTile == null)
 			return false;

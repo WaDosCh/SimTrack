@@ -19,7 +19,7 @@ public class DebugToolsRenderer implements IRenderer {
 	private HashSet<Option> showing;
 	private String[] inputGuideText;
 	private IGameView gameView;
-    private DebugTools tools;
+	private DebugTools tools;
 
 	public DebugToolsRenderer(HashSet<Option> showing, DebugTools tools) {
 		this.showing = showing;

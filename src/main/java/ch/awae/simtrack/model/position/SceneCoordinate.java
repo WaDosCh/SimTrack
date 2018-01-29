@@ -21,8 +21,7 @@ public final class SceneCoordinate {
 	}
 
 	public String toString() {
-		return String.format("SceneCoordinate[s=%1$,.1f, t=%2$,.1f]", this.s,
-				this.t);
+		return String.format("SceneCoordinate[s=%1$,.1f, t=%2$,.1f]", this.s, this.t);
 	}
 
 }

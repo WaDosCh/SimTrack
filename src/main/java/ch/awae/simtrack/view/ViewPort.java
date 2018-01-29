@@ -1,20 +1,3 @@
-/*
- * SimTrack - Railway Planning and Simulation Game
- * Copyright (C) 2015 Andreas Wälchli
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package ch.awae.simtrack.view;
 
 import java.awt.Graphics2D;
@@ -115,13 +98,11 @@ class ViewPort implements IViewPort {
 		int hScreen = this.owner.getHorizontalScreenSize();
 		int vScreen = this.owner.getVerticalScreenSize() - 150;
 		this.screenDimensions = new Point(hScreen, vScreen);
-		double minH = hScreen
-				/ (this.owner.getModel().getHorizontalSize() - 1.0);
+		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
 		if (minH > this.minZoom)
 			this.minZoom = (int) Math.ceil(minH);
 		this.zoom = this.minZoom;
-		this.sceneDimensions = new SceneCoordinate(
-				(this.owner.getModel().getHorizontalSize() - 1) * 100,
+		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
 				((this.owner.getModel().getVerticalSize() - 1) * SQRT3 * 50));
 		this.sceneCorner = new Point(0, 0);
 		updateCorner();
@@ -140,10 +121,8 @@ class ViewPort implements IViewPort {
 	}
 
 	private void updateCorner() {
-		double minX = this.screenDimensions.x
-				- (0.01 * this.zoom * this.sceneDimensions.s);
-		double minY = this.screenDimensions.y
-				- (0.01 * this.zoom * this.sceneDimensions.t);
+		double minX = this.screenDimensions.x - (0.01 * this.zoom * this.sceneDimensions.s);
+		double minY = this.screenDimensions.y - (0.01 * this.zoom * this.sceneDimensions.t);
 		int x = this.sceneCorner.x;
 		int y = this.sceneCorner.y;
 		if (x > 0)
@@ -204,8 +183,7 @@ class ViewPort implements IViewPort {
 		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
 			return false;
 		// below or to the right is outside
-		if (screenPos.x > screenDimensions.x + screenRad
-				|| screenPos.y > screenDimensions.y + screenRad)
+		if (screenPos.x > screenDimensions.x + screenRad || screenPos.y > screenDimensions.y + screenRad)
 			return false;
 		// anything else is (potentially) inside
 		return true;

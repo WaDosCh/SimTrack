@@ -13,43 +13,43 @@ import ch.awae.simtrack.view.IRenderer;
 
 public class BasePanel implements IRenderer, IComponent {
 
-    private ArrayList<IComponent> components;
-    private Input                 input;
-    private boolean               needsLayout;
-    private Rectangle             rect;
-    private Binding               click;
+	private ArrayList<IComponent> components;
+	private Input input;
+	private boolean needsLayout;
+	private Rectangle rect;
+	private Binding click;
 
-    public BasePanel(String title, Input input) {
-        this.input = input;
-        this.components = new ArrayList<>();
-        this.components.add(new Label(title, true));
-        this.click = input.getBinding(Input.MOUSE_LEFT);
-        this.needsLayout = true;
-    }
+	public BasePanel(String title, Input input) {
+		this.input = input;
+		this.components = new ArrayList<>();
+		this.components.add(new Label(title, true));
+		this.click = input.getBinding(Input.MOUSE_LEFT);
+		this.needsLayout = true;
+	}
 
-    public void addButton(String title, Runnable action) {
-        this.components.add(new Button(title, input, action));
-        this.needsLayout = true;
-    }
+	public void addButton(String title, Runnable action) {
+		this.components.add(new Button(title, input, action));
+		this.needsLayout = true;
+	}
 
-    @Override
-    public void render(Graphics2D g, IGameView view) {
-        if (this.needsLayout)
-            layout(0, 0, view.getHorizontalScreenSize(), view.getVerticalScreenSize() - Design.toolbarHeight);
+	@Override
+	public void render(Graphics2D g, IGameView view) {
+		if (this.needsLayout)
+			layout(0, 0, view.getHorizontalScreenSize(), view.getVerticalScreenSize() - Design.toolbarHeight);
 
-        g.setColor(Design.almostOpaque);
-        g.draw(this.rect);
-        g.setColor(Design.grayBorder);
-        g.fill(this.rect);
-
-        for (IComponent b : this.components) {
-            b.render(g, view);
-        }
+		g.setColor(Design.almostOpaque);
+		g.draw(this.rect);
+		g.setColor(Design.grayBorder);
+		g.fill(this.rect);
 
 		for (IComponent b : this.components) {
 			b.render(g, view);
 		}
-		
+
+		for (IComponent b : this.components) {
+			b.render(g, view);
+		}
+
 		click.onPress(() -> {
 			for (IComponent b : this.components) {
 				if (b instanceof Button) {
@@ -67,13 +67,12 @@ public class BasePanel implements IRenderer, IComponent {
 		// required, this does not scale down components
 		this.needsLayout = false;
 		Dimension size = new Dimension(getPreferedWidth(), getPreferedHeight());
-		this.rect = new Rectangle(x + w / 2 - size.width / 2,
-				y + h / 2 - size.height / 2, size.width + 1, size.height + 1);
+		this.rect = new Rectangle(x + w / 2 - size.width / 2, y + h / 2 - size.height / 2, size.width + 1,
+				size.height + 1);
 		int currentY = 0;
 		for (IComponent b : this.components) {
 			Dimension componentSize = b.getSize();
-			b.layout(this.rect.x, currentY + this.rect.y, this.rect.width,
-					componentSize.height);
+			b.layout(this.rect.x, currentY + this.rect.y, this.rect.width, componentSize.height);
 			currentY += componentSize.height;
 		}
 	}

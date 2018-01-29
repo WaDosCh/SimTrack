@@ -45,9 +45,8 @@ public abstract class BaseComponent implements IComponent {
 		Font f = this.font;
 		FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
 		Rectangle2D bounds = f.getStringBounds(getTextForSizeCalculation(), frc);
-		this.preferedSize = new Dimension((int) bounds.getWidth() + 2
-			* Design.buttonTextMarginX, (int) bounds.getHeight() + 2
-				* Design.buttonTextMarginY);
+		this.preferedSize = new Dimension((int) bounds.getWidth() + 2 * Design.buttonTextMarginX,
+				(int) bounds.getHeight() + 2 * Design.buttonTextMarginY);
 	}
 
 	protected abstract String getTextForSizeCalculation();

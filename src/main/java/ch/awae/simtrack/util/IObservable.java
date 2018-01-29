@@ -3,7 +3,7 @@ package ch.awae.simtrack.util;
 public interface IObservable {
 
 	ObservableHandler getObservableHandler();
-	
+
 	default void register(Observer observer) {
 		getObservableHandler().register(observer);
 	}
@@ -17,7 +17,7 @@ public interface IObservable {
 		register(o);
 		return o;
 	}
-	
+
 	default void notifyChanged() {
 		getObservableHandler().notifyObservers();
 	}

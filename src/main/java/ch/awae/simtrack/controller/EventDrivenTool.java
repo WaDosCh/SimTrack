@@ -26,7 +26,8 @@ public abstract class EventDrivenTool implements ITool {
 	private final boolean autoUnload;
 
 	public enum UnloadAction {
-		UNLOAD, IGNORE;
+		UNLOAD,
+		IGNORE;
 	}
 
 	public EventDrivenTool(Editor editor, UnloadAction action) {
@@ -38,11 +39,11 @@ public abstract class EventDrivenTool implements ITool {
 		this.viewPort = this.controller.getGameView().getViewPort();
 		onTick(this::preTick);
 	}
-	
+
 	private void preTick() {
-	    model = controller.getModel();
-	    mousePosition = input.getMousePosition();
-	    mouseTile = viewPort.toHex(mousePosition);
+		model = controller.getModel();
+		mousePosition = input.getMousePosition();
+		mouseTile = viewPort.toHex(mousePosition);
 	}
 
 	/**
@@ -151,7 +152,7 @@ public abstract class EventDrivenTool implements ITool {
 	@Override
 	public void tick() {
 		if (autoUnload && drop.isPressed() && drop.isEdge()) {
-		    drop.consume();
+			drop.consume();
 			editor.loadTool(null);
 			return;
 		}

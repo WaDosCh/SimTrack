@@ -23,8 +23,8 @@ public class Label extends BaseComponent implements IRenderer, IComponent {
 	public void render(Graphics2D g, IGameView view) {
 		g.setFont(this.font);
 		g.setColor(Design.textColor);
-		g.drawString(this.title, pos.x + Design.buttonTextMarginX, pos.y
-			+ Design.buttonTextMarginY + this.size.height / 2);
+		g.drawString(this.title, pos.x + Design.buttonTextMarginX,
+				pos.y + Design.buttonTextMarginY + this.size.height / 2);
 	}
 
 	@Override

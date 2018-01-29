@@ -1,20 +1,3 @@
-/*
- * SimTrack - Railway Planning and Simulation Game
- * Copyright (C) 2015 Andreas Wälchli
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package ch.awae.simtrack.view;
 
 import java.awt.BasicStroke;
@@ -64,20 +47,20 @@ class TileRenderer implements IRenderer {
 			// decide how to work
 			TileType type = tile.getType();
 			switch (type == null ? TileType.UNKNOWN : type) {
-			case TRACK:
-				renderTrack(g2, (ITrackTile) tile);
-				break;
-			case OBSTACLE:
-				renderObstacle(g2);
-				break;
-			// unknown tile
-			default:
-				renderUnknown(g2);
+				case TRACK:
+					renderTrack(g2, (ITrackTile) tile);
+					break;
+				case OBSTACLE:
+					renderObstacle(g2);
+					break;
+				// unknown tile
+				default:
+					renderUnknown(g2);
 			}
 
 		}
 	}
-	
+
 	private void renderUnknown(Graphics2D g2) {
 		g2.setColor(Color.RED.darker());
 		g2.fillPolygon(hexEdges[0], hexEdges[1], 6);

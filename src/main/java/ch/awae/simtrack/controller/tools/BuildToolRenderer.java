@@ -1,20 +1,3 @@
-/*
- * SimTrack - Railway Planning and Simulation Game
- * Copyright (C) 2015 Andreas Wälchli
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package ch.awae.simtrack.controller.tools;
 
 import java.awt.BasicStroke;
@@ -37,10 +20,13 @@ import ch.awae.simtrack.view.TrackRenderUtil;
 class BuildToolRenderer implements IRenderer {
 
 	private static Stroke bullCursorStroke = new BasicStroke(6);
+
 	private static Color darkRed = Color.RED.darker();
 
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
+
 	private static Stroke railStroke = new BasicStroke(5);
+
 	private BuildTool tool;
 
 	/**
@@ -70,10 +56,8 @@ class BuildToolRenderer implements IRenderer {
 		} else {
 			Graphics2D g2 = view.getViewPort().focusHex(c, g);
 			g2.setStroke(railStroke);
-			TrackRenderUtil.renderRails(g2,
-					this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED,
-					this.tool.isValid() ? Color.GRAY : Color.RED,
-					tool.getTrack().getRailPaths());
+			TrackRenderUtil.renderRails(g2, this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED,
+					this.tool.isValid() ? Color.GRAY : Color.RED, tool.getTrack().getRailPaths());
 		}
 	}
 }

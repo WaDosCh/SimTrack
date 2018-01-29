@@ -9,28 +9,29 @@ import lombok.Getter;
 
 public class DebugTools extends EventDrivenTool {
 
-    enum Option {
-        InputGuide,
-        Coordinates;
-    }
+	enum Option {
+		InputGuide,
+		Coordinates;
+	}
 
-    private HashSet<Option>            showing  = new HashSet<Option>();
-    private @Getter DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
+	private HashSet<Option> showing = new HashSet<Option>();
 
-    public DebugTools(Editor editor) {
-        super(editor, UnloadAction.IGNORE);
+	private @Getter DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
 
-        onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
-        onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
-        onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
-        onPress(KeyEvent.VK_F12, () -> System.exit(-1));
-    }
+	public DebugTools(Editor editor) {
+		super(editor, UnloadAction.IGNORE);
 
-    private void toggle(Option option) {
-        if (this.showing.contains(option))
-            this.showing.remove(option);
-        else
-            this.showing.add(option);
-    }
+		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
+		onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
+		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
+		onPress(KeyEvent.VK_F12, () -> System.exit(-1));
+	}
+
+	private void toggle(Option option) {
+		if (this.showing.contains(option))
+			this.showing.remove(option);
+		else
+			this.showing.add(option);
+	}
 
 }

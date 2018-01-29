@@ -19,6 +19,7 @@ public enum Action {
 	BT_MIRROR(VK_TAB);
 
 	public final int[] keycodes;
+
 	Action(int... keycodes) {
 		this.keycodes = keycodes;
 	}

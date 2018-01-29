@@ -21,8 +21,8 @@ import lombok.Getter;
 
 public class PathFindingTool extends EventDrivenTool implements IRenderer {
 
-    private @Getter IRenderer renderer = this;
-    
+	private @Getter IRenderer renderer = this;
+
 	private TileCoordinate start;
 	private Edge startEdge;
 	private TileCoordinate end;
@@ -30,43 +30,39 @@ public class PathFindingTool extends EventDrivenTool implements IRenderer {
 	private PathFinding pathFinder;
 	private Stack<TileEdgeCoordinate> path;
 
-
 	public PathFindingTool(Editor editor) {
-	    super(editor, UnloadAction.UNLOAD);
-	    
+		super(editor, UnloadAction.UNLOAD);
+
 		this.pathFinder = controller.getPathfinder();
 		this.startEdge = Edge.RIGHT;
 		this.endEdge = Edge.RIGHT;
-		
+
 		onPress(Input.MOUSE_LEFT, this::updateOrigin);
 		onPress(Input.MOUSE_RIGHT, this::updateTarget);
 	}
-	
+
 	private void updateOrigin() {
-	    this.start = mouseTile;
-        this.startEdge = this.startEdge.getNeighbour(true);
-        if (this.start != null) {
-            Log.info("Start:",
-                    new TileEdgeCoordinate(this.start, this.startEdge));
-        }
-        updatePath();
+		this.start = mouseTile;
+		this.startEdge = this.startEdge.getNeighbour(true);
+		if (this.start != null) {
+			Log.info("Start:", new TileEdgeCoordinate(this.start, this.startEdge));
+		}
+		updatePath();
 	}
-	
+
 	private void updateTarget() {
-	    this.end = mouseTile;
-        this.endEdge = this.endEdge.getNeighbour(true);
-        if (this.end != null)
-            Log.info("Ende: ",
-                    new TileEdgeCoordinate(this.end, this.endEdge));
-        updatePath();
+		this.end = mouseTile;
+		this.endEdge = this.endEdge.getNeighbour(true);
+		if (this.end != null)
+			Log.info("Ende: ", new TileEdgeCoordinate(this.end, this.endEdge));
+		updatePath();
 	}
-	
+
 	private void updatePath() {
-	    if (this.start != null && this.end != null) {
-            this.path = this.pathFinder.findPath(
-                    new TileEdgeCoordinate(this.start, this.startEdge),
-                    new TileEdgeCoordinate(this.end, this.endEdge));
-        }
+		if (this.start != null && this.end != null) {
+			this.path = this.pathFinder.findPath(new TileEdgeCoordinate(this.start, this.startEdge),
+					new TileEdgeCoordinate(this.end, this.endEdge));
+		}
 	}
 
 	private final static Stroke borderStroke = new BasicStroke(6);

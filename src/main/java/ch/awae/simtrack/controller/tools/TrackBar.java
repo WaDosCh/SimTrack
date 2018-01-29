@@ -1,20 +1,3 @@
-/*
- * SimTrack - Railway Planning and Simulation Game
- * Copyright (C) 2015 Andreas Wälchli
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package ch.awae.simtrack.controller.tools;
 
 import java.awt.Point;
@@ -40,8 +23,7 @@ public class TrackBar extends EventDrivenTool {
 	private int index;
 	private @Getter IRenderer renderer = new TrackBarRenderer(this);
 	private Binding click;
-	
-	
+
 	/**
 	 * creates a new track-bar instance
 	 * 
@@ -49,24 +31,24 @@ public class TrackBar extends EventDrivenTool {
 	 *            the editor owning the build tool
 	 */
 	public TrackBar(Editor editor) {
-	    super(editor, UnloadAction.IGNORE);
-	    
-	    click = input.getBinding(Input.MOUSE_LEFT);
-	    
-	    onPress(KeyEvent.VK_MINUS, () -> select(0));
-        onPress(KeyEvent.VK_1, () -> select(1));
-        onPress(KeyEvent.VK_2, () -> select(2));
-        onPress(KeyEvent.VK_3, () -> select(3));
-        onPress(KeyEvent.VK_4, () -> select(4));
-        onPress(KeyEvent.VK_5, () -> select(5));
-        onPress(KeyEvent.VK_6, () -> select(6));
-        onPress(KeyEvent.VK_7, () -> select(7));
-        onPress(KeyEvent.VK_8, () -> select(8));
-        onPress(KeyEvent.VK_9, () -> select(9));
-        onPress(KeyEvent.VK_0, () -> select(10));
-        
-        onTick(this::updateByMouse);
-        onTick(this::processMouse);
+		super(editor, UnloadAction.IGNORE);
+
+		click = input.getBinding(Input.MOUSE_LEFT);
+
+		onPress(KeyEvent.VK_MINUS, () -> select(0));
+		onPress(KeyEvent.VK_1, () -> select(1));
+		onPress(KeyEvent.VK_2, () -> select(2));
+		onPress(KeyEvent.VK_3, () -> select(3));
+		onPress(KeyEvent.VK_4, () -> select(4));
+		onPress(KeyEvent.VK_5, () -> select(5));
+		onPress(KeyEvent.VK_6, () -> select(6));
+		onPress(KeyEvent.VK_7, () -> select(7));
+		onPress(KeyEvent.VK_8, () -> select(8));
+		onPress(KeyEvent.VK_9, () -> select(9));
+		onPress(KeyEvent.VK_0, () -> select(10));
+
+		onTick(this::updateByMouse);
+		onTick(this::processMouse);
 	}
 
 	int getIndex() {
@@ -74,20 +56,19 @@ public class TrackBar extends EventDrivenTool {
 	}
 
 	private void select(int index) {
-	    this.index = index;
-	    select();
+		this.index = index;
+		select();
 	}
-	
+
 	private void select() {
-	    if (index < 0)
-	        return;
+		if (index < 0)
+			return;
 		if (this.index == 0) {
 			this.editor.loadTool(BuildTool.class);
 		} else {
 			if (this.index <= TrackProvider.getTileCount()) {
 				// TrackTile t = this.tracks.get(this.index - 1).cloneTrack();
-				this.editor.loadTool(BuildTool.class, new Object[] {
-						TrackProvider.getTileInstance(this.index - 1) });
+				this.editor.loadTool(BuildTool.class, new Object[] { TrackProvider.getTileInstance(this.index - 1) });
 			}
 		}
 	}
@@ -110,11 +91,11 @@ public class TrackBar extends EventDrivenTool {
 			return;
 		this.index = index;
 	}
-	
+
 	private void processMouse() {
-	    if (index >= 0) {
-	        click.onPress(this::select);
-	    }
+		if (index >= 0) {
+			click.onPress(this::select);
+		}
 	}
 
 }

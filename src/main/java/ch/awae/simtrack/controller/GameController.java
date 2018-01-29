@@ -1,20 +1,3 @@
-/*
- * SimTrack - Railway Planning and Simulation Game
- * Copyright (C) 2015 Andreas Wälchli
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package ch.awae.simtrack.controller;
 
 import java.awt.Graphics2D;
@@ -67,7 +50,7 @@ class GameController implements IController {
 		this.viewTimer = new Timer(10, e -> this.viewTick());
 		this.viewTimer.setRepeats(true);
 		this.pathfinder = new PathFinding(this.model);
-		this.navigator = new Navigator(this.gameView,input);
+		this.navigator = new Navigator(this.gameView, input);
 		this.editor = new Editor(this);
 		this.trackbar = new TrackBar(editor);
 		this.debugTools = new DebugTools(editor);
@@ -86,7 +69,7 @@ class GameController implements IController {
 	private void render(Graphics2D g, IGameView v) {
 		this.editor.render(g, v);
 		this.debugTools.getRenderer().renderSafe(g, v);
-        this.trackbar.getRenderer().renderSafe(g, v);
+		this.trackbar.getRenderer().renderSafe(g, v);
 	}
 
 	@Override
