@@ -1,4 +1,4 @@
-package ch.awae.simtrack.gui;
+package ch.awae.simtrack.gui.layout;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
