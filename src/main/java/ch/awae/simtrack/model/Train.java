@@ -3,7 +3,6 @@ package ch.awae.simtrack.model;
 import java.util.Stack;
 import java.util.function.Consumer;
 
-import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 
 public class Train implements IEntity {
@@ -29,8 +28,8 @@ public class Train implements IEntity {
 		}
 	}
 
-	public TileCoordinate getTile() {
-		return this.position.tile;
+	public TileEdgeCoordinate getPosition() {
+		return this.position;
 	}
 
 }

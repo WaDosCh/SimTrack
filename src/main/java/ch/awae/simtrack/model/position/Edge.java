@@ -28,4 +28,8 @@ public enum Edge {
 		return byIndex((ordinal() + (clockwise ? 1 : 5)) % 6);
 	}
 
+	public double getAngle() {
+		return this.ordinal() * 60 * 2 * Math.PI / 360;
+	}
+
 }
