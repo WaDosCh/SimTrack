@@ -16,8 +16,8 @@ public class Binding {
 		edge = ((counter > 0) != state);
 		if (state)
 			counter++;
-		else if (counter > 0)
-			counter--;
+		else
+			counter = 0;
 	}
 
 	public boolean isPressed() {
