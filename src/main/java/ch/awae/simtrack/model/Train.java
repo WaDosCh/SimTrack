@@ -13,9 +13,12 @@ public class Train implements IEntity {
 	private PathFindingOptions pathFindingOptions;
 	private Stack<TileEdgeCoordinate> path;
 
+	private int timer;
+
 	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
 		this.position = start;
 		this.pathFindingOptions = pathFindingOptions;
+		this.timer = 0;
 	}
 
 	@Override
@@ -25,6 +28,13 @@ public class Train implements IEntity {
 					(path) -> this.path = path);
 			pathFinding.accept(request);
 			this.pathFindingOptions = null;
+		}
+		if (this.path != null) {
+			if (this.timer++ % 10 == 0) {
+				this.position = this.path.pop();
+				if (this.path.size() == 0)
+					this.path = null;
+			}
 		}
 	}
 
