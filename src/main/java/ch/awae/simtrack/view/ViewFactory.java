@@ -27,6 +27,7 @@ public class ViewFactory {
 		ArrayList<IRenderer> rends = new ArrayList<>();
 		rends.add(new TileRenderer());
 		rends.add(new HexGridRenderer());
+		rends.add(new EntityRenderer());
 		v.setRenderers(rends);
 		return v;
 	}

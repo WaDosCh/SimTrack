@@ -24,7 +24,7 @@ public class Main {
 
 	private static void init() {
 		GUI gui = new GUI(1200, 800);
-		IModel model = ModelFactory.getModel(25, 13, 20);
+		IModel model = ModelFactory.getModel(25, 13, 4);
 		IGameView gameView = ViewFactory.createGameView(model, gui);
 		IController c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
 		c.startView();

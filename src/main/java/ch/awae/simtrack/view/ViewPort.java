@@ -17,9 +17,12 @@ import lombok.Getter;
  */
 class ViewPort implements IViewPort {
 
+	public static int outsideBounds = 100;
+
 	private int minZoom = 10;
 	private @Getter int zoom;
 
+	@Getter
 	private Point sceneCorner, screenDimensions;
 	private SceneCoordinate sceneDimensions;
 	private static final double SQRT3 = Math.sqrt(3);
@@ -125,14 +128,14 @@ class ViewPort implements IViewPort {
 		double minY = this.screenDimensions.y - (0.01 * this.zoom * this.sceneDimensions.t);
 		int x = this.sceneCorner.x;
 		int y = this.sceneCorner.y;
-		if (x > 0)
-			x = 0;
-		if (x < minX)
-			x = (int) minX;
-		if (y > 0)
-			y = 0;
-		if (y < minY)
-			y = (int) minY;
+		if (x > outsideBounds)
+			x = outsideBounds;
+		if (x < minX - outsideBounds)
+			x = (int) minX - outsideBounds;
+		if (y > outsideBounds)
+			y = outsideBounds;
+		if (y < minY - outsideBounds)
+			y = (int) minY - outsideBounds;
 		this.sceneCorner = new Point(x, y);
 	}
 
@@ -171,8 +174,17 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public Point getScreenDimensions() {
-		return this.screenDimensions;
+	public Graphics2D transformToScene(Graphics2D g) {
+		return transformToScene(g, new SceneCoordinate(0, 0));
+	}
+
+	public Graphics2D transformToScene(Graphics2D g, SceneCoordinate sceneCoordinates) {
+		Point p = toScreenCoordinate(new SceneCoordinate(0, 0));
+		double zoomFac = 0.01 * this.zoom;
+		Graphics2D g2 = (Graphics2D) g.create();
+		g2.translate(p.x, p.y);
+		g2.scale(zoomFac, zoomFac);
+		return g2;
 	}
 
 	@Override
@@ -193,4 +205,5 @@ class ViewPort implements IViewPort {
 	public boolean isVisible(TileCoordinate hex) {
 		return isVisible(toSceneCoordinate(hex), 80);
 	}
+
 }

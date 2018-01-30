@@ -112,6 +112,8 @@ class GameController implements IController {
 		this.editor.tick();
 		this.trackbar.tick();
 		this.debugTools.tick();
+		this.model.tick();
+		this.pathfinder.tick();
 		// TODO: tick logic
 	}
 

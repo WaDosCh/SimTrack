@@ -36,7 +36,7 @@ public class Navigator {
 	}
 
 	private final static int BORDER = 40;
-	private final static float deltaZoom = -.2f;
+	private final static float deltaZoom = -.05f;
 	private boolean isActive = true;
 	private final static int MOVE_SPEED = 20;
 

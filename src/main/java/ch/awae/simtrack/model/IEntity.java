@@ -1,6 +1,7 @@
 package ch.awae.simtrack.model;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 /**
  * @author Andreas Wälchli
@@ -9,10 +10,7 @@ import java.io.Serializable;
  */
 public interface IEntity extends Serializable {
 
-	default void tick() {
-	};
-
-	default void update(IModel model) {
+	default void tick(Consumer<PathFindingRequest> pathFinding) {
 	};
 
 }

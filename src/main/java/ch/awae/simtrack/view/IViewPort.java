@@ -116,4 +116,14 @@ public interface IViewPort {
 
 	public int getZoom();
 
+	public Point getSceneCorner();
+
+	/**
+	 * transforms the screen coordinate system into the the scene coordinate
+	 * system
+	 * 
+	 * @param g
+	 */
+	public Graphics2D transformToScene(Graphics2D g);
+
 }

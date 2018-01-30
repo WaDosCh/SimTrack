@@ -42,11 +42,15 @@ public class DebugToolsRenderer implements IRenderer {
 		IViewPort viewPort = this.gameView.getViewPort();
 		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
+		if (screenPos.y > viewPort.getScreenDimensions().y - Design.toolbarHeight)
+			screenPos.y -= 150;
+		if (screenPos.x > viewPort.getScreenDimensions().x - 400)
+			screenPos.x -= 400;
 		g.setColor(Design.almostOpaque);
 		int y = screenPos.y + 10;
-		g.fillRect(screenPos.x + 10, y, 400, 100);
+		g.fillRect(screenPos.x + 10, y, 400, 130);
 		g.setColor(Design.grayBorder);
-		g.drawRect(screenPos.x + 10, y, 400, 100);
+		g.drawRect(screenPos.x + 10, y, 400, 130);
 		g.setColor(Color.black);
 		g.setFont(Design.textFont);
 		y += Design.textFont.getSize();
@@ -62,6 +66,8 @@ public class DebugToolsRenderer implements IRenderer {
 		g.drawString(screenSizeToString(view), screenPos.x + 20, y);
 		y += Design.textFont.getSize();
 		g.drawString(zoomToString(view), screenPos.x + 20, y);
+		y += Design.textFont.getSize();
+		g.drawString("scroll: " + view.getViewPort().getSceneCorner(), screenPos.x + 20, y);
 	}
 
 	public String zoomToString(IGameView view) {

@@ -2,11 +2,16 @@ package ch.awae.simtrack.controller;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
+import ch.awae.simtrack.model.IDestinationTrackTile;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.ITile;
+import ch.awae.simtrack.model.PathFindingOptions.Type;
+import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.util.T3;
@@ -144,5 +149,37 @@ public class PathFinding {
 	public void setModel(IModel model) {
 		this.model = model;
 		this.modelObserver = this.model.createObserver();
+	}
+
+	public void tick() {
+		int maxWorkPerTick = 5;
+		LinkedList<PathFindingRequest> queue = this.model.getPathFindingQueue();
+		while (maxWorkPerTick-- > 0 && queue.size() > 0) {
+			PathFindingRequest request = queue.removeFirst();
+			if (request.options.type == Type.RandomTarget) {
+				Stack<TileEdgeCoordinate> path = randomPathForStart(request.start);
+				if (path != null) {
+					request.pathAcceptor.accept(path);
+				} else {
+					Log.warn("No path available for start position:", request.start);
+					// queue.addLast(request);
+				}
+			} else {
+				Log.err("Unknown PathFinding option type:", request.options.type);
+			}
+		}
+	}
+
+	public Stack<TileEdgeCoordinate> randomPathForStart(TileEdgeCoordinate start) {
+		Set<Entry<TileCoordinate, ITile>> destinations = this.model.getTileFiltered(
+				tile -> tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination());
+		List<TileEdgeCoordinate> targets = destinations.stream()
+				.map(destination -> this.model.getPaths(destination.getKey()).get(0)._2).collect(Collectors.toList());
+
+		HashMap<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> paths = findPathForTiles(start, targets);
+		if (paths.size() == 0)
+			return null;
+		Entry<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> randomPath = CollectionUtil.randomValue(paths.entrySet());
+		return randomPath.getValue();
 	}
 }
