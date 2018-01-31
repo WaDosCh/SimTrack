@@ -2,6 +2,7 @@ package ch.awae.simtrack.model.position;
 
 import java.io.Serializable;
 
+import ch.judos.generic.data.geometry.PointD;
 import lombok.Data;
 
 public @Data class TileEdgeCoordinate implements Serializable {
@@ -31,6 +32,12 @@ public @Data class TileEdgeCoordinate implements Serializable {
 
 	public String toString() {
 		return "TileEdgeCoordinate[u=" + tile.u + ", v=" + tile.v + ", edge=" + edge + "]";
+	}
+
+	public SceneCoordinate getSceneCoordinate() {
+		SceneCoordinate tileCenter = this.tile.getSceneCoordinate();
+		PointD tileOffset = this.edge.getPosition();
+		return new SceneCoordinate(tileCenter.s + tileOffset.x, tileCenter.t + tileOffset.y);
 	}
 
 }

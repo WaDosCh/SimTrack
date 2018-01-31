@@ -25,7 +25,6 @@ class ViewPort implements IViewPort {
 	@Getter
 	private Point sceneCorner, screenDimensions;
 	private SceneCoordinate sceneDimensions;
-	private static final double SQRT3 = Math.sqrt(3);
 	private IGameView owner;
 
 	/**
@@ -40,7 +39,7 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public TileCoordinate toHexCoordinate(SceneCoordinate p) {
-		double v = (2.0 * p.t) / (SQRT3 * 100);
+		double v = (2.0 * p.t) / (Math.sqrt(3) * 100);
 		double u = (1.0 * p.s) / 100 - v / 2;
 		int baseU = (int) Math.floor(u);
 		int baseV = (int) Math.floor(v);
@@ -77,13 +76,6 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public SceneCoordinate toSceneCoordinate(TileCoordinate tileCoor) {
-		double x = (2 * tileCoor.u + tileCoor.v) * 50;
-		double y = tileCoor.v * SQRT3 * 50;
-		return new SceneCoordinate(x, y);
-	}
-
-	@Override
 	public Point toScreenCoordinate(SceneCoordinate p) {
 		double x = p.s;
 		double y = p.t;
@@ -106,7 +98,7 @@ class ViewPort implements IViewPort {
 			this.minZoom = (int) Math.ceil(minH);
 		this.zoom = this.minZoom;
 		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
-				((this.owner.getModel().getVerticalSize() - 1) * SQRT3 * 50));
+				((this.owner.getModel().getVerticalSize() - 1) * Math.sqrt(3) * 50));
 		this.sceneCorner = new Point(0, 0);
 		updateCorner();
 	}
@@ -202,8 +194,8 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public boolean isVisible(TileCoordinate hex) {
-		return isVisible(toSceneCoordinate(hex), 80);
+	public boolean isVisible(TileCoordinate tileCoordinate) {
+		return isVisible(tileCoordinate.getSceneCoordinate(), 80);
 	}
 
 }

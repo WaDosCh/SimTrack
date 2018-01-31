@@ -1,5 +1,7 @@
 package ch.awae.simtrack.model.position;
 
+import ch.judos.generic.data.geometry.PointD;
+
 public enum Edge {
 
 	RIGHT(1, 0), //
@@ -38,7 +40,7 @@ public enum Edge {
 	 * @return direction from the edge away from the tile center
 	 */
 	public double getAngleOut() {
-		return this.ordinal() * 1 / 6 * 2 * Math.PI;
+		return this.ordinal() * 1. / 6. * 2. * Math.PI;
 	}
 
 	/**
@@ -46,6 +48,15 @@ public enum Edge {
 	 */
 	public double getAngleIn() {
 		return getAngleOut() + Math.PI;
+	}
+
+	/**
+	 * @return the position offset from the center of a tile
+	 */
+	public PointD getPosition() {
+		PointD position = new PointD(50, 0);
+		position.rotate(getAngleOut());
+		return position;
 	}
 
 }

@@ -38,7 +38,7 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		return new TilePath(_2, _1);
 	}
 
-	public double pathLength() {
+	public double getPathLength() {
 		if (_1.getOpposite() == _2)
 			return 100;
 
@@ -49,7 +49,7 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		return perimeter * 60 / 360;
 	}
 
-	public PointD getPosition(double progressedDistance) {
+	public SceneCoordinate getPosition(double progressedDistance) {
 		// start of movement
 		PointD start = new PointD(-50, 0);
 		// build a movement vector when we would go from left to right
@@ -58,10 +58,10 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 			delta = new PointD(progressedDistance, 0.);
 		} else { // curved, assume it's a right curve
 			final double radius = 100 * Math.sqrt(3) / 2;
-			double deltaAngle = progressedDistance / pathLength();
+			double deltaAngle = progressedDistance / getPathLength() * 60 / 360 * Math.PI * 2;
 
 			delta = new PointD(0, -radius);
-			delta.rotate(-deltaAngle); // negative because we turn clockwise
+			delta.rotate(deltaAngle); // we turn clockwise
 			delta.addI(new PointD(0, radius));
 			if (isLeftCurve())
 				delta.y *= -1;
@@ -70,7 +70,7 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		PointD point = start.add(delta);
 		// consider actual direction of path and rotate start,delta vectors
 		point.rotate(_1.getAngleIn());
-		return point;
+		return new SceneCoordinate(point.x, point.y);
 	}
 
 	public boolean isLeftCurve() {
