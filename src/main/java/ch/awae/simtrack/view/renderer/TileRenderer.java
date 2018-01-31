@@ -32,7 +32,6 @@ public class TileRenderer implements IRenderer {
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 	private static final Color waterColor = Color.BLUE;
 	private static Color railColour = Color.DARK_GRAY;
-	private static Stroke railStroke = new BasicStroke(5);
 
 	@Override
 	public void render(Graphics2D g, IGameView view) {
@@ -79,7 +78,6 @@ public class TileRenderer implements IRenderer {
 	}
 
 	private void renderTrack(Graphics2D g2, ITrackTile tile) {
-		g2.setStroke(railStroke);
 		TrackRenderUtil.renderRails(g2, bedColour, railColour, tile.getRailPaths());
 		if (tile instanceof IDestinationTrackTile) {
 			IDestinationTrackTile dest = (IDestinationTrackTile) tile;

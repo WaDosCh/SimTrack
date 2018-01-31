@@ -1,7 +1,9 @@
 package ch.awae.simtrack.view.renderer;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 
 import ch.awae.simtrack.model.position.TilePath;
@@ -21,6 +23,8 @@ public class TrackRenderUtil {
 	private final static int railGauge = 28;
 
 	private final static int halfSide = (int) (50 / Math.sqrt(3));
+
+	private static Stroke railStroke = new BasicStroke(5);
 
 	private static void renderCurvedRail(Graphics2D g) {
 		for (int i = 0; i < 2; i++) {
@@ -66,6 +70,7 @@ public class TrackRenderUtil {
 	 * @param network
 	 */
 	public static void renderRails(Graphics2D g, Color sleepers, Color rails, TilePath[] network) {
+		g.setStroke(railStroke);
 		AffineTransform Tx = g.getTransform();
 		for (int pass = 0; pass < 2; pass++) {
 			g.setColor(pass == 0 ? sleepers : rails);

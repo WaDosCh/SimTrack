@@ -25,8 +25,6 @@ class BuildToolRenderer implements IRenderer {
 
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
-	private static Stroke railStroke = new BasicStroke(5);
-
 	private BuildTool tool;
 
 	/**
@@ -55,7 +53,6 @@ class BuildToolRenderer implements IRenderer {
 			}
 		} else {
 			Graphics2D g2 = view.getViewPort().focusHex(c, g);
-			g2.setStroke(railStroke);
 			TrackRenderUtil.renderRails(g2, this.tool.isValid() ? Color.LIGHT_GRAY : Color.RED,
 					this.tool.isValid() ? Color.GRAY : Color.RED, tool.getTrack().getRailPaths());
 		}
