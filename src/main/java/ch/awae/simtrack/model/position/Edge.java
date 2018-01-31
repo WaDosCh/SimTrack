@@ -28,8 +28,24 @@ public enum Edge {
 		return byIndex((ordinal() + (clockwise ? 1 : 5)) % 6);
 	}
 
-	public double getAngle() {
-		return this.ordinal() * 60 * 2 * Math.PI / 360;
+	public Edge getNeighbourX(int clockwiseSteps) {
+		// make sure negative values work:
+		clockwiseSteps = (clockwiseSteps % 6) + 6;
+		return byIndex((ordinal() + clockwiseSteps) % 6);
+	}
+
+	/**
+	 * @return direction from the edge away from the tile center
+	 */
+	public double getAngleOut() {
+		return this.ordinal() * 1 / 6 * 2 * Math.PI;
+	}
+
+	/**
+	 * @return direction from the edge to the center of the tile
+	 */
+	public double getAngleIn() {
+		return getAngleOut() + Math.PI;
 	}
 
 }

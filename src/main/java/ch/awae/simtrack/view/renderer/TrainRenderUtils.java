@@ -18,7 +18,7 @@ public class TrainRenderUtils {
 
 		TileEdgeCoordinate position = train.getPosition();
 		SceneCoordinate scenePosition = view.getViewPort().toSceneCoordinate(position.tile);
-		double angle = position.edge.getAngle();
+		double angle = position.edge.getAngleOut();
 
 		g2.translate((int) scenePosition.s, (int) scenePosition.t);
 		g2.rotate(angle);
