@@ -1,8 +1,10 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.entity;
 
 import java.util.Stack;
 import java.util.function.Consumer;
 
+import ch.awae.simtrack.model.PathFindingOptions;
+import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 
 public class Train implements IEntity {

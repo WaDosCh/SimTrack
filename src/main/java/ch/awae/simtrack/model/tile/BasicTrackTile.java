@@ -1,6 +1,7 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.tile;
 
 import ch.awae.simtrack.model.position.Edge;
+import ch.awae.simtrack.model.position.TilePath;
 
 /**
  * @author Andreas Wälchli

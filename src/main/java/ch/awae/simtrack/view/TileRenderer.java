@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.Map.Entry;
 
-import ch.awae.simtrack.model.IDestinationTrackTile;
-import ch.awae.simtrack.model.ITile;
-import ch.awae.simtrack.model.ITrackTile;
-import ch.awae.simtrack.model.TileType;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.tile.IDestinationTrackTile;
+import ch.awae.simtrack.model.tile.ITile;
+import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.TileType;
 
 /**
  * Renderer for track rendering

@@ -1,8 +1,7 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.position;
 
 import java.io.Serializable;
 
-import ch.awae.simtrack.model.position.Edge;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode

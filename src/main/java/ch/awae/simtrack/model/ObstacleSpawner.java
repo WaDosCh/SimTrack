@@ -3,6 +3,8 @@ package ch.awae.simtrack.model;
 import java.util.Random;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.tile.BasicFixedTile;
+import ch.awae.simtrack.model.tile.TileType;
 
 public class ObstacleSpawner {
 

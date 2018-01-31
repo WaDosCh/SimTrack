@@ -1,7 +1,7 @@
 package ch.awae.simtrack.model.track;
 
-import ch.awae.simtrack.model.BasicTrackTile;
-import ch.awae.simtrack.model.TilePath;
+import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.model.tile.BasicTrackTile;
 import lombok.Getter;
 
 /**

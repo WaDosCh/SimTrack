@@ -3,10 +3,12 @@ package ch.awae.simtrack.model;
 import java.util.ArrayList;
 import java.util.Random;
 
-import ch.awae.simtrack.model.Signal.Type;
+import ch.awae.simtrack.model.entity.Signal;
+import ch.awae.simtrack.model.entity.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.model.tile.BorderTrackTile;
 
 /**
  * This basic implementation spawns connections on the edges with a random

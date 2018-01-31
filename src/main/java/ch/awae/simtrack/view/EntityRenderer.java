@@ -2,8 +2,8 @@ package ch.awae.simtrack.view;
 
 import java.awt.Graphics2D;
 
-import ch.awae.simtrack.model.IEntity;
-import ch.awae.simtrack.model.Train;
+import ch.awae.simtrack.model.entity.IEntity;
+import ch.awae.simtrack.model.entity.Train;
 
 public class EntityRenderer implements IRenderer {
 

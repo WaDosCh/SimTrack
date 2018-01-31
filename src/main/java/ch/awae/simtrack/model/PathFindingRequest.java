@@ -3,6 +3,7 @@ package ch.awae.simtrack.model;
 import java.util.Stack;
 import java.util.function.Consumer;
 
+import ch.awae.simtrack.model.entity.IEntity;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import lombok.AllArgsConstructor;
 

@@ -3,7 +3,7 @@ package ch.awae.simtrack.view;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import ch.awae.simtrack.model.Train;
+import ch.awae.simtrack.model.entity.Train;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.util.Resource;

@@ -5,10 +5,17 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.awae.simtrack.model.Signal.Type;
+import ch.awae.simtrack.model.entity.IEntity;
+import ch.awae.simtrack.model.entity.Signal;
+import ch.awae.simtrack.model.entity.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.model.tile.IDestinationTrackTile;
+import ch.awae.simtrack.model.tile.IFixedTile;
+import ch.awae.simtrack.model.tile.ITile;
+import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.util.ObservableHandler;
 import ch.awae.simtrack.util.T3;
 import lombok.Getter;

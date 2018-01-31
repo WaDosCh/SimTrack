@@ -1,6 +1,7 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.tile;
 
 import ch.awae.simtrack.model.position.Edge;
+import ch.awae.simtrack.model.position.TilePath;
 
 /**
  * Implementation for the border track pieces. They do not contain any paths.
@@ -9,7 +10,7 @@ import ch.awae.simtrack.model.position.Edge;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-class BorderTrackTile extends BasicTrackTile implements IDestinationTrackTile {
+public class BorderTrackTile extends BasicTrackTile implements IDestinationTrackTile {
 
 	private static final long serialVersionUID = -2434920987381887298L;
 	private final Edge edge;

@@ -4,13 +4,13 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import ch.awae.simtrack.model.IDestinationTrackTile;
 import ch.awae.simtrack.model.IModel;
-import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
 import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.model.tile.IDestinationTrackTile;
+import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;

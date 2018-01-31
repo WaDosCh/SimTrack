@@ -8,8 +8,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
+import ch.awae.simtrack.model.entity.IEntity;
+import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.util.IObservable;
 import ch.awae.simtrack.util.T3;
 

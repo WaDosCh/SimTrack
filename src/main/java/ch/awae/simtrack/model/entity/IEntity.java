@@ -1,7 +1,9 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.entity;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
+
+import ch.awae.simtrack.model.PathFindingRequest;
 
 /**
  * @author Andreas Wälchli

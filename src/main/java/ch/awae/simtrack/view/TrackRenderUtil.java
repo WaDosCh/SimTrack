@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
-import ch.awae.simtrack.model.TilePath;
+import ch.awae.simtrack.model.position.TilePath;
 
 /**
  * Rendering utilities for the rail rendering

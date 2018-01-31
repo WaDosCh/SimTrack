@@ -8,13 +8,13 @@ import java.util.Set;
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
 import ch.awae.simtrack.controller.Log;
-import ch.awae.simtrack.model.IDestinationTrackTile;
-import ch.awae.simtrack.model.ITile;
 import ch.awae.simtrack.model.PathFindingOptions;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
-import ch.awae.simtrack.model.Train;
+import ch.awae.simtrack.model.entity.Train;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.model.tile.IDestinationTrackTile;
+import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.util.CollectionUtil;
 import lombok.Getter;
 

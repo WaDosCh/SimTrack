@@ -1,4 +1,4 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.tile;
 
 public interface IDestinationTrackTile extends ITrackTile, IFixedTile {
 

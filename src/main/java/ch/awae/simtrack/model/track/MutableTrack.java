@@ -3,10 +3,10 @@ package ch.awae.simtrack.model.track;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
-import ch.awae.simtrack.model.BasicTrackTile;
-import ch.awae.simtrack.model.ITransformableTrackTile;
-import ch.awae.simtrack.model.TilePath;
 import ch.awae.simtrack.model.position.Edge;
+import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.model.tile.BasicTrackTile;
+import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 
 /**
  * mutable track implementation. used by the editor
