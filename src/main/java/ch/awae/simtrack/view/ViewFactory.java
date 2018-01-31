@@ -3,6 +3,10 @@ package ch.awae.simtrack.view;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.view.renderer.EntityRenderer;
+import ch.awae.simtrack.view.renderer.HexGridRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.TileRenderer;
 
 /**
  * factory for view instance

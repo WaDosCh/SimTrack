@@ -1,6 +1,6 @@
 package ch.awae.simtrack.controller;
 
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
  * describes the basic behaviour of any editor tool. Each editor tool represents

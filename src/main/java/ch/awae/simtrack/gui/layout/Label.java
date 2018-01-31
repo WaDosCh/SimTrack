@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 public class Label extends BaseComponent implements IRenderer, IComponent {
 

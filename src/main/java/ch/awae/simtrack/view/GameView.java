@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
  * the game view implementation

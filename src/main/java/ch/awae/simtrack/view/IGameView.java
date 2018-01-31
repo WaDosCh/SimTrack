@@ -1,6 +1,7 @@
 package ch.awae.simtrack.view;
 
 import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
  * The base interface for any view instance

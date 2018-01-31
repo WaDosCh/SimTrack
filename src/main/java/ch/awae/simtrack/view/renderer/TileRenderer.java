@@ -1,4 +1,4 @@
-package ch.awae.simtrack.view;
+package ch.awae.simtrack.view.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -11,6 +11,8 @@ import ch.awae.simtrack.model.tile.IDestinationTrackTile;
 import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.tile.TileType;
+import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.IViewPort;
 
 /**
  * Renderer for track rendering
@@ -19,7 +21,7 @@ import ch.awae.simtrack.model.tile.TileType;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-class TileRenderer implements IRenderer {
+public class TileRenderer implements IRenderer {
 	private static Color bedColour = Color.ORANGE.darker();
 	private static Color bgColour = Color.GREEN.darker();
 

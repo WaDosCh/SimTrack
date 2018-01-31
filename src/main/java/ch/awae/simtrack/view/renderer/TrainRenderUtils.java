@@ -1,4 +1,4 @@
-package ch.awae.simtrack.view;
+package ch.awae.simtrack.view.renderer;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -7,6 +7,7 @@ import ch.awae.simtrack.model.entity.Train;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.view.IGameView;
 
 public class TrainRenderUtils {
 

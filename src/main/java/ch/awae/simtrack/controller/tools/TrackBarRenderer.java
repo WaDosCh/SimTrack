@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.TrackRenderUtil;
+import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Track tool-bar renderer

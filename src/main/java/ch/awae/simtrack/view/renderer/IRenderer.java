@@ -1,6 +1,8 @@
-package ch.awae.simtrack.view;
+package ch.awae.simtrack.view.renderer;
 
 import java.awt.Graphics2D;
+
+import ch.awae.simtrack.view.IGameView;
 
 /**
  * General representation of any renderer.

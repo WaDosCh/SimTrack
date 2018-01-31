@@ -7,8 +7,8 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.TrackRenderUtil;
+import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Renderer for the {@link BuildTool}

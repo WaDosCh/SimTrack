@@ -9,7 +9,7 @@ import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 import lombok.Getter;
 
 /**

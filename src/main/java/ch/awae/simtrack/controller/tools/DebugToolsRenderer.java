@@ -11,8 +11,8 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
 import ch.awae.simtrack.view.IViewPort;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 public class DebugToolsRenderer implements IRenderer {
 
