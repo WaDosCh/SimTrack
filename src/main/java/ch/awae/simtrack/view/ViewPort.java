@@ -118,8 +118,8 @@ class ViewPort implements IViewPort {
 	 * @param dy
 	 */
 	void moveScene(int dx, int dy) {
-		this.sceneCorner.x += dx;
-		this.sceneCorner.y += dy;
+		this.sceneCorner.x += (float) dx * (100 / this.zoom);
+		this.sceneCorner.y += (float) dy * (100 / this.zoom);
 		updateCorner();
 	}
 
