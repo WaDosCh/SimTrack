@@ -1,5 +1,6 @@
 package ch.awae.simtrack.controller.input;
 
+import ch.awae.simtrack.controller.Log;
 import lombok.Getter;
 
 public class Binding {
@@ -58,10 +59,14 @@ public class Binding {
 	 * 
 	 * @param r
 	 */
-	public void onPress(Runnable r) {
+	public void onPress(EdgeProcessor r) {
 		if ((counter > 0) && edge) {
-			r.run();
-			consume();
+			try {
+				r.run();
+				consume();
+			} catch (SkipConsumeException e) {
+				Log.info("skipping consume");
+			}
 		}
 	}
 
@@ -70,11 +75,29 @@ public class Binding {
 	 * 
 	 * @param r
 	 */
-	public void onRelease(Runnable r) {
+	public void onRelease(EdgeProcessor r) {
 		if ((counter == 0) && edge) {
-			r.run();
-			consume();
+			try {
+				r.run();
+				consume();
+			} catch (SkipConsumeException e) {
+				Log.info("skipping consume");
+			}
 		}
+	}
+
+	public static void skipConsume() throws SkipConsumeException {
+		throw new SkipConsumeException();
+	}
+
+	// ######## EXCEPTION TYPE ########
+	public static class SkipConsumeException extends Exception {
+		private static final long serialVersionUID = 7232893320426249523L;
+	}
+
+	@FunctionalInterface
+	public static interface EdgeProcessor {
+		void run() throws SkipConsumeException;
 	}
 
 }

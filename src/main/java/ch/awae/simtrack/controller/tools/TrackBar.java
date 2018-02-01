@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
-import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IRenderer;
@@ -22,7 +21,6 @@ public class TrackBar extends EventDrivenTool {
 
 	private int index;
 	private @Getter IRenderer renderer = new TrackBarRenderer(this);
-	private Binding click;
 
 	/**
 	 * creates a new track-bar instance
@@ -32,8 +30,6 @@ public class TrackBar extends EventDrivenTool {
 	 */
 	public TrackBar(Editor editor) {
 		super(editor, UnloadAction.IGNORE);
-
-		click = input.getBinding(Input.MOUSE_LEFT);
 
 		onPress(KeyEvent.VK_MINUS, () -> select(0));
 		onPress(KeyEvent.VK_1, () -> select(1));
@@ -48,7 +44,7 @@ public class TrackBar extends EventDrivenTool {
 		onPress(KeyEvent.VK_0, () -> select(10));
 
 		onTick(this::updateByMouse);
-		onTick(this::processMouse);
+		ifMet(() -> index >= 0).onPress(Input.MOUSE_LEFT, this::select);
 	}
 
 	int getIndex() {
@@ -90,12 +86,6 @@ public class TrackBar extends EventDrivenTool {
 		if (index > 10)
 			return;
 		this.index = index;
-	}
-
-	private void processMouse() {
-		if (index >= 0) {
-			click.onPress(this::select);
-		}
 	}
 
 }

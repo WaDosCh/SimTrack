@@ -39,14 +39,10 @@ public class BuildTool extends EventDrivenTool {
 		onPress(Action.BT_ROTATE_LEFT, this::rotateLeft);
 		onPress(Action.BT_ROTATE_RIGHT, this::rotateRight);
 		onPress(Action.BT_MIRROR, this::mirror);
-
+		
 		ifPressed(Action.BT_DELETE_TILE, this::bulldoze);
-		ifPressed(Action.BT_BUILD_TILE, () -> {
-			if (isBulldozeTool)
-				bulldoze();
-			else
-				place();
-		});
+		ifMet(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this::bulldoze);
+		ifNot(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this:: place);
 
 	}
 
