@@ -17,12 +17,14 @@ import lombok.Getter;
  */
 class ViewPort implements IViewPort {
 
+	public static int outsideBounds = 100;
+
 	private int minZoom = 10;
 	private @Getter int zoom;
 
+	@Getter
 	private Point sceneCorner, screenDimensions;
 	private SceneCoordinate sceneDimensions;
-	private static final double SQRT3 = Math.sqrt(3);
 	private IGameView owner;
 
 	/**
@@ -37,7 +39,7 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public TileCoordinate toHexCoordinate(SceneCoordinate p) {
-		double v = (2.0 * p.t) / (SQRT3 * 100);
+		double v = (2.0 * p.t) / (Math.sqrt(3) * 100);
 		double u = (1.0 * p.s) / 100 - v / 2;
 		int baseU = (int) Math.floor(u);
 		int baseV = (int) Math.floor(v);
@@ -74,13 +76,6 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public SceneCoordinate toSceneCoordinate(TileCoordinate tileCoor) {
-		double x = (2 * tileCoor.u + tileCoor.v) * 50;
-		double y = tileCoor.v * SQRT3 * 50;
-		return new SceneCoordinate(x, y);
-	}
-
-	@Override
 	public Point toScreenCoordinate(SceneCoordinate p) {
 		double x = p.s;
 		double y = p.t;
@@ -103,7 +98,7 @@ class ViewPort implements IViewPort {
 			this.minZoom = (int) Math.ceil(minH);
 		this.zoom = this.minZoom;
 		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
-				((this.owner.getModel().getVerticalSize() - 1) * SQRT3 * 50));
+				((this.owner.getModel().getVerticalSize() - 1) * Math.sqrt(3) * 50));
 		this.sceneCorner = new Point(0, 0);
 		updateCorner();
 	}
@@ -115,8 +110,8 @@ class ViewPort implements IViewPort {
 	 * @param dy
 	 */
 	void moveScene(int dx, int dy) {
-		this.sceneCorner.x += dx;
-		this.sceneCorner.y += dy;
+		this.sceneCorner.x += (float) dx * (100. / this.zoom);
+		this.sceneCorner.y += (float) dy * (100. / this.zoom);
 		updateCorner();
 	}
 
@@ -125,14 +120,14 @@ class ViewPort implements IViewPort {
 		double minY = this.screenDimensions.y - (0.01 * this.zoom * this.sceneDimensions.t);
 		int x = this.sceneCorner.x;
 		int y = this.sceneCorner.y;
-		if (x > 0)
-			x = 0;
-		if (x < minX)
-			x = (int) minX;
-		if (y > 0)
-			y = 0;
-		if (y < minY)
-			y = (int) minY;
+		if (x > outsideBounds)
+			x = outsideBounds;
+		if (x < minX - outsideBounds)
+			x = (int) minX - outsideBounds;
+		if (y > outsideBounds)
+			y = outsideBounds;
+		if (y < minY - outsideBounds)
+			y = (int) minY - outsideBounds;
 		this.sceneCorner = new Point(x, y);
 	}
 
@@ -171,8 +166,17 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public Point getScreenDimensions() {
-		return this.screenDimensions;
+	public Graphics2D transformToScene(Graphics2D g) {
+		return transformToScene(g, new SceneCoordinate(0, 0));
+	}
+
+	public Graphics2D transformToScene(Graphics2D g, SceneCoordinate sceneCoordinates) {
+		Point p = toScreenCoordinate(new SceneCoordinate(0, 0));
+		double zoomFac = 0.01 * this.zoom;
+		Graphics2D g2 = (Graphics2D) g.create();
+		g2.translate(p.x, p.y);
+		g2.scale(zoomFac, zoomFac);
+		return g2;
 	}
 
 	@Override
@@ -190,7 +194,8 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public boolean isVisible(TileCoordinate hex) {
-		return isVisible(toSceneCoordinate(hex), 80);
+	public boolean isVisible(TileCoordinate tileCoordinate) {
+		return isVisible(tileCoordinate.getSceneCoordinate(), 80);
 	}
+
 }

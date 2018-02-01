@@ -2,9 +2,9 @@ package ch.awae.simtrack.model.track;
 
 import java.util.ArrayList;
 
-import ch.awae.simtrack.model.ITrackTile;
-import ch.awae.simtrack.model.TilePath;
 import ch.awae.simtrack.model.TileValidator;
+import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.model.tile.ITrackTile;
 
 /**
  * @author Andreas Wälchli

@@ -9,7 +9,7 @@ import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 public class BasePanel implements IRenderer, IComponent {
 

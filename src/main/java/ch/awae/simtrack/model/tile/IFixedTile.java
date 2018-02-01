@@ -1,4 +1,4 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.tile;
 
 /**
  * Marker interface for tiles that cannot be deleted

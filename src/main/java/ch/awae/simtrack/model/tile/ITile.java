@@ -1,4 +1,4 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.tile;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @version 1.2, 2015-01-24
  * @since SimTrack 0.2.2 (0.2.1)
  */
-public interface ITile extends IEntity, Serializable {
+public interface ITile extends Serializable {
 
 	default TileType getType() {
 		return TileType.UNKNOWN;

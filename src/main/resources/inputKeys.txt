@@ -1,7 +1,8 @@
 Input keys
 F1 = show this guide ingame
-F2 = show coordinates
+F2 = show coordinates debug view
 F3 = select pathfinding tool
+F4 = spawn a train
 F12 = end game
 ESC = deselect current tool
 1-9 = select tools in hotbar

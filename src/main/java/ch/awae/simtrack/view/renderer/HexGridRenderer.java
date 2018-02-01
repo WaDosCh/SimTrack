@@ -1,9 +1,11 @@
-package ch.awae.simtrack.view;
+package ch.awae.simtrack.view.renderer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.IViewPort;
 
 /**
  * Renderer for the hex grid overlay
@@ -12,7 +14,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-class HexGridRenderer implements IRenderer {
+public class HexGridRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics2D g, IGameView view) {

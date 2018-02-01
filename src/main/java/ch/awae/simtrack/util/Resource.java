@@ -1,11 +1,13 @@
 package ch.awae.simtrack.util;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.json.JsonObject;
 import javax.json.spi.JsonProvider;
 
@@ -57,6 +59,14 @@ public final class Resource {
 			ArrayList<String> text = new ArrayList<>();
 			reader.lines().forEach(text::add);
 			return text.toArray(new String[text.size()]);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static BufferedImage getImage(String id) {
+		try (InputStream stream = asStream(id)) {
+			return ImageIO.read(stream);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

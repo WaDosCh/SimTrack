@@ -1,17 +1,12 @@
 package ch.awae.simtrack.controller.input;
 
 import java.awt.Point;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.awae.simtrack.controller.IGUIControllerHookup;
 import ch.judos.generic.data.HashMapList;
-import lombok.Getter;
 
 public class Input {
 
@@ -29,7 +24,7 @@ public class Input {
 	private final long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
 	private double scroll = 0;
 	private long lastScrollUpdate;
-	private @Getter Point mousePosition = new Point(0, 0);
+	private Point mousePosition = new Point(0, 0);
 
 	// LISTENER REGISTRY
 	private HashMap<Integer, Binding> keycodeBindings = new HashMap<>();
@@ -68,6 +63,10 @@ public class Input {
 	public double getScroll() {
 		return (this.lastScrollUpdate + this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System.currentTimeMillis()) ? 0
 				: this.scroll;
+	}
+
+	public Point getMousePosition() {
+		return new Point(this.mousePosition);
 	}
 
 	// EVENT HANLDING

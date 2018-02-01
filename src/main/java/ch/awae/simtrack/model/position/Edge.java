@@ -1,5 +1,7 @@
 package ch.awae.simtrack.model.position;
 
+import ch.judos.generic.data.geometry.PointD;
+
 public enum Edge {
 
 	RIGHT(1, 0), //
@@ -26,6 +28,35 @@ public enum Edge {
 
 	public Edge getNeighbour(boolean clockwise) {
 		return byIndex((ordinal() + (clockwise ? 1 : 5)) % 6);
+	}
+
+	public Edge getNeighbourX(int clockwiseSteps) {
+		// make sure negative values work:
+		clockwiseSteps = (clockwiseSteps % 6) + 6;
+		return byIndex((ordinal() + clockwiseSteps) % 6);
+	}
+
+	/**
+	 * @return direction from the edge away from the tile center
+	 */
+	public double getAngleOut() {
+		return this.ordinal() * 1. / 6. * 2. * Math.PI;
+	}
+
+	/**
+	 * @return direction from the edge to the center of the tile
+	 */
+	public double getAngleIn() {
+		return getAngleOut() + Math.PI;
+	}
+
+	/**
+	 * @return the position offset from the center of a tile
+	 */
+	public PointD getPosition() {
+		PointD position = new PointD(50, 0);
+		position.rotate(getAngleOut());
+		return position;
 	}
 
 }

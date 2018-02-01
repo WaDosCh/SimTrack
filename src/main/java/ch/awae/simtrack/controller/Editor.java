@@ -9,7 +9,7 @@ import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.controller.tools.InGameMenu;
 import ch.awae.simtrack.controller.tools.PathFindingTool;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
  * top-level management of the active side of the user interface. It manages the

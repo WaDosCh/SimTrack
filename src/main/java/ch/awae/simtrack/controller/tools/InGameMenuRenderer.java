@@ -2,7 +2,7 @@ package ch.awae.simtrack.controller.tools;
 
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.gui.layout.BasePanel;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 public class InGameMenuRenderer extends BasePanel implements IRenderer {
 

@@ -2,7 +2,7 @@ package ch.awae.simtrack.gui.layout;
 
 import java.awt.Dimension;
 
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
  * a component is supposed to initialize its base size as the prefered size

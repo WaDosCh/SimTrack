@@ -2,11 +2,20 @@ package ch.awae.simtrack.model;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import ch.awae.simtrack.model.Signal.Type;
+import ch.awae.simtrack.model.entity.IEntity;
+import ch.awae.simtrack.model.entity.Signal;
+import ch.awae.simtrack.model.entity.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.model.tile.IDestinationTrackTile;
+import ch.awae.simtrack.model.tile.IFixedTile;
+import ch.awae.simtrack.model.tile.ITile;
+import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.util.ObservableHandler;
 import ch.awae.simtrack.util.T3;
 import lombok.Getter;
@@ -16,16 +25,18 @@ class Model implements IModel {
 	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
 
+	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
+	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
+	private Set<IEntity> entities = new HashSet<>();
+	@Getter
+	private LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
+	@Getter
+	private transient ObservableHandler observableHandler;
+
 	Model(int sizeX, int sizeY) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 	}
-
-	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
-	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
-
-	@Getter
-	private transient ObservableHandler observableHandler;
 
 	@Override
 	public int getHorizontalSize() {
@@ -53,6 +64,10 @@ class Model implements IModel {
 	@Override
 	public Set<Map.Entry<TileCoordinate, ITile>> getTiles() {
 		return tiles.entrySet();
+	}
+
+	public Set<IEntity> getEntities() {
+		return this.entities;
 	}
 
 	@Override
@@ -136,6 +151,19 @@ class Model implements IModel {
 	@Override
 	public void load() {
 		observableHandler = new ObservableHandler();
+	}
+
+	@Override
+	public void tick() {
+		for (IEntity entity : this.entities) {
+			entity.tick((pathFindingRequest) -> this.pathFindingQueue.addLast(pathFindingRequest));
+		}
+	}
+
+	@Override
+	public Set<Entry<TileCoordinate, ITile>> getTileFiltered(Function<ITile, Boolean> filter) {
+		return this.tiles.entrySet().stream().filter(entry -> filter.apply(entry.getValue()))
+				.collect(Collectors.toSet());
 	}
 
 }

@@ -3,6 +3,9 @@ package ch.awae.simtrack.model;
 import java.util.*;
 
 import ch.awae.simtrack.controller.Log;
+import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 
 /**

@@ -9,7 +9,7 @@ import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 import lombok.Getter;
 
 /**

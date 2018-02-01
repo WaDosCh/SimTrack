@@ -1,4 +1,4 @@
-package ch.awae.simtrack.view;
+package ch.awae.simtrack.view.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -6,11 +6,13 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.Map.Entry;
 
-import ch.awae.simtrack.model.IDestinationTrackTile;
-import ch.awae.simtrack.model.ITile;
-import ch.awae.simtrack.model.ITrackTile;
-import ch.awae.simtrack.model.TileType;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.model.tile.IDestinationTrackTile;
+import ch.awae.simtrack.model.tile.ITile;
+import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.TileType;
+import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.IViewPort;
 
 /**
  * Renderer for track rendering
@@ -19,7 +21,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-class TileRenderer implements IRenderer {
+public class TileRenderer implements IRenderer {
 	private static Color bedColour = Color.ORANGE.darker();
 	private static Color bgColour = Color.GREEN.darker();
 
@@ -30,7 +32,6 @@ class TileRenderer implements IRenderer {
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 	private static final Color waterColor = Color.BLUE;
 	private static Color railColour = Color.DARK_GRAY;
-	private static Stroke railStroke = new BasicStroke(5);
 
 	@Override
 	public void render(Graphics2D g, IGameView view) {
@@ -77,7 +78,6 @@ class TileRenderer implements IRenderer {
 	}
 
 	private void renderTrack(Graphics2D g2, ITrackTile tile) {
-		g2.setStroke(railStroke);
 		TrackRenderUtil.renderRails(g2, bedColour, railColour, tile.getRailPaths());
 		if (tile instanceof IDestinationTrackTile) {
 			IDestinationTrackTile dest = (IDestinationTrackTile) tile;

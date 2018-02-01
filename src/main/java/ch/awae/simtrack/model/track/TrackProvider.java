@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.json.JsonObject;
 
-import ch.awae.simtrack.model.ITransformableTrackTile;
+import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 import ch.awae.simtrack.util.Resource;
 
 /**

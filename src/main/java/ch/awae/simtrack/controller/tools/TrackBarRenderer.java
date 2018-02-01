@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.model.ITrackTile;
+import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
-import ch.awae.simtrack.view.TrackRenderUtil;
+import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
  * Track tool-bar renderer
@@ -28,7 +28,6 @@ public class TrackBarRenderer implements IRenderer {
 	private Color hover = new Color(0.8f, 0.8f, 0.8f);
 	private Color rails = new Color(0.2f, 0.2f, 0.2f);
 	private Color rbeds = new Color(0.6f, 0.6f, 0.6f);
-	private Stroke rlst = new BasicStroke(4);
 	private Stroke xstr = new BasicStroke(6);
 
 	private ArrayList<ITrackTile> tiles;
@@ -66,7 +65,6 @@ public class TrackBarRenderer implements IRenderer {
 			} else {
 				g.scale(0.8, 0.8);
 				// rail
-				g.setStroke(this.rlst);
 				TrackRenderUtil.renderRails(g, this.rbeds, this.rails, this.tiles.get(i).getRailPaths());
 
 				g.scale(1.25, 1.25);

@@ -16,7 +16,7 @@ import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IRenderer;
+import ch.awae.simtrack.view.renderer.IRenderer;
 import lombok.Getter;
 
 public class PathFindingTool extends EventDrivenTool implements IRenderer {

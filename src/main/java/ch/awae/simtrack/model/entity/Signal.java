@@ -1,4 +1,4 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.entity;
 
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import lombok.Getter;
