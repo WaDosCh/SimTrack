@@ -3,6 +3,8 @@ package ch.awae.simtrack.controller;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
@@ -70,7 +72,7 @@ public class Editor implements IEditor {
 	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
 		if (toolClass == null)
 			toolClass = FreeTool.class;
-		Log.info("Load tool: ", toolClass.getSimpleName());
+		Log.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
 		ITool next = this.tools.get(toolClass);
 		if (next == null) {
 			Log.warn("Tool " + toolClass.getSimpleName() + " was not found.");
