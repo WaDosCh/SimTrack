@@ -3,24 +3,44 @@ package ch.awae.simtrack.view;
 import java.awt.Color;
 import java.awt.Font;
 
+import ch.awae.simtrack.util.Properties;
+import ch.awae.simtrack.util.Resource;
+
 public class Design {
-	public static final int toolbarHeight = 100;
 
 	public static final Color almostOpaque = new Color(255, 255, 255, 235);
-	public static final Color grayBorder = new Color(128, 128, 128);
+	public static final Color grayBorder;
+	public static final Color textColor;
+	public static final Color buttonBackground;
+	public static final Color buttonHover;
+	public static final Color buttonBorder;
+	public static final Color textFieldBg;
+	public static final Color textFieldBorder;
 
-	public static final Font textFont = new Font("Arial", 0, 18);
-	public static final Font titleFont = new Font("Arial", 0, 36);
+	public static final Font textFont;
+	public static final Font titleFont;
 
-	public static final Color textColor = Color.black;
+	public static final int toolbarHeight;
+	public static final int buttonTextMarginX;
+	public static final int buttonTextMarginY;
 
-	public static final int buttonTextMarginX = 10;
-	public static final int buttonTextMarginY = 10;
-	public static final Color buttonBackground = new Color(192, 192, 192);
-	public static final Color buttonHover = new Color(230, 230, 230);
-	public static final Color buttonBorder = grayBorder;
+	static {
+		Properties props = Resource.getProperties("design.properties");
 
-	public static final Color textFieldBg = new Color(100, 100, 100);
-	public static final Color textFieldBorder = grayBorder;
+		toolbarHeight = props.getInt("toolbarHeight");
+		buttonTextMarginX = props.getInt("buttonMarginX");
+		buttonTextMarginY = props.getInt("buttonMarginY");
+
+		grayBorder = props.getColor("border");
+		textColor = props.getColor("textColor");
+		buttonBackground = props.getColor("buttonBackground");
+		buttonHover = props.getColor("buttonHover");
+		buttonBorder = props.getColor("buttonBorder");
+		textFieldBg = props.getColor("textFieldBackground");
+		textFieldBorder = props.getColor("textFieldBorder");
+
+		textFont = new Font(props.getString("textFont"), 0, props.getInt("textSize"));
+		titleFont = new Font(props.getString("titleFont"), 0, props.getInt("titleSize"));
+	}
 
 }
