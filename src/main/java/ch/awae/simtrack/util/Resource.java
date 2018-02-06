@@ -6,10 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.json.JsonObject;
 import javax.json.spi.JsonProvider;
+
+import ch.awae.simtrack.controller.Log;
 
 /**
  * Utility class for accessing resource files
@@ -69,6 +73,29 @@ public final class Resource {
 			return ImageIO.read(stream);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	private static HashMap<String, Properties> propertyCache = new HashMap<>();
+
+	public static Properties getProperties(String id) {
+		if (propertyCache.containsKey(id)) {
+			Log.info("loading '" + id + "' from cache");
+			return propertyCache.get(id);
+		} else {
+			java.util.Properties props = new java.util.Properties();
+			try (InputStream stream = asStream(id)) {
+				props.load(stream);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			Log.info("loading '" + id + "' with " + props.size() + " entries:");
+			for (Entry<Object, Object> entry : props.entrySet()) {
+				Log.info("  " + entry.getKey() + "\t= " + entry.getValue());
+			}
+			Properties p = new Properties(props);
+			propertyCache.put(id, p);
+			return p;
 		}
 	}
 

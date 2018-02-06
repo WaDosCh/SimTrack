@@ -7,6 +7,8 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 
 import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.util.Properties;
+import ch.awae.simtrack.util.Resource;
 
 /**
  * Rendering utilities for the rail rendering
@@ -17,15 +19,24 @@ import ch.awae.simtrack.model.position.TilePath;
  */
 public class TrackRenderUtil {
 
-	private final static int sleeperCount = 8;
-	private final static int sleeperWidth = 5;
-	private final static int sleeperHeight = 45;
-	private final static int railGauge = 28;
-
+	private final static int sleeperCount;
+	private final static int sleeperWidth;
+	private final static int sleeperHeight;
+	private final static int railGauge;
+	private final static Stroke railStroke;
+	
 	private final static int halfSide = (int) (50 / Math.sqrt(3));
 
-	private static Stroke railStroke = new BasicStroke(5);
-
+	static {
+		Properties props = Resource.getProperties("trackRenderer.properties");
+		
+		sleeperCount = props.getInt("sleeperCount");
+		sleeperWidth = props.getInt("sleeperWidth");
+		sleeperHeight = props.getInt("sleeperHeight");
+		railGauge = props.getInt("railGauge");
+		railStroke = new BasicStroke(props.getInt("railThickness"));
+	}
+	
 	private static void renderCurvedRail(Graphics2D g) {
 		for (int i = 0; i < 2; i++) {
 			int radius = 3 * halfSide + (i == 0 ? railGauge / 2 : -railGauge / 2);

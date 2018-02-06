@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IViewPort;
 
@@ -16,10 +17,12 @@ import ch.awae.simtrack.view.IViewPort;
  */
 public class HexGridRenderer implements IRenderer {
 
+	private final static Color gridColor = Resource.getProperties("renderer.properties").getColor("gridColor");
+
 	@Override
 	public void render(Graphics2D g, IGameView view) {
 		IViewPort port = view.getViewPort();
-		g.setColor(Color.BLACK);
+		g.setColor(gridColor);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 		for (int i = 0; i < view.getModel().getHorizontalSize(); i++) {
 			for (int j = 0; j < view.getModel().getVerticalSize(); j++) {

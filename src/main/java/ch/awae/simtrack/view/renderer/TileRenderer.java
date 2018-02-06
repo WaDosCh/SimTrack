@@ -11,6 +11,8 @@ import ch.awae.simtrack.model.tile.IDestinationTrackTile;
 import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.tile.TileType;
+import ch.awae.simtrack.util.Properties;
+import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IViewPort;
 
@@ -22,17 +24,27 @@ import ch.awae.simtrack.view.IViewPort;
  * @since SimTrack 0.2.1
  */
 public class TileRenderer implements IRenderer {
-	private static Color bedColour = Color.ORANGE.darker();
-	private static Color bgColour = Color.GREEN.darker();
+	private static final Color bedColour;
+	private static final Color bgColour;
+	private static final Color waterColor;
+	private static final Color railColour;
+	private static final Stroke arrowStroke;
 
-	private static Stroke arrowStroke = new BasicStroke(3);
+	static {
+		Properties props = Resource.getProperties("renderer.properties");
+		
+		bedColour = props.getColor("railbedColor");
+		bgColour = props.getColor("grassColor");
+		waterColor = props.getColor("waterColor");
+		railColour = props.getColor("railColor");
+		arrowStroke = new BasicStroke(props.getInt("arrowStroke"));
+	}
+
 
 	private final static int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
-	private static final Color waterColor = Color.BLUE;
-	private static Color railColour = Color.DARK_GRAY;
-
+	
 	@Override
 	public void render(Graphics2D g, IGameView view) {
 		g.setColor(bgColour);
