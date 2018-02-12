@@ -7,27 +7,32 @@ import java.util.function.Consumer;
 import ch.awae.simtrack.controller.Log;
 import ch.awae.simtrack.model.PathFindingOptions;
 import ch.awae.simtrack.model.PathFindingRequest;
-import ch.awae.simtrack.model.position.SceneCoordinate;
-import ch.awae.simtrack.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.model.position.TilePath;
+import ch.awae.simtrack.model.position.*;
 import ch.judos.generic.data.DynamicList;
 
 public class Train implements IEntity {
 
 	private static final long serialVersionUID = -559986357702522674L;
 
-	private TileEdgeCoordinate currentTileEdge;
 	private PathFindingOptions pathFindingOptions;
 	private Stack<TileEdgeCoordinate> path;
 
 	private double progressedDistance; // distance progressed to reach next edge
 	private double speed;
-	private TilePath currentTilePath;
+
+	/**
+	 * The edge to be reached next. The train can never get past this edge (if
+	 * it would the next tileEdge in the path is assigned to this var). For
+	 * spawning the train spawns behind this edge as if it were waiting for the
+	 * signal on this tileEdge to turn green.
+	 */
+	private TileEdgeCoordinate nextTileTargetEdge;
+	private TilePathCoordinate currentTilePath;
 	private DynamicList<TrainElementConfiguration> trainElements;
 
 	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
-		this.currentTileEdge = start;
+		this.nextTileTargetEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.progressedDistance = 0.;
 		this.speed = 5;
@@ -66,28 +71,26 @@ public class Train implements IEntity {
 	}
 
 	private void createNextTilePath() {
-		TileEdgeCoordinate nextStartTileEdge = this.currentTileEdge.getOppositeDirection();
-		this.currentTileEdge = this.path.pop();
-		this.currentTilePath = new TilePath(nextStartTileEdge.edge, this.currentTileEdge.edge);
+		Edge nextStartEdge = this.currentTilePath.getPath()._2.getOpposite();
+		this.nextTileTargetEdge = this.path.pop();
+		TilePath nextPath = new TilePath(nextStartEdge, this.nextTileTargetEdge.edge);
+		this.currentTilePath = new TilePathCoordinate(this.nextTileTargetEdge.tile, nextPath);
 	}
 
 	public TileEdgeCoordinate getHeadPosition() {
-		return this.currentTileEdge;
+		return this.nextTileTargetEdge;
 	}
 
 	public SceneCoordinate getNicePosition() {
-		if (this.currentTilePath == null) {
-			return this.currentTileEdge.getSceneCoordinate();
-		} else {
-			SceneCoordinate tilePos = this.currentTileEdge.getTile().toSceneCoordinate();
-			SceneCoordinate delta = this.currentTilePath.getPosition(this.progressedDistance);
-			return new SceneCoordinate(tilePos.s + delta.s, tilePos.t + delta.t);
-		}
+		if (this.currentTilePath == null)
+			return this.nextTileTargetEdge.getSceneCoordinate();
+		else
+			return this.currentTilePath.getPositionOnPath(this.progressedDistance);
 	}
 
 	private void searchPath(Consumer<PathFindingRequest> pathFinding) {
-		PathFindingRequest request = new PathFindingRequest(this, this.currentTileEdge, null, this.pathFindingOptions,
-				(path) -> {
+		PathFindingRequest request = new PathFindingRequest(this, this.nextTileTargetEdge, null,
+				this.pathFindingOptions, (path) -> {
 					this.path = path;
 					Log.info("Train found path to: " + path.firstElement());
 				});
