@@ -76,8 +76,8 @@ public class PathFindingTool extends EventDrivenTool implements IRenderer {
 			for (int i = 0; i < this.path.size() - 1; i++) {
 				TileCoordinate tile1 = this.path.get(i).tile;
 				TileCoordinate tile2 = this.path.get(i + 1).tile;
-				Point p1 = this.viewPort.toScreenCoordinate(tile1);
-				Point p2 = this.viewPort.toScreenCoordinate(tile2);
+				Point p1 = this.viewPort.toScreenCoordinate(tile1.toSceneCoordinate());
+				Point p2 = this.viewPort.toScreenCoordinate(tile2.toSceneCoordinate());
 
 				g.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}

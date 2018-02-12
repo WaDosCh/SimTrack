@@ -24,4 +24,26 @@ public final class SceneCoordinate {
 		return String.format("SceneCoordinate[s=%1$,.1f, t=%2$,.1f]", this.s, this.t);
 	}
 
+	public TileCoordinate toTileCoordinate() {
+		double v = (2.0 * t) / (Math.sqrt(3) * 100);
+		double u = (1.0 * s) / 100 - v / 2;
+		int baseU = (int) Math.floor(u);
+		int baseV = (int) Math.floor(v);
+		u -= baseU;
+		v -= baseV;
+
+		if ((v < 1 - (2 * u)) && (v < (1 - u) / 2)) {
+			// aok
+		} else if ((v > 2 - (2 * u)) && (v > 1 - (u / 2))) {
+			baseU++;
+			baseV++;
+		} else if (v < u) {
+			baseU++;
+		} else {
+			baseV++;
+		}
+
+		return new TileCoordinate(baseU, baseV);
+	}
+
 }

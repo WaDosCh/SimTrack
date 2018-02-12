@@ -21,6 +21,7 @@ public interface IViewPort {
 	 * @param p
 	 * @return the hex closest to the given scene coordinates.
 	 */
+	@Deprecated
 	public TileCoordinate toHexCoordinate(SceneCoordinate p);
 
 	/**
@@ -43,10 +44,12 @@ public interface IViewPort {
 
 	/* HEX <<====>> SCREEN */
 
+	@Deprecated
 	default Point toScreenCoordinate(TileCoordinate t) {
 		return toScreenCoordinate(t.getSceneCoordinate());
 	}
 
+	@Deprecated
 	default TileCoordinate toHex(Point p) {
 		return toHexCoordinate(toSceneCoordinate(p));
 	}
