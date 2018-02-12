@@ -73,7 +73,7 @@ public class Train implements IEntity {
 	}
 
 	private void createNextTilePath() {
-		Edge nextStartEdge = this.currentTilePath.getPath()._2.getOpposite();
+		Edge nextStartEdge = this.nextTileTargetEdge.edge.getOpposite();
 		this.nextTileTargetEdge = this.path.pop();
 		TilePath nextPath = new TilePath(nextStartEdge, this.nextTileTargetEdge.edge);
 		this.currentTilePath = new TilePathCoordinate(this.nextTileTargetEdge.tile, nextPath);

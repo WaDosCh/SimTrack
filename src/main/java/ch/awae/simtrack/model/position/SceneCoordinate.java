@@ -1,5 +1,6 @@
 package ch.awae.simtrack.model.position;
 
+import ch.judos.generic.data.geometry.PointD;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -44,6 +45,10 @@ public final class SceneCoordinate {
 		}
 
 		return new TileCoordinate(baseU, baseV);
+	}
+
+	public PointD getPointD() {
+		return new PointD(this.s, this.t);
 	}
 
 }
