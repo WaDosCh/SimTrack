@@ -79,7 +79,7 @@ public class Train implements IEntity {
 		if (this.currentTilePath == null) {
 			return this.currentTileEdge.getSceneCoordinate();
 		} else {
-			SceneCoordinate tilePos = this.currentTileEdge.getTile().getSceneCoordinate();
+			SceneCoordinate tilePos = this.currentTileEdge.getTile().toSceneCoordinate();
 			SceneCoordinate delta = this.currentTilePath.getPosition(this.progressedDistance);
 			return new SceneCoordinate(tilePos.s + delta.s, tilePos.t + delta.t);
 		}
