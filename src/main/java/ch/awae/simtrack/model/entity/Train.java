@@ -15,7 +15,7 @@ import ch.judos.generic.data.DynamicList;
 public class Train implements IEntity {
 
 	private static Logger logger = LogManager.getLogger();
-	
+
 	private static final long serialVersionUID = -559986357702522674L;
 
 	private PathFindingOptions pathFindingOptions;
@@ -30,19 +30,22 @@ public class Train implements IEntity {
 	 * spawning the train spawns behind this edge as if it were waiting for the
 	 * signal on this tileEdge to turn green.
 	 */
-	private TileEdgeCoordinate nextTileTargetEdge;
+	private TileEdgeCoordinate currentTileTargetEdge;
 	private TilePathCoordinate currentTilePath;
 	private DynamicList<TrainElementConfiguration> trainElements;
 	private DynamicList<TilePathCoordinate> reservedTiles;
 
 	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
-		this.nextTileTargetEdge = start;
+		this.currentTileTargetEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.progressedDistance = 0.;
 		this.speed = 5;
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
+
+		// TODO: add moooarr power
+		// this.trainElements.add(TrainElementConfiguration.locomotive1);
 	}
 
 	public List<TrainElementConfiguration> getElements() {
@@ -77,20 +80,20 @@ public class Train implements IEntity {
 	}
 
 	private void createNextTilePath() {
-		Edge nextStartEdge = this.nextTileTargetEdge.edge.getOpposite();
-		this.nextTileTargetEdge = this.path.pop();
-		TilePath nextPath = new TilePath(nextStartEdge, this.nextTileTargetEdge.edge);
-		this.currentTilePath = new TilePathCoordinate(this.nextTileTargetEdge.tile, nextPath);
+		Edge nextStartEdge = this.currentTileTargetEdge.edge.getOpposite();
+		this.currentTileTargetEdge = this.path.pop();
+		TilePath nextPath = new TilePath(nextStartEdge, this.currentTileTargetEdge.edge);
+		this.currentTilePath = new TilePathCoordinate(this.currentTileTargetEdge.tile, nextPath);
 		this.reservedTiles.add(this.currentTilePath);
 	}
 
 	public TileEdgeCoordinate getHeadPosition() {
-		return this.nextTileTargetEdge;
+		return this.currentTileTargetEdge;
 	}
 
 	public SceneCoordinate getNicePosition() {
 		if (this.currentTilePath == null)
-			return this.nextTileTargetEdge.getSceneCoordinate();
+			return this.currentTileTargetEdge.getSceneCoordinate();
 		else
 			return this.currentTilePath.getPositionOnPath(this.progressedDistance);
 	}
@@ -108,11 +111,12 @@ public class Train implements IEntity {
 				return tilePath.getPositionOnPath(progressedOnTile);
 			historyIndex--;
 		}
+		logger.info("reserved tiles: " + this.reservedTiles.size());
 		return null;
 	}
 
 	private void searchPath(Consumer<PathFindingRequest> pathFinding) {
-		PathFindingRequest request = new PathFindingRequest(this, this.nextTileTargetEdge, null,
+		PathFindingRequest request = new PathFindingRequest(this, this.currentTileTargetEdge, null,
 				this.pathFindingOptions, (path) -> {
 					this.path = path;
 					logger.info("Train found path to: " + path.firstElement());
