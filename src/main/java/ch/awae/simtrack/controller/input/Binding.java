@@ -1,11 +1,15 @@
 package ch.awae.simtrack.controller.input;
 
-import ch.awae.simtrack.controller.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
 public class Binding implements Logic {
 
+	private static Logger logger = LogManager.getLogger(Binding.class);
+	
 	private int counter = 0;
 	private @Getter boolean edge = false;
 
@@ -66,7 +70,7 @@ public class Binding implements Logic {
 				r.run();
 				consume();
 			} catch (SkipConsumeException e) {
-				Log.info("skipping consume");
+				logger.debug("skipping consume");
 			}
 		}
 	}
@@ -82,7 +86,7 @@ public class Binding implements Logic {
 				r.run();
 				consume();
 			} catch (SkipConsumeException e) {
-				Log.info("skipping consume");
+				logger.debug("skipping consume");
 			}
 		}
 	}

@@ -32,10 +32,10 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		// System.setProperty("sun.java2d.trace", "log");
 		System.setProperty("sun.java2d.opengl", "True");
 		System.setProperty("sun.java2d.accthreshold", "0");
 
 		SwingUtilities.invokeLater(Main::init);
 	}
+
 }

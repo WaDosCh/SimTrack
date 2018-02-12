@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
-import ch.awae.simtrack.controller.Log;
 import ch.awae.simtrack.model.PathFindingOptions;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
 import ch.awae.simtrack.model.entity.Train;
@@ -25,6 +27,8 @@ public class DebugTools extends EventDrivenTool {
 		InputGuide,
 		Coordinates;
 	}
+
+	private Logger logger = LogManager.getLogger(DebugTools.class);
 
 	private HashSet<Option> showing = new HashSet<Option>();
 
@@ -48,7 +52,7 @@ public class DebugTools extends EventDrivenTool {
 
 		Train t = new Train(start, new PathFindingOptions(Type.RandomTarget), TrainElementConfiguration.locomotive1);
 		this.model.getEntities().add(t);
-		Log.info("Train spawned at", start);
+		logger.info("Train spawned at " + start);
 	}
 
 	private void toggle(Option option) {

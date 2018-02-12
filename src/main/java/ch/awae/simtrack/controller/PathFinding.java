@@ -4,6 +4,9 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
 import ch.awae.simtrack.model.PathFindingRequest;
@@ -22,6 +25,8 @@ public class PathFinding {
 
 	@Getter
 	private IModel model;
+
+	private Logger logger = LogManager.getLogger(getClass());
 
 	private HashMapList<TileEdgeCoordinate, T2<TileEdgeCoordinate, Float>> connectionCache;
 	private Observer modelObserver;
@@ -61,7 +66,7 @@ public class PathFinding {
 	 */
 	public Stack<TileEdgeCoordinate> findPath(TileEdgeCoordinate start, TileEdgeCoordinate end) {
 		if (start.equals(end)) {
-			Log.info("start==end for pathfinding");
+			logger.info("start==end for pathfinding");
 			return null;
 		}
 		this.modelObserver.ifChanged(this::buildGraph);
@@ -112,7 +117,7 @@ public class PathFinding {
 			path.push(current);
 			T2<TileEdgeCoordinate, Float> last = wayBack.get(current);
 			if (last == null) {
-				Log.err("Found target, but could not trace back to start");
+				logger.error("Found target, but could not trace back to start");
 				return null;
 			}
 			current = last._1;
@@ -161,11 +166,11 @@ public class PathFinding {
 				if (path != null) {
 					request.pathAcceptor.accept(path);
 				} else {
-					Log.warn("No path available for start position:", request.start);
+					logger.warn("No path available for start position:" + request.start);
 					// queue.addLast(request);
 				}
 			} else {
-				Log.err("Unknown PathFinding option type:", request.options.type);
+				logger.error("Unknown PathFinding option type:", request.options.type);
 			}
 		}
 	}

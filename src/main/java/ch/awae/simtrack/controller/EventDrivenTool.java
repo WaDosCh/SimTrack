@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Binding.EdgeProcessor;
@@ -28,6 +31,7 @@ public abstract class EventDrivenTool implements ITool {
 	protected @Getter TileCoordinate mouseTile = null;
 	protected @Getter SceneCoordinate mouseScene = null;
 	protected IModel model = null;
+	protected final Logger logger = LogManager.getLogger(getClass());
 	private final Binding drop;
 	private final boolean autoUnload;
 
@@ -193,7 +197,7 @@ public abstract class EventDrivenTool implements ITool {
 		if (autoUnload && drop.isPressed() && drop.isEdge()) {
 			drop.consume();
 			editor.loadTool(null);
-			Log.info("auto-unloading tool");
+			logger.info("auto-unloading tool");
 			return;
 		}
 		try {
@@ -201,9 +205,9 @@ public abstract class EventDrivenTool implements ITool {
 				r.run();
 			}
 		} catch (TerminateTickException tte) {
-			Log.info("terminating tick");
+			logger.info("terminating tick");
 		} catch (TerminateTickAndSkipConsumeException ttasce) {
-			Log.info("terminating tick without consuming the last processed edge");
+			logger.info("terminating tick without consuming the last processed edge");
 		}
 	}
 

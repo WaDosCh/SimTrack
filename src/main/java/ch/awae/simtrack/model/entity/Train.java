@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Stack;
 import java.util.function.Consumer;
 
-import ch.awae.simtrack.controller.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.model.PathFindingOptions;
 import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.SceneCoordinate;
@@ -14,6 +16,8 @@ import ch.judos.generic.data.DynamicList;
 
 public class Train implements IEntity {
 
+	private static Logger logger = LogManager.getLogger();
+	
 	private static final long serialVersionUID = -559986357702522674L;
 
 	private TileEdgeCoordinate currentTileEdge;
@@ -89,7 +93,7 @@ public class Train implements IEntity {
 		PathFindingRequest request = new PathFindingRequest(this, this.currentTileEdge, null, this.pathFindingOptions,
 				(path) -> {
 					this.path = path;
-					Log.info("Train found path to: " + path.firstElement());
+					logger.info("Train found path to: " + path.firstElement());
 				});
 		pathFinding.accept(request);
 		this.pathFindingOptions = null;

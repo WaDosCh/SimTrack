@@ -13,7 +13,8 @@ import javax.imageio.ImageIO;
 import javax.json.JsonObject;
 import javax.json.spi.JsonProvider;
 
-import ch.awae.simtrack.controller.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Utility class for accessing resource files
@@ -23,6 +24,8 @@ import ch.awae.simtrack.controller.Log;
 public final class Resource {
 
 	private final static ClassLoader loader = Resource.class.getClassLoader();
+
+	private final static Logger logger = LogManager.getLogger(Resource.class);
 
 	/**
 	 * Provides a resource as an input stream
@@ -80,7 +83,7 @@ public final class Resource {
 
 	public static Properties getProperties(String id) {
 		if (propertyCache.containsKey(id)) {
-			Log.info("loading '" + id + "' from cache");
+			logger.info("loading '" + id + "' from cache");
 			return propertyCache.get(id);
 		} else {
 			java.util.Properties props = new java.util.Properties();
@@ -89,9 +92,9 @@ public final class Resource {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-			Log.info("loading '" + id + "' with " + props.size() + " entries:");
+			logger.info("loading '" + id + "' with " + props.size() + " entries:");
 			for (Entry<Object, Object> entry : props.entrySet()) {
-				Log.info("  " + entry.getKey() + "\t= " + entry.getValue());
+				logger.info("  " + entry.getKey() + "\t= " + entry.getValue());
 			}
 			Properties p = new Properties(props);
 			propertyCache.put(id, p);

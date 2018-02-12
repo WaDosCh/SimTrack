@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.BuildTool;
@@ -25,6 +27,8 @@ import ch.awae.simtrack.view.renderer.IRenderer;
 public class Editor implements IEditor {
 
 	private IController owner;
+
+	private Logger logger = LogManager.getLogger(getClass());
 
 	private ITool currentTool;
 	private IRenderer renderer;
@@ -72,10 +76,10 @@ public class Editor implements IEditor {
 	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
 		if (toolClass == null)
 			toolClass = FreeTool.class;
-		Log.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
+		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
 		ITool next = this.tools.get(toolClass);
 		if (next == null) {
-			Log.warn("Tool " + toolClass.getSimpleName() + " was not found.");
+			logger.warn("Tool " + toolClass.getSimpleName() + " was not found.");
 			return false;
 		}
 		if (this.currentTool == next) {
@@ -86,7 +90,7 @@ public class Editor implements IEditor {
 		try {
 			next.load(args);
 		} catch (IllegalStateException ex) {
-			Log.err("Error loading tool", ex.getMessage());
+			logger.error("Error loading tool: " + ex.getMessage());
 			// could not load. do not make the switch and leave old tool on!
 			return false;
 		}

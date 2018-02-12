@@ -1,8 +1,14 @@
 package ch.awae.simtrack.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import ch.awae.simtrack.controller.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.model.position.TilePath;
 import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.tile.ITransformableTrackTile;
@@ -16,7 +22,8 @@ import ch.awae.simtrack.model.track.TrackProvider;
  * @since SimTrack 0.2.2
  */
 public class TileValidator {
-
+	
+	private static Logger logger = LogManager.getLogger(TileValidator.class);
 	private static List<TilePath[]> validTiles;
 	private static Map<Integer, ITrackTile> tileCache;
 
@@ -87,7 +94,7 @@ public class TileValidator {
 		ITrackTile res = tileCache.get(key);
 		if (res == null) {
 			tileCache.put(key, tile);
-			Log.info("added new tile to cache with hash: " + key);
+			logger.debug("added new tile to cache with hash: " + key);
 			res = tile;
 		}
 		return res;

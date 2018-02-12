@@ -7,9 +7,11 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.Stack;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
-import ch.awae.simtrack.controller.Log;
 import ch.awae.simtrack.controller.PathFinding;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.position.Edge;
@@ -23,6 +25,7 @@ public class PathFindingTool extends EventDrivenTool implements IRenderer {
 
 	private @Getter IRenderer renderer = this;
 
+	private Logger logger = LogManager.getLogger(getClass());
 	private TileCoordinate start;
 	private Edge startEdge;
 	private TileCoordinate end;
@@ -45,7 +48,7 @@ public class PathFindingTool extends EventDrivenTool implements IRenderer {
 		this.start = mouseTile;
 		this.startEdge = this.startEdge.getNeighbour(true);
 		if (this.start != null) {
-			Log.info("Start:", new TileEdgeCoordinate(this.start, this.startEdge));
+			logger.info("Start:" + new TileEdgeCoordinate(this.start, this.startEdge));
 		}
 		updatePath();
 	}
@@ -54,7 +57,7 @@ public class PathFindingTool extends EventDrivenTool implements IRenderer {
 		this.end = mouseTile;
 		this.endEdge = this.endEdge.getNeighbour(true);
 		if (this.end != null)
-			Log.info("Ende: ", new TileEdgeCoordinate(this.end, this.endEdge));
+			logger.info("Ende: " + new TileEdgeCoordinate(this.end, this.endEdge));
 		updatePath();
 	}
 

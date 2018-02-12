@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j>
+<Configuration status="ALL" packages="ch.awae.simtrack">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level (%F:%L) %msg%n" />
+		</Console>
+		<File name="MyFile" fileName="all.log" immediateFlush="true"
+			append="false">
+			<PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %l: %msg%n" />
+		</File>
+	</Appenders>
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="MyFile" />
+		</Root>
+	</Loggers>
+</Configuration>
