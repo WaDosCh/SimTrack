@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE log4j>
-<Configuration status="ALL" packages="ch.awae.simtrack">
+<Configuration status="INFO">
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level (%F:%L) %msg%n" />
@@ -11,7 +10,7 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Root level="debug">
+		<Root level="ALL">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="MyFile" />
 		</Root>
