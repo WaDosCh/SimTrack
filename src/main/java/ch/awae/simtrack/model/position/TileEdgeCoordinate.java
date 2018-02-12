@@ -35,7 +35,7 @@ public @Data class TileEdgeCoordinate implements Serializable {
 	}
 
 	public SceneCoordinate getSceneCoordinate() {
-		SceneCoordinate tileCenter = this.tile.getSceneCoordinate();
+		SceneCoordinate tileCenter = this.tile.toSceneCoordinate();
 		PointD tileOffset = this.edge.getPosition();
 		return new SceneCoordinate(tileCenter.s + tileOffset.x, tileCenter.t + tileOffset.y);
 	}

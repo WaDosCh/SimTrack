@@ -157,7 +157,7 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
-		Point p = toScreenCoordinate(hex);
+		Point p = toScreenCoordinate(hex.toSceneCoordinate());
 		double zoomFac = 0.01 * this.zoom;
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.translate(p.x, p.y);
@@ -195,7 +195,7 @@ class ViewPort implements IViewPort {
 
 	@Override
 	public boolean isVisible(TileCoordinate tileCoordinate) {
-		return isVisible(tileCoordinate.getSceneCoordinate(), 80);
+		return isVisible(tileCoordinate.toSceneCoordinate(), 80);
 	}
 
 }

@@ -11,6 +11,7 @@ import ch.awae.simtrack.controller.input.Binding.EdgeProcessor;
 import ch.awae.simtrack.controller.input.Binding.SkipConsumeException;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IViewPort;
 import ch.awae.utils.logic.Logic;
@@ -25,6 +26,7 @@ public abstract class EventDrivenTool implements ITool {
 	protected final IViewPort viewPort;
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected @Getter TileCoordinate mouseTile = null;
+	protected @Getter SceneCoordinate mouseScene = null;
 	protected IModel model = null;
 	private final Binding drop;
 	private final boolean autoUnload;
@@ -47,7 +49,8 @@ public abstract class EventDrivenTool implements ITool {
 	private void preTick() {
 		model = controller.getModel();
 		mousePosition = input.getMousePosition();
-		mouseTile = viewPort.toHex(mousePosition);
+		mouseScene = viewPort.toSceneCoordinate(mousePosition);
+		mouseTile = mouseScene.toTileCoordinate();
 	}
 
 	/**
