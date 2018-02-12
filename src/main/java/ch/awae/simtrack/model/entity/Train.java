@@ -29,6 +29,7 @@ public class Train implements IEntity {
 	private TileEdgeCoordinate nextTileTargetEdge;
 	private TilePathCoordinate currentTilePath;
 	private DynamicList<TrainElementConfiguration> trainElements;
+	private DynamicList<TilePathCoordinate> reservedTiles;
 
 	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
@@ -37,6 +38,7 @@ public class Train implements IEntity {
 		this.progressedDistance = 0.;
 		this.speed = 5;
 		this.trainElements = new DynamicList<>(firstElement);
+		this.reservedTiles = new DynamicList<>();
 	}
 
 	public List<TrainElementConfiguration> getElements() {
@@ -75,6 +77,7 @@ public class Train implements IEntity {
 		this.nextTileTargetEdge = this.path.pop();
 		TilePath nextPath = new TilePath(nextStartEdge, this.nextTileTargetEdge.edge);
 		this.currentTilePath = new TilePathCoordinate(this.nextTileTargetEdge.tile, nextPath);
+		this.reservedTiles.add(this.currentTilePath);
 	}
 
 	public TileEdgeCoordinate getHeadPosition() {
@@ -86,6 +89,22 @@ public class Train implements IEntity {
 			return this.nextTileTargetEdge.getSceneCoordinate();
 		else
 			return this.currentTilePath.getPositionOnPath(this.progressedDistance);
+	}
+
+	public SceneCoordinate getPositionWithOffset(double offset) {
+		double progressedOnTile = this.progressedDistance - offset;
+		if (progressedOnTile >= 0)
+			return this.currentTilePath.getPositionOnPath(progressedOnTile);
+		// current tilePath already checked
+		int historyIndex = this.reservedTiles.size() - 2;
+		while (historyIndex > 0) {
+			TilePathCoordinate tilePath = this.reservedTiles.get(historyIndex);
+			progressedOnTile += tilePath.getPathLength();
+			if (progressedOnTile >= 0)
+				return tilePath.getPositionOnPath(progressedOnTile);
+			historyIndex--;
+		}
+		return null;
 	}
 
 	private void searchPath(Consumer<PathFindingRequest> pathFinding) {
