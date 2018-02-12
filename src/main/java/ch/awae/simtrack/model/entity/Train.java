@@ -1,5 +1,6 @@
 package ch.awae.simtrack.model.entity;
 
+import java.util.List;
 import java.util.Stack;
 import java.util.function.Consumer;
 
@@ -9,6 +10,7 @@ import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.position.TilePath;
+import ch.judos.generic.data.DynamicList;
 
 public class Train implements IEntity {
 
@@ -20,14 +22,20 @@ public class Train implements IEntity {
 
 	private double progressedDistance; // distance progressed to reach next edge
 	private double speed;
-
 	private TilePath currentTilePath;
+	private DynamicList<TrainElementConfiguration> trainElements;
 
-	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
+	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
+			TrainElementConfiguration firstElement) {
 		this.currentTileEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.progressedDistance = 0.;
 		this.speed = 5;
+		this.trainElements = new DynamicList<>(firstElement);
+	}
+
+	public List<TrainElementConfiguration> getElements() {
+		return this.trainElements;
 	}
 
 	@Override
@@ -63,7 +71,7 @@ public class Train implements IEntity {
 		this.currentTilePath = new TilePath(nextStartTileEdge.edge, this.currentTileEdge.edge);
 	}
 
-	public TileEdgeCoordinate getPosition() {
+	public TileEdgeCoordinate getHeadPosition() {
 		return this.currentTileEdge;
 	}
 

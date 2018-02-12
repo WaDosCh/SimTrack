@@ -28,7 +28,7 @@ public class TrainRenderUtils {
 	}
 
 	private static void drawImage(Graphics2D g2, Train train) {
-		TileEdgeCoordinate position = train.getPosition();
+		TileEdgeCoordinate position = train.getHeadPosition();
 		SceneCoordinate scenePosition = position.tile.getSceneCoordinate();
 		double angle = position.edge.getAngleOut();
 

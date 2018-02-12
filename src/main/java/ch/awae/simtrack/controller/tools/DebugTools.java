@@ -11,6 +11,7 @@ import ch.awae.simtrack.controller.Log;
 import ch.awae.simtrack.model.PathFindingOptions;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
 import ch.awae.simtrack.model.entity.Train;
+import ch.awae.simtrack.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.tile.IDestinationTrackTile;
@@ -36,7 +37,7 @@ public class DebugTools extends EventDrivenTool {
 		onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
 		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
 		onPress(KeyEvent.VK_F4, this::spawnTrain);
-		onPress(KeyEvent.VK_F12, () -> System.exit(-1));
+		onPress(KeyEvent.VK_F12, () -> System.exit(0));
 	}
 
 	private void spawnTrain() {
@@ -45,7 +46,7 @@ public class DebugTools extends EventDrivenTool {
 		Entry<TileCoordinate, ITile> spawner = CollectionUtil.randomValue(spawners);
 		TileEdgeCoordinate start = this.model.getPaths(spawner.getKey()).get(0)._1;
 
-		Train t = new Train(start, new PathFindingOptions(Type.RandomTarget));
+		Train t = new Train(start, new PathFindingOptions(Type.RandomTarget), TrainElementConfiguration.locomotive1);
 		this.model.getEntities().add(t);
 		Log.info("Train spawned at", start);
 	}
