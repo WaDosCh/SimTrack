@@ -16,15 +16,6 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 public interface IViewPort {
 
 	/**
-	 * calculates the closest hex tile for any given scene coordinates.
-	 * 
-	 * @param p
-	 * @return the hex closest to the given scene coordinates.
-	 */
-	@Deprecated
-	public TileCoordinate toHexCoordinate(SceneCoordinate p);
-
-	/**
 	 * returns the scene coordinate for a given screen coordinate
 	 * 
 	 * @param p
@@ -41,18 +32,6 @@ public interface IViewPort {
 	 * @return the screen coordinate
 	 */
 	public Point toScreenCoordinate(SceneCoordinate p);
-
-	/* HEX <<====>> SCREEN */
-
-	@Deprecated
-	default Point toScreenCoordinate(TileCoordinate t) {
-		return toScreenCoordinate(t.getSceneCoordinate());
-	}
-
-	@Deprecated
-	default TileCoordinate toHex(Point p) {
-		return toHexCoordinate(toSceneCoordinate(p));
-	}
 
 	/**
 	 * focuses the given hex

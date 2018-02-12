@@ -68,11 +68,6 @@ public class TileCoordinate implements Serializable {
 		return new TileCoordinate(u + edge.Δu, v + edge.Δv);
 	}
 
-	@Deprecated
-	public SceneCoordinate getSceneCoordinate() {
-		return toSceneCoordinate();
-	}
-	
 	/**
 	 * calculates the scene pixel coordinates of the centre of a given hex tile.
 	 * The scene coordinates are not the screen coordinates.

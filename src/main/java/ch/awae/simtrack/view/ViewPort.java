@@ -38,35 +38,6 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public TileCoordinate toHexCoordinate(SceneCoordinate p) {
-		double v = (2.0 * p.t) / (Math.sqrt(3) * 100);
-		double u = (1.0 * p.s) / 100 - v / 2;
-		int baseU = (int) Math.floor(u);
-		int baseV = (int) Math.floor(v);
-		u -= baseU;
-		v -= baseV;
-
-		if ((v < 1 - (2 * u)) && (v < (1 - u) / 2)) {
-			// aok
-		} else if ((v > 2 - (2 * u)) && (v > 1 - (u / 2))) {
-			baseU++;
-			baseV++;
-		} else if (v < u) {
-			baseU++;
-		} else {
-			baseV++;
-		}
-
-		// note: horizontal validation irrelevant, since could NEVER be reached
-		// due to zoom limitations along the horizontal axis.
-		if (baseV < 0 || baseV >= this.owner.getModel().getVerticalSize())
-			return null;
-
-		return new TileCoordinate(baseU, baseV);
-
-	}
-
-	@Override
 	public SceneCoordinate toSceneCoordinate(Point p) {
 		double x = p.x - this.sceneCorner.x;
 		double y = p.y - this.sceneCorner.y;
