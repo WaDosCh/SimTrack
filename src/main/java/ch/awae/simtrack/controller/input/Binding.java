@@ -1,9 +1,10 @@
 package ch.awae.simtrack.controller.input;
 
 import ch.awae.simtrack.controller.Log;
+import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
-public class Binding {
+public class Binding implements Logic {
 
 	private int counter = 0;
 	private @Getter boolean edge = false;
@@ -100,4 +101,19 @@ public class Binding {
 		void run() throws SkipConsumeException;
 	}
 
+	@Override
+	public boolean evaluate() {
+		return isPressed();
+	}
+
+	@Override
+	public Logic edge() {
+		return () -> {
+			// TODO: fix
+			boolean e = isPressed() && isEdge();
+			consume();
+			return e;
+		};
+	}
+	
 }

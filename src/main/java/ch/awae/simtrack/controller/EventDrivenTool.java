@@ -13,6 +13,7 @@ import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IViewPort;
+import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
 public abstract class EventDrivenTool implements ITool {
@@ -215,12 +216,12 @@ public abstract class EventDrivenTool implements ITool {
 		throw new TerminateTickAndSkipConsumeException();
 	}
 
-	protected ConditionalStep ifMet(BooleanSupplier condition) {
-		return new ConditionalStep(condition);
+	protected ConditionalStep ifMet(Logic condition) {
+		return new ConditionalStep(condition::evaluate);
 	}
 
-	protected ConditionalStep ifNot(BooleanSupplier condition) {
-		return new ConditionalStep(() -> !condition.getAsBoolean());
+	protected ConditionalStep ifNot(Logic condition) {
+		return new ConditionalStep(() -> !condition.evaluate());
 	}
 
 	// ######### INNER CLASSES #########
