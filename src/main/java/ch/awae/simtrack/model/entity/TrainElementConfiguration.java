@@ -9,6 +9,7 @@ public class TrainElementConfiguration {
 
 	public static final TrainElementConfiguration locomotive1 = new TrainElementConfiguration("locomotive1", 20, 80,
 			100);
+	public static final TrainElementConfiguration wagon1 = new TrainElementConfiguration("wagon1", 15, 60, 74);
 
 	private @Getter int firstAxle;
 	private @Getter int secondAxle;

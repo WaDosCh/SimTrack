@@ -46,7 +46,7 @@ public class Train implements IEntity {
 
 		// TODO: add moooarr power
 		for (int i = 0; i < 5; i++)
-			this.trainElements.add(TrainElementConfiguration.locomotive1);
+			this.trainElements.add(TrainElementConfiguration.wagon1);
 	}
 
 	public List<TrainElementConfiguration> getElements() {
