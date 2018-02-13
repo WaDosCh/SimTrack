@@ -45,7 +45,8 @@ public class Train implements IEntity {
 		this.reservedTiles = new DynamicList<>();
 
 		// TODO: add moooarr power
-		// this.trainElements.add(TrainElementConfiguration.locomotive1);
+		for (int i = 0; i < 5; i++)
+			this.trainElements.add(TrainElementConfiguration.locomotive1);
 	}
 
 	public List<TrainElementConfiguration> getElements() {
@@ -81,6 +82,7 @@ public class Train implements IEntity {
 
 	private void createNextTilePath() {
 		Edge nextStartEdge = this.currentTileTargetEdge.edge.getOpposite();
+
 		this.currentTileTargetEdge = this.path.pop();
 		TilePath nextPath = new TilePath(nextStartEdge, this.currentTileTargetEdge.edge);
 		this.currentTilePath = new TilePathCoordinate(this.currentTileTargetEdge.tile, nextPath);
@@ -104,7 +106,7 @@ public class Train implements IEntity {
 			return this.currentTilePath.getPositionOnPath(progressedOnTile);
 		// current tilePath already checked
 		int historyIndex = this.reservedTiles.size() - 2;
-		while (historyIndex > 0) {
+		while (historyIndex >= 0) {
 			TilePathCoordinate tilePath = this.reservedTiles.get(historyIndex);
 			progressedOnTile += tilePath.getPathLength();
 			if (progressedOnTile >= 0)
