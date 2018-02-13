@@ -3,8 +3,6 @@ package ch.awae.simtrack.controller;
 import java.awt.Graphics2D;
 import java.util.function.Consumer;
 
-import javax.swing.Timer;
-
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.TrackBar;
@@ -14,12 +12,8 @@ import lombok.Getter;
 
 /**
  * The game controller implementation
- * 
- * @author Andreas Wälchli
- * @version 1.2, 2015-01-26
- * @since SimTrack 0.2.2
  */
-class GameController implements IController {
+public class GameController implements IController {
 
 	private @Getter IModel model;
 	private @Getter IGameView gameView;
@@ -27,12 +21,10 @@ class GameController implements IController {
 	private Navigator navigator;
 	private TrackBar trackbar;
 	private Editor editor;
-	private int fps, tps;
-
-	private Timer tickTimer, viewTimer;
 	private DebugTools debugTools;
 	private @Getter PathFinding pathfinder;
 	private Consumer<String> titleUpdater;
+	private HighPrecisionClock gameClock;
 
 	/**
 	 * instantiates a new controller instance
@@ -45,10 +37,7 @@ class GameController implements IController {
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
 		this.gameView = gameView;
-		this.tickTimer = new Timer(10, e -> this.tick());
-		this.tickTimer.setRepeats(true);
-		this.viewTimer = new Timer(10, e -> this.viewTick());
-		this.viewTimer.setRepeats(true);
+		this.gameClock = new HighPrecisionClock(60, this::tick, "Render+Update");
 		this.pathfinder = new PathFinding(this.model);
 		this.navigator = new Navigator(this.gameView, input);
 		this.editor = new Editor(this);
@@ -73,56 +62,30 @@ class GameController implements IController {
 	}
 
 	@Override
-	public void setFPS(int fps) {
-		this.fps = fps;
-		this.viewTimer.setDelay(this.fps);
-	}
-
-	@Override
-	public void setTPS(int tps) {
-		this.tps = tps;
-		this.tickTimer.setDelay(this.tps);
-	}
-
-	@Override
 	public void start() {
-		this.tickTimer.start();
+		this.gameClock.start();
 	}
 
 	@Override
 	public void stop() {
-		this.tickTimer.stop();
-	}
-
-	@Override
-	public void startView() {
-		this.viewTimer.start();
-	}
-
-	@Override
-	public void stopView() {
-		this.viewTimer.stop();
+		this.gameClock.stop();
 	}
 
 	/**
 	 * performs a game logic update tick.
 	 */
 	private void tick() {
+		// rendering first to make sure this happens at a constant rate when
+		// updates take more or less time
+		this.gameView.renderView();
+
+		// update ticks
 		this.navigator.tick();
 		this.editor.tick();
 		this.trackbar.tick();
 		this.debugTools.tick();
 		this.model.tick();
 		this.pathfinder.tick();
-		// TODO: tick logic
-	}
-
-	/**
-	 * performs a view tick. This renders the view associated with this
-	 * controller.
-	 */
-	private void viewTick() {
-		this.gameView.renderView();
 	}
 
 	@Override

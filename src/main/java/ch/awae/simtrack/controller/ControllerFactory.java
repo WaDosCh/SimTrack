@@ -6,10 +6,6 @@ import ch.awae.simtrack.view.IGameView;
 
 /**
  * Factory for controller instances.
- * 
- * @author Andreas Wälchli
- * @version 1.2, 2015-01-26
- * @since SimTrack 0.2.2
  */
 public class ControllerFactory {
 
@@ -24,13 +20,10 @@ public class ControllerFactory {
 	 * @param fps
 	 * @return a new game controller instantiated with the provided params
 	 */
-	public static IController buildGameController(IModel model, IGameView view, IGUIControllerHookup hooker, int tps,
+	public static GameController buildGameController(IModel model, IGameView view, IGUIControllerHookup hooker, int tps,
 			int fps) {
 		Input input = new Input(hooker);
-		GameController c = new GameController(model, view, hooker, input);
-		c.setTPS(tps);
-		c.setFPS(fps);
-		return c;
+		return new GameController(model, view, hooker, input);
 	}
 
 }

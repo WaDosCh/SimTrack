@@ -28,22 +28,6 @@ public interface IController {
 	public IGameView getGameView();
 
 	/**
-	 * sets the rendering frequency
-	 * 
-	 * @param fps
-	 *            the new frequency given as frames-per-second
-	 */
-	public void setFPS(int fps);
-
-	/**
-	 * sets the update frequency
-	 * 
-	 * @param tps
-	 *            the new tick frequency given as ticks-per-second
-	 */
-	public void setTPS(int tps);
-
-	/**
 	 * starts the tick loop
 	 */
 	public void start();
@@ -52,16 +36,6 @@ public interface IController {
 	 * stops the tick loop
 	 */
 	public void stop();
-
-	/**
-	 * starts the rendering loop
-	 */
-	public void startView();
-
-	/**
-	 * stops the rendering loop
-	 */
-	public void stopView();
 
 	public Input getInput();
 

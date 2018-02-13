@@ -8,9 +8,9 @@ public final class SceneCoordinate {
 
 	public final double s, t;
 
-	public SceneCoordinate(double x, double y) {
-		this.s = x;
-		this.t = y;
+	public SceneCoordinate(double s, double t) {
+		this.s = s;
+		this.t = t;
 	}
 
 	public double distanceSquared(SceneCoordinate other) {

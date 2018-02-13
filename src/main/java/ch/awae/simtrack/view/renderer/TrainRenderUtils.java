@@ -41,7 +41,6 @@ public class TrainRenderUtils {
 			SceneCoordinate axis1Pos = train.getPositionWithOffset(offset + element.getFirstAxle());
 			SceneCoordinate axis2Pos = train.getPositionWithOffset(offset + element.getSecondAxle());
 			if (axis1Pos == null || axis2Pos == null) {
-				logger.error("Houston we have a problem");
 				break;
 			}
 			Graphics2D g3 = (Graphics2D) g2.create();

@@ -40,7 +40,7 @@ public class Train implements IEntity {
 		this.currentTileTargetEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.progressedDistance = 0.;
-		this.speed = 5;
+		this.speed = 2;
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
 
@@ -113,7 +113,6 @@ public class Train implements IEntity {
 				return tilePath.getPositionOnPath(progressedOnTile);
 			historyIndex--;
 		}
-		logger.info("reserved tiles: " + this.reservedTiles.size());
 		return null;
 	}
 
