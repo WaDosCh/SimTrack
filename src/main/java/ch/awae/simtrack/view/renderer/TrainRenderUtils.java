@@ -54,13 +54,5 @@ public class TrainRenderUtils {
 					null);
 			offset += element.getLength();
 		}
-
-		// TileEdgeCoordinate position = train.getHeadPosition();
-		// SceneCoordinate scenePosition = position.tile.toSceneCoordinate();
-		// double angle = position.edge.getAngleOut();
-		//
-		// g2.translate((int) scenePosition.s, (int) scenePosition.t);
-		// g2.rotate(angle);
-		// g2.drawImage(loc, -loc.getWidth() / 2, -loc.getHeight() / 2, null);
 	}
 }
