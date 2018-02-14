@@ -2,6 +2,9 @@ package ch.awae.simtrack.controller;
 
 import java.awt.Point;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
@@ -18,6 +21,8 @@ public class Navigator {
 
 	private Input input;
 	private IGameView gameView;
+
+	private Logger logger = LogManager.getLogger(getClass());
 
 	private Binding A, S, D, W;
 
@@ -81,6 +86,7 @@ public class Navigator {
 		this.gameView.moveScene(dx, dy);
 
 		double amount = input.getScroll();
+		// logger.info("scroll: " + amount);
 		this.gameView.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
 	}
 }

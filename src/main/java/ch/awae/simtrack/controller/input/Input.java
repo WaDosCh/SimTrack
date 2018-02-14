@@ -91,6 +91,7 @@ public class Input {
 			handle(e.getKeyCode(), false);
 		}
 	};
+
 	private MouseAdapter mouse = new MouseAdapter() {
 
 		@Override

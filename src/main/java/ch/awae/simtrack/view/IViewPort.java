@@ -82,7 +82,7 @@ public interface IViewPort {
 	 */
 	public boolean isVisible(TileCoordinate hex);
 
-	public int getZoom();
+	public double getZoom();
 
 	public Point getSceneCorner();
 

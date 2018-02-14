@@ -20,7 +20,7 @@ class ViewPort implements IViewPort {
 	public static int outsideBounds = 100;
 
 	private int minZoom = 10;
-	private @Getter int zoom;
+	private @Getter double zoom;
 
 	@Getter
 	private Point sceneCorner, screenDimensions;
@@ -113,14 +113,12 @@ class ViewPort implements IViewPort {
 	 *            y-coordinate of the fixed point
 	 */
 	void zoom(int delta, int fixX, int fixY) {
-		int newZoom = this.zoom + delta;
+		double newZoom = this.zoom + delta;
 		if (newZoom < this.minZoom)
 			newZoom = this.minZoom;
 		int x = this.sceneCorner.x - fixX, y = this.sceneCorner.y - fixY;
-		x *= newZoom;
-		y *= newZoom;
-		x /= this.zoom;
-		y /= this.zoom;
+		x *= newZoom / this.zoom;
+		y *= newZoom / this.zoom;
 		this.sceneCorner = new Point(x + fixX, y + fixY);
 		this.zoom = newZoom;
 		updateCorner();
