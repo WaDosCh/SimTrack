@@ -34,7 +34,7 @@ public class MacKeyboardHack {
 
 		try {
 			try {
-				Process exec = Runtime.getRuntime().exec("defaults read NSGlobalDomainS SApplePressAndHoldEnabled");
+				Process exec = Runtime.getRuntime().exec("defaults read NSGlobalDomain ApplePressAndHoldEnabled");
 				BufferedReader r = new BufferedReader(new InputStreamReader(exec.getInputStream()));
 				boolean needsHack = r.readLine().equals("1");
 

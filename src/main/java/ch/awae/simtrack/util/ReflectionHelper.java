@@ -30,7 +30,8 @@ public class ReflectionHelper<T> {
 		this.instance = instance;
 	}
 
-	public Method findCompatibleMethod(Class<? extends Annotation> annotation, String name, Class<?>[] params) throws NoSuchMethodException {
+	public Method findCompatibleMethod(Class<? extends Annotation> annotation, String name, Class<?>[] params)
+			throws NoSuchMethodException {
 		Method[] methods = clazz.getMethods();
 
 		logger.info("searching compatible method\n"
