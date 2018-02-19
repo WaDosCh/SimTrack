@@ -92,9 +92,19 @@ public class Editor implements IEditor {
 				helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);
 			} catch (NoSuchMethodException nsm) {
 				// ignore
+				if (args.length > 0)
+					throw new IllegalArgumentException("no method found for non-empty parameter list");
 			}
-			if (currentTool != null)
-				currentTool.onUnload();
+			if (currentTool != null) {
+				ReflectionHelper<ITool> oldHelper = new ReflectionHelper<ITool>(currentTool);
+				try {
+					oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
+				} catch (NoSuchMethodException nsm) {
+					// ignore
+				} catch (Exception e) {
+					logger.error("failure to unload", e);
+				}
+			}
 
 			this.currentTool = next;
 			this.renderer = this.currentTool.getRenderer();

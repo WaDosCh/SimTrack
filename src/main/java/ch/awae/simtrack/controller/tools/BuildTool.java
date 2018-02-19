@@ -3,6 +3,7 @@ package ch.awae.simtrack.controller.tools;
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
 import ch.awae.simtrack.controller.OnLoad;
+import ch.awae.simtrack.controller.OnUnload;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.tile.IFixedTile;
@@ -40,22 +41,27 @@ public class BuildTool extends EventDrivenTool {
 		onPress(Action.BT_ROTATE_LEFT, this::rotateLeft);
 		onPress(Action.BT_ROTATE_RIGHT, this::rotateRight);
 		onPress(Action.BT_MIRROR, this::mirror);
-		
+
 		ifPressed(Action.BT_DELETE_TILE, this::bulldoze);
 		ifMet(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this::bulldoze);
-		ifNot(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this:: place);
+		ifNot(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this::place);
 
 	}
-	
+
 	@OnLoad
 	public void loadBulldoze() {
 		isBulldozeTool = true;
 	}
-	
+
 	@OnLoad
 	public void loadBuilder(ITransformableTrackTile tile) {
 		isBulldozeTool = false;
 		track = tile;
+	}
+
+	@OnUnload
+	public void unloadTile() {
+		track = null;
 	}
 
 	private void checkValid() {
