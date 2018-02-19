@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
+import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
@@ -38,9 +39,7 @@ public class TrackBar extends EventDrivenTool implements IRenderer {
 	private Color rbeds = new Color(0.6f, 0.6f, 0.6f);
 	private Stroke xstr = new BasicStroke(6);
 
-	private ArrayList<ITrackTile> tiles;
-
-	private IRenderer[] renderers = new IRenderer[11];
+	private ArrayList<T2<Runnable, IRenderer>> bindings = new ArrayList<>();
 
 	/**
 	 * creates a new track-bar instance
@@ -51,13 +50,24 @@ public class TrackBar extends EventDrivenTool implements IRenderer {
 	public TrackBar(Editor editor) {
 		super(editor, UnloadAction.IGNORE);
 
-		this.tiles = new ArrayList<>();
+		// ######### BINDINGS ##########
+		// bind bulldoze
+		bind(() -> editor.loadTool(BuildTool.class), (g, v) -> {
+			g.setColor(Color.RED);
+			g.setStroke(this.xstr);
+			g.drawLine(-25, -25, 25, 25);
+			g.drawLine(-25, 25, 25, -25);
+		});
+		// bind track tiles
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
-			if (i != 3 && i != 4 && i != 8)
-				this.tiles.add(TrackProvider.getTileInstance(i));
+			if (i != 3 && i != 4 && i != 8) {
+				ITransformableTrackTile tile = TrackProvider.getTileInstance(i);
+				bind(() -> editor.loadTool(BuildTool.class, tile), (g, v) -> {
+					g.scale(0.8, 0.8);
+					TrackRenderUtil.renderRails(g, this.rbeds, this.rails, tile.getRailPaths());
+				});
+			}
 		}
-
-		loadRenderers();
 
 		onPress(KeyEvent.VK_MINUS, () -> select(0));
 		onPress(KeyEvent.VK_1, () -> select(1));
@@ -79,19 +89,20 @@ public class TrackBar extends EventDrivenTool implements IRenderer {
 		return this.index;
 	}
 
+	private void bind(Runnable ru, IRenderer re) {
+		bindings.add(new T2<>(ru, re));
+	}
+
 	private void select(int index) {
 		this.index = index;
 		select();
 	}
 
 	private void select() {
-		if (index < 0)
+		if (index < 0 || index >= bindings.size())
 			return;
-		if (this.index == 0) {
-			this.editor.loadTool(BuildTool.class);
-		} else if (this.index <= tiles.size()) {
-			this.editor.loadTool(BuildTool.class, new Object[] { tiles.get(this.index - 1) });
-		}
+
+		bindings.get(index)._1.run();
 	}
 
 	public void updateByMouse() {
@@ -113,24 +124,6 @@ public class TrackBar extends EventDrivenTool implements IRenderer {
 		this.index = index;
 	}
 
-	private void loadRenderers() {
-		// bulldoze
-		renderers[0] = (g, v) -> {
-			g.setColor(Color.RED);
-			g.setStroke(this.xstr);
-			g.drawLine(-25, -25, 25, 25);
-			g.drawLine(-25, 25, 25, -25);
-		};
-		// track tiles
-		for (int i = 0; i < tiles.size(); i++) {
-			ITrackTile tile = this.tiles.get(i);
-			renderers[i + 1] = (g, v) -> {
-				g.scale(0.8, 0.8);
-				TrackRenderUtil.renderRails(g, this.rbeds, this.rails, tile.getRailPaths());
-			};
-		}
-	}
-
 	@Override
 	public void render(Graphics g, IGameView view) {
 		g.translate(view.getHorizontalScreenSize() / 2 - 500, view.getVerticalScreenSize() - 50);
@@ -142,9 +135,8 @@ public class TrackBar extends EventDrivenTool implements IRenderer {
 			g.fillRect(-50, -50, 100, 100);
 			g.setColor(this.bdcol);
 			g.drawRect(-50, -50, 100, 100);
-			IRenderer renderer = renderers[i];
-			if (renderer != null)
-				renderer.renderSafe(g, view);
+			if (bindings.size() > i)
+				bindings.get(i)._2.renderSafe(g, view);
 			g.translate(100, 0);
 		}
 	}
