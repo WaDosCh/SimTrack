@@ -58,6 +58,12 @@ public class Graphics extends Graphics2D {
 	public void push() {
 		stack = stack.prep(backer.getTransform());
 	}
+	
+	public void peek() {
+		if (stack.head != null) {
+			backer.setTransform(stack.head);
+		}
+	}
 
 	public Stack getStack() {
 		push();

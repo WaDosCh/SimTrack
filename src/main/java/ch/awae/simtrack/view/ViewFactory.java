@@ -6,6 +6,7 @@ import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.renderer.EntityRenderer;
 import ch.awae.simtrack.view.renderer.HexGridRenderer;
 import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.SignalRenderer;
 import ch.awae.simtrack.view.renderer.TileRenderer;
 
 /**
@@ -31,6 +32,7 @@ public class ViewFactory {
 		ArrayList<IRenderer> rends = new ArrayList<>();
 		rends.add(new TileRenderer());
 		rends.add(new HexGridRenderer());
+		rends.add(new SignalRenderer());
 		rends.add(new EntityRenderer());
 		v.setRenderers(rends);
 		return v;

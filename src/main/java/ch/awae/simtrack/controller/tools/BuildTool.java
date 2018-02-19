@@ -1,17 +1,23 @@
 package ch.awae.simtrack.controller.tools;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Stroke;
+
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.EventDrivenTool;
 import ch.awae.simtrack.controller.OnLoad;
 import ch.awae.simtrack.controller.OnUnload;
+import ch.awae.simtrack.controller.SimpleEventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.model.TileValidator;
+import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.tile.IFixedTile;
 import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.Graphics;
+import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 import lombok.Getter;
 
 /**
@@ -19,12 +25,14 @@ import lombok.Getter;
  * 
  * @author Andreas Wälchli
  */
-public class BuildTool extends EventDrivenTool {
+public class BuildTool extends SimpleEventDrivenTool {
+
+	private static Stroke bullCursorStroke = new BasicStroke(6);
+	private static Color darkRed = Color.RED.darker();
+	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	private @Getter boolean isBulldozeTool;
 	private @Getter boolean valid = false;
-
-	private @Getter IRenderer renderer = new BuildToolRenderer(this);
 	private @Getter ITransformableTrackTile track;
 
 	/**
@@ -145,6 +153,27 @@ public class BuildTool extends EventDrivenTool {
 	private void mirror() {
 		if (!isBulldozeTool)
 			track = track.mirrored();
+	}
+
+	@Override
+	public void render(Graphics g) {
+		TileCoordinate c = mouseTile;
+		if (c == null)
+			return;
+		if (isBulldozeTool) {
+			viewPort.focusHex(c, g);
+			g.setColor(valid ? Color.RED : darkRed);
+			g.setStroke(bullCursorStroke);
+			double angle = Math.PI / 3;
+			for (int i = 0; i < 6; i++) {
+				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+				g.rotate(angle);
+			}
+		} else {
+			viewPort.focusHex(c, g);
+			TrackRenderUtil.renderRails(g, valid ? Color.LIGHT_GRAY : Color.RED, valid ? Color.GRAY : Color.RED,
+					track.getRailPaths());
+		}
 	}
 
 }

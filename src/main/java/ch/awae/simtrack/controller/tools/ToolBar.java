@@ -66,6 +66,11 @@ public class ToolBar extends RenderingEventDrivenTool {
 				});
 			}
 		}
+		// signal
+		bind(() -> editor.loadTool(SignalTool.class, false), (g, v) -> {
+		});
+		bind(() -> editor.loadTool(SignalTool.class, true), (g, v) -> {
+		});
 
 		onPress(KeyEvent.VK_MINUS, () -> select(0));
 		onPress(KeyEvent.VK_1, () -> select(1));

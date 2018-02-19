@@ -5,12 +5,9 @@ import java.awt.Color;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.SimpleEventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.renderer.IRenderer;
-import lombok.Getter;
 
 /**
  * "Free-Hand" tool. This tool will be used for in-situ tile manipulation
@@ -19,12 +16,10 @@ import lombok.Getter;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class FreeTool extends EventDrivenTool implements IRenderer {
+public class FreeTool extends SimpleEventDrivenTool {
 
 	private final static Stroke borderStroke = new BasicStroke(6);
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
-
-	private @Getter IRenderer renderer = this;
 
 	/**
 	 * creates a new tool instance.
@@ -38,10 +33,10 @@ public class FreeTool extends EventDrivenTool implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g) {
 		if (mouseTile != null) {
 			g.setStroke(borderStroke);
-			view.getViewPort().focusHex(mouseTile, g);
+			viewPort.focusHex(mouseTile, g);
 			g.setColor(Color.ORANGE);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {

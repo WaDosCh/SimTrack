@@ -1,24 +1,27 @@
 package ch.awae.simtrack.controller.tools;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.SimpleEventDrivenTool;
+import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.renderer.IRenderer;
-import lombok.Getter;
 
-public class SignalBulldozeTool extends EventDrivenTool implements IRenderer {
+public class SignalBulldozeTool extends SimpleEventDrivenTool {
 
-	private final @Getter IRenderer renderer = this;
+	private TileEdgeCoordinate position;
 
 	public SignalBulldozeTool(Editor editor) {
 		super(editor, UnloadAction.UNLOAD);
+		
+		onTick(this::updatePosition);
+	}
+	
+	private void updatePosition() {
+		
 	}
 
 	@Override
-	public void render(Graphics g, IGameView view) {
-		// TODO Auto-generated method stub
-
+	public void render(Graphics g) {
+		
 	}
 
 }

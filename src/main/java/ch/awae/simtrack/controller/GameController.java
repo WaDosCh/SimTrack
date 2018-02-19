@@ -78,12 +78,16 @@ public class GameController implements IController {
 	private void tick() {
 		// rendering first to make sure this happens at a constant rate when
 		// updates take more or less time
-		this.gameView.renderView();
+		try {
+			this.gameView.renderView();
+		} catch (NullPointerException nex) {
+			nex.printStackTrace();
+		}
 
 		// update ticks
 		this.navigator.tick();
-		this.editor.tick();
 		this.trackbar.tick();
+		this.editor.tick();
 		this.debugTools.tick();
 		this.gameView.getViewPort().tick();
 		this.model.tick();
