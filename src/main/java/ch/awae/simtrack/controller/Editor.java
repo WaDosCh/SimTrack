@@ -11,6 +11,7 @@ import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.controller.tools.InGameMenu;
 import ch.awae.simtrack.controller.tools.PathFindingTool;
+import ch.awae.simtrack.controller.tools.SignalBulldozeTool;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
@@ -127,6 +128,7 @@ public class Editor implements IEditor {
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
 		addTool(new InGameMenu(this));
+		addTool(new SignalBulldozeTool(this));
 	}
 
 	/**

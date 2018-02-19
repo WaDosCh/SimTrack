@@ -34,9 +34,9 @@ public class ReflectionHelper<T> {
 			throws NoSuchMethodException {
 		Method[] methods = clazz.getMethods();
 
-		logger.info("searching compatible method\n"
-				+ ((annotation == null) ? "" : "Annotation: " + annotation.getSimpleName() + "\n")
-				+ ((name == null) ? "" : "Name:       " + name + "\n") + Arrays.deepToString(params));
+		logger.debug("searching method with "
+				+ ((annotation == null) ? "" : "annotation " + annotation.getSimpleName() + ", ")
+				+ ((name == null) ? "" : "name '" + name + "', ") + Arrays.deepToString(params));
 
 		Method match = null;
 		loop:
@@ -61,7 +61,7 @@ public class ReflectionHelper<T> {
 					continue loop;
 			}
 
-			logger.info("found matching method: " + method);
+			logger.debug("found matching method: " + method);
 
 			// HAVE A METHOD ALREADY?
 			if (match != null)
@@ -77,17 +77,6 @@ public class ReflectionHelper<T> {
 		throw new NoSuchMethodException();
 	}
 
-	public DelayedReflectiveInvocation findAndPrepareCompatibleMethod(Class<? extends Annotation> annotation,
-			String name, Object... params) throws NoSuchMethodException {
-		Class<?>[] paramTypes = new Class<?>[params.length];
-		for (int i = 0; i < paramTypes.length; i++) {
-			Object param = params[i];
-			paramTypes[i] = param == null ? null : param.getClass();
-		}
-		Method method = findCompatibleMethod(annotation, name, paramTypes);
-		return new DelayedReflectiveInvocation(instance, method, params);
-	}
-
 	public Object findAndInvokeCompatibleMethod(Class<? extends Annotation> annotation, String name, Object... params)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
 		Class<?>[] paramTypes = new Class<?>[params.length];
@@ -96,7 +85,23 @@ public class ReflectionHelper<T> {
 			paramTypes[i] = param == null ? null : param.getClass();
 		}
 		Method method = findCompatibleMethod(annotation, name, paramTypes);
+		logger.info("invoking " + shortMethodString(method));
 		return method.invoke(this.instance, params);
+	}
+
+	private String shortMethodString(Method m) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(m.getName());
+		sb.append('(');
+		boolean first = true;
+		for (Class<?> c : m.getParameterTypes()) {
+			if (!first)
+				sb.append(", ");
+			sb.append(c.getSimpleName());
+			first = false;
+		}
+		sb.append(')');
+		return sb.toString();
 	}
 
 	/**
