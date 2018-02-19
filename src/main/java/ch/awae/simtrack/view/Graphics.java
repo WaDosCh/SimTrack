@@ -1,18 +1,7 @@
 package ch.awae.simtrack.view;
 
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.Image;
-import java.awt.Paint;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.RenderingHints.Key;
-import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
@@ -23,25 +12,20 @@ import java.awt.image.RenderedImage;
 import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
+import java.util.Stack;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
 public class Graphics extends Graphics2D {
 
-	public static interface Stack {
-	};
-
-	private final static @Data class TStack implements Stack {
-		final AffineTransform head;
-		final TStack tail;
-
-		public TStack prep(AffineTransform T) {
-			return new TStack(T, this);
-		}
+	@AllArgsConstructor
+	public static class GraphicsContext {
+		AffineTransform transform;
+		Stroke stroke;
 	}
 
 	private final Graphics2D backer;
-	private TStack stack = new TStack(null, null);
+	private Stack<GraphicsContext> stack = new Stack<>();
 
 	public Graphics(Graphics2D backer) {
 		this.backer = backer;
@@ -49,31 +33,31 @@ public class Graphics extends Graphics2D {
 
 	// STACK MANAGEMENT
 	public void pop() {
-		if (stack.head != null) {
-			backer.setTransform(stack.head);
-			stack = stack.tail;
+		if (this.stack.size() > 0) {
+			GraphicsContext d = this.stack.pop();
+			backer.setTransform(d.transform);
+			backer.setStroke(d.stroke);
 		}
 	}
 
 	public void push() {
-		stack = stack.prep(backer.getTransform());
+		this.stack.push(new GraphicsContext(backer.getTransform(), backer.getStroke()));
 	}
 
-	public Stack getStack() {
+	@SuppressWarnings("unchecked")
+	public Stack<GraphicsContext> getStack() {
 		push();
-		return stack;
+		return (Stack<GraphicsContext>) stack.clone();
 	}
 
-	public void setStack(Stack stack) {
-		if (stack instanceof TStack) {
-			this.stack = (TStack) stack;
-			pop();
-		} else {
-			throw new IllegalArgumentException("unsupported stack type");
-		}
+	public void setStack(Stack<GraphicsContext> stack) {
+		this.stack = stack;
+		pop();
 	}
 
+	// ------------------------------------------------------------------
 	// BACKER-BASED METHODS
+	// ------------------------------------------------------------------
 
 	@Override
 	public void draw(Shape s) {

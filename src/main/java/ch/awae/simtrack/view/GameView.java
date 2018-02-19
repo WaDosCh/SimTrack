@@ -2,8 +2,10 @@ package ch.awae.simtrack.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.view.Graphics.GraphicsContext;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
@@ -65,15 +67,13 @@ public class GameView implements IGameView {
 	 *            the graphics instance to render onto
 	 */
 	void render(Graphics graphics) {
-		Graphics.Stack stack = graphics.getStack();
-
 		this.renderers.forEach(r -> {
+			Stack<GraphicsContext> stack = graphics.getStack();
 			r.render(graphics, this);
 			graphics.setStack(stack);
 		});
 
 		this.editorRenderer.render(graphics, this);
-		graphics.setStack(stack);
 	}
 
 	@Override

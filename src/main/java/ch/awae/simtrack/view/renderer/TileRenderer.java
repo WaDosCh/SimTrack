@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.Map.Entry;
+import java.util.Stack;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.tile.IDestinationTrackTile;
@@ -14,6 +15,7 @@ import ch.awae.simtrack.model.tile.TileType;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Graphics;
+import ch.awae.simtrack.view.Graphics.GraphicsContext;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IViewPort;
 
@@ -33,7 +35,7 @@ public class TileRenderer implements IRenderer {
 
 	static {
 		Properties props = Resource.getProperties("renderer.properties");
-		
+
 		bedColour = props.getColor("railbedColor");
 		bgColour = props.getColor("grassColor");
 		waterColor = props.getColor("waterColor");
@@ -41,17 +43,15 @@ public class TileRenderer implements IRenderer {
 		arrowStroke = new BasicStroke(props.getInt("arrowStroke"));
 	}
 
-
 	private final static int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
-	
+
 	@Override
 	public void render(Graphics g, IGameView view) {
 		IViewPort port = view.getViewPort();
-		Graphics.Stack stack = g.getStack();
 		for (Entry<TileCoordinate, ITile> pair : view.getModel().getTiles()) {
-			g.setStack(stack);
+			Stack<GraphicsContext> stack = g.getStack();
 			TileCoordinate pos = pair.getKey();
 			ITile tile = pair.getValue();
 			if (!port.isVisible(pos))
@@ -73,9 +73,8 @@ public class TileRenderer implements IRenderer {
 				default:
 					renderUnknown(g);
 			}
-
+			g.setStack(stack);
 		}
-		g.setStack(stack);
 	}
 
 	private void renderUnknown(Graphics2D g2) {
