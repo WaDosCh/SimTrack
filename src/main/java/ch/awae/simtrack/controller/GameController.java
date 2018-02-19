@@ -1,6 +1,5 @@
 package ch.awae.simtrack.controller;
 
-import java.awt.Graphics2D;
 import java.util.function.Consumer;
 
 import ch.awae.simtrack.controller.input.Input;
@@ -8,6 +7,7 @@ import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.TrackBar;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import lombok.Getter;
 
@@ -56,7 +56,7 @@ public class GameController implements IController {
 	 * @param v
 	 *            the view
 	 */
-	private void render(Graphics2D g, IGameView v) {
+	private void render(Graphics g, IGameView v) {
 		this.editor.render(g, v);
 		this.debugTools.getRenderer().renderSafe(g, v);
 		this.trackbar.getRenderer().renderSafe(g, v);

@@ -7,6 +7,7 @@ import ch.awae.simtrack.controller.GameController;
 import ch.awae.simtrack.gui.GUI;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.model.ModelFactory;
+import ch.awae.simtrack.util.MacKeyboardHack;
 import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.ViewFactory;
 
@@ -33,6 +34,9 @@ public class Main {
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.opengl", "True");
 		System.setProperty("sun.java2d.accthreshold", "0");
+
+		if (System.getProperty("os.name").equals("Mac OS X"))
+			MacKeyboardHack.applyHack();
 
 		SwingUtilities.invokeLater(Main::init);
 	}

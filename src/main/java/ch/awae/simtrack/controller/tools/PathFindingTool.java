@@ -2,7 +2,6 @@ package ch.awae.simtrack.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.util.Stack;
@@ -17,6 +16,7 @@ import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 import lombok.Getter;
@@ -72,7 +72,7 @@ public class PathFindingTool extends EventDrivenTool implements IRenderer {
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	@Override
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		if (this.path != null) {
 			g.setColor(Color.red);
 			g.setStroke(new BasicStroke(12));
@@ -87,33 +87,37 @@ public class PathFindingTool extends EventDrivenTool implements IRenderer {
 		}
 
 		if (start != null) {
+			g.push();
 			g.setStroke(borderStroke);
-			Graphics2D g2 = view.getViewPort().focusHex(start, g);
-			g2.setColor(Color.GREEN);
+			view.getViewPort().focusHex(start, g);
+			g.setColor(Color.GREEN);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {
-				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-				g2.rotate(angle);
+				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+				g.rotate(angle);
 			}
 			for (int i = 0; i < startEdge.ordinal(); i++) {
-				g2.rotate(angle);
+				g.rotate(angle);
 			}
-			g2.fillOval(30, -20, 40, 40);
+			g.fillOval(30, -20, 40, 40);
+			g.pop();
 		}
 
 		if (end != null) {
+			g.push();
 			g.setStroke(borderStroke);
-			Graphics2D g2 = view.getViewPort().focusHex(end, g);
-			g2.setColor(Color.ORANGE);
+			view.getViewPort().focusHex(end, g);
+			g.setColor(Color.ORANGE);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {
-				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-				g2.rotate(angle);
+				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+				g.rotate(angle);
 			}
 			for (int i = 0; i < endEdge.ordinal(); i++) {
-				g2.rotate(angle);
+				g.rotate(angle);
 			}
-			g2.fillOval(30, -20, 40, 40);
+			g.fillOval(30, -20, 40, 40);
+			g.pop();
 		}
 
 	}

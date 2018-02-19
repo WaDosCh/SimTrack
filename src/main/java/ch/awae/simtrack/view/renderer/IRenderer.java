@@ -2,6 +2,7 @@ package ch.awae.simtrack.view.renderer;
 
 import java.awt.Graphics2D;
 
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 
 /**
@@ -22,8 +23,10 @@ public interface IRenderer {
 	 * @param g
 	 * @param view
 	 */
-	default void renderSafe(Graphics2D g, IGameView view) {
-		render((Graphics2D) g.create(), view);
+	default void renderSafe(Graphics g, IGameView view) {
+		Graphics.Stack stack = g.getStack();
+		render(g, view);
+		g.setStack(stack);
 	}
 
 	/**
@@ -40,6 +43,6 @@ public interface IRenderer {
 	 * @param view
 	 *            the view that invokes the rendering
 	 */
-	public void render(Graphics2D g, IGameView view);
+	public void render(Graphics g, IGameView view);
 
 }

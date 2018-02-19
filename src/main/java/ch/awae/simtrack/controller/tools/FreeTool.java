@@ -2,12 +2,12 @@ package ch.awae.simtrack.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 import lombok.Getter;
@@ -38,15 +38,15 @@ public class FreeTool extends EventDrivenTool implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		if (mouseTile != null) {
 			g.setStroke(borderStroke);
-			Graphics2D g2 = view.getViewPort().focusHex(mouseTile, g);
-			g2.setColor(Color.ORANGE);
+			view.getViewPort().focusHex(mouseTile, g);
+			g.setColor(Color.ORANGE);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {
-				g2.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-				g2.rotate(angle);
+				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
+				g.rotate(angle);
 			}
 		}
 	}

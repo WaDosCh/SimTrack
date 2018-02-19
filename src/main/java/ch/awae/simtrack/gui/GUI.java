@@ -1,11 +1,11 @@
 package ch.awae.simtrack.gui;
 
-import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.util.function.Consumer;
 
 import ch.awae.simtrack.controller.IGUIControllerHookup;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGUIHookProvider;
 
 /**
@@ -35,11 +35,11 @@ public class GUI implements IGUIControllerHookup, IGUIHookProvider {
 
 	@Override
 	public Runnable getRenderDelegate() {
-		return this.window::repaint;
+		return () -> this.surface.doPaint();
 	}
 
 	@Override
-	public void hookComponentRenderer(Consumer<Graphics2D> consumer) {
+	public void hookComponentRenderer(Consumer<Graphics> consumer) {
 		this.surface.setRenderingHook(consumer);
 	}
 

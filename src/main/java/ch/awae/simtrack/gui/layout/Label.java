@@ -1,8 +1,7 @@
 package ch.awae.simtrack.gui.layout;
 
-import java.awt.Graphics2D;
-
 import ch.awae.simtrack.view.Design;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
@@ -20,7 +19,7 @@ public class Label extends BaseComponent implements IRenderer, IComponent {
 		init();
 	}
 
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		g.setFont(this.font);
 		g.setColor(Design.textColor);
 		g.drawString(this.title, pos.x + Design.buttonTextMarginX,

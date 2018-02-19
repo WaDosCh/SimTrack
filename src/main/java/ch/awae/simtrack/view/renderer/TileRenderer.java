@@ -13,6 +13,7 @@ import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.tile.TileType;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IViewPort;
 
@@ -46,32 +47,35 @@ public class TileRenderer implements IRenderer {
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 	
 	@Override
-	public void render(Graphics2D g, IGameView view) {
-		g.setColor(bgColour);
+	public void render(Graphics g, IGameView view) {
 		IViewPort port = view.getViewPort();
+		Graphics.Stack stack = g.getStack();
 		for (Entry<TileCoordinate, ITile> pair : view.getModel().getTiles()) {
+			g.setStack(stack);
 			TileCoordinate pos = pair.getKey();
 			ITile tile = pair.getValue();
 			if (!port.isVisible(pos))
 				continue;
-			Graphics2D g2 = port.focusHex(pos, g);
-			g2.fillPolygon(hexEdges[0], hexEdges[1], 6);
+			port.focusHex(pos, g);
+			g.setColor(bgColour);
+			g.fillPolygon(hexEdges[0], hexEdges[1], 6);
 
 			// decide how to work
 			TileType type = tile.getType();
 			switch (type == null ? TileType.UNKNOWN : type) {
 				case TRACK:
-					renderTrack(g2, (ITrackTile) tile);
+					renderTrack(g, (ITrackTile) tile);
 					break;
 				case OBSTACLE:
-					renderObstacle(g2);
+					renderObstacle(g);
 					break;
 				// unknown tile
 				default:
-					renderUnknown(g2);
+					renderUnknown(g);
 			}
 
 		}
+		g.setStack(stack);
 	}
 
 	private void renderUnknown(Graphics2D g2) {

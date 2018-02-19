@@ -1,6 +1,5 @@
 package ch.awae.simtrack.controller;
 
-import java.awt.Graphics2D;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +11,9 @@ import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.controller.tools.InGameMenu;
 import ch.awae.simtrack.controller.tools.PathFindingTool;
+import ch.awae.simtrack.controller.tools.SignalBulldozeTool;
+import ch.awae.simtrack.util.ReflectionHelper;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
@@ -78,28 +80,44 @@ public class Editor implements IEditor {
 			toolClass = FreeTool.class;
 		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
 		ITool next = this.tools.get(toolClass);
+
 		if (next == null) {
 			logger.warn("Tool " + toolClass.getSimpleName() + " was not found.");
 			return false;
 		}
-		if (this.currentTool == next) {
-			next.onUnload();
-			next.load(args);
-			return true;
-		}
+
 		try {
-			next.load(args);
-		} catch (IllegalStateException ex) {
-			logger.error("Error loading tool: " + ex.getMessage());
-			// could not load. do not make the switch and leave old tool on!
+			ReflectionHelper<ITool> helper = new ReflectionHelper<>(next);
+
+			try {
+				helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);
+			} catch (NoSuchMethodException nsm) {
+				// ignore
+				if (args.length > 0)
+					throw new IllegalArgumentException("no method found for non-empty parameter list");
+			}
+			if (currentTool != null) {
+				ReflectionHelper<ITool> oldHelper = new ReflectionHelper<ITool>(currentTool);
+				try {
+					oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
+				} catch (NoSuchMethodException nsm) {
+					// ignore
+				} catch (Exception e) {
+					logger.error("failure to unload", e);
+				}
+			}
+
+			this.currentTool = next;
+			this.renderer = this.currentTool.getRenderer();
+			this.getController().setWindowTitle(toolClass.getSimpleName());
+
+			return true;
+
+		} catch (Exception exception) {
+			logger.error("Error loading tool: " + exception.getMessage());
+			// error during tool load. remain with old tool
 			return false;
 		}
-		if (this.currentTool != null)
-			this.currentTool.onUnload();
-		this.currentTool = next;
-		this.renderer = this.currentTool.getRenderer();
-		this.getController().setWindowTitle(toolClass.getSimpleName());
-		return true;
 	}
 
 	/**
@@ -110,6 +128,7 @@ public class Editor implements IEditor {
 		addTool(new BuildTool(this));
 		addTool(new PathFindingTool(this));
 		addTool(new InGameMenu(this));
+		addTool(new SignalBulldozeTool(this));
 	}
 
 	/**
@@ -120,7 +139,7 @@ public class Editor implements IEditor {
 	 * @param view
 	 *            the view
 	 */
-	void render(Graphics2D g, IGameView view) {
+	void render(Graphics g, IGameView view) {
 		if (this.renderer != null)
 			this.renderer.renderSafe(g, view);
 	}

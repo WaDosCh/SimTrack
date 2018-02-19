@@ -1,13 +1,13 @@
 package ch.awae.simtrack.gui.layout;
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.Design;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
@@ -33,7 +33,7 @@ public class BasePanel implements IRenderer, IComponent {
 	}
 
 	@Override
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		if (this.needsLayout)
 			layout(0, 0, view.getHorizontalScreenSize(), view.getVerticalScreenSize() - Design.toolbarHeight);
 

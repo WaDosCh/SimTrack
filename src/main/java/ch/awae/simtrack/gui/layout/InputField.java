@@ -1,8 +1,7 @@
 package ch.awae.simtrack.gui.layout;
 
-import java.awt.Graphics2D;
-
 import ch.awae.simtrack.view.Design;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.judos.generic.data.StringUtils;
 
@@ -16,7 +15,7 @@ public class InputField extends BaseComponent {
 	}
 
 	@Override
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		g.setColor(Design.textFieldBg);
 		g.fillRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 		g.setColor(Design.textFieldBorder);

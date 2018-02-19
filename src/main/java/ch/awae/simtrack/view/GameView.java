@@ -1,6 +1,5 @@
 package ch.awae.simtrack.view;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,9 +64,16 @@ public class GameView implements IGameView {
 	 * @param graphics
 	 *            the graphics instance to render onto
 	 */
-	void render(Graphics2D graphics) {
-		this.renderers.forEach(r -> r.render((Graphics2D) graphics.create(), this));
-		this.editorRenderer.render((Graphics2D) graphics.create(), this);
+	void render(Graphics graphics) {
+		Graphics.Stack stack = graphics.getStack();
+
+		this.renderers.forEach(r -> {
+			r.render(graphics, this);
+			graphics.setStack(stack);
+		});
+
+		this.editorRenderer.render(graphics, this);
+		graphics.setStack(stack);
 	}
 
 	@Override

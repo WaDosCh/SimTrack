@@ -92,9 +92,9 @@ public final class Resource {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-			logger.info("loading '" + id + "' with " + props.size() + " entries:");
+			logger.info("loading '" + id + "' with " + props.size() + " entries");
 			for (Entry<Object, Object> entry : props.entrySet()) {
-				logger.info("  " + entry.getKey() + "\t= " + entry.getValue());
+				logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
 			}
 			Properties p = new Properties(props);
 			propertyCache.put(id, p);

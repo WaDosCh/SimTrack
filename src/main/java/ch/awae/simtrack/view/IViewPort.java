@@ -1,6 +1,5 @@
 package ch.awae.simtrack.view;
 
-import java.awt.Graphics2D;
 import java.awt.Point;
 
 import ch.awae.simtrack.model.position.SceneCoordinate;
@@ -43,7 +42,7 @@ public interface IViewPort {
 	 * @return a new graphics instance that has the centre of the given tile in
 	 *         its origin and a total tile width of 100
 	 */
-	public Graphics2D focusHex(TileCoordinate hex, Graphics2D g);
+	public void focusHex(TileCoordinate hex, Graphics g);
 
 	/**
 	 * returns the dimension of the section of the drawing surface reserved for
@@ -92,6 +91,6 @@ public interface IViewPort {
 	 * 
 	 * @param g
 	 */
-	public Graphics2D transformToScene(Graphics2D g);
+	public void transformToScene(Graphics g);
 
 }

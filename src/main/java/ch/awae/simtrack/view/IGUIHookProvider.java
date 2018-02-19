@@ -1,6 +1,5 @@
 package ch.awae.simtrack.view;
 
-import java.awt.Graphics2D;
 import java.util.function.Consumer;
 
 /**
@@ -26,7 +25,7 @@ public interface IGUIHookProvider {
 	 * 
 	 * @param consumer
 	 */
-	public void hookComponentRenderer(Consumer<Graphics2D> consumer);
+	public void hookComponentRenderer(Consumer<Graphics> consumer);
 
 	/**
 	 * provides the width of the drawing surface in pixels

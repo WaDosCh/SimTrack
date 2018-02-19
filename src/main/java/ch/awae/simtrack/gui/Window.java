@@ -40,6 +40,8 @@ class Window extends JFrame {
 		this.setLocation((int) (width / 2 - this.getWidth() / 2), 0);
 		this.setFocusTraversalKeysEnabled(false);
 		this.setVisible(true);
+		this.setIgnoreRepaint(true);
+		surface.initBuffer();
 	}
 
 	/**
