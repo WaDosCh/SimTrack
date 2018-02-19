@@ -1,10 +1,10 @@
 package ch.awae.simtrack.gui.layout;
 
-import java.awt.Graphics2D;
 import java.awt.Point;
 
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.Design;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +22,7 @@ public class Button extends Label {
 		this.action = action;
 	}
 
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		g.setColor(Design.buttonBackground);
 		if (test(this.input.getMousePosition()))
 			g.setColor(Design.buttonHover);
