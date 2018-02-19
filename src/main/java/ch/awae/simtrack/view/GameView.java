@@ -67,13 +67,15 @@ public class GameView implements IGameView {
 	 *            the graphics instance to render onto
 	 */
 	void render(Graphics graphics) {
+		Stack<GraphicsContext> stack = graphics.getStack();
+
 		this.renderers.forEach(r -> {
-			Stack<GraphicsContext> stack = graphics.getStack();
 			r.render(graphics, this);
 			graphics.setStack(stack);
 		});
 
 		this.editorRenderer.render(graphics, this);
+		graphics.setStack(stack);
 	}
 
 	@Override

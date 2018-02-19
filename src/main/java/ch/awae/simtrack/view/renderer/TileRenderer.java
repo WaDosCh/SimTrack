@@ -50,8 +50,9 @@ public class TileRenderer implements IRenderer {
 	@Override
 	public void render(Graphics g, IGameView view) {
 		IViewPort port = view.getViewPort();
+		Stack<GraphicsContext> stack = g.getStack();
 		for (Entry<TileCoordinate, ITile> pair : view.getModel().getTiles()) {
-			Stack<GraphicsContext> stack = g.getStack();
+			g.setStack(stack);
 			TileCoordinate pos = pair.getKey();
 			ITile tile = pair.getValue();
 			if (!port.isVisible(pos))
@@ -73,8 +74,9 @@ public class TileRenderer implements IRenderer {
 				default:
 					renderUnknown(g);
 			}
-			g.setStack(stack);
+
 		}
+		g.setStack(stack);
 	}
 
 	private void renderUnknown(Graphics2D g2) {

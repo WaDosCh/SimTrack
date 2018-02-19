@@ -14,6 +14,8 @@ import java.text.AttributedCharacterIterator;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import lombok.AllArgsConstructor;
 
 public class Graphics extends Graphics2D {
@@ -44,14 +46,13 @@ public class Graphics extends Graphics2D {
 		this.stack.push(new GraphicsContext(backer.getTransform(), backer.getStroke()));
 	}
 
-	@SuppressWarnings("unchecked")
 	public Stack<GraphicsContext> getStack() {
 		push();
-		return (Stack<GraphicsContext>) stack.clone();
+		return ObjectUtils.clone(stack);
 	}
 
 	public void setStack(Stack<GraphicsContext> stack) {
-		this.stack = stack;
+		this.stack = ObjectUtils.clone(stack);
 		pop();
 	}
 
