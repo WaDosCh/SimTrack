@@ -35,6 +35,7 @@ class Surface extends Canvas {
 		this.setMinimumSize(new Dimension(x, y));
 		this.setPreferredSize(new Dimension(x, y));
 		setIgnoreRepaint(true);
+		this.setFocusable(false);
 	}
 
 	private Consumer<Graphics> renderer = (g) -> {
