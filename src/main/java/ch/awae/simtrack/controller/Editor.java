@@ -74,6 +74,19 @@ public class Editor implements IEditor {
 		return this.owner;
 	}
 
+	private void unloadCurrentTool() {
+		if (currentTool != null) {
+			ReflectionHelper<ITool> oldHelper = new ReflectionHelper<ITool>(currentTool);
+			try {
+				oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
+			} catch (NoSuchMethodException nsm) {
+				// ignore
+			} catch (Exception e) {
+				logger.error("failure to unload", e);
+			}
+		}
+	}
+
 	@Override
 	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
 		if (toolClass == null)
@@ -96,16 +109,8 @@ public class Editor implements IEditor {
 				if (args.length > 0)
 					throw new IllegalArgumentException("no method found for non-empty parameter list");
 			}
-			if (currentTool != null) {
-				ReflectionHelper<ITool> oldHelper = new ReflectionHelper<ITool>(currentTool);
-				try {
-					oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
-				} catch (NoSuchMethodException nsm) {
-					// ignore
-				} catch (Exception e) {
-					logger.error("failure to unload", e);
-				}
-			}
+			if (currentTool != next)
+				unloadCurrentTool();
 
 			this.currentTool = next;
 			this.renderer = this.currentTool.getRenderer();
