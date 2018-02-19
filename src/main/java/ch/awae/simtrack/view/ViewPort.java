@@ -1,6 +1,5 @@
 package ch.awae.simtrack.view;
 
-import java.awt.Graphics2D;
 import java.awt.Point;
 
 import ch.awae.simtrack.model.position.SceneCoordinate;
@@ -125,27 +124,23 @@ class ViewPort implements IViewPort {
 	}
 
 	@Override
-	public Graphics2D focusHex(TileCoordinate hex, Graphics2D g) {
+	public void focusHex(TileCoordinate hex, Graphics g) {
 		Point p = toScreenCoordinate(hex.toSceneCoordinate());
 		double zoomFac = 0.01 * this.zoom;
-		Graphics2D g2 = (Graphics2D) g.create();
-		g2.translate(p.x, p.y);
-		g2.scale(zoomFac, zoomFac);
-		return g2;
+		g.translate(p.x, p.y);
+		g.scale(zoomFac, zoomFac);
 	}
 
 	@Override
-	public Graphics2D transformToScene(Graphics2D g) {
-		return transformToScene(g, new SceneCoordinate(0, 0));
+	public void transformToScene(Graphics g) {
+		transformToScene(g, new SceneCoordinate(0, 0));
 	}
 
-	public Graphics2D transformToScene(Graphics2D g, SceneCoordinate sceneCoordinates) {
+	public void transformToScene(Graphics g, SceneCoordinate sceneCoordinates) {
 		Point p = toScreenCoordinate(new SceneCoordinate(0, 0));
 		double zoomFac = 0.01 * this.zoom;
-		Graphics2D g2 = (Graphics2D) g.create();
-		g2.translate(p.x, p.y);
-		g2.scale(zoomFac, zoomFac);
-		return g2;
+		g.translate(p.x, p.y);
+		g.scale(zoomFac, zoomFac);
 	}
 
 	@Override

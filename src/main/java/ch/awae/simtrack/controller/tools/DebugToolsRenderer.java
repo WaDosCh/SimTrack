@@ -10,6 +10,7 @@ import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Design;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.IViewPort;
 import ch.awae.simtrack.view.renderer.IRenderer;
@@ -28,7 +29,7 @@ public class DebugToolsRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		if (this.showing.contains(Option.InputGuide))
 			renderUserGuide(g, view);
 		if (this.showing.contains(Option.Coordinates))

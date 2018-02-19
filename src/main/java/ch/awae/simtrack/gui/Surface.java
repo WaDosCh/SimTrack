@@ -2,10 +2,11 @@ package ch.awae.simtrack.gui;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.util.function.Consumer;
+
+import ch.awae.simtrack.view.Graphics;
 
 /**
  * Drawing Surface
@@ -36,10 +37,10 @@ class Surface extends Canvas {
 		setIgnoreRepaint(true);
 	}
 
-	private Consumer<Graphics2D> renderer = (g) -> {
+	private Consumer<Graphics> renderer = (g) -> {
 		// nop
 	};
-	
+
 	void initBuffer() {
 		createBufferStrategy(2);
 		buffer = getBufferStrategy();
@@ -49,18 +50,18 @@ class Surface extends Canvas {
 	 * set the rendering delegate that forwards the internal paint operation to
 	 * the view itself.
 	 * 
-	 * @param renderer
+	 * @param consumer
 	 *            the rendering delgate
 	 */
-	void setRenderingHook(Consumer<Graphics2D> renderer) {
-		this.renderer = renderer;
+	void setRenderingHook(Consumer<Graphics> consumer) {
+		this.renderer = consumer;
 	}
 
 	public void doPaint() {
 		buffer.show();
-		Graphics g = buffer.getDrawGraphics();
+		java.awt.Graphics g = buffer.getDrawGraphics();
 		g.clearRect(0, 0, this.getWidth(), this.getHeight());
-		this.renderer.accept((Graphics2D) g);
+		this.renderer.accept(new Graphics((Graphics2D) g));
 		g.dispose();
 	}
 

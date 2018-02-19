@@ -2,12 +2,12 @@ package ch.awae.simtrack.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.model.tile.ITrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
@@ -47,7 +47,7 @@ public class TrackBarRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics2D g, IGameView view) {
+	public void render(Graphics g, IGameView view) {
 		g.translate(view.getHorizontalScreenSize() / 2 - 500, view.getVerticalScreenSize() - 50);
 		g.setStroke(new BasicStroke(4));
 		for (int i = -1; i < this.tiles.size(); i++) {

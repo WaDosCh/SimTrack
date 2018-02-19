@@ -1,6 +1,5 @@
 package ch.awae.simtrack.controller;
 
-import java.awt.Graphics2D;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +12,7 @@ import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.controller.tools.InGameMenu;
 import ch.awae.simtrack.controller.tools.PathFindingTool;
 import ch.awae.simtrack.util.ReflectionHelper;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
@@ -127,7 +127,7 @@ public class Editor implements IEditor {
 	 * @param view
 	 *            the view
 	 */
-	void render(Graphics2D g, IGameView view) {
+	void render(Graphics g, IGameView view) {
 		if (this.renderer != null)
 			this.renderer.renderSafe(g, view);
 	}
