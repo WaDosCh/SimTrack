@@ -1,11 +1,11 @@
 package ch.awae.simtrack.gui;
 
+import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferStrategy;
 import java.util.function.Consumer;
-
-import javax.swing.JPanel;
 
 /**
  * Drawing Surface
@@ -14,9 +14,11 @@ import javax.swing.JPanel;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.1
  */
-class Surface extends JPanel {
+class Surface extends Canvas {
 
 	private static final long serialVersionUID = -6043801963054580971L;
+
+	private BufferStrategy buffer;
 
 	/**
 	 * instantiates a new rendering surface with the given dimensions
@@ -31,16 +33,16 @@ class Surface extends JPanel {
 		this.setSize(x, y);
 		this.setMinimumSize(new Dimension(x, y));
 		this.setPreferredSize(new Dimension(x, y));
+		setIgnoreRepaint(true);
 	}
 
 	private Consumer<Graphics2D> renderer = (g) -> {
 		// nop
 	};
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		this.renderer.accept((Graphics2D) g);
+	
+	void initBuffer() {
+		createBufferStrategy(2);
+		buffer = getBufferStrategy();
 	}
 
 	/**
@@ -52,6 +54,14 @@ class Surface extends JPanel {
 	 */
 	void setRenderingHook(Consumer<Graphics2D> renderer) {
 		this.renderer = renderer;
+	}
+
+	public void doPaint() {
+		buffer.show();
+		Graphics g = buffer.getDrawGraphics();
+		g.clearRect(0, 0, this.getWidth(), this.getHeight());
+		this.renderer.accept((Graphics2D) g);
+		g.dispose();
 	}
 
 }

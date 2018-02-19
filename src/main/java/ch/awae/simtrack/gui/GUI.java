@@ -35,7 +35,7 @@ public class GUI implements IGUIControllerHookup, IGUIHookProvider {
 
 	@Override
 	public Runnable getRenderDelegate() {
-		return this.window::repaint;
+		return () -> this.surface.doPaint();
 	}
 
 	@Override
