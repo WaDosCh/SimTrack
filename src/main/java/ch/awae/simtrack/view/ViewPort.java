@@ -20,10 +20,10 @@ public class ViewPort implements IViewPort {
 
 	public static int outsideBounds = 100;
 
-	private double minZoom = 10;
-	private double defaultZoom = 50;
+	private double minZoom = 0.1;
+	private double defaultZoom = 1;
 	private @Getter double zoom;
-	private double targetZoom;
+	private @Getter double targetZoom;
 
 	private PointD sceneCorner;
 
@@ -52,7 +52,8 @@ public class ViewPort implements IViewPort {
 		this.screenDimensions = new PointI(hScreen, vScreen);
 		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
 		if (minH > this.minZoom)
-			this.minZoom = (int) Math.ceil(minH);
+			this.minZoom = minH * 0.01;
+
 		this.zoom = this.defaultZoom;
 		this.targetZoom = this.zoom;
 		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
@@ -65,8 +66,8 @@ public class ViewPort implements IViewPort {
 	public SceneCoordinate toSceneCoordinate(Point p) {
 		double x = p.x - this.sceneCorner.x;
 		double y = p.y - this.sceneCorner.y;
-		x /= 0.01 * this.zoom;
-		y /= 0.01 * this.zoom;
+		x /= this.zoom;
+		y /= this.zoom;
 		return new SceneCoordinate(x, y);
 	}
 
@@ -74,8 +75,8 @@ public class ViewPort implements IViewPort {
 	public Point toScreenCoordinate(SceneCoordinate p) {
 		double x = p.s;
 		double y = p.t;
-		x *= 0.01 * this.zoom;
-		y *= 0.01 * this.zoom; // here : screen scaled scene coordinate
+		x *= this.zoom;
+		y *= this.zoom; // here : screen scaled scene coordinate
 		x += this.sceneCorner.x;
 		y += this.sceneCorner.y;
 		return new Point((int) x, (int) y);
@@ -88,14 +89,14 @@ public class ViewPort implements IViewPort {
 	 * @param dy
 	 */
 	void moveScene(int dx, int dy) {
-		this.sceneCorner.x += (float) dx * (100. / this.zoom);
-		this.sceneCorner.y += (float) dy * (100. / this.zoom);
+		this.sceneCorner.x += (float) dx;
+		this.sceneCorner.y += (float) dy;
 		updateCorner();
 	}
 
 	private void updateCorner() {
-		double minX = this.screenDimensions.x - (0.01 * this.zoom * this.sceneDimensions.s);
-		double minY = this.screenDimensions.y - (0.01 * this.zoom * this.sceneDimensions.t);
+		double minX = this.screenDimensions.x - (this.zoom * this.sceneDimensions.s);
+		double minY = this.screenDimensions.y - (this.zoom * this.sceneDimensions.t);
 		double x = this.sceneCorner.x;
 		double y = this.sceneCorner.y;
 		if (x > outsideBounds)
@@ -153,9 +154,8 @@ public class ViewPort implements IViewPort {
 	@Override
 	public void focusHex(TileCoordinate hex, Graphics g) {
 		Point p = toScreenCoordinate(hex.toSceneCoordinate());
-		double zoomFac = 0.01 * this.zoom;
 		g.translate(p.x, p.y);
-		g.scale(zoomFac, zoomFac);
+		g.scale(this.zoom, this.zoom);
 	}
 
 	@Override
@@ -165,15 +165,14 @@ public class ViewPort implements IViewPort {
 
 	public void transformToScene(Graphics g, SceneCoordinate sceneCoordinates) {
 		Point p = toScreenCoordinate(new SceneCoordinate(0, 0));
-		double zoomFac = 0.01 * this.zoom;
 		g.translate(p.x, p.y);
-		g.scale(zoomFac, zoomFac);
+		g.scale(this.zoom, this.zoom);
 	}
 
 	@Override
 	public boolean isVisible(SceneCoordinate point, int radius) {
 		Point screenPos = toScreenCoordinate(point);
-		double screenRad = radius * 0.01 * this.zoom;
+		double screenRad = radius * this.zoom;
 		// above or to the left is outside
 		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
 			return false;

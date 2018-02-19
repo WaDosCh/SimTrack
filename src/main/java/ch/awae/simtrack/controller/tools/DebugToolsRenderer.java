@@ -3,6 +3,7 @@ package ch.awae.simtrack.controller.tools;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 
 import ch.awae.simtrack.controller.tools.DebugTools.Option;
@@ -72,7 +73,9 @@ public class DebugToolsRenderer implements IRenderer {
 	}
 
 	public String zoomToString(IGameView view) {
-		return "Zoom: " + view.getViewPort().getZoom();
+		DecimalFormat f = new DecimalFormat("#.00");
+		return "Zoom: " + f.format(view.getViewPort().getZoom()) + " -> "
+				+ f.format(view.getViewPort().getTargetZoom());
 	}
 
 	public String screenPositionToString(Point screenPos) {

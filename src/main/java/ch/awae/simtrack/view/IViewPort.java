@@ -93,4 +93,6 @@ public interface IViewPort {
 	 */
 	public void transformToScene(Graphics g);
 
+	public double getTargetZoom();
+
 }
