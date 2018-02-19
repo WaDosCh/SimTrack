@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.DebugTools;
-import ch.awae.simtrack.controller.tools.TrackBar;
+import ch.awae.simtrack.controller.tools.ToolBar;
 import ch.awae.simtrack.model.IModel;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
@@ -19,7 +19,7 @@ public class GameController implements IController {
 	private @Getter IGameView gameView;
 	private @Getter Input input;
 	private Navigator navigator;
-	private TrackBar trackbar;
+	private ToolBar trackbar;
 	private Editor editor;
 	private DebugTools debugTools;
 	private @Getter PathFinding pathfinder;
@@ -41,7 +41,7 @@ public class GameController implements IController {
 		this.pathfinder = new PathFinding(this.model);
 		this.navigator = new Navigator(this.gameView, input);
 		this.editor = new Editor(this);
-		this.trackbar = new TrackBar(editor);
+		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);
 		this.gameView.setEditorRenderer(this::render);
 	}

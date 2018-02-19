@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.RenderingEventDrivenTool;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
@@ -17,7 +17,6 @@ import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
-import lombok.Getter;
 
 /**
  * Track tool-bar used for track selection while editing the board
@@ -26,10 +25,9 @@ import lombok.Getter;
  * @version 1.5, 2015-01-26
  * @since SimTrack 0.2.2 (0.2.1)
  */
-public class TrackBar extends EventDrivenTool implements IRenderer {
+public class ToolBar extends RenderingEventDrivenTool {
 
 	private int index;
-	private @Getter IRenderer renderer = this;
 
 	private Color bdcol = new Color(0.0f, 0.0f, 0.0f);
 	private Stroke bdst = new BasicStroke(2);
@@ -47,7 +45,7 @@ public class TrackBar extends EventDrivenTool implements IRenderer {
 	 * @param editor
 	 *            the editor owning the build tool
 	 */
-	public TrackBar(Editor editor) {
+	public ToolBar(Editor editor) {
 		super(editor, UnloadAction.IGNORE);
 
 		// ######### BINDINGS ##########
