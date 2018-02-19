@@ -6,6 +6,7 @@ import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.ToolBar;
 import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import lombok.Getter;
 public class GameController implements IController {
 
 	private @Getter IModel model;
-	private @Getter IGameView gameView;
+	private @Getter GameView gameView;
 	private @Getter Input input;
 	private Navigator navigator;
 	private ToolBar trackbar;
@@ -32,7 +33,7 @@ public class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, IGameView gameView, IGUIControllerHookup hooker, Input input) {
+	public GameController(IModel model, GameView gameView, IGUIControllerHookup hooker, Input input) {
 		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
@@ -84,6 +85,7 @@ public class GameController implements IController {
 		this.editor.tick();
 		this.trackbar.tick();
 		this.debugTools.tick();
+		this.gameView.getViewPort().tick();
 		this.model.tick();
 		this.pathfinder.tick();
 	}

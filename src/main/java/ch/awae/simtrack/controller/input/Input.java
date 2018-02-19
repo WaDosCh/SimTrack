@@ -21,7 +21,6 @@ public class Input {
 	public static final int MOUSE_RIGHT = 0x0003_0000;
 
 	// MOUSE MOTION
-	private final long MAX_SCROLL_TIME_WITHOUT_UPDATE = 100;
 	private double scroll = 0;
 	private long lastScrollUpdate;
 	private Point mousePosition = new Point(0, 0);
@@ -61,8 +60,9 @@ public class Input {
 	 * @return the current scroll speed.
 	 */
 	public double getScroll() {
-		return (this.lastScrollUpdate + this.MAX_SCROLL_TIME_WITHOUT_UPDATE < System.currentTimeMillis()) ? 0
-				: this.scroll;
+		double result = this.scroll;
+		this.scroll = 0;
+		return result;
 	}
 
 	public Point getMousePosition() {

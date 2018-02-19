@@ -13,7 +13,7 @@ import ch.awae.simtrack.view.renderer.IRenderer;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-class GameView implements IGameView {
+public class GameView implements IGameView {
 
 	private IModel model;
 	private ViewPort viewPort;
@@ -118,7 +118,7 @@ class GameView implements IGameView {
 	}
 
 	@Override
-	public IViewPort getViewPort() {
+	public ViewPort getViewPort() {
 		return this.viewPort;
 	}
 
