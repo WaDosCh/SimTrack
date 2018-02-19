@@ -5,6 +5,8 @@ import java.awt.Point;
 
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.judos.generic.data.geometry.PointD;
+import ch.judos.generic.data.geometry.PointI;
 import lombok.Getter;
 
 /**
@@ -15,17 +17,22 @@ import lombok.Getter;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-class ViewPort implements IViewPort {
+public class ViewPort implements IViewPort {
 
 	public static int outsideBounds = 100;
 
-	private int minZoom = 10;
+	private double minZoom = 10;
+	private double defaultZoom = 50;
 	private @Getter double zoom;
+	private double targetZoom;
 
-	@Getter
-	private Point sceneCorner, screenDimensions;
+	private PointD sceneCorner;
+
+	private @Getter PointI screenDimensions;
 	private SceneCoordinate sceneDimensions;
 	private IGameView owner;
+
+	private PointI focusedPointForZoom;
 
 	/**
 	 * instantiates a new view-port
@@ -35,6 +42,24 @@ class ViewPort implements IViewPort {
 	ViewPort(IGameView owner) {
 		this.owner = owner;
 		this.init();
+	}
+
+	/**
+	 * initialises the viewport
+	 */
+	void init() {
+		int hScreen = this.owner.getHorizontalScreenSize();
+		int vScreen = this.owner.getVerticalScreenSize() - 150;
+		this.screenDimensions = new PointI(hScreen, vScreen);
+		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
+		if (minH > this.minZoom)
+			this.minZoom = (int) Math.ceil(minH);
+		this.zoom = this.defaultZoom;
+		this.targetZoom = this.zoom;
+		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
+				((this.owner.getModel().getVerticalSize() - 1) * Math.sqrt(3) * 50));
+		this.sceneCorner = new PointD(0, 0);
+		updateCorner();
 	}
 
 	@Override
@@ -58,23 +83,6 @@ class ViewPort implements IViewPort {
 	}
 
 	/**
-	 * initialises the viewport
-	 */
-	void init() {
-		int hScreen = this.owner.getHorizontalScreenSize();
-		int vScreen = this.owner.getVerticalScreenSize() - 150;
-		this.screenDimensions = new Point(hScreen, vScreen);
-		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
-		if (minH > this.minZoom)
-			this.minZoom = (int) Math.ceil(minH);
-		this.zoom = this.minZoom;
-		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
-				((this.owner.getModel().getVerticalSize() - 1) * Math.sqrt(3) * 50));
-		this.sceneCorner = new Point(0, 0);
-		updateCorner();
-	}
-
-	/**
 	 * moves the scene
 	 * 
 	 * @param dx
@@ -89,8 +97,8 @@ class ViewPort implements IViewPort {
 	private void updateCorner() {
 		double minX = this.screenDimensions.x - (0.01 * this.zoom * this.sceneDimensions.s);
 		double minY = this.screenDimensions.y - (0.01 * this.zoom * this.sceneDimensions.t);
-		int x = this.sceneCorner.x;
-		int y = this.sceneCorner.y;
+		double x = this.sceneCorner.x;
+		double y = this.sceneCorner.y;
 		if (x > outsideBounds)
 			x = outsideBounds;
 		if (x < minX - outsideBounds)
@@ -99,7 +107,7 @@ class ViewPort implements IViewPort {
 			y = outsideBounds;
 		if (y < minY - outsideBounds)
 			y = (int) minY - outsideBounds;
-		this.sceneCorner = new Point(x, y);
+		this.sceneCorner = new PointD(x, y);
 	}
 
 	/**
@@ -113,13 +121,32 @@ class ViewPort implements IViewPort {
 	 *            y-coordinate of the fixed point
 	 */
 	void zoom(int delta, int fixX, int fixY) {
-		double newZoom = this.zoom + delta;
-		if (newZoom < this.minZoom)
-			newZoom = this.minZoom;
-		int x = this.sceneCorner.x - fixX, y = this.sceneCorner.y - fixY;
-		x *= newZoom / this.zoom;
-		y *= newZoom / this.zoom;
-		this.sceneCorner = new Point(x + fixX, y + fixY);
+		this.focusedPointForZoom = new PointI(fixX, fixY);
+		if (delta > 0)
+			this.targetZoom *= 1.3;
+		if (delta < 0)
+			this.targetZoom /= 1.3;
+
+		if (this.targetZoom < this.minZoom)
+			this.targetZoom = this.minZoom;
+	}
+
+	protected void updateZoomFactor() {
+		if (this.focusedPointForZoom == null)
+			return;
+		double diff = (this.targetZoom - this.zoom);
+		double diffDir = Math.signum(diff);
+		diff = Math.abs(diff);
+		double diffChange = diff * 0.1;
+		if (diffChange > 0 && diffChange < 0.001 * this.targetZoom) {
+			diffChange = Math.min(0.001 * this.targetZoom, diff);
+		}
+		double newZoom = this.zoom + diffDir * diffChange;
+
+		PointD scroll = this.sceneCorner.subtract(this.focusedPointForZoom);
+		scroll.scaleI(newZoom / this.zoom);
+		this.sceneCorner = scroll.add(this.focusedPointForZoom);
+
 		this.zoom = newZoom;
 		updateCorner();
 	}
@@ -165,6 +192,15 @@ class ViewPort implements IViewPort {
 	@Override
 	public boolean isVisible(TileCoordinate tileCoordinate) {
 		return isVisible(tileCoordinate.toSceneCoordinate(), 80);
+	}
+
+	public void tick() {
+		updateZoomFactor();
+	}
+
+	@Override
+	public Point getSceneCorner() {
+		return this.sceneCorner.getPoint();
 	}
 
 }

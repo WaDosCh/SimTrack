@@ -86,7 +86,7 @@ public class Navigator {
 		this.gameView.moveScene(dx, dy);
 
 		double amount = input.getScroll();
-		// logger.info("scroll: " + amount);
-		this.gameView.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
+		if (amount != 0)
+			this.gameView.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
 	}
 }
