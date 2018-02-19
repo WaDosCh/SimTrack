@@ -2,6 +2,7 @@ package ch.awae.simtrack.controller.tools;
 
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.OnLoad;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.tile.IFixedTile;
@@ -45,15 +46,16 @@ public class BuildTool extends EventDrivenTool {
 		ifNot(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this:: place);
 
 	}
-
-	@Override
-	public void load(Object[] args) throws IllegalStateException {
-		if (args.length == 0) {
-			this.isBulldozeTool = true;
-		} else {
-			this.track = (ITransformableTrackTile) args[0];
-			this.isBulldozeTool = false;
-		}
+	
+	@OnLoad
+	public void loadBulldoze() {
+		isBulldozeTool = true;
+	}
+	
+	@OnLoad
+	public void loadBuilder(ITransformableTrackTile tile) {
+		isBulldozeTool = false;
+		track = tile;
 	}
 
 	private void checkValid() {

@@ -12,6 +12,7 @@ import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.controller.tools.InGameMenu;
 import ch.awae.simtrack.controller.tools.PathFindingTool;
+import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
@@ -78,28 +79,34 @@ public class Editor implements IEditor {
 			toolClass = FreeTool.class;
 		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
 		ITool next = this.tools.get(toolClass);
+
 		if (next == null) {
 			logger.warn("Tool " + toolClass.getSimpleName() + " was not found.");
 			return false;
 		}
-		if (this.currentTool == next) {
-			next.onUnload();
-			next.load(args);
-			return true;
-		}
+
 		try {
-			next.load(args);
-		} catch (IllegalStateException ex) {
-			logger.error("Error loading tool: " + ex.getMessage());
-			// could not load. do not make the switch and leave old tool on!
+			ReflectionHelper<ITool> helper = new ReflectionHelper<>(next);
+
+			try {
+				helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);
+			} catch (NoSuchMethodException nsm) {
+				// ignore
+			}
+			if (currentTool != null)
+				currentTool.onUnload();
+
+			this.currentTool = next;
+			this.renderer = this.currentTool.getRenderer();
+			this.getController().setWindowTitle(toolClass.getSimpleName());
+
+			return true;
+
+		} catch (Exception exception) {
+			logger.error("Error loading tool: " + exception.getMessage());
+			// error during tool load. remain with old tool
 			return false;
 		}
-		if (this.currentTool != null)
-			this.currentTool.onUnload();
-		this.currentTool = next;
-		this.renderer = this.currentTool.getRenderer();
-		this.getController().setWindowTitle(toolClass.getSimpleName());
-		return true;
 	}
 
 	/**
