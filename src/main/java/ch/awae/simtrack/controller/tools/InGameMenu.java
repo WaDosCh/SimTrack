@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.EventDrivenTool;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import lombok.Getter;
 
 public class InGameMenu extends EventDrivenTool {
@@ -41,7 +41,7 @@ public class InGameMenu extends EventDrivenTool {
 	private void load() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
-			IModel model = (IModel) in.readObject();
+			Model model = (Model) in.readObject();
 			in.close();
 			this.controller.loadModel(model);
 			this.editor.loadTool(FreeTool.class);

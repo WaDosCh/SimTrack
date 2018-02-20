@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.ToolBar;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
@@ -16,7 +16,7 @@ import lombok.Getter;
  */
 public class GameController implements IController {
 
-	private @Getter IModel model;
+	private @Getter Model model;
 	private @Getter GameView gameView;
 	private @Getter Input input;
 	private Navigator navigator;
@@ -33,7 +33,7 @@ public class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, GameView gameView, IGUIControllerHookup hooker, Input input) {
+	public GameController(Model model, GameView gameView, IGUIControllerHookup hooker, Input input) {
 		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
@@ -100,7 +100,7 @@ public class GameController implements IController {
 	}
 
 	@Override
-	public void loadModel(IModel model) {
+	public void loadModel(Model model) {
 		this.model = model;
 		this.model.load();
 		this.pathfinder.setModel(this.model);

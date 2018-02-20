@@ -13,7 +13,7 @@ import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Binding.EdgeProcessor;
 import ch.awae.simtrack.controller.input.Binding.SkipConsumeException;
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.view.IViewPort;
@@ -30,7 +30,7 @@ public abstract class EventDrivenTool implements ITool {
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected @Getter TileCoordinate mouseTile = null;
 	protected @Getter SceneCoordinate mouseScene = null;
-	protected IModel model = null;
+	protected Model model = null;
 	protected final Logger logger = LogManager.getLogger(getClass());
 	private final Binding drop;
 	private final boolean autoUnload;

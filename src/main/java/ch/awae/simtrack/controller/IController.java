@@ -1,7 +1,7 @@
 package ch.awae.simtrack.controller;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.view.IGameView;
 
 /**
@@ -18,7 +18,7 @@ public interface IController {
 	 * 
 	 * @return the model
 	 */
-	public IModel getModel();
+	public Model getModel();
 
 	/**
 	 * retrieves the controller-associated view
@@ -43,6 +43,6 @@ public interface IController {
 
 	public void setWindowTitle(String string);
 
-	public void loadModel(IModel model);
+	public void loadModel(Model model);
 
 }

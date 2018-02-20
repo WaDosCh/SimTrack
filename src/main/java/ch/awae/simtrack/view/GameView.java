@@ -3,7 +3,7 @@ package ch.awae.simtrack.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
@@ -15,7 +15,7 @@ import ch.awae.simtrack.view.renderer.IRenderer;
  */
 public class GameView implements IGameView {
 
-	private IModel model;
+	private Model model;
 	private ViewPort viewPort;
 	private int screenX, screenY;
 	private Runnable delegate;
@@ -32,7 +32,7 @@ public class GameView implements IGameView {
 	 * @param screenX
 	 * @param screenY
 	 */
-	GameView(IModel model, int screenX, int screenY) {
+	GameView(Model model, int screenX, int screenY) {
 		this.model = model;
 		this.screenX = screenX;
 		this.screenY = screenY;
@@ -103,7 +103,7 @@ public class GameView implements IGameView {
 	}
 
 	@Override
-	public IModel getModel() {
+	public Model getModel() {
 		return this.model;
 	}
 
@@ -123,7 +123,7 @@ public class GameView implements IGameView {
 	}
 
 	@Override
-	public void setModel(IModel model) {
+	public void setModel(Model model) {
 		this.model = model;
 	}
 

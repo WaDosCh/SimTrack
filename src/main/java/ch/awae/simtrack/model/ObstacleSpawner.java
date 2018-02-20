@@ -8,7 +8,7 @@ import ch.awae.simtrack.model.tile.TileType;
 
 public class ObstacleSpawner {
 
-	public static void spawnObstacles(IModel model, int amountOfObstacles) {
+	public static void spawnObstacles(Model model, int amountOfObstacles) {
 		Random r = new Random();
 
 		for (int i = 0; i < amountOfObstacles; i++) {

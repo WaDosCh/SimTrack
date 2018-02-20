@@ -1,6 +1,6 @@
 package ch.awae.simtrack.view;
 
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
 /**
@@ -55,7 +55,7 @@ public interface IGameView {
 	 * 
 	 * @return the view-associated model
 	 */
-	public IModel getModel();
+	public Model getModel();
 
 	/**
 	 * returns the pixel width of the drawing surface
@@ -78,6 +78,6 @@ public interface IGameView {
 	 */
 	public IViewPort getViewPort();
 
-	public void setModel(IModel model);
+	public void setModel(Model model);
 
 }

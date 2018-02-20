@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
 import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.TileCoordinate;
@@ -24,14 +24,14 @@ import lombok.Getter;
 public class PathFinding {
 
 	@Getter
-	private IModel model;
+	private Model model;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private HashMapList<TileEdgeCoordinate, T2<TileEdgeCoordinate, Float>> connectionCache;
 	private Observer modelObserver;
 
-	public PathFinding(IModel model) {
+	public PathFinding(Model model) {
 		this.model = model;
 		this.connectionCache = new HashMapList<>();
 		this.modelObserver = this.model.createObserver();
@@ -151,7 +151,7 @@ public class PathFinding {
 		return (int) (dist1 - dist2);
 	}
 
-	public void setModel(IModel model) {
+	public void setModel(Model model) {
 		this.model = model;
 		this.modelObserver = this.model.createObserver();
 	}
