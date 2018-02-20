@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 public class CollectionUtil {
 
 	private static Random random = new Random(System.currentTimeMillis());
@@ -20,6 +23,10 @@ public class CollectionUtil {
 
 	public static <K> K randomValue(List<K> list) {
 		return list.get(random.nextInt(list.size()));
+	}
+
+	public static <K, V> Cache<K, V> softValueCache() {
+		return CacheBuilder.newBuilder().softValues().build();
 	}
 
 }

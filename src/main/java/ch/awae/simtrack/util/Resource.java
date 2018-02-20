@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.json.JsonObject;
@@ -15,6 +15,8 @@ import javax.json.spi.JsonProvider;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.google.common.cache.Cache;
 
 /**
  * Utility class for accessing resource files
@@ -71,34 +73,43 @@ public final class Resource {
 		}
 	}
 
+	private static Cache<String, BufferedImage> imageCache = CollectionUtil.softValueCache();
+
 	public static BufferedImage getImage(String id) {
-		try (InputStream stream = asStream(id)) {
-			return ImageIO.read(stream);
-		} catch (IOException e) {
+		try {
+			return imageCache.get(id, () -> {
+				logger.info("loading image '" + id + "'");
+				try (InputStream stream = asStream(id)) {
+					return ImageIO.read(stream);
+				}
+			});
+		} catch (ExecutionException e) {
+			logger.error("error loading image", e);
 			throw new RuntimeException(e);
 		}
 	}
 
-	private static HashMap<String, Properties> propertyCache = new HashMap<>();
+	private static Cache<String, Properties> propertyCache = CollectionUtil.softValueCache();
 
 	public static Properties getProperties(String id) {
-		if (propertyCache.containsKey(id)) {
-			logger.info("loading '" + id + "' from cache");
-			return propertyCache.get(id);
-		} else {
-			java.util.Properties props = new java.util.Properties();
-			try (InputStream stream = asStream(id)) {
-				props.load(stream);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			logger.info("loading '" + id + "' with " + props.size() + " entries");
-			for (Entry<Object, Object> entry : props.entrySet()) {
-				logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
-			}
-			Properties p = new Properties(props);
-			propertyCache.put(id, p);
-			return p;
+		try {
+			return propertyCache.get(id, () -> {
+				java.util.Properties props = new java.util.Properties();
+				try (InputStream stream = asStream(id)) {
+					props.load(stream);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+				logger.info("loading '" + id + "' with " + props.size() + " entries");
+				for (Entry<Object, Object> entry : props.entrySet()) {
+					logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
+				}
+				Properties p = new Properties(props);
+				return p;
+			});
+		} catch (ExecutionException e) {
+			logger.error("error loading property", e);
+			throw new RuntimeException(e);
 		}
 	}
 
