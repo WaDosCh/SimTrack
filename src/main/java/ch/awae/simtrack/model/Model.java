@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.awae.simtrack.model.entity.IEntity;
+import ch.awae.simtrack.model.entity.Entity;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.entity.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
@@ -18,12 +18,12 @@ import ch.awae.simtrack.model.tile.IDestinationTrackTile;
 import ch.awae.simtrack.model.tile.IFixedTile;
 import ch.awae.simtrack.model.tile.ITile;
 import ch.awae.simtrack.model.tile.ITrackTile;
-import ch.awae.simtrack.util.IObservable;
+import ch.awae.simtrack.util.Observable;
 import ch.awae.simtrack.util.ObservableHandler;
 import ch.awae.simtrack.util.T3;
 import lombok.Getter;
 
-public class Model implements Serializable, IObservable {
+public class Model implements Serializable, Observable {
 
 	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
@@ -31,7 +31,7 @@ public class Model implements Serializable, IObservable {
 
 	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
-	private Set<IEntity> entities = new HashSet<>();
+	private Set<Entity> entities = new HashSet<>();
 	@Getter
 	private LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	@Getter
@@ -67,7 +67,7 @@ public class Model implements Serializable, IObservable {
 		return tiles.entrySet();
 	}
 
-	public Set<IEntity> getEntities() {
+	public Set<Entity> getEntities() {
 		return this.entities;
 	}
 
@@ -173,7 +173,7 @@ public class Model implements Serializable, IObservable {
 	}
 
 	public void tick() {
-		for (IEntity entity : this.entities) {
+		for (Entity entity : this.entities) {
 			entity.tick((pathFindingRequest) -> this.pathFindingQueue.addLast(pathFindingRequest));
 		}
 	}

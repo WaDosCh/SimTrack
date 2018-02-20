@@ -3,7 +3,7 @@ package ch.awae.simtrack.model.entity;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import lombok.Getter;
 
-public class Signal implements IEntity {
+public class Signal implements Entity {
 
 	private static final long serialVersionUID = 3814126426621063787L;
 

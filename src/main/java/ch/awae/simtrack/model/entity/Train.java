@@ -12,7 +12,7 @@ import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.*;
 import ch.judos.generic.data.DynamicList;
 
-public class Train implements IEntity {
+public class Train implements Entity {
 
 	private static Logger logger = LogManager.getLogger();
 
