@@ -18,6 +18,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.cache.Cache;
 
+import lombok.SneakyThrows;
+
 /**
  * Utility class for accessing resource files
  * 
@@ -75,42 +77,34 @@ public final class Resource {
 
 	private static Cache<String, BufferedImage> imageCache = CollectionUtil.softValueCache();
 
+	@SneakyThrows(ExecutionException.class)
 	public static BufferedImage getImage(String id) {
-		try {
-			return imageCache.get(id, () -> {
-				logger.info("loading image '" + id + "'");
-				try (InputStream stream = asStream(id)) {
-					return ImageIO.read(stream);
-				}
-			});
-		} catch (ExecutionException e) {
-			logger.error("error loading image", e);
-			throw new RuntimeException(e);
-		}
+		return imageCache.get(id, () -> {
+			logger.info("loading image '" + id + "'");
+			try (InputStream stream = asStream(id)) {
+				return ImageIO.read(stream);
+			}
+		});
 	}
 
 	private static Cache<String, Properties> propertyCache = CollectionUtil.softValueCache();
 
+	@SneakyThrows(ExecutionException.class)
 	public static Properties getProperties(String id) {
-		try {
-			return propertyCache.get(id, () -> {
-				java.util.Properties props = new java.util.Properties();
-				try (InputStream stream = asStream(id)) {
-					props.load(stream);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				logger.info("loading '" + id + "' with " + props.size() + " entries");
-				for (Entry<Object, Object> entry : props.entrySet()) {
-					logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
-				}
-				Properties p = new Properties(props);
-				return p;
-			});
-		} catch (ExecutionException e) {
-			logger.error("error loading property", e);
-			throw new RuntimeException(e);
-		}
+		return propertyCache.get(id, () -> {
+			java.util.Properties props = new java.util.Properties();
+			try (InputStream stream = asStream(id)) {
+				props.load(stream);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			logger.info("loading '" + id + "' with " + props.size() + " entries");
+			for (Entry<Object, Object> entry : props.entrySet()) {
+				logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
+			}
+			Properties p = new Properties(props);
+			return p;
+		});
 	}
 
 }
