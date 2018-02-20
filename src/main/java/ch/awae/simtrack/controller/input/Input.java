@@ -22,7 +22,6 @@ public class Input {
 
 	// MOUSE MOTION
 	private double scroll = 0;
-	private long lastScrollUpdate;
 	private Point mousePosition = new Point(0, 0);
 
 	// LISTENER REGISTRY
@@ -120,7 +119,6 @@ public class Input {
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			Input.this.scroll = e.getPreciseWheelRotation();
-			Input.this.lastScrollUpdate = System.currentTimeMillis();
 		}
 
 		private void setBtn(int button, boolean value) {
