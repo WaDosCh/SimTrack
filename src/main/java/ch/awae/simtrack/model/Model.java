@@ -9,6 +9,7 @@ import ch.awae.simtrack.model.entity.IEntity;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.entity.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
+import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.position.TilePath;
@@ -24,6 +25,7 @@ class Model implements IModel {
 
 	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
+	private int maxS, maxT;
 
 	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
@@ -36,6 +38,8 @@ class Model implements IModel {
 	Model(int sizeX, int sizeY) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
+		maxS = (int) (sizeX * new TileCoordinate(1, 0).toSceneCoordinate().s);
+		maxT = (int) (sizeY * new TileCoordinate(0, 1).toSceneCoordinate().t);
 	}
 
 	@Override
@@ -190,6 +194,14 @@ class Model implements IModel {
 	public Set<Entry<TileCoordinate, ITile>> getTileFiltered(Function<ITile, Boolean> filter) {
 		return this.tiles.entrySet().stream().filter(entry -> filter.apply(entry.getValue()))
 				.collect(Collectors.toSet());
+	}
+
+	@Override
+	public boolean isOnMap(TileCoordinate tile) {
+		SceneCoordinate P = tile.toSceneCoordinate();
+		if (P.s < 0 || P.t < 0)
+			return false;
+		return P.s <= maxS && P.t <= maxT;
 	}
 
 }

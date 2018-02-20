@@ -60,4 +60,6 @@ public interface IModel extends IObservable, Serializable {
 	 */
 	public void load();
 
+	public boolean isOnMap(TileCoordinate tile);
+
 }

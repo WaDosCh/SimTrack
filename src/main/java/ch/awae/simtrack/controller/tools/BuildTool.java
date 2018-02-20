@@ -79,6 +79,11 @@ public class BuildTool extends SimpleEventDrivenTool {
 	private boolean canPlace() {
 		if (mouseTile == null)
 			return false;
+		// in range?
+		if (!model.isOnMap(mouseTile))
+			return false;
+		
+		// compatible?
 		ITile tile = model.getTileAt(mouseTile);
 		if (tile != null) {
 			if (tile instanceof IFixedTile)
