@@ -21,6 +21,8 @@ public class HexGridRenderer implements Renderer {
 
 	@Override
 	public void render(Graphics g, GameView view) {
+		if (!view.drawHex)
+			return;
 		ViewPort port = view.getViewPort();
 		g.setColor(gridColor);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));

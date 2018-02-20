@@ -23,6 +23,8 @@ public class GameView {
 	private int screenX, screenY;
 	private Runnable delegate;
 
+	public boolean drawHex = true;
+
 	private Logger logger = LogManager.getLogger();
 
 	private List<Renderer> renderers = new ArrayList<>();
@@ -144,6 +146,10 @@ public class GameView {
 
 	public void setModel(Model model) {
 		this.model = model;
+	}
+
+	public void toggleHex() {
+		this.drawHex = !this.drawHex;
 	}
 
 }

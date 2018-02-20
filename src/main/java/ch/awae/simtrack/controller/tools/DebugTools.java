@@ -41,6 +41,7 @@ public class DebugTools extends EventDrivenTool {
 		onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
 		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
 		onPress(KeyEvent.VK_F4, this::spawnTrain);
+		onPress(KeyEvent.VK_F5, () -> editor.getController().getGameView().toggleHex());
 		onPress(KeyEvent.VK_F12, () -> System.exit(0));
 	}
 

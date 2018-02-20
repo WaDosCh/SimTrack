@@ -96,7 +96,7 @@ public class TileRenderer implements Renderer {
 			Tile tile = model.getTileAt(pos.getNeighbour(edge));
 			if (tile != null && tile.getType() == TileType.WATER) {
 				g.rotate(edge.getAngleOut());
-				g.fillRect(0, -hexSideHalf, 50, 2 * hexSideHalf);
+				g.fillRect(0, -hexSideHalf, 55, 2 * hexSideHalf);
 				g.peek();
 			}
 		}
