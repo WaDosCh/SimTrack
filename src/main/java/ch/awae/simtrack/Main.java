@@ -3,9 +3,9 @@ package ch.awae.simtrack;
 import javax.swing.SwingUtilities;
 
 import ch.awae.simtrack.controller.ControllerFactory;
-import ch.awae.simtrack.controller.GameController;
+import ch.awae.simtrack.controller.Controller;
 import ch.awae.simtrack.gui.GUI;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.ModelFactory;
 import ch.awae.simtrack.util.MacKeyboardHack;
 import ch.awae.simtrack.view.GameView;
@@ -25,9 +25,9 @@ public class Main {
 
 	private static void init() {
 		GUI gui = new GUI(1200, 800);
-		IModel model = ModelFactory.getModel(25, 13, 10);
+		Model model = ModelFactory.getModel(25, 13, 10);
 		GameView gameView = ViewFactory.createGameView(model, gui);
-		GameController c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
+		Controller c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
 		c.start();
 	}
 

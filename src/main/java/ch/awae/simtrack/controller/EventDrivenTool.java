@@ -13,24 +13,24 @@ import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Binding.EdgeProcessor;
 import ch.awae.simtrack.controller.input.Binding.SkipConsumeException;
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.IViewPort;
+import ch.awae.simtrack.view.ViewPort;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
-public abstract class EventDrivenTool implements ITool {
+public abstract class EventDrivenTool implements Tool {
 
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
 	protected final Editor editor;
-	protected final IController controller;
-	protected final IViewPort viewPort;
+	protected final Controller controller;
+	protected final ViewPort viewPort;
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected @Getter TileCoordinate mouseTile = null;
 	protected @Getter SceneCoordinate mouseScene = null;
-	protected IModel model = null;
+	protected Model model = null;
 	protected final Logger logger = LogManager.getLogger(getClass());
 	private final Binding drop;
 	private final boolean autoUnload;

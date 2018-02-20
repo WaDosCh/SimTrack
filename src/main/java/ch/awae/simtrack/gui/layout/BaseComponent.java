@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 import ch.awae.simtrack.view.Design;
 import lombok.Getter;
 
-public abstract class BaseComponent implements IComponent {
+public abstract class BaseComponent implements Component {
 
 	@Getter
 	public Dimension size;

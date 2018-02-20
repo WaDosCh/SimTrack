@@ -3,8 +3,8 @@ package ch.awae.simtrack.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.awae.simtrack.model.IModel;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.model.Model;
+import ch.awae.simtrack.view.renderer.Renderer;
 
 /**
  * the game view implementation
@@ -13,15 +13,15 @@ import ch.awae.simtrack.view.renderer.IRenderer;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class GameView implements IGameView {
+public class GameView {
 
-	private IModel model;
+	private Model model;
 	private ViewPort viewPort;
 	private int screenX, screenY;
 	private Runnable delegate;
 
-	private List<IRenderer> renderers = new ArrayList<>();
-	private IRenderer editorRenderer = (r, v) -> {
+	private List<Renderer> renderers = new ArrayList<>();
+	private Renderer editorRenderer = (r, v) -> {
 		// void
 	};
 
@@ -32,7 +32,7 @@ public class GameView implements IGameView {
 	 * @param screenX
 	 * @param screenY
 	 */
-	GameView(IModel model, int screenX, int screenY) {
+	GameView(Model model, int screenX, int screenY) {
 		this.model = model;
 		this.screenX = screenX;
 		this.screenY = screenY;
@@ -44,16 +44,28 @@ public class GameView implements IGameView {
 	 * 
 	 * @param renderers
 	 */
-	void setRenderers(List<IRenderer> renderers) {
+	void setRenderers(List<Renderer> renderers) {
 		this.renderers = renderers;
 	}
 
-	@Override
+	/**
+	 * moves the view by the given amount
+	 * 
+	 * @param dx
+	 * @param dy
+	 */
 	public void moveScene(int dx, int dy) {
 		this.viewPort.moveScene(dx, dy);
 	}
 
-	@Override
+	/**
+	 * zooms the view by the given amount at the given point. the given point
+	 * remains stationary while zooming.
+	 * 
+	 * @param dzoom
+	 * @param fixX
+	 * @param fixY
+	 */
 	public void zoom(float dzoom, int fixX, int fixY) {
 		this.viewPort.zoom((int) (100 * dzoom), fixX, fixY);
 	}
@@ -76,14 +88,18 @@ public class GameView implements IGameView {
 		graphics.setStack(stack);
 	}
 
-	@Override
+	/**
+	 * sets the rendering surface dimensions. All values are provided in pixels
+	 * 
+	 * @param width
+	 * @param height
+	 */
 	public void setScreenDimensions(int width, int height) {
 		this.screenX = width;
 		this.screenY = height;
 		this.viewPort.init();
 	}
 
-	@Override
 	public void renderView() {
 		this.delegate.run();
 	}
@@ -97,33 +113,27 @@ public class GameView implements IGameView {
 		this.delegate = delegate;
 	}
 
-	@Override
-	public void setEditorRenderer(IRenderer renderer) {
+	public void setEditorRenderer(Renderer renderer) {
 		this.editorRenderer = renderer;
 	}
 
-	@Override
-	public IModel getModel() {
+	public Model getModel() {
 		return this.model;
 	}
 
-	@Override
 	public int getHorizontalScreenSize() {
 		return this.screenX;
 	}
 
-	@Override
 	public int getVerticalScreenSize() {
 		return this.screenY;
 	}
 
-	@Override
 	public ViewPort getViewPort() {
 		return this.viewPort;
 	}
 
-	@Override
-	public void setModel(IModel model) {
+	public void setModel(Model model) {
 		this.model = model;
 	}
 

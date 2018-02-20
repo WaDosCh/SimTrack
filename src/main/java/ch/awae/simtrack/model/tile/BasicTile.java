@@ -12,7 +12,7 @@ import lombok.Getter;
  * 
  * @see #getInstance(TileType)
  */
-public final class BasicTile implements ITile {
+public final class BasicTile implements Tile {
 
 	private static final long serialVersionUID = 6343687845845067422L;
 	@Getter

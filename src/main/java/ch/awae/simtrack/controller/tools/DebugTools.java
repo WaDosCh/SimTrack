@@ -16,8 +16,8 @@ import ch.awae.simtrack.model.entity.Train;
 import ch.awae.simtrack.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.model.tile.IDestinationTrackTile;
-import ch.awae.simtrack.model.tile.ITile;
+import ch.awae.simtrack.model.tile.DestinationTrackTile;
+import ch.awae.simtrack.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
 import lombok.Getter;
 
@@ -45,9 +45,9 @@ public class DebugTools extends EventDrivenTool {
 	}
 
 	private void spawnTrain() {
-		Set<Entry<TileCoordinate, ITile>> spawners = this.model.getTileFiltered(
-				tile -> tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainSpawner());
-		Entry<TileCoordinate, ITile> spawner = CollectionUtil.randomValue(spawners);
+		Set<Entry<TileCoordinate, Tile>> spawners = this.model.getTileFiltered(
+				tile -> tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainSpawner());
+		Entry<TileCoordinate, Tile> spawner = CollectionUtil.randomValue(spawners);
 		TileEdgeCoordinate start = this.model.getPaths(spawner.getKey()).get(0)._1;
 
 		Train t = new Train(start, new PathFindingOptions(Type.RandomTarget), TrainElementConfiguration.locomotive1);

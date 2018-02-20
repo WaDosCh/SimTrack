@@ -22,7 +22,7 @@ class ConnectionSpawner {
 
 	private static Random RAND = new Random();
 
-	public static void spawnConnections(IModel model, int amount) {
+	public static void spawnConnections(Model model, int amount) {
 
 		ArrayList<TileCoordinate> list = new ArrayList<>();
 

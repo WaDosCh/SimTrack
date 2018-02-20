@@ -1,6 +1,6 @@
 package ch.awae.simtrack.model.tile;
 
-public interface IDestinationTrackTile extends ITrackTile, IFixedTile {
+public interface DestinationTrackTile extends TrackTile, FixedTile {
 
 	public boolean isTrainSpawner();
 

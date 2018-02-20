@@ -3,7 +3,7 @@ package ch.awae.simtrack.view.renderer;
 import java.awt.Graphics2D;
 
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 
 /**
  * General representation of any renderer.
@@ -13,17 +13,17 @@ import ch.awae.simtrack.view.IGameView;
  * @since SimTrack 0.1.1 (0.0.1)
  */
 @FunctionalInterface
-public interface IRenderer {
+public interface Renderer {
 
 	/**
-	 * calls the {@link #render(Graphics2D, IGameView)} function with a new
+	 * calls the {@link #render(Graphics2D, GameView)} function with a new
 	 * graphics instance such that transforms and strokes are not propagated
 	 * back out
 	 * 
 	 * @param g
 	 * @param view
 	 */
-	default void renderSafe(Graphics g, IGameView view) {
+	default void renderSafe(Graphics g, GameView view) {
 		Graphics.Stack stack = g.getStack();
 		render(g, view);
 		g.setStack(stack);
@@ -35,7 +35,7 @@ public interface IRenderer {
 	 * 
 	 * Transforms usually do not need to be managed, as it is recommended to
 	 * always call a Renderer through the
-	 * {@link #renderSafe(Graphics2D, IGameView)} method
+	 * {@link #renderSafe(Graphics2D, GameView)} method
 	 * 
 	 * @param g
 	 *            the graphics object to render with. This instance can be
@@ -43,6 +43,6 @@ public interface IRenderer {
 	 * @param view
 	 *            the view that invokes the rendering
 	 */
-	public void render(Graphics g, IGameView view);
+	public void render(Graphics g, GameView view);
 
 }

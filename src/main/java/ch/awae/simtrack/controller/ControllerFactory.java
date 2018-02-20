@@ -1,7 +1,7 @@
 package ch.awae.simtrack.controller;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.view.GameView;
 
 /**
@@ -20,10 +20,10 @@ public class ControllerFactory {
 	 * @param fps
 	 * @return a new game controller instantiated with the provided params
 	 */
-	public static GameController buildGameController(IModel model, GameView view, IGUIControllerHookup hooker, int tps,
+	public static Controller buildGameController(Model model, GameView view, GUIControllerHook hooker, int tps,
 			int fps) {
 		Input input = new Input(hooker);
-		return new GameController(model, view, hooker, input);
+		return new Controller(model, view, hooker, input);
 	}
 
 }

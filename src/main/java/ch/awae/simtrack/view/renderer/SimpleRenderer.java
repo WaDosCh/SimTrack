@@ -1,13 +1,13 @@
 package ch.awae.simtrack.view.renderer;
 
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 
 @FunctionalInterface
-public interface ISimpleRenderer extends IRenderer {
+public interface SimpleRenderer extends Renderer {
 
 	@Override
-	default void render(Graphics g, IGameView view) {
+	default void render(Graphics g, GameView view) {
 		render(g);
 	}
 	

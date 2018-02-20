@@ -11,12 +11,12 @@ import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.RenderingEventDrivenTool;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.entity.Signal;
-import ch.awae.simtrack.model.tile.ITransformableTrackTile;
+import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.renderer.Renderer;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
 /**
@@ -38,7 +38,7 @@ public class ToolBar extends RenderingEventDrivenTool {
 	private Color rbeds = new Color(0.6f, 0.6f, 0.6f);
 	private Stroke xstr = new BasicStroke(6);
 
-	private ArrayList<T2<Runnable, IRenderer>> bindings = new ArrayList<>();
+	private ArrayList<T2<Runnable, Renderer>> bindings = new ArrayList<>();
 
 	/**
 	 * creates a new track-bar instance
@@ -60,7 +60,7 @@ public class ToolBar extends RenderingEventDrivenTool {
 		// bind track tiles
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			if (i != 3 && i != 4 && i != 8) {
-				ITransformableTrackTile tile = TrackProvider.getTileInstance(i);
+				TransformableTrackTile tile = TrackProvider.getTileInstance(i);
 				bind(() -> editor.loadTool(BuildTool.class, tile), (g, v) -> {
 					g.scale(0.8, 0.8);
 					TrackRenderUtil.renderRails(g, this.rbeds, this.rails, tile.getRailPaths());
@@ -112,7 +112,7 @@ public class ToolBar extends RenderingEventDrivenTool {
 		return this.index;
 	}
 
-	private void bind(Runnable ru, IRenderer re) {
+	private void bind(Runnable ru, Renderer re) {
 		bindings.add(new T2<>(ru, re));
 	}
 
@@ -148,7 +148,7 @@ public class ToolBar extends RenderingEventDrivenTool {
 	}
 
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g, GameView view) {
 		g.translate(view.getHorizontalScreenSize() / 2 - 500, view.getVerticalScreenSize() - 50);
 		g.setStroke(new BasicStroke(4));
 		for (int i = 0; i < 11; i++) {

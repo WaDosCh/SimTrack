@@ -4,9 +4,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.util.function.Consumer;
 
-import ch.awae.simtrack.controller.IGUIControllerHookup;
+import ch.awae.simtrack.controller.GUIControllerHook;
+import ch.awae.simtrack.view.GUIRenderHook;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGUIHookProvider;
 
 /**
  * The GUI wrapper class
@@ -15,7 +15,7 @@ import ch.awae.simtrack.view.IGUIHookProvider;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class GUI implements IGUIControllerHookup, IGUIHookProvider {
+public class GUI implements GUIControllerHook, GUIRenderHook {
 
 	private Window window;
 	private Surface surface;

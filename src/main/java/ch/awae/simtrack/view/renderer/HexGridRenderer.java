@@ -5,8 +5,8 @@ import java.awt.Color;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IViewPort;
+import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.ViewPort;
 
 /**
  * Renderer for the hex grid overlay
@@ -15,13 +15,13 @@ import ch.awae.simtrack.view.IViewPort;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class HexGridRenderer implements IRenderer {
+public class HexGridRenderer implements Renderer {
 
 	private final static Color gridColor = Resource.getProperties("renderer.properties").getColor("gridColor");
 
 	@Override
-	public void render(Graphics g, IGameView view) {
-		IViewPort port = view.getViewPort();
+	public void render(Graphics g, GameView view) {
+		ViewPort port = view.getViewPort();
 		g.setColor(gridColor);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 		for (int i = 0; i < view.getModel().getHorizontalSize(); i++) {

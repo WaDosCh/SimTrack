@@ -1,11 +1,12 @@
 package ch.awae.simtrack.model;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.awae.simtrack.model.entity.IEntity;
+import ch.awae.simtrack.model.entity.Entity;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.entity.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
@@ -13,23 +14,24 @@ import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.position.TilePath;
-import ch.awae.simtrack.model.tile.IDestinationTrackTile;
-import ch.awae.simtrack.model.tile.IFixedTile;
-import ch.awae.simtrack.model.tile.ITile;
-import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.DestinationTrackTile;
+import ch.awae.simtrack.model.tile.FixedTile;
+import ch.awae.simtrack.model.tile.Tile;
+import ch.awae.simtrack.model.tile.TrackTile;
+import ch.awae.simtrack.util.Observable;
 import ch.awae.simtrack.util.ObservableHandler;
 import ch.awae.simtrack.util.T3;
 import lombok.Getter;
 
-class Model implements IModel {
+public class Model implements Serializable, Observable {
 
 	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
 	private int maxS, maxT;
 
-	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
+	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
-	private Set<IEntity> entities = new HashSet<>();
+	private Set<Entity> entities = new HashSet<>();
 	@Getter
 	private LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	@Getter
@@ -42,42 +44,36 @@ class Model implements IModel {
 		maxT = (int) (sizeY * new TileCoordinate(0, 1).toSceneCoordinate().t);
 	}
 
-	@Override
 	public int getHorizontalSize() {
 		return this.sizeX;
 	}
 
-	@Override
 	public int getVerticalSize() {
 		return this.sizeY;
 	}
 
-	@Override
-	public ITile getTileAt(TileCoordinate position) {
+	public Tile getTileAt(TileCoordinate position) {
 		return this.tiles.get(position);
 	}
 
-	@Override
-	public void setTileAt(TileCoordinate position, ITile tile) {
+	public void setTileAt(TileCoordinate position, Tile tile) {
 		if (this.tiles.containsKey(position))
 			return;
 		this.tiles.put(position, tile);
 		notifyChanged();
 	}
 
-	@Override
-	public Set<Map.Entry<TileCoordinate, ITile>> getTiles() {
+	public Set<Map.Entry<TileCoordinate, Tile>> getTiles() {
 		return tiles.entrySet();
 	}
 
-	public Set<IEntity> getEntities() {
+	public Set<Entity> getEntities() {
 		return this.entities;
 	}
 
-	@Override
 	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException {
-		ITile tile = this.tiles.get(position);
-		if (tile == null || tile instanceof IFixedTile)
+		Tile tile = this.tiles.get(position);
+		if (tile == null || tile instanceof FixedTile)
 			throw new IllegalArgumentException();
 		this.tiles.remove(position);
 		// remove any signals
@@ -89,12 +85,11 @@ class Model implements IModel {
 		notifyChanged();
 	}
 
-	@Override
 	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position) {
-		ITile tile = tiles.get(position);
-		if (tile instanceof ITrackTile) {
+		Tile tile = tiles.get(position);
+		if (tile instanceof TrackTile) {
 			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = new ArrayList<>();
-			ITrackTile tt = (ITrackTile) tile;
+			TrackTile tt = (TrackTile) tile;
 			for (TilePath p : tt.getPaths()) {
 				TileEdgeCoordinate from = new TileEdgeCoordinate(position, p._1);
 				TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
@@ -113,25 +108,22 @@ class Model implements IModel {
 		}
 	}
 
-	@Override
 	public Set<Entry<TileEdgeCoordinate, Signal>> getSignals() {
 		return signals.entrySet();
 	}
 
-	@Override
 	public Signal getSignalAt(TileEdgeCoordinate position) {
 		return signals.get(position);
 	}
 
-	@Override
 	public void setSignalAt(TileEdgeCoordinate position, Signal signal) {
 		if (signals.containsKey(position))
 			throw new IllegalArgumentException("signal position already occupied");
 		// check if signal position is valid
-		ITile tile = tiles.get(position.tile);
+		Tile tile = tiles.get(position.tile);
 		if (tile == null
-				|| (tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination())
-				|| !(tile instanceof ITrackTile))
+				|| (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
+				|| !(tile instanceof TrackTile))
 			throw new IllegalArgumentException("invalid tile");
 		Signal opponent = getSignalAt(position.getOppositeDirection());
 		if (opponent != null) {
@@ -139,7 +131,7 @@ class Model implements IModel {
 				throw new IllegalArgumentException("signal conflict");
 		}
 
-		ITrackTile track = (ITrackTile) tile;
+		TrackTile track = (TrackTile) tile;
 		if (!track.connectsAt(position.edge)) {
 			throw new IllegalArgumentException("invalid edge - no connections");
 		}
@@ -147,15 +139,14 @@ class Model implements IModel {
 		notifyChanged();
 	}
 
-	@Override
 	public boolean canPlaceSignal(TileEdgeCoordinate position, Type type) {
 		if (signals.containsKey(position))
 			return false;
 		// check if signal position is valid
-		ITile tile = tiles.get(position.tile);
+		Tile tile = tiles.get(position.tile);
 		if (tile == null
-				|| (tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination())
-				|| !(tile instanceof ITrackTile))
+				|| (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
+				|| !(tile instanceof TrackTile))
 			return false;
 		Signal opponent = getSignalAt(position.getOppositeDirection());
 		if (opponent != null) {
@@ -164,39 +155,34 @@ class Model implements IModel {
 		}
 		// CHECK POSITION
 
-		ITrackTile track = (ITrackTile) tile;
+		TrackTile track = (TrackTile) tile;
 		return track.connectsAt(position.edge);
 	}
 
-	@Override
 	public void removeSignalAt(TileEdgeCoordinate position) {
 		Signal current = signals.get(position);
-		ITrackTile tile = (ITrackTile) tiles.get(position.tile);
-		if (current == null || tile instanceof IDestinationTrackTile)
+		TrackTile tile = (TrackTile) tiles.get(position.tile);
+		if (current == null || tile instanceof DestinationTrackTile)
 			throw new IllegalArgumentException();
 		signals.remove(position);
 		notifyChanged();
 	}
 
-	@Override
 	public void load() {
 		observableHandler = new ObservableHandler();
 	}
 
-	@Override
 	public void tick() {
-		for (IEntity entity : this.entities) {
+		for (Entity entity : this.entities) {
 			entity.tick((pathFindingRequest) -> this.pathFindingQueue.addLast(pathFindingRequest));
 		}
 	}
 
-	@Override
-	public Set<Entry<TileCoordinate, ITile>> getTileFiltered(Function<ITile, Boolean> filter) {
+	public Set<Entry<TileCoordinate, Tile>> getTileFiltered(Function<Tile, Boolean> filter) {
 		return this.tiles.entrySet().stream().filter(entry -> filter.apply(entry.getValue()))
 				.collect(Collectors.toSet());
 	}
 
-	@Override
 	public boolean isOnMap(TileCoordinate tile) {
 		SceneCoordinate P = tile.toSceneCoordinate();
 		if (P.s < 0 || P.t < 0)

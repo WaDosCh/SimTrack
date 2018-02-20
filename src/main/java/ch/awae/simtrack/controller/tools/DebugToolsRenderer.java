@@ -12,15 +12,15 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IViewPort;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.ViewPort;
+import ch.awae.simtrack.view.renderer.Renderer;
 
-public class DebugToolsRenderer implements IRenderer {
+public class DebugToolsRenderer implements Renderer {
 
 	private HashSet<Option> showing;
 	private String[] inputGuideText;
-	private IGameView gameView;
+	private GameView gameView;
 	private DebugTools tools;
 
 	public DebugToolsRenderer(HashSet<Option> showing, DebugTools tools) {
@@ -30,18 +30,18 @@ public class DebugToolsRenderer implements IRenderer {
 	}
 
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g, GameView view) {
 		if (this.showing.contains(Option.InputGuide))
 			renderUserGuide(g, view);
 		if (this.showing.contains(Option.Coordinates))
 			renderCoordinate(g, view);
 	}
 
-	private void renderCoordinate(Graphics2D g, IGameView view) {
+	private void renderCoordinate(Graphics2D g, GameView view) {
 		Point screenPos = tools.getMousePosition();
 		TileCoordinate tilePos = tools.getMouseTile();
 		gameView = view;
-		IViewPort viewPort = this.gameView.getViewPort();
+		ViewPort viewPort = this.gameView.getViewPort();
 		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
 		if (screenPos.y > viewPort.getScreenDimensions().y - Design.toolbarHeight)
@@ -72,7 +72,7 @@ public class DebugToolsRenderer implements IRenderer {
 		g.drawString("scroll: " + view.getViewPort().getSceneCorner(), screenPos.x + 20, y);
 	}
 
-	public String zoomToString(IGameView view) {
+	public String zoomToString(GameView view) {
 		DecimalFormat f = new DecimalFormat("#.00");
 		return "Zoom: " + f.format(view.getViewPort().getZoom()) + " -> "
 				+ f.format(view.getViewPort().getTargetZoom());
@@ -82,12 +82,12 @@ public class DebugToolsRenderer implements IRenderer {
 		return "ScreenPos: [x=" + screenPos.x + ", y=" + screenPos.y + "]";
 	}
 
-	public String screenSizeToString(IGameView view) {
+	public String screenSizeToString(GameView view) {
 		Point pos = view.getViewPort().getScreenDimensions();
 		return "ScreenSize: [w=" + pos.x + ", h=" + pos.y + "]";
 	}
 
-	private void renderUserGuide(Graphics2D g, IGameView view) {
+	private void renderUserGuide(Graphics2D g, GameView view) {
 		int w = view.getHorizontalScreenSize();
 		int h = view.getVerticalScreenSize();
 		g.setColor(new Color(255, 255, 255, 225));

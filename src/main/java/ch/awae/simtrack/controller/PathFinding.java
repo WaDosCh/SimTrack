@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
 import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.model.tile.IDestinationTrackTile;
-import ch.awae.simtrack.model.tile.ITile;
+import ch.awae.simtrack.model.tile.DestinationTrackTile;
+import ch.awae.simtrack.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;
@@ -24,14 +24,14 @@ import lombok.Getter;
 public class PathFinding {
 
 	@Getter
-	private IModel model;
+	private Model model;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private HashMapList<TileEdgeCoordinate, T2<TileEdgeCoordinate, Float>> connectionCache;
 	private Observer modelObserver;
 
-	public PathFinding(IModel model) {
+	public PathFinding(Model model) {
 		this.model = model;
 		this.connectionCache = new HashMapList<>();
 		this.modelObserver = this.model.createObserver();
@@ -42,7 +42,7 @@ public class PathFinding {
 	 */
 	private void buildGraph() {
 		this.connectionCache.clear();
-		for (Entry<TileCoordinate, ITile> entry : this.model.getTiles()) {
+		for (Entry<TileCoordinate, Tile> entry : this.model.getTiles()) {
 			TileCoordinate tileCoordinate = entry.getKey();
 			buildGraphForTileCoordinate(tileCoordinate);
 		}
@@ -151,7 +151,7 @@ public class PathFinding {
 		return (int) (dist1 - dist2);
 	}
 
-	public void setModel(IModel model) {
+	public void setModel(Model model) {
 		this.model = model;
 		this.modelObserver = this.model.createObserver();
 	}
@@ -176,8 +176,8 @@ public class PathFinding {
 	}
 
 	public Stack<TileEdgeCoordinate> randomPathForStart(TileEdgeCoordinate start) {
-		Set<Entry<TileCoordinate, ITile>> destinations = this.model.getTileFiltered(
-				tile -> tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination());
+		Set<Entry<TileCoordinate, Tile>> destinations = this.model.getTileFiltered(
+				tile -> tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination());
 		List<TileEdgeCoordinate> targets = destinations.stream()
 				.map(destination -> this.model.getPaths(destination.getKey()).get(0)._2).collect(Collectors.toList());
 

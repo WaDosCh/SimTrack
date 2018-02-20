@@ -16,7 +16,7 @@ import lombok.Getter;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class ViewPort implements IViewPort {
+public class ViewPort {
 
 	public static int outsideBounds = 100;
 
@@ -27,9 +27,9 @@ public class ViewPort implements IViewPort {
 
 	private PointD sceneCorner;
 
-	private @Getter PointI screenDimensions;
+	private PointI screenDimensions;
 	private SceneCoordinate sceneDimensions;
-	private IGameView owner;
+	private GameView owner;
 
 	private PointI focusedPointForZoom;
 
@@ -38,7 +38,7 @@ public class ViewPort implements IViewPort {
 	 * 
 	 * @param owner
 	 */
-	ViewPort(IGameView owner) {
+	ViewPort(GameView owner) {
 		this.owner = owner;
 		this.init();
 	}
@@ -62,7 +62,23 @@ public class ViewPort implements IViewPort {
 		updateCorner();
 	}
 
-	@Override
+	/**
+	 * returns the dimension of the section of the drawing surface reserved for
+	 * the scene rendering.
+	 * 
+	 * @return the scene surface dimensions
+	 */
+	public Point getScreenDimensions() {
+		return this.screenDimensions;
+	}
+	
+	/**
+	 * returns the scene coordinate for a given screen coordinate
+	 * 
+	 * @param p
+	 *            the screen coordinate
+	 * @return the scene coordinate
+	 */
 	public SceneCoordinate toSceneCoordinate(Point p) {
 		double x = p.x - this.sceneCorner.x;
 		double y = p.y - this.sceneCorner.y;
@@ -71,7 +87,13 @@ public class ViewPort implements IViewPort {
 		return new SceneCoordinate(x, y);
 	}
 
-	@Override
+	/**
+	 * returns the screen coordinate for a given scene coordinate
+	 * 
+	 * @param p
+	 *            the scene coordinate
+	 * @return the screen coordinate
+	 */
 	public Point toScreenCoordinate(SceneCoordinate p) {
 		double x = p.s;
 		double y = p.t;
@@ -151,14 +173,28 @@ public class ViewPort implements IViewPort {
 		updateCorner();
 	}
 
-	@Override
+	/**
+	 * focuses the given hex
+	 * 
+	 * @param hex
+	 *            the hex to be focused
+	 * @param g
+	 *            the graphics
+	 * @return a new graphics instance that has the centre of the given tile in
+	 *         its origin and a total tile width of 100
+	 */
 	public void focusHex(TileCoordinate hex, Graphics g) {
 		Point p = toScreenCoordinate(hex.toSceneCoordinate());
 		g.translate(p.x, p.y);
 		g.scale(this.zoom, this.zoom);
 	}
-
-	@Override
+	
+	/**
+	 * transforms the screen coordinate system into the the scene coordinate
+	 * system
+	 * 
+	 * @param g
+	 */
 	public void transformToScene(Graphics g) {
 		transformToScene(g, new SceneCoordinate(0, 0));
 	}
@@ -169,7 +205,22 @@ public class ViewPort implements IViewPort {
 		g.scale(this.zoom, this.zoom);
 	}
 
-	@Override
+	/**
+	 * checks if a given area around a given scene coordinate is at least
+	 * partially visible on the screen. The check can be performed as
+	 * efficiently as possible and therefore may not be perfect. The
+	 * implementation must avoid any false negatives, but may introduce false
+	 * positives (i.e. a return value of {@code false} implies that the area is
+	 * certainly invisible, but a return value of {@code true} does not imply
+	 * any visibility)
+	 * 
+	 * @param point
+	 *            the scene coordinate
+	 * @param radius
+	 *            the radius of the area to be checked
+	 * @return false if it can be proven that the area is invisible, true
+	 *         otherwise
+	 */
 	public boolean isVisible(SceneCoordinate point, int radius) {
 		Point screenPos = toScreenCoordinate(point);
 		double screenRad = radius * this.zoom;
@@ -183,7 +234,15 @@ public class ViewPort implements IViewPort {
 		return true;
 	}
 
-	@Override
+	/**
+	 * checks if a given tile is (potentially visible)
+	 * 
+	 * @param hex
+	 *            the hex to check
+	 * @return false if it can be proven that the tile is invisible, true
+	 *         otherwise
+	 * @see #isVisible(Point, int)
+	 */
 	public boolean isVisible(TileCoordinate tileCoordinate) {
 		return isVisible(tileCoordinate.toSceneCoordinate(), 80);
 	}
@@ -192,7 +251,6 @@ public class ViewPort implements IViewPort {
 		updateZoomFactor();
 	}
 
-	@Override
 	public Point getSceneCorner() {
 		return this.sceneCorner.getPoint();
 	}

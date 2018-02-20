@@ -5,18 +5,17 @@ import java.util.function.Consumer;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.controller.tools.DebugTools;
 import ch.awae.simtrack.controller.tools.ToolBar;
-import ch.awae.simtrack.model.IModel;
+import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
 import lombok.Getter;
 
 /**
  * The game controller implementation
  */
-public class GameController implements IController {
+public class Controller {
 
-	private @Getter IModel model;
+	private @Getter Model model;
 	private @Getter GameView gameView;
 	private @Getter Input input;
 	private Navigator navigator;
@@ -33,7 +32,7 @@ public class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(IModel model, GameView gameView, IGUIControllerHookup hooker, Input input) {
+	public Controller(Model model, GameView gameView, GUIControllerHook hooker, Input input) {
 		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;
@@ -56,18 +55,16 @@ public class GameController implements IController {
 	 * @param v
 	 *            the view
 	 */
-	private void render(Graphics g, IGameView v) {
+	private void render(Graphics g, GameView v) {
 		this.editor.render(g, v);
 		this.debugTools.getRenderer().renderSafe(g, v);
 		this.trackbar.getRenderer().renderSafe(g, v);
 	}
 
-	@Override
 	public void start() {
 		this.gameClock.start();
 	}
 
-	@Override
 	public void stop() {
 		this.gameClock.stop();
 	}
@@ -94,13 +91,11 @@ public class GameController implements IController {
 		this.pathfinder.tick();
 	}
 
-	@Override
 	public void setWindowTitle(String string) {
 		titleUpdater.accept(string);
 	}
 
-	@Override
-	public void loadModel(IModel model) {
+	public void loadModel(Model model) {
 		this.model = model;
 		this.model.load();
 		this.pathfinder.setModel(this.model);

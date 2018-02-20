@@ -6,12 +6,12 @@ import java.util.Map.Entry;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 
-public class SignalRenderer implements IRenderer {
+public class SignalRenderer implements Renderer {
 
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g, GameView view) {
 		g.push();
 
 		for (Entry<TileEdgeCoordinate, Signal> entry : view.getModel().getSignals()) {

@@ -1,6 +1,6 @@
 package ch.awae.simtrack.controller;
 
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.Renderer;
 
 /**
  * describes the basic behaviour of any editor tool. Each editor tool represents
@@ -10,14 +10,14 @@ import ch.awae.simtrack.view.renderer.IRenderer;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.0.1
  */
-public interface ITool {
+public interface Tool {
 
 	/**
 	 * retrieves the renderer for this tool
 	 * 
 	 * @return the tool renderer
 	 */
-	public IRenderer getRenderer();
+	public Renderer getRenderer();
 
 	/**
 	 * performs an update tick on the tool

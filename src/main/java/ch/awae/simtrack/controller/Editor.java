@@ -14,8 +14,8 @@ import ch.awae.simtrack.controller.tools.PathFindingTool;
 import ch.awae.simtrack.controller.tools.SignalTool;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.renderer.Renderer;
 
 /**
  * top-level management of the active side of the user interface. It manages the
@@ -26,15 +26,15 @@ import ch.awae.simtrack.view.renderer.IRenderer;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class Editor implements IEditor {
+public class Editor {
 
-	private IController owner;
+	private Controller owner;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private ITool currentTool;
-	private IRenderer renderer;
-	private HashMap<Class<? extends ITool>, ITool> tools = new HashMap<>();
+	private Tool currentTool;
+	private Renderer renderer;
+	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
 
 	/**
 	 * instantiates a new editor for the given controller.
@@ -42,7 +42,7 @@ public class Editor implements IEditor {
 	 * @param c
 	 *            the controller
 	 */
-	Editor(IController c) {
+	Editor(Controller c) {
 		this.owner = c;
 		loadTools();
 	}
@@ -58,7 +58,7 @@ public class Editor implements IEditor {
 	 * @param tool
 	 *            the tool to add.
 	 */
-	private void addTool(ITool tool) {
+	private void addTool(Tool tool) {
 		this.tools.put(tool.getClass(), tool);
 		if (this.currentTool == null) {
 			loadTool(tool.getClass());
@@ -70,13 +70,13 @@ public class Editor implements IEditor {
 	 * 
 	 * @return the owning controller instance
 	 */
-	public IController getController() {
+	public Controller getController() {
 		return this.owner;
 	}
 
 	private void unloadCurrentTool() {
 		if (currentTool != null) {
-			ReflectionHelper<ITool> oldHelper = new ReflectionHelper<ITool>(currentTool);
+			ReflectionHelper<Tool> oldHelper = new ReflectionHelper<Tool>(currentTool);
 			try {
 				oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
 			} catch (NoSuchMethodException nsm) {
@@ -86,13 +86,22 @@ public class Editor implements IEditor {
 			}
 		}
 	}
-
-	@Override
-	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
+	
+	/**
+	 * loads a tool and unloads the current one. If the new tool cannot be
+	 * loaded, the current one will not be unloaded and stays active.
+	 * 
+	 * @param name
+	 *            the identifier string of the new tool
+	 * @param args
+	 *            additional arguments to hand over to the new tool
+	 * @return {@code true} if the tool switch was successful
+	 */
+	public boolean loadTool(Class<? extends Tool> toolClass, Object... args) {
 		if (toolClass == null)
 			toolClass = FreeTool.class;
 		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
-		ITool next = this.tools.get(toolClass);
+		Tool next = this.tools.get(toolClass);
 
 		if (next == null) {
 			logger.warn("Tool " + toolClass.getSimpleName() + " was not found.");
@@ -100,7 +109,7 @@ public class Editor implements IEditor {
 		}
 
 		try {
-			ReflectionHelper<ITool> helper = new ReflectionHelper<>(next);
+			ReflectionHelper<Tool> helper = new ReflectionHelper<>(next);
 
 			try {
 				helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);
@@ -144,7 +153,7 @@ public class Editor implements IEditor {
 	 * @param view
 	 *            the view
 	 */
-	void render(Graphics g, IGameView view) {
+	void render(Graphics g, GameView view) {
 		if (this.renderer != null)
 			this.renderer.renderSafe(g, view);
 	}

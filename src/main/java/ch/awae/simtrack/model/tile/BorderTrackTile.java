@@ -10,7 +10,7 @@ import ch.awae.simtrack.model.position.TilePath;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class BorderTrackTile extends BasicTrackTile implements IDestinationTrackTile {
+public class BorderTrackTile extends BasicTrackTile implements DestinationTrackTile {
 
 	private static final long serialVersionUID = -2434920987381887298L;
 	private final Edge edge;

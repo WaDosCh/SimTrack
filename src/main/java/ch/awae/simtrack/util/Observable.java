@@ -1,6 +1,6 @@
 package ch.awae.simtrack.util;
 
-public interface IObservable {
+public interface Observable {
 
 	ObservableHandler getObservableHandler();
 
