@@ -9,13 +9,13 @@ import ch.awae.simtrack.controller.OnLoad;
 import ch.awae.simtrack.controller.OnUnload;
 import ch.awae.simtrack.controller.SimpleEventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
-import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.tile.FixedTile;
 import ch.awae.simtrack.model.tile.Tile;
 import ch.awae.simtrack.model.tile.TrackTile;
 import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
+import ch.awae.simtrack.model.track.TrackValidator;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 import lombok.Getter;
@@ -33,6 +33,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 
 	private @Getter boolean isBulldozeTool;
 	private @Getter boolean valid = false;
+	private boolean placeGood = false;
 	private @Getter TransformableTrackTile track;
 
 	/**
@@ -74,6 +75,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 
 	private void checkValid() {
 		this.valid = this.isBulldozeTool ? canDelete() : canPlace();
+		this.placeGood = !isBulldozeTool && valid && makesPlaceSense();
 	}
 
 	private boolean canPlace() {
@@ -82,7 +84,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 		// in range?
 		if (!model.isOnMap(mouseTile))
 			return false;
-		
+
 		// compatible?
 		Tile tile = model.getTileAt(mouseTile);
 		if (tile != null) {
@@ -90,8 +92,35 @@ public class BuildTool extends SimpleEventDrivenTool {
 				return false;
 			if (tile instanceof TrackTile) {
 				TrackTile ttile = (TrackTile) tile;
-				if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(ttile, track)))
+				TrackTile fused = FusedTrackFactory.createFusedTrack(ttile, track);
+				if (TrackValidator.isValidTrack(fused)) {
 					return true;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private boolean makesPlaceSense() {
+		if (mouseTile == null)
+			return false;
+		// in range?
+		if (!model.isOnMap(mouseTile))
+			return false;
+
+		// compatible?
+		Tile tile = model.getTileAt(mouseTile);
+
+		if (tile != null) {
+			if (tile instanceof FixedTile)
+				return false;
+			if (tile instanceof TrackTile) {
+				TrackTile ttile = (TrackTile) tile;
+				TrackTile fused = FusedTrackFactory.createFusedTrack(ttile, track);
+				if (TrackValidator.isValidTrack(fused)) {
+					return TrackValidator.intern(ttile) != TrackValidator.intern(fused);
+				}
 			}
 			return false;
 		}
@@ -130,16 +159,16 @@ public class BuildTool extends SimpleEventDrivenTool {
 	 * tile onto the current one.
 	 */
 	private void place() {
-		if (canPlace()) {
+		if (canPlace() && makesPlaceSense()) {
 			if (input.getMousePosition().y < editor.getController().getGameView().getViewPort()
 					.getScreenDimensions().y) {
 				if (model.getTileAt(mouseTile) == null)
-					model.setTileAt(mouseTile, TileValidator.intern(track));
+					model.setTileAt(mouseTile, TrackValidator.intern(track));
 				else {
 					TrackTile oldTile = (TrackTile) model.getTileAt(mouseTile);
 					model.removeTileAt(mouseTile);
 					model.setTileAt(mouseTile,
-							TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));
+							TrackValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));
 				}
 			}
 		}
@@ -176,8 +205,8 @@ public class BuildTool extends SimpleEventDrivenTool {
 			}
 		} else {
 			viewPort.focusHex(c, g);
-			TrackRenderUtil.renderRails(g, valid ? Color.LIGHT_GRAY : Color.RED, valid ? Color.GRAY : Color.RED,
-					track.getRailPaths());
+			TrackRenderUtil.renderRails(g, valid ? placeGood ? Color.LIGHT_GRAY : Color.GRAY : Color.RED,
+					valid ? placeGood ? Color.GRAY : Color.DARK_GRAY : Color.RED, track.getRailPaths());
 		}
 	}
 

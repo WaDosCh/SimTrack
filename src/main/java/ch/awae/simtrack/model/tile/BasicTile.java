@@ -2,6 +2,7 @@ package ch.awae.simtrack.model.tile;
 
 import java.io.ObjectStreamException;
 
+import ch.awae.simtrack.util.serial.SerializedThroughProxy;
 import lombok.Getter;
 
 /**
@@ -12,7 +13,7 @@ import lombok.Getter;
  * 
  * @see #getInstance(TileType)
  */
-public final class BasicTile implements Tile {
+public final class BasicTile implements Tile, SerializedThroughProxy {
 
 	private static final long serialVersionUID = 6343687845845067422L;
 	@Getter
@@ -39,7 +40,8 @@ public final class BasicTile implements Tile {
 		return INSTANCE[type.ordinal()];
 	}
 
-	private Object writeReplace() throws ObjectStreamException {
+	@Override
+	public Object writeReplace() throws ObjectStreamException {
 		return proxy;
 	}
 

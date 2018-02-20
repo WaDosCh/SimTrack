@@ -2,7 +2,6 @@ package ch.awae.simtrack.model.track;
 
 import java.util.ArrayList;
 
-import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TilePath;
 import ch.awae.simtrack.model.tile.TrackTile;
 
@@ -36,7 +35,7 @@ public class FusedTrackFactory {
 	}
 
 	private static TilePath[] clean(TilePath[] cons) {
-		TileValidator.sortPathList(cons);
+		TrackValidator.sortPathList(cons);
 		ArrayList<TilePath> items = new ArrayList<>();
 		for (TilePath p : cons)
 			items.add(p);

@@ -1,4 +1,4 @@
-package ch.awae.simtrack.model;
+package ch.awae.simtrack.model.track;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import ch.awae.simtrack.model.position.TilePath;
 import ch.awae.simtrack.model.tile.TrackTile;
 import ch.awae.simtrack.model.tile.TransformableTrackTile;
-import ch.awae.simtrack.model.track.TrackProvider;
 
 /**
  * Validation class to determine whether or not a tile is valid
@@ -21,9 +20,9 @@ import ch.awae.simtrack.model.track.TrackProvider;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class TileValidator {
-	
-	private static Logger logger = LogManager.getLogger(TileValidator.class);
+public class TrackValidator {
+
+	private static Logger logger = LogManager.getLogger(TrackValidator.class);
 	private static List<TilePath[]> validTiles;
 	private static Map<Integer, TrackTile> tileCache;
 
@@ -90,6 +89,8 @@ public class TileValidator {
 	 * @return
 	 */
 	public static TrackTile intern(TrackTile tile) {
+		if (!tile.getClass().equals(AnonymousTrack.class))
+			return intern(AnonymousTrack.from(tile));
 		Integer key = Integer.valueOf(Arrays.hashCode(tile.getRailPaths()));
 		TrackTile res = tileCache.get(key);
 		if (res == null) {

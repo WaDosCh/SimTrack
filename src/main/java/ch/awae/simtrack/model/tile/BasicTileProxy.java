@@ -1,20 +1,21 @@
 package ch.awae.simtrack.model.tile;
 
 import java.io.ObjectStreamException;
-import java.io.Serializable;
 
+import ch.awae.simtrack.util.serial.SerializationProxy;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-final class BasicTileProxy implements Serializable {
+final class BasicTileProxy implements SerializationProxy {
 
 	private static final long serialVersionUID = 1L;
 
 	private final TileType type;
 	private final boolean fixed;
 
-	private Object readResolve() throws ObjectStreamException {
+	public Object readResolve() throws ObjectStreamException {
+		System.out.println("resolve " + type + "(" + fixed + ")");
 		if (fixed)
 			return BasicFixedTile.getInstance(type);
 		else
