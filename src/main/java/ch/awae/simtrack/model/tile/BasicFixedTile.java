@@ -1,5 +1,7 @@
 package ch.awae.simtrack.model.tile;
 
+import java.io.ObjectStreamException;
+
 import lombok.Getter;
 
 /**
@@ -15,9 +17,11 @@ public final class BasicFixedTile implements IFixedTile {
 	private static final long serialVersionUID = 4292032135599648285L;
 	@Getter
 	private final TileType type;
+	private final BasicTileProxy proxy;
 
 	private BasicFixedTile(TileType type) {
 		this.type = type;
+		proxy = new BasicTileProxy(type, true);
 	}
 
 	private final static BasicFixedTile[] INSTANCE;
@@ -33,6 +37,10 @@ public final class BasicFixedTile implements IFixedTile {
 		if (type == null)
 			return NULL_TILE;
 		return INSTANCE[type.ordinal()];
+	}
+
+	private Object writeReplace() throws ObjectStreamException {
+		return proxy;
 	}
 
 }
