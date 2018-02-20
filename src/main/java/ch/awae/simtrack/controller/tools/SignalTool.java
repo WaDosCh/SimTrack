@@ -83,7 +83,7 @@ public class SignalTool extends SimpleEventDrivenTool {
 			g.drawOval(40, 7, 20, 20);
 		} else {
 			g.setColor(type == Type.ONE_WAY ? Color.PINK : Color.MAGENTA);
-			g.fillOval(41, 8, 18, 18);
+			g.drawOval(41, 8, 18, 18);
 			g.setColor(valid ? Color.BLACK : Color.RED);
 			g.drawLine(-40, 0, 40, 0);
 			g.drawLine(30, -10, 40, 0);
