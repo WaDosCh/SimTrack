@@ -11,6 +11,7 @@ import ch.awae.simtrack.model.PathFindingOptions;
 import ch.awae.simtrack.model.PathFindingRequest;
 import ch.awae.simtrack.model.position.*;
 import ch.judos.generic.data.DynamicList;
+import ch.judos.generic.data.RandomJS;
 
 public class Train implements Entity {
 
@@ -45,8 +46,10 @@ public class Train implements Entity {
 		this.reservedTiles = new DynamicList<>();
 
 		// TODO: add moooarr power
-		for (int i = 0; i < 5; i++)
-			this.trainElements.add(TrainElementConfiguration.wagon1);
+		for (int i = 0; i < 5; i++) {
+			this.trainElements
+					.add(RandomJS.getObject(TrainElementConfiguration.wagon1, TrainElementConfiguration.wagon2));
+		}
 	}
 
 	public List<TrainElementConfiguration> getElements() {
