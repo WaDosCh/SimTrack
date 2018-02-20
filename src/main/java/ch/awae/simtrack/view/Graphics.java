@@ -81,12 +81,6 @@ public class Graphics extends Graphics2D {
 			backer.setStroke(stack.stroke);
 		}
 	}
-	
-	public void peek() {
-		if (stack.head != null) {
-			backer.setTransform(stack.head);
-		}
-	}
 
 	public Stack getStack() {
 		push();
