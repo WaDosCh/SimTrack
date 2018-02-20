@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.awae.simtrack.model.Model;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.Renderer;
 
 /**
  * the game view implementation
@@ -20,8 +20,8 @@ public class GameView implements IGameView {
 	private int screenX, screenY;
 	private Runnable delegate;
 
-	private List<IRenderer> renderers = new ArrayList<>();
-	private IRenderer editorRenderer = (r, v) -> {
+	private List<Renderer> renderers = new ArrayList<>();
+	private Renderer editorRenderer = (r, v) -> {
 		// void
 	};
 
@@ -44,7 +44,7 @@ public class GameView implements IGameView {
 	 * 
 	 * @param renderers
 	 */
-	void setRenderers(List<IRenderer> renderers) {
+	void setRenderers(List<Renderer> renderers) {
 		this.renderers = renderers;
 	}
 
@@ -98,7 +98,7 @@ public class GameView implements IGameView {
 	}
 
 	@Override
-	public void setEditorRenderer(IRenderer renderer) {
+	public void setEditorRenderer(Renderer renderer) {
 		this.editorRenderer = renderer;
 	}
 

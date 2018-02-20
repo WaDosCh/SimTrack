@@ -15,7 +15,7 @@ import ch.awae.simtrack.view.ViewPort;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class HexGridRenderer implements IRenderer {
+public class HexGridRenderer implements Renderer {
 
 	private final static Color gridColor = Resource.getProperties("renderer.properties").getColor("gridColor");
 

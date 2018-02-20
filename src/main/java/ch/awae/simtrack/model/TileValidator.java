@@ -10,8 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.model.position.TilePath;
-import ch.awae.simtrack.model.tile.ITrackTile;
-import ch.awae.simtrack.model.tile.ITransformableTrackTile;
+import ch.awae.simtrack.model.tile.TrackTile;
+import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 
 /**
@@ -25,15 +25,15 @@ public class TileValidator {
 	
 	private static Logger logger = LogManager.getLogger(TileValidator.class);
 	private static List<TilePath[]> validTiles;
-	private static Map<Integer, ITrackTile> tileCache;
+	private static Map<Integer, TrackTile> tileCache;
 
 	static {
 		validTiles = new ArrayList<>();
 		tileCache = new HashMap<>();
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			TilePath[] paths;
-			ITransformableTrackTile t0 = TrackProvider.getTileInstance(i);
-			ITransformableTrackTile t1 = t0.mirrored();
+			TransformableTrackTile t0 = TrackProvider.getTileInstance(i);
+			TransformableTrackTile t1 = t0.mirrored();
 			for (int r = 0; r < 6; r++) {
 				paths = t0.getRailPaths().clone();
 				sortPathList(paths);
@@ -61,7 +61,7 @@ public class TileValidator {
 	 * @param tile
 	 * @return {@code true} if and only if the provided tile is valid.
 	 */
-	public static boolean isValidTrack(ITrackTile tile) {
+	public static boolean isValidTrack(TrackTile tile) {
 		TilePath[] paths = tile.getRailPaths().clone();
 		sortPathList(paths);
 
@@ -89,9 +89,9 @@ public class TileValidator {
 	 * 
 	 * @return
 	 */
-	public static ITrackTile intern(ITrackTile tile) {
+	public static TrackTile intern(TrackTile tile) {
 		Integer key = Integer.valueOf(Arrays.hashCode(tile.getRailPaths()));
-		ITrackTile res = tileCache.get(key);
+		TrackTile res = tileCache.get(key);
 		if (res == null) {
 			tileCache.put(key, tile);
 			logger.debug("added new tile to cache with hash: " + key);

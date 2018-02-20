@@ -13,7 +13,7 @@ import ch.awae.simtrack.view.IGameView;
  * @since SimTrack 0.1.1 (0.0.1)
  */
 @FunctionalInterface
-public interface IRenderer {
+public interface Renderer {
 
 	/**
 	 * calls the {@link #render(Graphics2D, IGameView)} function with a new

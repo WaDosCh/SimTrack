@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @version 1.2, 2015-01-24
  * @since SimTrack 0.2.2 (0.2.1)
  */
-public interface ITile extends Serializable {
+public interface Tile extends Serializable {
 
 	default TileType getType() {
 		return TileType.UNKNOWN;

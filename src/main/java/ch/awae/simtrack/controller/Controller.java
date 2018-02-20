@@ -33,7 +33,7 @@ public class Controller implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public Controller(Model model, GameView gameView, IGUIControllerHookup hooker, Input input) {
+	public Controller(Model model, GameView gameView, GUIControllerHook hooker, Input input) {
 		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;

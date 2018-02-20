@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public interface IGUIControllerHookup {
+public interface GUIControllerHook {
 
 	/**
 	 * provides a consumer that registers a given mouse adapter to the required

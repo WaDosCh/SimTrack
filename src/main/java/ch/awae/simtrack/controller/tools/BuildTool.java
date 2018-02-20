@@ -11,10 +11,10 @@ import ch.awae.simtrack.controller.SimpleEventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.model.tile.IFixedTile;
-import ch.awae.simtrack.model.tile.ITile;
-import ch.awae.simtrack.model.tile.ITrackTile;
-import ch.awae.simtrack.model.tile.ITransformableTrackTile;
+import ch.awae.simtrack.model.tile.FixedTile;
+import ch.awae.simtrack.model.tile.Tile;
+import ch.awae.simtrack.model.tile.TrackTile;
+import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.track.FusedTrackFactory;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
@@ -33,7 +33,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 
 	private @Getter boolean isBulldozeTool;
 	private @Getter boolean valid = false;
-	private @Getter ITransformableTrackTile track;
+	private @Getter TransformableTrackTile track;
 
 	/**
 	 * instantiates a new build tool
@@ -62,7 +62,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 	}
 
 	@OnLoad
-	public void loadBuilder(ITransformableTrackTile tile) {
+	public void loadBuilder(TransformableTrackTile tile) {
 		isBulldozeTool = false;
 		track = tile;
 	}
@@ -84,12 +84,12 @@ public class BuildTool extends SimpleEventDrivenTool {
 			return false;
 		
 		// compatible?
-		ITile tile = model.getTileAt(mouseTile);
+		Tile tile = model.getTileAt(mouseTile);
 		if (tile != null) {
-			if (tile instanceof IFixedTile)
+			if (tile instanceof FixedTile)
 				return false;
-			if (tile instanceof ITrackTile) {
-				ITrackTile ttile = (ITrackTile) tile;
+			if (tile instanceof TrackTile) {
+				TrackTile ttile = (TrackTile) tile;
 				if (TileValidator.isValidTrack(FusedTrackFactory.createFusedTrack(ttile, track)))
 					return true;
 			}
@@ -111,8 +111,8 @@ public class BuildTool extends SimpleEventDrivenTool {
 	private boolean canDelete() {
 		if (mouseTile == null)
 			return false;
-		ITile t = model.getTileAt(mouseTile);
-		if (t == null || t instanceof IFixedTile)
+		Tile t = model.getTileAt(mouseTile);
+		if (t == null || t instanceof FixedTile)
 			return false;
 		return true;
 	}
@@ -136,7 +136,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 				if (model.getTileAt(mouseTile) == null)
 					model.setTileAt(mouseTile, TileValidator.intern(track));
 				else {
-					ITrackTile oldTile = (ITrackTile) model.getTileAt(mouseTile);
+					TrackTile oldTile = (TrackTile) model.getTileAt(mouseTile);
 					model.removeTileAt(mouseTile);
 					model.setTileAt(mouseTile,
 							TileValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));

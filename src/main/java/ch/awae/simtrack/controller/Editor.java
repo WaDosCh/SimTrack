@@ -15,7 +15,7 @@ import ch.awae.simtrack.controller.tools.SignalTool;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.Renderer;
 
 /**
  * top-level management of the active side of the user interface. It manages the
@@ -33,7 +33,7 @@ public class Editor {
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private Tool currentTool;
-	private IRenderer renderer;
+	private Renderer renderer;
 	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
 
 	/**

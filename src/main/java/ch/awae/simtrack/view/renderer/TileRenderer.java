@@ -7,9 +7,9 @@ import java.awt.Stroke;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.model.tile.IDestinationTrackTile;
-import ch.awae.simtrack.model.tile.ITile;
-import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.DestinationTrackTile;
+import ch.awae.simtrack.model.tile.Tile;
+import ch.awae.simtrack.model.tile.TrackTile;
 import ch.awae.simtrack.model.tile.TileType;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
@@ -24,7 +24,7 @@ import ch.awae.simtrack.view.ViewPort;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-public class TileRenderer implements IRenderer {
+public class TileRenderer implements Renderer {
 	private static final Color bedColour;
 	private static final Color bgColour;
 	private static final Color waterColor;
@@ -50,10 +50,10 @@ public class TileRenderer implements IRenderer {
 	public void render(Graphics g, IGameView view) {
 		ViewPort port = view.getViewPort();
 		Graphics.Stack stack = g.getStack();
-		for (Entry<TileCoordinate, ITile> pair : view.getModel().getTiles()) {
+		for (Entry<TileCoordinate, Tile> pair : view.getModel().getTiles()) {
 			g.setStack(stack);
 			TileCoordinate pos = pair.getKey();
-			ITile tile = pair.getValue();
+			Tile tile = pair.getValue();
 			if (!port.isVisible(pos))
 				continue;
 			port.focusHex(pos, g);
@@ -64,7 +64,7 @@ public class TileRenderer implements IRenderer {
 			TileType type = tile.getType();
 			switch (type == null ? TileType.UNKNOWN : type) {
 				case TRACK:
-					renderTrack(g, (ITrackTile) tile);
+					renderTrack(g, (TrackTile) tile);
 					break;
 				case OBSTACLE:
 					renderObstacle(g);
@@ -93,10 +93,10 @@ public class TileRenderer implements IRenderer {
 		g2.fillOval(0 - 20, -10 - 20, 40, 40);
 	}
 
-	private void renderTrack(Graphics2D g2, ITrackTile tile) {
+	private void renderTrack(Graphics2D g2, TrackTile tile) {
 		TrackRenderUtil.renderRails(g2, bedColour, railColour, tile.getRailPaths());
-		if (tile instanceof IDestinationTrackTile) {
-			IDestinationTrackTile dest = (IDestinationTrackTile) tile;
+		if (tile instanceof DestinationTrackTile) {
+			DestinationTrackTile dest = (DestinationTrackTile) tile;
 			g2.rotate(Math.PI / 3 * tile.getRailPaths()[0]._1.ordinal());
 			g2.setColor(railColour);
 			g2.setStroke(arrowStroke);

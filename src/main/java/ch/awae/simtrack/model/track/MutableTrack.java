@@ -6,7 +6,7 @@ import javax.json.JsonObject;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TilePath;
 import ch.awae.simtrack.model.tile.BasicTrackTile;
-import ch.awae.simtrack.model.tile.ITransformableTrackTile;
+import ch.awae.simtrack.model.tile.TransformableTrackTile;
 
 /**
  * mutable track implementation. used by the editor
@@ -15,7 +15,7 @@ import ch.awae.simtrack.model.tile.ITransformableTrackTile;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-class MutableTrack extends BasicTrackTile implements ITransformableTrackTile {
+class MutableTrack extends BasicTrackTile implements TransformableTrackTile {
 
 	private static final long serialVersionUID = -8192970361285195653L;
 	private int rotation = 0;
@@ -48,7 +48,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTrackTile {
 	}
 
 	@Override
-	public ITransformableTrackTile rotated(boolean clockwise) {
+	public TransformableTrackTile rotated(boolean clockwise) {
 		TilePath[] links = new TilePath[this.links.length];
 		for (int i = 0; i < this.links.length; i++) {
 			links[i] = new TilePath(this.links[i]._1.getNeighbour(clockwise), this.links[i]._2.getNeighbour(clockwise));
@@ -57,13 +57,13 @@ class MutableTrack extends BasicTrackTile implements ITransformableTrackTile {
 	}
 
 	@Override
-	public ITransformableTrackTile mirrored() {
+	public TransformableTrackTile mirrored() {
 		// not the most efficient but ok
 		if (!this.specialMirror) {
 			return rotated(false).rotated(false).rotated(false);
 		} else {
 			int rot = this.rotation;
-			ITransformableTrackTile tile = this;
+			TransformableTrackTile tile = this;
 			for (int i = 0; i < rot; i++)
 				tile = tile.rotated(false);
 			TilePath[] links = new TilePath[tile.getRailPaths().length];
@@ -78,7 +78,7 @@ class MutableTrack extends BasicTrackTile implements ITransformableTrackTile {
 	}
 
 	@Override
-	public ITransformableTrackTile cloneTile() {
+	public TransformableTrackTile cloneTile() {
 		return new MutableTrack(this.links.clone(), rotation, this.specialMirror);
 	}
 

@@ -5,7 +5,7 @@ import ch.awae.simtrack.model.entity.Train;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 
-public class EntityRenderer implements IRenderer {
+public class EntityRenderer implements Renderer {
 
 	@Override
 	public void render(Graphics g, IGameView view) {

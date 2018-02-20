@@ -14,10 +14,10 @@ import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.position.TilePath;
-import ch.awae.simtrack.model.tile.IDestinationTrackTile;
-import ch.awae.simtrack.model.tile.IFixedTile;
-import ch.awae.simtrack.model.tile.ITile;
-import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.DestinationTrackTile;
+import ch.awae.simtrack.model.tile.FixedTile;
+import ch.awae.simtrack.model.tile.Tile;
+import ch.awae.simtrack.model.tile.TrackTile;
 import ch.awae.simtrack.util.Observable;
 import ch.awae.simtrack.util.ObservableHandler;
 import ch.awae.simtrack.util.T3;
@@ -29,7 +29,7 @@ public class Model implements Serializable, Observable {
 	private int sizeX, sizeY;
 	private int maxS, maxT;
 
-	private HashMap<TileCoordinate, ITile> tiles = new HashMap<>();
+	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
 	private Set<Entity> entities = new HashSet<>();
 	@Getter
@@ -52,18 +52,18 @@ public class Model implements Serializable, Observable {
 		return this.sizeY;
 	}
 
-	public ITile getTileAt(TileCoordinate position) {
+	public Tile getTileAt(TileCoordinate position) {
 		return this.tiles.get(position);
 	}
 
-	public void setTileAt(TileCoordinate position, ITile tile) {
+	public void setTileAt(TileCoordinate position, Tile tile) {
 		if (this.tiles.containsKey(position))
 			return;
 		this.tiles.put(position, tile);
 		notifyChanged();
 	}
 
-	public Set<Map.Entry<TileCoordinate, ITile>> getTiles() {
+	public Set<Map.Entry<TileCoordinate, Tile>> getTiles() {
 		return tiles.entrySet();
 	}
 
@@ -72,8 +72,8 @@ public class Model implements Serializable, Observable {
 	}
 
 	public void removeTileAt(TileCoordinate position) throws IllegalArgumentException {
-		ITile tile = this.tiles.get(position);
-		if (tile == null || tile instanceof IFixedTile)
+		Tile tile = this.tiles.get(position);
+		if (tile == null || tile instanceof FixedTile)
 			throw new IllegalArgumentException();
 		this.tiles.remove(position);
 		// remove any signals
@@ -86,10 +86,10 @@ public class Model implements Serializable, Observable {
 	}
 
 	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position) {
-		ITile tile = tiles.get(position);
-		if (tile instanceof ITrackTile) {
+		Tile tile = tiles.get(position);
+		if (tile instanceof TrackTile) {
 			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = new ArrayList<>();
-			ITrackTile tt = (ITrackTile) tile;
+			TrackTile tt = (TrackTile) tile;
 			for (TilePath p : tt.getPaths()) {
 				TileEdgeCoordinate from = new TileEdgeCoordinate(position, p._1);
 				TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
@@ -120,10 +120,10 @@ public class Model implements Serializable, Observable {
 		if (signals.containsKey(position))
 			throw new IllegalArgumentException("signal position already occupied");
 		// check if signal position is valid
-		ITile tile = tiles.get(position.tile);
+		Tile tile = tiles.get(position.tile);
 		if (tile == null
-				|| (tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination())
-				|| !(tile instanceof ITrackTile))
+				|| (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
+				|| !(tile instanceof TrackTile))
 			throw new IllegalArgumentException("invalid tile");
 		Signal opponent = getSignalAt(position.getOppositeDirection());
 		if (opponent != null) {
@@ -131,7 +131,7 @@ public class Model implements Serializable, Observable {
 				throw new IllegalArgumentException("signal conflict");
 		}
 
-		ITrackTile track = (ITrackTile) tile;
+		TrackTile track = (TrackTile) tile;
 		if (!track.connectsAt(position.edge)) {
 			throw new IllegalArgumentException("invalid edge - no connections");
 		}
@@ -143,10 +143,10 @@ public class Model implements Serializable, Observable {
 		if (signals.containsKey(position))
 			return false;
 		// check if signal position is valid
-		ITile tile = tiles.get(position.tile);
+		Tile tile = tiles.get(position.tile);
 		if (tile == null
-				|| (tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination())
-				|| !(tile instanceof ITrackTile))
+				|| (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
+				|| !(tile instanceof TrackTile))
 			return false;
 		Signal opponent = getSignalAt(position.getOppositeDirection());
 		if (opponent != null) {
@@ -155,14 +155,14 @@ public class Model implements Serializable, Observable {
 		}
 		// CHECK POSITION
 
-		ITrackTile track = (ITrackTile) tile;
+		TrackTile track = (TrackTile) tile;
 		return track.connectsAt(position.edge);
 	}
 
 	public void removeSignalAt(TileEdgeCoordinate position) {
 		Signal current = signals.get(position);
-		ITrackTile tile = (ITrackTile) tiles.get(position.tile);
-		if (current == null || tile instanceof IDestinationTrackTile)
+		TrackTile tile = (TrackTile) tiles.get(position.tile);
+		if (current == null || tile instanceof DestinationTrackTile)
 			throw new IllegalArgumentException();
 		signals.remove(position);
 		notifyChanged();
@@ -178,7 +178,7 @@ public class Model implements Serializable, Observable {
 		}
 	}
 
-	public Set<Entry<TileCoordinate, ITile>> getTileFiltered(Function<ITile, Boolean> filter) {
+	public Set<Entry<TileCoordinate, Tile>> getTileFiltered(Function<Tile, Boolean> filter) {
 		return this.tiles.entrySet().stream().filter(entry -> filter.apply(entry.getValue()))
 				.collect(Collectors.toSet());
 	}

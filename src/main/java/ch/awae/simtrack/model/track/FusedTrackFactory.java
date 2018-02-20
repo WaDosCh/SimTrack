@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ch.awae.simtrack.model.TileValidator;
 import ch.awae.simtrack.model.position.TilePath;
-import ch.awae.simtrack.model.tile.ITrackTile;
+import ch.awae.simtrack.model.tile.TrackTile;
 
 /**
  * @author Andreas Wälchli
@@ -13,15 +13,15 @@ import ch.awae.simtrack.model.tile.ITrackTile;
  */
 public class FusedTrackFactory {
 
-	public static ITrackTile createAnonymousTrack(TilePath[] connections, float cost) {
+	public static TrackTile createAnonymousTrack(TilePath[] connections, float cost) {
 		return new AnonymousTrack(connections.clone(), cost);
 	}
 
-	public static ITrackTile createAnonymousTrack(ITrackTile tile) {
+	public static TrackTile createAnonymousTrack(TrackTile tile) {
 		return new AnonymousTrack(tile.getRailPaths().clone(), tile.getTravelCost());
 	}
 
-	public static ITrackTile createFusedTrack(ITrackTile tile0, ITrackTile tile1) {
+	public static TrackTile createFusedTrack(TrackTile tile0, TrackTile tile1) {
 		TilePath[] con0 = tile0.getRailPaths().clone();
 		TilePath[] con1 = tile1.getRailPaths().clone();
 

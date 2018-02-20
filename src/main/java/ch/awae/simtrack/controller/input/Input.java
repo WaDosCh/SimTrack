@@ -5,12 +5,12 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ch.awae.simtrack.controller.IGUIControllerHookup;
+import ch.awae.simtrack.controller.GUIControllerHook;
 import ch.judos.generic.data.HashMapList;
 
 public class Input {
 
-	public Input(IGUIControllerHookup hook) {
+	public Input(GUIControllerHook hook) {
 		hook.getMouseHookup().accept(this.mouse);
 		hook.getKeyboardHookup().accept(this.keyboard);
 	}

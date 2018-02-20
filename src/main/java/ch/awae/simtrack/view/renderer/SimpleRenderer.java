@@ -4,7 +4,7 @@ import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 
 @FunctionalInterface
-public interface ISimpleRenderer extends IRenderer {
+public interface SimpleRenderer extends Renderer {
 
 	@Override
 	default void render(Graphics g, IGameView view) {

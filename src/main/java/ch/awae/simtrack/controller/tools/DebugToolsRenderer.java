@@ -14,9 +14,9 @@ import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
 import ch.awae.simtrack.view.ViewPort;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.Renderer;
 
-public class DebugToolsRenderer implements IRenderer {
+public class DebugToolsRenderer implements Renderer {
 
 	private HashSet<Option> showing;
 	private String[] inputGuideText;

@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public interface IGUIHookProvider {
+public interface GUIRenderHook {
 
 	/**
 	 * provides the rendering delegate. The rendering delegate is a method that

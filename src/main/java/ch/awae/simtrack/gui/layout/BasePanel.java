@@ -9,9 +9,9 @@ import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.Renderer;
 
-public class BasePanel implements IRenderer, IComponent {
+public class BasePanel implements Renderer, IComponent {
 
 	private ArrayList<IComponent> components;
 	private Input input;

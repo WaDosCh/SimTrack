@@ -3,7 +3,7 @@ package ch.awae.simtrack.model.tile;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TilePath;
 
-public interface ITrackTile extends ITile {
+public interface TrackTile extends Tile {
 
 	public float getTravelCost();
 

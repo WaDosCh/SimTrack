@@ -3,9 +3,9 @@ package ch.awae.simtrack.gui.layout;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.Renderer;
 
-public class Label extends BaseComponent implements IRenderer, IComponent {
+public class Label extends BaseComponent implements Renderer, IComponent {
 
 	public final String title;
 

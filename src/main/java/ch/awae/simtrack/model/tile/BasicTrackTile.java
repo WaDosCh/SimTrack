@@ -8,7 +8,7 @@ import ch.awae.simtrack.model.position.TilePath;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public abstract class BasicTrackTile implements ITrackTile {
+public abstract class BasicTrackTile implements TrackTile {
 
 	private static final long serialVersionUID = 3482264021238974251L;
 

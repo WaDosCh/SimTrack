@@ -6,6 +6,6 @@ package ch.awae.simtrack.model.tile;
  * @author andreas
  *
  */
-public interface IFixedTile extends ITile {
+public interface FixedTile extends Tile {
 
 }

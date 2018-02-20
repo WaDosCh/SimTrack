@@ -1,7 +1,7 @@
 package ch.awae.simtrack.view;
 
 import ch.awae.simtrack.model.Model;
-import ch.awae.simtrack.view.renderer.IRenderer;
+import ch.awae.simtrack.view.renderer.Renderer;
 
 /**
  * The base interface for any view instance
@@ -48,7 +48,7 @@ public interface IGameView {
 	 * 
 	 * @param renderer
 	 */
-	public void setEditorRenderer(IRenderer renderer);
+	public void setEditorRenderer(Renderer renderer);
 
 	/**
 	 * provides the model associated with the view
