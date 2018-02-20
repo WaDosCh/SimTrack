@@ -1,4 +1,4 @@
-package ch.awae.simtrack.model.track;
+package ch.awae.simtrack.model.tile.track;
 
 import java.io.ObjectStreamException;
 

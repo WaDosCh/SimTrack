@@ -12,7 +12,7 @@ import ch.awae.simtrack.controller.RenderingEventDrivenTool;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.tile.TransformableTrackTile;
-import ch.awae.simtrack.model.track.TrackProvider;
+import ch.awae.simtrack.model.tile.track.TrackProvider;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GameView;
