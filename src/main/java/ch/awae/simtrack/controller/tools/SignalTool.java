@@ -29,7 +29,8 @@ public class SignalTool extends SimpleEventDrivenTool {
 		super(editor, UnloadAction.UNLOAD);
 
 		onTick(this::updatePosition);
-		ifNot(() -> bulldoze).onTick(this::checkPosition);
+		ifNot(() -> bulldoze).onTick(this::checkPlace);
+		ifMet(() -> bulldoze).onTick(this::checkDelete);
 
 		ifNot(() -> bulldoze).onPress(Action.ST_BUILD_SIGNAL, this::buildSignal);
 		ifMet(() -> bulldoze).onPress(Action.ST_BUILD_SIGNAL, this::deleteSignal);
@@ -48,16 +49,22 @@ public class SignalTool extends SimpleEventDrivenTool {
 		position = mouseTile.getEdge(edge);
 	}
 
-	private void checkPosition() {
+	private void checkPlace() {
 		valid = model.canPlaceSignal(position, type);
 	}
 
+	private void checkDelete() {
+		valid = model.canRemoveSignalAt(position);
+	}
+
 	private void buildSignal() {
-		model.setSignalAt(position, new Signal(position, type));
+		if (valid)
+			model.setSignalAt(position, new Signal(position, type));
 	}
 
 	private void deleteSignal() {
-		model.removeSignalAt(position);
+		if (valid)
+			model.removeSignalAt(position);
 	}
 
 	@OnLoad

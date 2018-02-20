@@ -121,8 +121,7 @@ public class Model implements Serializable, Observable {
 			throw new IllegalArgumentException("signal position already occupied");
 		// check if signal position is valid
 		Tile tile = tiles.get(position.tile);
-		if (tile == null
-				|| (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
+		if (tile == null || (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
 				|| !(tile instanceof TrackTile))
 			throw new IllegalArgumentException("invalid tile");
 		Signal opponent = getSignalAt(position.getOppositeDirection());
@@ -144,8 +143,7 @@ public class Model implements Serializable, Observable {
 			return false;
 		// check if signal position is valid
 		Tile tile = tiles.get(position.tile);
-		if (tile == null
-				|| (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
+		if (tile == null || (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
 				|| !(tile instanceof TrackTile))
 			return false;
 		Signal opponent = getSignalAt(position.getOppositeDirection());
@@ -162,10 +160,18 @@ public class Model implements Serializable, Observable {
 	public void removeSignalAt(TileEdgeCoordinate position) {
 		Signal current = signals.get(position);
 		TrackTile tile = (TrackTile) tiles.get(position.tile);
-		if (current == null || tile instanceof DestinationTrackTile)
-			throw new IllegalArgumentException();
+		if (current == null)
+			throw new IllegalArgumentException("no signal exists");
+		if (tile instanceof DestinationTrackTile)
+			throw new IllegalArgumentException("fixed signal on soure");
 		signals.remove(position);
 		notifyChanged();
+	}
+
+	public boolean canRemoveSignalAt(TileEdgeCoordinate position) {
+		TrackTile tile = (TrackTile) tiles.get(position.tile);
+		Signal current = signals.get(position);
+		return !(current == null || tile instanceof DestinationTrackTile);
 	}
 
 	public void load() {
