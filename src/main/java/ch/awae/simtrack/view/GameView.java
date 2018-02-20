@@ -3,6 +3,9 @@ package ch.awae.simtrack.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.view.renderer.Renderer;
 
@@ -19,6 +22,8 @@ public class GameView {
 	private ViewPort viewPort;
 	private int screenX, screenY;
 	private Runnable delegate;
+
+	private Logger logger = LogManager.getLogger();
 
 	private List<Renderer> renderers = new ArrayList<>();
 	private Renderer editorRenderer = (r, v) -> {
@@ -80,7 +85,11 @@ public class GameView {
 		Graphics.Stack stack = graphics.getStack();
 
 		this.renderers.forEach(r -> {
-			r.render(graphics, this);
+			try {
+				r.render(graphics, this);
+			} catch (Exception ex) {
+				logger.error("Rendering failed for " + r.getClass().getSimpleName(), ex);
+			}
 			graphics.setStack(stack);
 		});
 

@@ -155,7 +155,11 @@ public class Editor {
 	 */
 	void render(Graphics g, GameView view) {
 		if (this.renderer != null)
-			this.renderer.renderSafe(g, view);
+			try {
+				this.renderer.renderSafe(g, view);
+			} catch (Exception e) {
+				logger.error("failed to render " + currentTool.getClass().getSimpleName(), e);
+			}
 	}
 
 	/**

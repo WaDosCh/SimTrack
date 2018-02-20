@@ -75,11 +75,7 @@ public class Controller {
 	private void tick() {
 		// rendering first to make sure this happens at a constant rate when
 		// updates take more or less time
-		try {
-			this.gameView.renderView();
-		} catch (NullPointerException nex) {
-			nex.printStackTrace();
-		}
+		this.gameView.renderView();
 
 		// update ticks
 		this.navigator.tick();
