@@ -1,11 +1,16 @@
 package ch.awae.simtrack.model.entity;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.util.serial.CustomDeserialization;
 import lombok.Getter;
 
-public class TrainElementConfiguration {
+public class TrainElementConfiguration implements CustomDeserialization {
+
+	private static final long serialVersionUID = 1L;
 
 	public static final TrainElementConfiguration locomotive1 = new TrainElementConfiguration("locomotive1", 20, 80,
 			100);
@@ -13,13 +18,26 @@ public class TrainElementConfiguration {
 
 	private @Getter int firstAxle;
 	private @Getter int secondAxle;
-	private @Getter BufferedImage image;
+	private transient @Getter BufferedImage image;
 	private @Getter int length;
+	private String imageName;
 
 	public TrainElementConfiguration(String imageName, int firstAxle, int secondAxle, int length) {
 		this.firstAxle = firstAxle;
 		this.secondAxle = secondAxle;
 		this.length = length;
-		this.image = Resource.getImage(imageName + ".png");
+		this.imageName = imageName;
+		loadImage();
 	}
+
+	private void loadImage() {
+		image = Resource.getImage(imageName + ".png");
+	}
+
+	@Override
+	public void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		loadImage();
+	}
+
 }
