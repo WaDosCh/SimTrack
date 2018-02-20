@@ -6,7 +6,7 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IViewPort;
+import ch.awae.simtrack.view.ViewPort;
 
 /**
  * Renderer for the hex grid overlay
@@ -21,7 +21,7 @@ public class HexGridRenderer implements IRenderer {
 
 	@Override
 	public void render(Graphics g, IGameView view) {
-		IViewPort port = view.getViewPort();
+		ViewPort port = view.getViewPort();
 		g.setColor(gridColor);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 		for (int i = 0; i < view.getModel().getHorizontalSize(); i++) {

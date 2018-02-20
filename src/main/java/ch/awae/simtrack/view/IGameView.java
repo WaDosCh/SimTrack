@@ -76,7 +76,7 @@ public interface IGameView {
 	 * 
 	 * @return the viewport
 	 */
-	public IViewPort getViewPort();
+	public ViewPort getViewPort();
 
 	public void setModel(Model model);
 

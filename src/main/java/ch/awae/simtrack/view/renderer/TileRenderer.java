@@ -15,7 +15,7 @@ import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IViewPort;
+import ch.awae.simtrack.view.ViewPort;
 
 /**
  * Renderer for track rendering
@@ -48,7 +48,7 @@ public class TileRenderer implements IRenderer {
 	
 	@Override
 	public void render(Graphics g, IGameView view) {
-		IViewPort port = view.getViewPort();
+		ViewPort port = view.getViewPort();
 		Graphics.Stack stack = g.getStack();
 		for (Entry<TileCoordinate, ITile> pair : view.getModel().getTiles()) {
 			g.setStack(stack);

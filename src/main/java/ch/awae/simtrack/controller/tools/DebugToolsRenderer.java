@@ -13,7 +13,7 @@ import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.IGameView;
-import ch.awae.simtrack.view.IViewPort;
+import ch.awae.simtrack.view.ViewPort;
 import ch.awae.simtrack.view.renderer.IRenderer;
 
 public class DebugToolsRenderer implements IRenderer {
@@ -41,7 +41,7 @@ public class DebugToolsRenderer implements IRenderer {
 		Point screenPos = tools.getMousePosition();
 		TileCoordinate tilePos = tools.getMouseTile();
 		gameView = view;
-		IViewPort viewPort = this.gameView.getViewPort();
+		ViewPort viewPort = this.gameView.getViewPort();
 		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
 
 		if (screenPos.y > viewPort.getScreenDimensions().y - Design.toolbarHeight)
