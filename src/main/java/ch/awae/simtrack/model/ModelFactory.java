@@ -6,7 +6,7 @@ public class ModelFactory {
 		Model model = new Model(sizeX, sizeY);
 		model.load();
 		ConnectionSpawner.spawnConnections(model, connectionCount);
-		ObstacleSpawner.spawnObstacles(model, 15);
+		ObstacleSpawner.spawnObstacles(model, 40);
 		return model;
 	}
 

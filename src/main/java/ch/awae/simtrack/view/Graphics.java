@@ -39,6 +39,7 @@ public class Graphics extends Graphics2D {
 		final Stroke stroke;
 		final Color color;
 		final Font font;
+		final Shape clip;
 		final TStack tail;
 
 		public TStack() {
@@ -47,10 +48,11 @@ public class Graphics extends Graphics2D {
 			color = null;
 			font = null;
 			tail = null;
+			clip = null;
 		}
 
-		public TStack prep(AffineTransform T, Stroke stroke, Color color, Font font) {
-			return new TStack(T, stroke, color, font, this);
+		public TStack prep(AffineTransform T, Stroke stroke, Color color, Font font, Shape clip) {
+			return new TStack(T, stroke, color, font, clip, this);
 		}
 	}
 
@@ -70,7 +72,7 @@ public class Graphics extends Graphics2D {
 	}
 
 	public void push() {
-		stack = stack.prep(backer.getTransform(), backer.getStroke(), backer.getColor(), backer.getFont());
+		stack = stack.prep(backer.getTransform(), backer.getStroke(), backer.getColor(), backer.getFont(), backer.getClip());
 	}
 
 	public void peek() {
@@ -79,6 +81,7 @@ public class Graphics extends Graphics2D {
 			backer.setColor(stack.color);
 			backer.setFont(stack.font);
 			backer.setStroke(stack.stroke);
+			backer.setClip(stack.clip);
 		}
 	}
 

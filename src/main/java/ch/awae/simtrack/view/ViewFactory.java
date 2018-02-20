@@ -3,6 +3,7 @@ package ch.awae.simtrack.view;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.model.Model;
+import ch.awae.simtrack.view.renderer.BackgroundRenderer;
 import ch.awae.simtrack.view.renderer.EntityRenderer;
 import ch.awae.simtrack.view.renderer.HexGridRenderer;
 import ch.awae.simtrack.view.renderer.Renderer;
@@ -30,6 +31,7 @@ public class ViewFactory {
 		v.setRenderingDelegate(hooker.getRenderDelegate());
 		hooker.hookComponentRenderer(v::render);
 		ArrayList<Renderer> rends = new ArrayList<>();
+		rends.add(new BackgroundRenderer());
 		rends.add(new TileRenderer());
 		rends.add(new HexGridRenderer());
 		rends.add(new SignalRenderer());

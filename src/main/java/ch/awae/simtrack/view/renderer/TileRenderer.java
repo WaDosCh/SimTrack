@@ -6,15 +6,17 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.Map.Entry;
 
+import ch.awae.simtrack.model.Model;
+import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.model.tile.Tile;
-import ch.awae.simtrack.model.tile.TrackTile;
 import ch.awae.simtrack.model.tile.TileType;
+import ch.awae.simtrack.model.tile.TrackTile;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
-import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.ViewPort;
 
 /**
@@ -33,7 +35,7 @@ public class TileRenderer implements Renderer {
 
 	static {
 		Properties props = Resource.getProperties("renderer.properties");
-		
+
 		bedColour = props.getColor("railbedColor");
 		bgColour = props.getColor("grassColor");
 		waterColor = props.getColor("waterColor");
@@ -41,16 +43,16 @@ public class TileRenderer implements Renderer {
 		arrowStroke = new BasicStroke(props.getInt("arrowStroke"));
 	}
 
-
 	private final static int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
-	
+
 	@Override
 	public void render(Graphics g, GameView view) {
 		ViewPort port = view.getViewPort();
 		Graphics.Stack stack = g.getStack();
-		for (Entry<TileCoordinate, Tile> pair : view.getModel().getTiles()) {
+		Model model = view.getModel();
+		for (Entry<TileCoordinate, Tile> pair : model.getTiles()) {
 			g.setStack(stack);
 			TileCoordinate pos = pair.getKey();
 			Tile tile = pair.getValue();
@@ -66,8 +68,8 @@ public class TileRenderer implements Renderer {
 				case TRACK:
 					renderTrack(g, (TrackTile) tile);
 					break;
-				case OBSTACLE:
-					renderObstacle(g);
+				case WATER:
+					renderWater(g, model, pos);
 					break;
 				// unknown tile
 				default:
@@ -86,11 +88,19 @@ public class TileRenderer implements Renderer {
 		g2.drawString("?", -2, 5);
 	}
 
-	private void renderObstacle(Graphics2D g2) {
-		g2.setColor(waterColor);
-		g2.fillOval(10 - 20, 10 - 20, 40, 40);
-		g2.fillOval(-10 - 20, 10 - 20, 40, 40);
-		g2.fillOval(0 - 20, -10 - 20, 40, 40);
+	private void renderWater(Graphics g, Model model, TileCoordinate pos) {
+		g.setColor(waterColor);
+		g.fillOval(-hexSideHalf, -hexSideHalf, 2 * hexSideHalf, 2 * hexSideHalf);
+		g.push();
+		for (Edge edge : Edge.values()) {
+			Tile tile = model.getTileAt(pos.getNeighbour(edge));
+			if (tile != null && tile.getType() == TileType.WATER) {
+				g.rotate(edge.getAngleOut());
+				g.fillRect(0, -hexSideHalf, 50, 2 * hexSideHalf);
+				g.peek();
+			}
+		}
+		g.pop();
 	}
 
 	private void renderTrack(Graphics2D g2, TrackTile tile) {
