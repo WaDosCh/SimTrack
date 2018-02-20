@@ -10,7 +10,7 @@ import ch.awae.simtrack.view.renderer.IRenderer;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.0.1
  */
-public interface ITool {
+public interface Tool {
 
 	/**
 	 * retrieves the renderer for this tool

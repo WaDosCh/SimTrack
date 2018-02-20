@@ -32,9 +32,9 @@ public class Editor {
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private ITool currentTool;
+	private Tool currentTool;
 	private IRenderer renderer;
-	private HashMap<Class<? extends ITool>, ITool> tools = new HashMap<>();
+	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
 
 	/**
 	 * instantiates a new editor for the given controller.
@@ -58,7 +58,7 @@ public class Editor {
 	 * @param tool
 	 *            the tool to add.
 	 */
-	private void addTool(ITool tool) {
+	private void addTool(Tool tool) {
 		this.tools.put(tool.getClass(), tool);
 		if (this.currentTool == null) {
 			loadTool(tool.getClass());
@@ -76,7 +76,7 @@ public class Editor {
 
 	private void unloadCurrentTool() {
 		if (currentTool != null) {
-			ReflectionHelper<ITool> oldHelper = new ReflectionHelper<ITool>(currentTool);
+			ReflectionHelper<Tool> oldHelper = new ReflectionHelper<Tool>(currentTool);
 			try {
 				oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
 			} catch (NoSuchMethodException nsm) {
@@ -97,11 +97,11 @@ public class Editor {
 	 *            additional arguments to hand over to the new tool
 	 * @return {@code true} if the tool switch was successful
 	 */
-	public boolean loadTool(Class<? extends ITool> toolClass, Object... args) {
+	public boolean loadTool(Class<? extends Tool> toolClass, Object... args) {
 		if (toolClass == null)
 			toolClass = FreeTool.class;
 		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
-		ITool next = this.tools.get(toolClass);
+		Tool next = this.tools.get(toolClass);
 
 		if (next == null) {
 			logger.warn("Tool " + toolClass.getSimpleName() + " was not found.");
@@ -109,7 +109,7 @@ public class Editor {
 		}
 
 		try {
-			ReflectionHelper<ITool> helper = new ReflectionHelper<>(next);
+			ReflectionHelper<Tool> helper = new ReflectionHelper<>(next);
 
 			try {
 				helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);

@@ -14,7 +14,7 @@ import lombok.Getter;
 /**
  * The game controller implementation
  */
-public class GameController implements IController {
+public class Controller implements IController {
 
 	private @Getter Model model;
 	private @Getter GameView gameView;
@@ -33,7 +33,7 @@ public class GameController implements IController {
 	 * @param model
 	 * @param view
 	 */
-	public GameController(Model model, GameView gameView, IGUIControllerHookup hooker, Input input) {
+	public Controller(Model model, GameView gameView, IGUIControllerHookup hooker, Input input) {
 		this.input = input;
 		titleUpdater = hooker.getWindowTitleHookup();
 		this.model = model;

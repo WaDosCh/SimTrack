@@ -20,7 +20,7 @@ import ch.awae.simtrack.view.IViewPort;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
-public abstract class EventDrivenTool implements ITool {
+public abstract class EventDrivenTool implements Tool {
 
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;

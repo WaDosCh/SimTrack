@@ -3,7 +3,7 @@ package ch.awae.simtrack;
 import javax.swing.SwingUtilities;
 
 import ch.awae.simtrack.controller.ControllerFactory;
-import ch.awae.simtrack.controller.GameController;
+import ch.awae.simtrack.controller.Controller;
 import ch.awae.simtrack.gui.GUI;
 import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.ModelFactory;
@@ -27,7 +27,7 @@ public class Main {
 		GUI gui = new GUI(1200, 800);
 		Model model = ModelFactory.getModel(25, 13, 10);
 		GameView gameView = ViewFactory.createGameView(model, gui);
-		GameController c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
+		Controller c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
 		c.start();
 	}
 
