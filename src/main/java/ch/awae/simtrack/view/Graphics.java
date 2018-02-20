@@ -24,6 +24,7 @@ import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 public class Graphics extends Graphics2D {
@@ -31,17 +32,30 @@ public class Graphics extends Graphics2D {
 	public static interface Stack {
 	};
 
+	@AllArgsConstructor
 	private final static @Data class TStack implements Stack {
-		final AffineTransform head;
+
+		final AffineTransform Tx;
+		final Stroke stroke;
+		final Color color;
+		final Font font;
 		final TStack tail;
 
-		public TStack prep(AffineTransform T) {
-			return new TStack(T, this);
+		public TStack() {
+			Tx = null;
+			stroke = null;
+			color = null;
+			font = null;
+			tail = null;
+		}
+
+		public TStack prep(AffineTransform T, Stroke stroke, Color color, Font font) {
+			return new TStack(T, stroke, color, font, this);
 		}
 	}
 
 	private final Graphics2D backer;
-	private TStack stack = new TStack(null, null);
+	private TStack stack = new TStack();
 
 	public Graphics(Graphics2D backer) {
 		this.backer = backer;
@@ -49,14 +63,23 @@ public class Graphics extends Graphics2D {
 
 	// STACK MANAGEMENT
 	public void pop() {
-		if (stack.head != null) {
-			backer.setTransform(stack.head);
+		if (stack.Tx != null) {
+			peek();
 			stack = stack.tail;
 		}
 	}
 
 	public void push() {
-		stack = stack.prep(backer.getTransform());
+		stack = stack.prep(backer.getTransform(), backer.getStroke(), backer.getColor(), backer.getFont());
+	}
+
+	public void peek() {
+		if (stack.Tx != null) {
+			backer.setTransform(stack.Tx);
+			backer.setColor(stack.color);
+			backer.setFont(stack.font);
+			backer.setStroke(stack.stroke);
+		}
 	}
 
 	public Stack getStack() {
