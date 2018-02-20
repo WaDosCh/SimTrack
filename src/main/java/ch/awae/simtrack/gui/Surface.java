@@ -60,9 +60,13 @@ class Surface extends Canvas {
 
 	public void doPaint() {
 		buffer.show();
-		java.awt.Graphics g = buffer.getDrawGraphics();
+		Graphics2D g = (Graphics2D) buffer.getDrawGraphics();
+		// g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+		// RenderingHints.VALUE_ANTIALIAS_ON);
+		// g.setRenderingHint(RenderingHints.KEY_RENDERING,
+		// RenderingHints.VALUE_RENDER_QUALITY);
 		g.clearRect(0, 0, this.getWidth(), this.getHeight());
-		this.renderer.accept(new Graphics((Graphics2D) g));
+		this.renderer.accept(new Graphics(g));
 		g.dispose();
 	}
 

@@ -73,8 +73,8 @@ public class Controller {
 	 * performs a game logic update tick.
 	 */
 	private void tick() {
-		// rendering first to make sure this happens at a constant rate when
-		// updates take more or less time
+		// render gameView first to make sure this happens at a constant rate
+		// when updates take more or less time
 		this.gameView.renderView();
 
 		// update ticks

@@ -18,7 +18,7 @@ import ch.awae.simtrack.view.Graphics;
  */
 public class FreeTool extends SimpleEventDrivenTool {
 
-	private final static Stroke borderStroke = new BasicStroke(6);
+	private final static Stroke borderStroke = new BasicStroke(3);
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	/**

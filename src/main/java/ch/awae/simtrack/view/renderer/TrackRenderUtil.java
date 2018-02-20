@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Arc2D.Double;
 
 import ch.awae.simtrack.model.position.TilePath;
 import ch.awae.simtrack.util.Properties;
@@ -24,46 +26,49 @@ public class TrackRenderUtil {
 	private final static int sleeperHeight;
 	private final static int railGauge;
 	private final static Stroke railStroke;
-	
-	private final static int halfSide = (int) (50 / Math.sqrt(3));
+
+	private final static double halfSide = (int) (50 / Math.sqrt(3));
 
 	static {
 		Properties props = Resource.getProperties("trackRenderer.properties");
-		
+
 		sleeperCount = props.getInt("sleeperCount");
 		sleeperWidth = props.getInt("sleeperWidth");
 		sleeperHeight = props.getInt("sleeperHeight");
 		railGauge = props.getInt("railGauge");
 		railStroke = new BasicStroke(props.getInt("railThickness"));
 	}
-	
+
 	private static void renderCurvedRail(Graphics2D g) {
 		for (int i = 0; i < 2; i++) {
-			int radius = 3 * halfSide + (i == 0 ? railGauge / 2 : -railGauge / 2);
-			g.drawArc(50 - radius, -(3 * halfSide + radius) + 1, 2 * radius - 1, 2 * radius - 1, 210, 59);
+			double radius = 3 * halfSide + (i == 0 ? railGauge / 2 : -railGauge / 2);
+			Double arc = new Arc2D.Double(50 - radius - 1.7, -(3 * halfSide + radius), 2 * radius + 3, 2 * radius,
+					209.25, 60, Arc2D.OPEN);
+			g.draw(arc);
 		}
 	}
 
 	private static void renderCurvedRailbed(Graphics2D g) {
 		AffineTransform transform = g.getTransform();
-		int radius = 3 * halfSide;
+		double radius = 3 * halfSide;
 		double step = Math.PI / (3 * sleeperCount);
-		g.rotate(-step / 2, 50, -radius);
+		g.rotate(step * 1 / 3, 50 - 1, -radius);
+		step += (1. / 2. * step) / sleeperCount;
 		for (int i = 0; i < sleeperCount; i++) {
-			g.rotate(step, 50, -radius);
-			g.fillRect(50 - sleeperWidth / 2, -sleeperHeight / 2, sleeperWidth, sleeperHeight);
+			g.fillRect(49 - sleeperWidth / 2, -sleeperHeight / 2, sleeperWidth, sleeperHeight);
+			g.rotate(step, 50 - 1, -radius);
 		}
 		g.setTransform(transform);
 	}
 
 	private static void renderStraightRail(Graphics2D g) {
-		g.drawLine(-50, railGauge / 2, 50, railGauge / 2);
-		g.drawLine(-50, -railGauge / 2, 50, -railGauge / 2);
+		g.drawLine(-49, railGauge / 2, 49, railGauge / 2);
+		g.drawLine(-49, -railGauge / 2, 49, -railGauge / 2);
 	}
 
 	private static void renderStraightRailbed(Graphics2D g) {
 		AffineTransform transform = g.getTransform();
-		int step = 100 / sleeperCount;
+		double step = 100 / sleeperCount;
 		g.translate(-50 - step / 2, 0);
 		for (int i = 0; i < sleeperCount; i++) {
 			g.translate(step, 0);
