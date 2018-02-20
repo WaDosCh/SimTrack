@@ -1,7 +1,5 @@
 package ch.awae.simtrack.view.renderer;
 
-import java.awt.Graphics2D;
-
 import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.Graphics;
 
