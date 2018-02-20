@@ -2,9 +2,6 @@ package ch.awae.simtrack.controller;
 
 import java.awt.Point;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
@@ -21,8 +18,6 @@ public class Navigator {
 
 	private Input input;
 	private IGameView gameView;
-
-	private Logger logger = LogManager.getLogger(getClass());
 
 	private Binding A, S, D, W;
 
