@@ -19,7 +19,9 @@ public class SignalTool extends SimpleEventDrivenTool {
 
 	private final static Stroke borderStroke = new BasicStroke(6);
 
-	private boolean oneway;
+	private boolean bulldoze;
+	private Type type;
+	private boolean valid;
 	private TileEdgeCoordinate position;
 	private PointD center, mouse;
 
@@ -27,7 +29,10 @@ public class SignalTool extends SimpleEventDrivenTool {
 		super(editor, UnloadAction.UNLOAD);
 
 		onTick(this::updatePosition);
-		onPress(Action.ST_BUILD_SIGNAL, this::buildSignal);
+		ifNot(() -> bulldoze).onTick(this::checkPosition);
+
+		ifNot(() -> bulldoze).onPress(Action.ST_BUILD_SIGNAL, this::buildSignal);
+		ifMet(() -> bulldoze).onPress(Action.ST_BUILD_SIGNAL, this::deleteSignal);
 		onPress(Action.ST_DELETE_SIGNAL, this::deleteSignal);
 	}
 
@@ -43,8 +48,12 @@ public class SignalTool extends SimpleEventDrivenTool {
 		position = mouseTile.getEdge(edge);
 	}
 
+	private void checkPosition() {
+		valid = model.canPlaceSignal(position, type);
+	}
+
 	private void buildSignal() {
-		model.setSignalAt(position, new Signal(position, oneway ? Type.ONE_WAY : Type.TWO_WAY));
+		model.setSignalAt(position, new Signal(position, type));
 	}
 
 	private void deleteSignal() {
@@ -52,21 +61,34 @@ public class SignalTool extends SimpleEventDrivenTool {
 	}
 
 	@OnLoad
-	public void load(boolean oneway) {
-		this.oneway = oneway;
+	public void loadBulldoze() {
+		this.bulldoze = true;
+	}
+
+	@OnLoad
+	public void load(Type type) {
+		this.bulldoze = false;
+		this.type = type;
 	}
 
 	@Override
 	public void render(Graphics g) {
 		viewPort.focusHex(position.getTile(), g);
 		g.setStroke(borderStroke);
-		g.setColor(Color.CYAN);
 		double angle = position.getEdge().getAngleOut();
 		g.rotate(angle);
-		g.fillOval(41, 8, 18, 18);
-		g.drawLine(-40, 0, 40, 0);
-		g.drawLine(30, -10, 40, 0);
-		g.drawLine(30, 10, 40, 0);
+
+		if (bulldoze) {
+			g.setColor(Color.RED);
+			g.drawOval(40, 7, 20, 20);
+		} else {
+			g.setColor(type == Type.ONE_WAY ? Color.PINK : Color.MAGENTA);
+			g.fillOval(41, 8, 18, 18);
+			g.setColor(valid ? Color.BLACK : Color.RED);
+			g.drawLine(-40, 0, 40, 0);
+			g.drawLine(30, -10, 40, 0);
+			g.drawLine(30, 10, 40, 0);
+		}
 	}
 
 }

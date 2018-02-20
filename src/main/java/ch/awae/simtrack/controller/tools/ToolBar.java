@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.RenderingEventDrivenTool;
 import ch.awae.simtrack.controller.input.Input;
+import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.tile.ITransformableTrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.util.T2;
@@ -67,9 +68,28 @@ public class ToolBar extends RenderingEventDrivenTool {
 			}
 		}
 		// signal
-		bind(() -> editor.loadTool(SignalTool.class, false), (g, v) -> {
+		bind(() -> editor.loadTool(SignalTool.class), (g, v) -> {
+			g.setColor(Color.RED);
+			g.setStroke(this.xstr);
+			g.drawLine(-25, -25, 25, 25);
+			g.drawLine(-25, 25, 25, -25);
+			g.setColor(Color.BLACK);
+			g.setFont(g.getFont().deriveFont(20f));
+			g.drawString("Signal", -30, 5);
 		});
-		bind(() -> editor.loadTool(SignalTool.class, true), (g, v) -> {
+		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.TWO_WAY), (g, v) -> {
+			g.setColor(Color.MAGENTA);
+			g.fillOval(-25, -25, 50, 50);
+			g.setColor(Color.BLACK);
+			g.setFont(g.getFont().deriveFont(20f));
+			g.drawString("Signal", -30, 5);
+		});
+		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.ONE_WAY), (g, v) -> {
+			g.setColor(Color.PINK);
+			g.fillOval(-25, -25, 50, 50);
+			g.setColor(Color.BLACK);
+			g.setFont(g.getFont().deriveFont(20f));
+			g.drawString("Signal", -30, 5);
 		});
 
 		onPress(KeyEvent.VK_MINUS, () -> select(0));
@@ -142,10 +162,6 @@ public class ToolBar extends RenderingEventDrivenTool {
 				bindings.get(i)._2.renderSafe(g, view);
 			g.translate(100, 0);
 		}
-	}
-
-	void renderSlot(Graphics g, IGameView view, int slot) {
-
 	}
 
 }

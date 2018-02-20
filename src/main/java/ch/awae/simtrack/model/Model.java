@@ -134,8 +134,34 @@ class Model implements IModel {
 			if (opponent.getType() == Type.ONE_WAY || signal.getType() == Type.ONE_WAY)
 				throw new IllegalArgumentException("signal conflict");
 		}
+
+		ITrackTile track = (ITrackTile) tile;
+		if (!track.connectsAt(position.edge)) {
+			throw new IllegalArgumentException("invalid edge - no connections");
+		}
 		signals.put(position, signal);
 		notifyChanged();
+	}
+
+	@Override
+	public boolean canPlaceSignal(TileEdgeCoordinate position, Type type) {
+		if (signals.containsKey(position))
+			return false;
+		// check if signal position is valid
+		ITile tile = tiles.get(position.tile);
+		if (tile == null
+				|| (tile instanceof IDestinationTrackTile && ((IDestinationTrackTile) tile).isTrainDestination())
+				|| !(tile instanceof ITrackTile))
+			return false;
+		Signal opponent = getSignalAt(position.getOppositeDirection());
+		if (opponent != null) {
+			if (opponent.getType() == Type.ONE_WAY || type == Type.ONE_WAY)
+				return false;
+		}
+		// CHECK POSITION
+
+		ITrackTile track = (ITrackTile) tile;
+		return track.connectsAt(position.edge);
 	}
 
 	@Override

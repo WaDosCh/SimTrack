@@ -53,6 +53,8 @@ public interface IModel extends IObservable, Serializable {
 
 	void removeSignalAt(TileEdgeCoordinate position);
 
+	boolean canPlaceSignal(TileEdgeCoordinate position, Signal.Type type);
+	
 	/**
 	 * called when a model is created or loaded from file.
 	 */
