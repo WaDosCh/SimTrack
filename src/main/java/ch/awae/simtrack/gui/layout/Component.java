@@ -7,7 +7,7 @@ import ch.awae.simtrack.view.renderer.Renderer;
 /**
  * a component is supposed to initialize its base size as the prefered size
  */
-public interface IComponent extends Renderer {
+public interface Component extends Renderer {
 
 	/**
 	 * called by the super component before drawing happens to decide on the

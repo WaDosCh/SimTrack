@@ -5,7 +5,7 @@ import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.renderer.Renderer;
 
-public class Label extends BaseComponent implements Renderer, IComponent {
+public class Label extends BaseComponent implements Renderer, Component {
 
 	public final String title;
 

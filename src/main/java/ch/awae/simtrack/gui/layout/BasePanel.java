@@ -11,9 +11,9 @@ import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.renderer.Renderer;
 
-public class BasePanel implements Renderer, IComponent {
+public class BasePanel implements Renderer, Component {
 
-	private ArrayList<IComponent> components;
+	private ArrayList<Component> components;
 	private Input input;
 	private boolean needsLayout;
 	private Rectangle rect;
@@ -42,16 +42,16 @@ public class BasePanel implements Renderer, IComponent {
 		g.setColor(Design.grayBorder);
 		g.fill(this.rect);
 
-		for (IComponent b : this.components) {
+		for (Component b : this.components) {
 			b.render(g, view);
 		}
 
-		for (IComponent b : this.components) {
+		for (Component b : this.components) {
 			b.render(g, view);
 		}
 
 		click.onPress(() -> {
-			for (IComponent b : this.components) {
+			for (Component b : this.components) {
 				if (b instanceof Button) {
 					Button button = (Button) b;
 					if (button.test(input.getMousePosition()))
@@ -70,7 +70,7 @@ public class BasePanel implements Renderer, IComponent {
 		this.rect = new Rectangle(x + w / 2 - size.width / 2, y + h / 2 - size.height / 2, size.width + 1,
 				size.height + 1);
 		int currentY = 0;
-		for (IComponent b : this.components) {
+		for (Component b : this.components) {
 			Dimension componentSize = b.getSize();
 			b.layout(this.rect.x, currentY + this.rect.y, this.rect.width, componentSize.height);
 			currentY += componentSize.height;
@@ -80,7 +80,7 @@ public class BasePanel implements Renderer, IComponent {
 	@Override
 	public int getPreferedWidth() {
 		int minWidth = 0;
-		for (IComponent b : this.components) {
+		for (Component b : this.components) {
 			minWidth = Math.max(minWidth, b.getPreferedWidth());
 		}
 		return minWidth;
@@ -89,7 +89,7 @@ public class BasePanel implements Renderer, IComponent {
 	@Override
 	public int getPreferedHeight() {
 		int totalHeight = 0;
-		for (IComponent b : this.components) {
+		for (Component b : this.components) {
 			totalHeight += b.getPreferedHeight();
 		}
 		return totalHeight;
