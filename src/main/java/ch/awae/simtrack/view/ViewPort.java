@@ -29,7 +29,7 @@ public class ViewPort {
 
 	private PointI screenDimensions;
 	private SceneCoordinate sceneDimensions;
-	private IGameView owner;
+	private GameView owner;
 
 	private PointI focusedPointForZoom;
 
@@ -38,7 +38,7 @@ public class ViewPort {
 	 * 
 	 * @param owner
 	 */
-	ViewPort(IGameView owner) {
+	ViewPort(GameView owner) {
 		this.owner = owner;
 		this.init();
 	}

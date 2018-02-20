@@ -15,7 +15,7 @@ import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.track.TrackProvider;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.renderer.Renderer;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
@@ -148,7 +148,7 @@ public class ToolBar extends RenderingEventDrivenTool {
 	}
 
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g, GameView view) {
 		g.translate(view.getHorizontalScreenSize() / 2 - 500, view.getVerticalScreenSize() - 50);
 		g.setStroke(new BasicStroke(4));
 		for (int i = 0; i < 11; i++) {

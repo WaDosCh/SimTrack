@@ -14,7 +14,7 @@ import ch.awae.simtrack.model.tile.TileType;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.ViewPort;
 
 /**
@@ -47,7 +47,7 @@ public class TileRenderer implements Renderer {
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 	
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g, GameView view) {
 		ViewPort port = view.getViewPort();
 		Graphics.Stack stack = g.getStack();
 		for (Entry<TileCoordinate, Tile> pair : view.getModel().getTiles()) {

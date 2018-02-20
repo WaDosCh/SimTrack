@@ -25,7 +25,7 @@ public abstract class EventDrivenTool implements Tool {
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
 	protected final Editor editor;
-	protected final IController controller;
+	protected final Controller controller;
 	protected final ViewPort viewPort;
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected @Getter TileCoordinate mouseTile = null;

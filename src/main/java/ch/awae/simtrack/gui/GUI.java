@@ -5,8 +5,8 @@ import java.awt.event.MouseAdapter;
 import java.util.function.Consumer;
 
 import ch.awae.simtrack.controller.GUIControllerHook;
-import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GUIRenderHook;
+import ch.awae.simtrack.view.Graphics;
 
 /**
  * The GUI wrapper class

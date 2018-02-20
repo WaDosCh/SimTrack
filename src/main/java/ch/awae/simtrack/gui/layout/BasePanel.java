@@ -8,7 +8,7 @@ import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.renderer.Renderer;
 
 public class BasePanel implements Renderer, IComponent {
@@ -33,7 +33,7 @@ public class BasePanel implements Renderer, IComponent {
 	}
 
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g, GameView view) {
 		if (this.needsLayout)
 			layout(0, 0, view.getHorizontalScreenSize(), view.getVerticalScreenSize() - Design.toolbarHeight);
 

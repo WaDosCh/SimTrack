@@ -13,7 +13,7 @@ import ch.awae.simtrack.view.renderer.Renderer;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class GameView implements IGameView {
+public class GameView {
 
 	private Model model;
 	private ViewPort viewPort;
@@ -48,12 +48,24 @@ public class GameView implements IGameView {
 		this.renderers = renderers;
 	}
 
-	@Override
+	/**
+	 * moves the view by the given amount
+	 * 
+	 * @param dx
+	 * @param dy
+	 */
 	public void moveScene(int dx, int dy) {
 		this.viewPort.moveScene(dx, dy);
 	}
 
-	@Override
+	/**
+	 * zooms the view by the given amount at the given point. the given point
+	 * remains stationary while zooming.
+	 * 
+	 * @param dzoom
+	 * @param fixX
+	 * @param fixY
+	 */
 	public void zoom(float dzoom, int fixX, int fixY) {
 		this.viewPort.zoom((int) (100 * dzoom), fixX, fixY);
 	}
@@ -76,14 +88,18 @@ public class GameView implements IGameView {
 		graphics.setStack(stack);
 	}
 
-	@Override
+	/**
+	 * sets the rendering surface dimensions. All values are provided in pixels
+	 * 
+	 * @param width
+	 * @param height
+	 */
 	public void setScreenDimensions(int width, int height) {
 		this.screenX = width;
 		this.screenY = height;
 		this.viewPort.init();
 	}
 
-	@Override
 	public void renderView() {
 		this.delegate.run();
 	}
@@ -97,32 +113,26 @@ public class GameView implements IGameView {
 		this.delegate = delegate;
 	}
 
-	@Override
 	public void setEditorRenderer(Renderer renderer) {
 		this.editorRenderer = renderer;
 	}
 
-	@Override
 	public Model getModel() {
 		return this.model;
 	}
 
-	@Override
 	public int getHorizontalScreenSize() {
 		return this.screenX;
 	}
 
-	@Override
 	public int getVerticalScreenSize() {
 		return this.screenY;
 	}
 
-	@Override
 	public ViewPort getViewPort() {
 		return this.viewPort;
 	}
 
-	@Override
 	public void setModel(Model model) {
 		this.model = model;
 	}

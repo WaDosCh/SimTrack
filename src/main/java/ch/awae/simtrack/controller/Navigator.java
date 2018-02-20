@@ -5,7 +5,7 @@ import java.awt.Point;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 
 /**
  * Navigation Tool. Used for Scene movement & zoom
@@ -17,14 +17,14 @@ import ch.awae.simtrack.view.IGameView;
 public class Navigator {
 
 	private Input input;
-	private IGameView gameView;
+	private GameView gameView;
 
 	private Binding A, S, D, W;
 
 	/**
 	 * instantiates a new navigator
 	 */
-	public Navigator(IGameView gameView, Input input) {
+	public Navigator(GameView gameView, Input input) {
 		this.gameView = gameView;
 		this.input = input;
 

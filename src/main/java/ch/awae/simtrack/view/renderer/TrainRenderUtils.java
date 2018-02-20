@@ -12,7 +12,7 @@ import ch.awae.simtrack.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 
 public class TrainRenderUtils {
 
@@ -20,7 +20,7 @@ public class TrainRenderUtils {
 
 	public static final BufferedImage loc = Resource.getImage("locomotive1.png");
 
-	public static void renderTrain(Train train, Graphics g, IGameView view) {
+	public static void renderTrain(Train train, Graphics g, GameView view) {
 		view.getViewPort().transformToScene(g);
 		drawExactCircle(g, train);
 	}

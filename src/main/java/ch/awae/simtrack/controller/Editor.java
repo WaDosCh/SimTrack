@@ -14,7 +14,7 @@ import ch.awae.simtrack.controller.tools.PathFindingTool;
 import ch.awae.simtrack.controller.tools.SignalTool;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.renderer.Renderer;
 
 /**
@@ -28,7 +28,7 @@ import ch.awae.simtrack.view.renderer.Renderer;
  */
 public class Editor {
 
-	private IController owner;
+	private Controller owner;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
@@ -42,7 +42,7 @@ public class Editor {
 	 * @param c
 	 *            the controller
 	 */
-	Editor(IController c) {
+	Editor(Controller c) {
 		this.owner = c;
 		loadTools();
 	}
@@ -70,7 +70,7 @@ public class Editor {
 	 * 
 	 * @return the owning controller instance
 	 */
-	public IController getController() {
+	public Controller getController() {
 		return this.owner;
 	}
 
@@ -153,7 +153,7 @@ public class Editor {
 	 * @param view
 	 *            the view
 	 */
-	void render(Graphics g, IGameView view) {
+	void render(Graphics g, GameView view) {
 		if (this.renderer != null)
 			this.renderer.renderSafe(g, view);
 	}

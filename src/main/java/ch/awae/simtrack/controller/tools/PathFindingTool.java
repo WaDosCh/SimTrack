@@ -17,7 +17,7 @@ import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.IGameView;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.renderer.Renderer;
 import lombok.Getter;
 
@@ -72,7 +72,7 @@ public class PathFindingTool extends EventDrivenTool implements Renderer {
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	@Override
-	public void render(Graphics g, IGameView view) {
+	public void render(Graphics g, GameView view) {
 		if (this.path != null) {
 			g.setColor(Color.red);
 			g.setStroke(new BasicStroke(12));
