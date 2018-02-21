@@ -18,10 +18,12 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.model.tile.Tile;
+import ch.awae.simtrack.scene.BaseTicker;
 import ch.awae.simtrack.util.CollectionUtil;
+import ch.awae.simtrack.view.GameView;
 import lombok.Getter;
 
-public class DebugTools extends EventDrivenTool {
+public class DebugTools extends EventDrivenTool implements BaseTicker<GameView> {
 
 	enum Option {
 		InputGuide,
@@ -41,7 +43,7 @@ public class DebugTools extends EventDrivenTool {
 		onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
 		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
 		onPress(KeyEvent.VK_F4, this::spawnTrain);
-		onPress(KeyEvent.VK_F5, () -> editor.getController().getGameView().toggleHex());
+		onPress(KeyEvent.VK_F5, () -> editor.getController().toggleHex());
 		onPress(KeyEvent.VK_F12, () -> System.exit(0));
 	}
 
@@ -61,6 +63,11 @@ public class DebugTools extends EventDrivenTool {
 			this.showing.remove(option);
 		else
 			this.showing.add(option);
+	}
+
+	@Override
+	public void tick(GameView scene) {
+		tick();
 	}
 
 }

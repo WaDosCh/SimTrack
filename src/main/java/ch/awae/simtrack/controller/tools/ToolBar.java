@@ -13,9 +13,10 @@ import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.tile.track.TrackProvider;
+import ch.awae.simtrack.scene.BaseTicker;
 import ch.awae.simtrack.util.T2;
-import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.renderer.Renderer;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 
@@ -26,7 +27,7 @@ import ch.awae.simtrack.view.renderer.TrackRenderUtil;
  * @version 1.5, 2015-01-26
  * @since SimTrack 0.2.2 (0.2.1)
  */
-public class ToolBar extends RenderingEventDrivenTool {
+public class ToolBar extends RenderingEventDrivenTool implements BaseTicker<GameView> {
 
 	private int index;
 
@@ -135,9 +136,9 @@ public class ToolBar extends RenderingEventDrivenTool {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= controller.getGameView().getHorizontalScreenSize() / 2;
+		p.x -= controller.getHorizontalScreenSize() / 2;
 		p.x += 550;
-		p.y -= controller.getGameView().getVerticalScreenSize();
+		p.y -= controller.getVerticalScreenSize();
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;
@@ -162,6 +163,11 @@ public class ToolBar extends RenderingEventDrivenTool {
 				bindings.get(i)._2.renderSafe(g, view);
 			g.translate(100, 0);
 		}
+	}
+
+	@Override
+	public void tick(GameView scene) {
+		tick();
 	}
 
 }

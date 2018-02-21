@@ -9,15 +9,10 @@ import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ch.awae.simtrack.controller.GUIControllerHook;
 import ch.judos.generic.data.HashMapList;
+import lombok.Getter;
 
 public class Input {
-
-	public Input(GUIControllerHook hook) {
-		hook.getMouseHookup().accept(this.mouse);
-		hook.getKeyboardHookup().accept(this.keyboard);
-	}
 
 	// CONSTANTS
 	public static final int MOUSE_LEFT = 0x0001_0000;
@@ -83,7 +78,7 @@ public class Input {
 	}
 
 	// ADAPTERS
-	private KeyAdapter keyboard = new KeyAdapter() {
+	private @Getter KeyAdapter keyboard = new KeyAdapter() {
 		@Override
 		public synchronized void keyPressed(KeyEvent e) {
 			handle(e.getKeyCode(), true);
@@ -95,7 +90,7 @@ public class Input {
 		}
 	};
 
-	private MouseAdapter mouse = new MouseAdapter() {
+	private @Getter MouseAdapter mouse = new MouseAdapter() {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {

@@ -2,14 +2,12 @@ package ch.awae.simtrack;
 
 import javax.swing.SwingUtilities;
 
-import ch.awae.simtrack.controller.ControllerFactory;
-import ch.awae.simtrack.controller.Controller;
-import ch.awae.simtrack.gui.GUI;
 import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.ModelFactory;
+import ch.awae.simtrack.scene.window.MainWindow;
+import ch.awae.simtrack.scene.window.Window;
 import ch.awae.simtrack.util.MacKeyboardHack;
 import ch.awae.simtrack.view.GameView;
-import ch.awae.simtrack.view.ViewFactory;
 
 /**
  * Main Class.
@@ -24,11 +22,12 @@ import ch.awae.simtrack.view.ViewFactory;
 public class Main {
 
 	private static void init() {
-		GUI gui = new GUI(1200, 800);
+
+		Window window = new MainWindow(1200, 800);
 		Model model = ModelFactory.getModel(25, 13, 10);
-		GameView gameView = ViewFactory.createGameView(model, gui);
-		Controller c = ControllerFactory.buildGameController(model, gameView, gui, 50, 50);
-		c.start();
+		GameView scene = new GameView(model, window);
+
+		new GameController(window, scene).start();
 	}
 
 	public static void main(String[] args) {

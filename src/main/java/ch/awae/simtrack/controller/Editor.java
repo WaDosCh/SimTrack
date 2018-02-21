@@ -12,6 +12,8 @@ import ch.awae.simtrack.controller.tools.FreeTool;
 import ch.awae.simtrack.controller.tools.InGameMenu;
 import ch.awae.simtrack.controller.tools.PathFindingTool;
 import ch.awae.simtrack.controller.tools.SignalTool;
+import ch.awae.simtrack.scene.BaseRenderer;
+import ch.awae.simtrack.scene.BaseTicker;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GameView;
@@ -26,9 +28,9 @@ import ch.awae.simtrack.view.renderer.Renderer;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class Editor {
+public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
 
-	private Controller owner;
+	private GameView owner;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
@@ -42,7 +44,7 @@ public class Editor {
 	 * @param c
 	 *            the controller
 	 */
-	Editor(Controller c) {
+	public Editor(GameView c) {
 		this.owner = c;
 		loadTools();
 	}
@@ -70,7 +72,7 @@ public class Editor {
 	 * 
 	 * @return the owning controller instance
 	 */
-	public Controller getController() {
+	public GameView getController() {
 		return this.owner;
 	}
 
@@ -123,7 +125,7 @@ public class Editor {
 
 			this.currentTool = next;
 			this.renderer = this.currentTool.getRenderer();
-			this.getController().setWindowTitle(toolClass.getSimpleName());
+			this.owner.setWindowTitle(toolClass.getSimpleName());
 
 			return true;
 
@@ -153,7 +155,8 @@ public class Editor {
 	 * @param view
 	 *            the view
 	 */
-	void render(Graphics g, GameView view) {
+	@Override
+	public void render(Graphics g, GameView view) {
 		if (this.renderer != null)
 			try {
 				this.renderer.renderSafe(g, view);
@@ -168,6 +171,11 @@ public class Editor {
 	void tick() {
 		if (this.currentTool != null)
 			this.currentTool.tick();
+	}
+
+	@Override
+	public void tick(GameView scene) {
+		this.tick();
 	}
 
 }

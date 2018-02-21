@@ -1,13 +1,19 @@
 package ch.awae.simtrack.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import ch.awae.simtrack.controller.Editor;
+import ch.awae.simtrack.controller.Navigator;
+import ch.awae.simtrack.controller.PathFinding;
+import ch.awae.simtrack.controller.tools.DebugTools;
+import ch.awae.simtrack.controller.tools.ToolBar;
 import ch.awae.simtrack.model.Model;
-import ch.awae.simtrack.view.renderer.Renderer;
+import ch.awae.simtrack.scene.Scene;
+import ch.awae.simtrack.scene.window.Window;
+import ch.awae.simtrack.view.renderer.BackgroundRenderer;
+import ch.awae.simtrack.view.renderer.EntityRenderer;
+import ch.awae.simtrack.view.renderer.HexGridRenderer;
+import ch.awae.simtrack.view.renderer.SignalRenderer;
+import ch.awae.simtrack.view.renderer.TileRenderer;
+import lombok.Getter;
 
 /**
  * the game view implementation
@@ -16,21 +22,18 @@ import ch.awae.simtrack.view.renderer.Renderer;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class GameView {
+public class GameView extends Scene<GameView> {
 
+
+	private @Getter PathFinding pathfinder;
 	private Model model;
 	private ViewPort viewPort;
-	private int screenX, screenY;
-	private Runnable delegate;
+	private Editor editor;
 
 	public boolean drawHex = true;
 
-	private Logger logger = LogManager.getLogger();
-
-	private List<Renderer> renderers = new ArrayList<>();
-	private Renderer editorRenderer = (r, v) -> {
-		// void
-	};
+	private ToolBar trackbar;
+	private DebugTools debugTools;
 
 	/**
 	 * instantiates a new game view
@@ -39,20 +42,31 @@ public class GameView {
 	 * @param screenX
 	 * @param screenY
 	 */
-	GameView(Model model, int screenX, int screenY) {
+	public GameView(Model model, Window window) {
+		super(window);
 		this.model = model;
-		this.screenX = screenX;
-		this.screenY = screenY;
 		this.viewPort = new ViewPort(this);
-	}
+		this.editor = new Editor(this);
+		this.trackbar = new ToolBar(editor);
+		this.debugTools = new DebugTools(editor);
+		this.pathfinder = new PathFinding(model);
 
-	/**
-	 * sets the list of renderers to be used to render this view
-	 * 
-	 * @param renderers
-	 */
-	void setRenderers(List<Renderer> renderers) {
-		this.renderers = renderers;
+		addRenderer(new BackgroundRenderer());
+		addRenderer(new TileRenderer());
+		addRenderer(new HexGridRenderer());
+		addRenderer(new SignalRenderer());
+		addRenderer(new EntityRenderer());
+		addRenderer(editor);
+		addRenderer(debugTools.getRenderer());
+		addRenderer(trackbar);
+		
+		addTicker(new Navigator(this, input));
+		addTicker(trackbar);
+		addTicker(editor);
+		addTicker(debugTools);
+		addTicker(s -> viewPort.tick());
+		addTicker(s -> model.tick());
+		addTicker(pathfinder);
 	}
 
 	/**
@@ -77,75 +91,28 @@ public class GameView {
 		this.viewPort.zoom((int) (100 * dzoom), fixX, fixY);
 	}
 
-	/**
-	 * renders the view onto the graphics instance
-	 * 
-	 * @param graphics
-	 *            the graphics instance to render onto
-	 */
-	void render(Graphics graphics) {
-		Graphics.Stack stack = graphics.getStack();
-
-		this.renderers.forEach(r -> {
-			try {
-				r.render(graphics, this);
-			} catch (Exception ex) {
-				logger.error("Rendering failed for " + r.getClass().getSimpleName(), ex);
-			}
-			graphics.setStack(stack);
-		});
-
-		this.editorRenderer.render(graphics, this);
-		graphics.setStack(stack);
-	}
-
-	/**
-	 * sets the rendering surface dimensions. All values are provided in pixels
-	 * 
-	 * @param width
-	 * @param height
-	 */
-	public void setScreenDimensions(int width, int height) {
-		this.screenX = width;
-		this.screenY = height;
-		this.viewPort.init();
-	}
-
-	public void renderView() {
-		this.delegate.run();
-	}
-
-	/**
-	 * sets the delegate responsible for enforcing the rendering
-	 * 
-	 * @param delegate
-	 */
-	void setRenderingDelegate(Runnable delegate) {
-		this.delegate = delegate;
-	}
-
-	public void setEditorRenderer(Renderer renderer) {
-		this.editorRenderer = renderer;
-	}
+	
 
 	public Model getModel() {
 		return this.model;
 	}
 
 	public int getHorizontalScreenSize() {
-		return this.screenX;
+		return width;
 	}
 
 	public int getVerticalScreenSize() {
-		return this.screenY;
+		return height;
 	}
 
 	public ViewPort getViewPort() {
 		return this.viewPort;
 	}
 
-	public void setModel(Model model) {
+	public void loadModel(Model model) {
 		this.model = model;
+		this.model.load();
+		this.pathfinder.setModel(model);
 	}
 
 	public void toggleHex() {

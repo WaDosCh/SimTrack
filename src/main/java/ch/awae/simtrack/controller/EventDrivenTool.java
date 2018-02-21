@@ -16,6 +16,7 @@ import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.model.position.SceneCoordinate;
 import ch.awae.simtrack.model.position.TileCoordinate;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.ViewPort;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public abstract class EventDrivenTool implements Tool {
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
 	protected final Editor editor;
-	protected final Controller controller;
+	protected final GameView controller;
 	protected final ViewPort viewPort;
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected @Getter TileCoordinate mouseTile = null;
@@ -46,7 +47,7 @@ public abstract class EventDrivenTool implements Tool {
 		autoUnload = action == UnloadAction.UNLOAD;
 		this.editor = editor;
 		this.controller = editor.getController();
-		this.viewPort = this.controller.getGameView().getViewPort();
+		this.viewPort = this.controller.getViewPort();
 		onTick(this::preTick);
 	}
 

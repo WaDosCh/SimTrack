@@ -5,6 +5,7 @@ import java.awt.Point;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
+import ch.awae.simtrack.scene.BaseTicker;
 import ch.awae.simtrack.view.GameView;
 
 /**
@@ -14,7 +15,7 @@ import ch.awae.simtrack.view.GameView;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class Navigator {
+public class Navigator implements BaseTicker<GameView> {
 
 	private Input input;
 	private GameView gameView;
@@ -83,5 +84,10 @@ public class Navigator {
 		double amount = input.getScroll();
 		if (amount != 0)
 			this.gameView.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
+	}
+
+	@Override
+	public void tick(GameView scene) {
+		this.tick();
 	}
 }

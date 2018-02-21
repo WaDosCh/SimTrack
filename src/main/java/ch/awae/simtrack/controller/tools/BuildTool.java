@@ -160,7 +160,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 	 */
 	private void place() {
 		if (canPlace() && makesPlaceSense()) {
-			if (input.getMousePosition().y < editor.getController().getGameView().getViewPort()
+			if (input.getMousePosition().y < editor.getController().getViewPort()
 					.getScreenDimensions().y) {
 				if (model.getTileAt(mouseTile) == null)
 					model.setTileAt(mouseTile, TrackValidator.intern(track));

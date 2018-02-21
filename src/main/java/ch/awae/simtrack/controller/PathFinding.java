@@ -14,14 +14,16 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.model.tile.Tile;
+import ch.awae.simtrack.scene.BaseTicker;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.util.T3;
+import ch.awae.simtrack.view.GameView;
 import ch.judos.generic.data.HashMapList;
 import lombok.Getter;
 
-public class PathFinding {
+public class PathFinding implements BaseTicker<GameView> {
 
 	@Getter
 	private Model model;
@@ -186,5 +188,10 @@ public class PathFinding {
 			return null;
 		Entry<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> randomPath = CollectionUtil.randomValue(paths.entrySet());
 		return randomPath.getValue();
+	}
+
+	@Override
+	public void tick(GameView scene) {
+		this.tick();
 	}
 }
