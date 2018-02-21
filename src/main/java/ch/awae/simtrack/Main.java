@@ -2,12 +2,13 @@ package ch.awae.simtrack;
 
 import javax.swing.SwingUtilities;
 
-import ch.awae.simtrack.model.Model;
-import ch.awae.simtrack.model.ModelFactory;
-import ch.awae.simtrack.scene.window.MainWindow;
-import ch.awae.simtrack.scene.window.Window;
+import ch.awae.simtrack.controller.GameController;
+import ch.awae.simtrack.scene.Window;
+import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.model.ModelFactory;
+import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.util.MacKeyboardHack;
-import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.window.MainWindow;
 
 /**
  * Main Class.

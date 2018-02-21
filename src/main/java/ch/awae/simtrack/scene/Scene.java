@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.window.Window;
 import lombok.Getter;
 
 public class Scene<T extends Scene<T>> {

@@ -9,10 +9,10 @@ import org.apache.logging.log4j.Logger;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.scene.BaseRenderer;
 import ch.awae.simtrack.scene.BaseTicker;
+import ch.awae.simtrack.scene.Graphics;
 import ch.awae.simtrack.scene.Scene;
+import ch.awae.simtrack.scene.Graphics.Stack;
 import ch.awae.simtrack.util.ReflectionHelper;
-import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.Graphics.Stack;
 import lombok.NonNull;
 
 /**
