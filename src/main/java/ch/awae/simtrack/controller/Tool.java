@@ -1,6 +1,8 @@
 package ch.awae.simtrack.controller;
 
-import ch.awae.simtrack.view.renderer.Renderer;
+import ch.awae.simtrack.scene.BaseRenderer;
+import ch.awae.simtrack.scene.BaseTicker;
+import ch.awae.simtrack.scene.Scene;
 
 /**
  * describes the basic behaviour of any editor tool. Each editor tool represents
@@ -10,18 +12,13 @@ import ch.awae.simtrack.view.renderer.Renderer;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.0.1
  */
-public interface Tool {
+public interface Tool<T extends Scene<T>> extends BaseTicker<T> {
 
 	/**
 	 * retrieves the renderer for this tool
 	 * 
 	 * @return the tool renderer
 	 */
-	public Renderer getRenderer();
-
-	/**
-	 * performs an update tick on the tool
-	 */
-	void tick();
+	public BaseRenderer<T> getRenderer();
 
 }

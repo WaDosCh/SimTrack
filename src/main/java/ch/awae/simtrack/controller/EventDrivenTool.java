@@ -13,25 +13,18 @@ import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Binding.EdgeProcessor;
 import ch.awae.simtrack.controller.input.Binding.SkipConsumeException;
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.model.Model;
-import ch.awae.simtrack.model.position.SceneCoordinate;
-import ch.awae.simtrack.model.position.TileCoordinate;
-import ch.awae.simtrack.view.GameView;
-import ch.awae.simtrack.view.ViewPort;
+import ch.awae.simtrack.scene.BaseRenderer;
+import ch.awae.simtrack.scene.Scene;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
-public abstract class EventDrivenTool implements Tool {
+public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, BaseRenderer<T> {
 
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
-	protected final Editor editor;
-	protected final GameView controller;
-	protected final ViewPort viewPort;
+	protected final Editor<T> editor;
+	protected final T controller;
 	protected @Getter Point mousePosition = new Point(0, 0);
-	protected @Getter TileCoordinate mouseTile = null;
-	protected @Getter SceneCoordinate mouseScene = null;
-	protected Model model = null;
 	protected final Logger logger = LogManager.getLogger(getClass());
 	private final Binding drop;
 	private final boolean autoUnload;
@@ -41,21 +34,16 @@ public abstract class EventDrivenTool implements Tool {
 		IGNORE;
 	}
 
-	public EventDrivenTool(Editor editor, UnloadAction action) {
+	public EventDrivenTool(Editor<T> editor, UnloadAction action) {
 		this.input = editor.getInput();
 		drop = input.getBinding(Action.DROP_TOOL);
 		autoUnload = action == UnloadAction.UNLOAD;
 		this.editor = editor;
 		this.controller = editor.getController();
-		this.viewPort = this.controller.getViewPort();
-		onTick(this::preTick);
 	}
 
-	private void preTick() {
-		model = controller.getModel();
+	protected void preTick(T scene) {
 		mousePosition = input.getMousePosition();
-		mouseScene = viewPort.toSceneCoordinate(mousePosition);
-		mouseTile = mouseScene.toTileCoordinate();
 	}
 
 	/**
@@ -194,7 +182,8 @@ public abstract class EventDrivenTool implements Tool {
 	}
 
 	@Override
-	public void tick() {
+	public void tick(T scene) {
+		preTick(scene);
 		if (autoUnload && drop.isPressed() && drop.isEdge()) {
 			drop.consume();
 			editor.loadTool(null);
@@ -230,6 +219,11 @@ public abstract class EventDrivenTool implements Tool {
 
 	protected ConditionalStep ifNot(Logic condition) {
 		return new ConditionalStep(() -> !condition.evaluate());
+	}
+	
+	@Override
+	public BaseRenderer<T> getRenderer() {
+		return this;
 	}
 
 	// ######### INNER CLASSES #########

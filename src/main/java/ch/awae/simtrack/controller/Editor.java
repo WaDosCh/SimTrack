@@ -7,17 +7,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.controller.tools.BuildTool;
-import ch.awae.simtrack.controller.tools.FreeTool;
-import ch.awae.simtrack.controller.tools.InGameMenu;
-import ch.awae.simtrack.controller.tools.PathFindingTool;
-import ch.awae.simtrack.controller.tools.SignalTool;
 import ch.awae.simtrack.scene.BaseRenderer;
 import ch.awae.simtrack.scene.BaseTicker;
+import ch.awae.simtrack.scene.Scene;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.GameView;
-import ch.awae.simtrack.view.renderer.Renderer;
+import ch.awae.simtrack.view.Graphics.Stack;
+import lombok.NonNull;
 
 /**
  * top-level management of the active side of the user interface. It manages the
@@ -28,15 +24,18 @@ import ch.awae.simtrack.view.renderer.Renderer;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
+public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T> {
 
-	private GameView owner;
+	private T owner;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private Tool currentTool;
-	private Renderer renderer;
-	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
+	private Tool<T> currentTool;
+	private BaseRenderer<T> renderer;
+	@SuppressWarnings("rawtypes")
+	private HashMap<Class<? extends Tool>, Tool<T>> tools = new HashMap<>();
+	@SuppressWarnings("rawtypes")
+	private Class<? extends Tool> baseToolClass = null;
 
 	/**
 	 * instantiates a new editor for the given controller.
@@ -44,9 +43,8 @@ public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
 	 * @param c
 	 *            the controller
 	 */
-	public Editor(GameView c) {
+	public Editor(@NonNull T c) {
 		this.owner = c;
-		loadTools();
 	}
 
 	public Input getInput() {
@@ -60,10 +58,11 @@ public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
 	 * @param tool
 	 *            the tool to add.
 	 */
-	private void addTool(Tool tool) {
+	public void addTool(@NonNull Tool<T> tool) {
 		this.tools.put(tool.getClass(), tool);
 		if (this.currentTool == null) {
 			loadTool(tool.getClass());
+			baseToolClass = tool.getClass();
 		}
 	}
 
@@ -72,12 +71,13 @@ public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
 	 * 
 	 * @return the owning controller instance
 	 */
-	public GameView getController() {
+	public T getController() {
 		return this.owner;
 	}
 
 	private void unloadCurrentTool() {
 		if (currentTool != null) {
+			@SuppressWarnings("rawtypes")
 			ReflectionHelper<Tool> oldHelper = new ReflectionHelper<Tool>(currentTool);
 			try {
 				oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
@@ -99,11 +99,11 @@ public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
 	 *            additional arguments to hand over to the new tool
 	 * @return {@code true} if the tool switch was successful
 	 */
-	public boolean loadTool(Class<? extends Tool> toolClass, Object... args) {
-		if (toolClass == null)
-			toolClass = FreeTool.class;
+	@SuppressWarnings("rawtypes")
+	public boolean loadTool(Class<? extends Tool> toolClazz, Object... args) {
+		@NonNull Class<? extends Tool> toolClass = (toolClazz == null) ? baseToolClass : toolClazz;
 		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
-		Tool next = this.tools.get(toolClass);
+		Tool<T> next = this.tools.get(toolClass);
 
 		if (next == null) {
 			logger.warn("Tool " + toolClass.getSimpleName() + " was not found.");
@@ -137,17 +137,6 @@ public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
 	}
 
 	/**
-	 * initialise all available tools
-	 */
-	private void loadTools() {
-		addTool(new FreeTool(this));
-		addTool(new BuildTool(this));
-		addTool(new PathFindingTool(this));
-		addTool(new InGameMenu(this));
-		addTool(new SignalTool(this));
-	}
-
-	/**
 	 * renders the currently active tool
 	 * 
 	 * @param g
@@ -156,26 +145,21 @@ public class Editor implements BaseTicker<GameView>, BaseRenderer<GameView> {
 	 *            the view
 	 */
 	@Override
-	public void render(Graphics g, GameView view) {
+	public void render(Graphics g, T scene) {
 		if (this.renderer != null)
 			try {
-				this.renderer.renderSafe(g, view);
+				Stack stack = g.getStack();
+				this.renderer.render(g, scene);
+				g.setStack(stack);
 			} catch (Exception e) {
 				logger.error("failed to render " + currentTool.getClass().getSimpleName(), e);
 			}
 	}
 
-	/**
-	 * performs an editor update tick
-	 */
-	void tick() {
-		if (this.currentTool != null)
-			this.currentTool.tick();
-	}
-
 	@Override
-	public void tick(GameView scene) {
-		this.tick();
+	public void tick(T scene) {
+		if (this.currentTool != null)
+			this.currentTool.tick(scene);
 	}
 
 }

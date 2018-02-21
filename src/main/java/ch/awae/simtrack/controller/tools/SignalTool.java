@@ -5,17 +5,18 @@ import java.awt.Color;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.controller.Editor;
+import ch.awae.simtrack.controller.GameTool;
 import ch.awae.simtrack.controller.OnLoad;
-import ch.awae.simtrack.controller.SimpleEventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.entity.Signal.Type;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.Graphics;
 import ch.judos.generic.data.geometry.PointD;
 
-public class SignalTool extends SimpleEventDrivenTool {
+public class SignalTool extends GameTool {
 
 	private final static Stroke borderStroke = new BasicStroke(6);
 
@@ -25,7 +26,7 @@ public class SignalTool extends SimpleEventDrivenTool {
 	private TileEdgeCoordinate position;
 	private PointD center, mouse;
 
-	public SignalTool(Editor editor) {
+	public SignalTool(Editor<GameView> editor) {
 		super(editor, UnloadAction.UNLOAD);
 
 		onTick(this::updatePosition);
@@ -79,8 +80,8 @@ public class SignalTool extends SimpleEventDrivenTool {
 	}
 
 	@Override
-	public void render(Graphics g) {
-		viewPort.focusHex(position.getTile(), g);
+	public void render(Graphics g, GameView scene) {
+		scene.getViewPort().focusHex(position.getTile(), g);
 		g.setStroke(borderStroke);
 		double angle = position.getEdge().getAngleOut();
 		g.rotate(angle);

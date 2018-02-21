@@ -6,12 +6,11 @@ import java.util.ArrayList;
 
 import ch.awae.simtrack.controller.input.Binding;
 import ch.awae.simtrack.controller.input.Input;
+import ch.awae.simtrack.scene.window.Window;
 import ch.awae.simtrack.view.Design;
 import ch.awae.simtrack.view.Graphics;
-import ch.awae.simtrack.view.GameView;
-import ch.awae.simtrack.view.renderer.Renderer;
 
-public class BasePanel implements Renderer, Component {
+public class BasePanel implements Component {
 
 	private ArrayList<Component> components;
 	private Input input;
@@ -33,9 +32,9 @@ public class BasePanel implements Renderer, Component {
 	}
 
 	@Override
-	public void render(Graphics g, GameView view) {
+	public void render(Graphics g, Window w) {
 		if (this.needsLayout)
-			layout(0, 0, view.getHorizontalScreenSize(), view.getVerticalScreenSize() - Design.toolbarHeight);
+			layout(0, 0, w.getCanvasWidth(), w.getCanvasHeight() - Design.toolbarHeight);
 
 		g.setColor(Design.almostOpaque);
 		g.draw(this.rect);
@@ -43,11 +42,11 @@ public class BasePanel implements Renderer, Component {
 		g.fill(this.rect);
 
 		for (Component b : this.components) {
-			b.render(g, view);
+			b.render(g, w);
 		}
 
 		for (Component b : this.components) {
-			b.render(g, view);
+			b.render(g, w);
 		}
 
 		click.onPress(() -> {

@@ -11,7 +11,7 @@ public class Scene<T extends Scene<T>> {
 
 	protected final @Getter int width, height;
 	protected final @Getter Input input;
-	private final Window window;
+	protected final @Getter Window window;
 
 	private List<BaseRenderer<T>> renderers;
 	private List<BaseTicker<T>> tickers;

@@ -10,20 +10,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.GameTool;
 import ch.awae.simtrack.controller.PathFinding;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.position.Edge;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.GameView;
-import ch.awae.simtrack.view.renderer.Renderer;
-import lombok.Getter;
+import ch.awae.simtrack.view.Graphics;
 
-public class PathFindingTool extends EventDrivenTool implements Renderer {
-
-	private @Getter Renderer renderer = this;
+public class PathFindingTool extends GameTool {
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private TileCoordinate start;
@@ -33,7 +29,7 @@ public class PathFindingTool extends EventDrivenTool implements Renderer {
 	private PathFinding pathFinder;
 	private Stack<TileEdgeCoordinate> path;
 
-	public PathFindingTool(Editor editor) {
+	public PathFindingTool(Editor<GameView> editor) {
 		super(editor, UnloadAction.UNLOAD);
 
 		this.pathFinder = controller.getPathfinder();
@@ -79,8 +75,8 @@ public class PathFindingTool extends EventDrivenTool implements Renderer {
 			for (int i = 0; i < this.path.size() - 1; i++) {
 				TileCoordinate tile1 = this.path.get(i).tile;
 				TileCoordinate tile2 = this.path.get(i + 1).tile;
-				Point p1 = this.viewPort.toScreenCoordinate(tile1.toSceneCoordinate());
-				Point p2 = this.viewPort.toScreenCoordinate(tile2.toSceneCoordinate());
+				Point p1 = view.getViewPort().toScreenCoordinate(tile1.toSceneCoordinate());
+				Point p2 = view.getViewPort().toScreenCoordinate(tile2.toSceneCoordinate());
 
 				g.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}

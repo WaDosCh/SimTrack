@@ -2,12 +2,13 @@ package ch.awae.simtrack.gui.layout;
 
 import java.awt.Dimension;
 
-import ch.awae.simtrack.view.renderer.Renderer;
+import ch.awae.simtrack.scene.window.Window;
+import ch.awae.simtrack.view.Graphics;
 
 /**
  * a component is supposed to initialize its base size as the prefered size
  */
-public interface Component extends Renderer {
+public interface Component {
 
 	/**
 	 * called by the super component before drawing happens to decide on the
@@ -26,4 +27,6 @@ public interface Component extends Renderer {
 	 * @return
 	 */
 	public Dimension getSize();
+	
+	void render(Graphics g, Window w);
 }

@@ -3,7 +3,12 @@ package ch.awae.simtrack.view;
 import ch.awae.simtrack.controller.Editor;
 import ch.awae.simtrack.controller.Navigator;
 import ch.awae.simtrack.controller.PathFinding;
+import ch.awae.simtrack.controller.tools.BuildTool;
 import ch.awae.simtrack.controller.tools.DebugTools;
+import ch.awae.simtrack.controller.tools.FreeTool;
+import ch.awae.simtrack.controller.tools.InGameMenu;
+import ch.awae.simtrack.controller.tools.PathFindingTool;
+import ch.awae.simtrack.controller.tools.SignalTool;
 import ch.awae.simtrack.controller.tools.ToolBar;
 import ch.awae.simtrack.model.Model;
 import ch.awae.simtrack.scene.Scene;
@@ -24,11 +29,10 @@ import lombok.Getter;
  */
 public class GameView extends Scene<GameView> {
 
-
 	private @Getter PathFinding pathfinder;
 	private Model model;
 	private ViewPort viewPort;
-	private Editor editor;
+	private Editor<GameView> editor;
 
 	public boolean drawHex = true;
 
@@ -46,10 +50,16 @@ public class GameView extends Scene<GameView> {
 		super(window);
 		this.model = model;
 		this.viewPort = new ViewPort(this);
-		this.editor = new Editor(this);
+		this.editor = new Editor<GameView>(this);
 		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);
 		this.pathfinder = new PathFinding(model);
+
+		editor.addTool(new FreeTool(editor));
+		editor.addTool(new BuildTool(editor));
+		editor.addTool(new PathFindingTool(editor));
+		editor.addTool(new InGameMenu(editor));
+		editor.addTool(new SignalTool(editor));
 
 		addRenderer(new BackgroundRenderer());
 		addRenderer(new TileRenderer());
@@ -59,7 +69,7 @@ public class GameView extends Scene<GameView> {
 		addRenderer(editor);
 		addRenderer(debugTools.getRenderer());
 		addRenderer(trackbar);
-		
+
 		addTicker(new Navigator(this, input));
 		addTicker(trackbar);
 		addTicker(editor);
@@ -90,8 +100,6 @@ public class GameView extends Scene<GameView> {
 	public void zoom(float dzoom, int fixX, int fixY) {
 		this.viewPort.zoom((int) (100 * dzoom), fixX, fixY);
 	}
-
-	
 
 	public Model getModel() {
 		return this.model;

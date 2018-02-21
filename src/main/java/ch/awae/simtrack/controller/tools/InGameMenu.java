@@ -8,15 +8,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.GameTool;
 import ch.awae.simtrack.model.Model;
-import lombok.Getter;
+import ch.awae.simtrack.view.GameView;
+import ch.awae.simtrack.view.Graphics;
 
-public class InGameMenu extends EventDrivenTool {
+public class InGameMenu extends GameTool {
 
-	private @Getter InGameMenuRenderer renderer;
+	private InGameMenuRenderer renderer;
 
-	public InGameMenu(Editor editor) {
+	public InGameMenu(Editor<GameView> editor) {
 		super(editor, UnloadAction.UNLOAD);
 
 		this.renderer = new InGameMenuRenderer(input);
@@ -54,6 +55,11 @@ public class InGameMenu extends EventDrivenTool {
 
 	private void resume() {
 		this.editor.loadTool(FreeTool.class);
+	}
+
+	@Override
+	public void render(Graphics graphics, GameView scene) {
+		this.renderer.render(graphics, scene);
 	}
 
 }

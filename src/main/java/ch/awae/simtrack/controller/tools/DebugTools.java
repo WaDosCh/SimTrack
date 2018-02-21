@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.EventDrivenTool;
+import ch.awae.simtrack.controller.GameTool;
 import ch.awae.simtrack.model.PathFindingOptions;
 import ch.awae.simtrack.model.PathFindingOptions.Type;
 import ch.awae.simtrack.model.entity.Train;
@@ -18,12 +18,11 @@ import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.model.tile.Tile;
-import ch.awae.simtrack.scene.BaseTicker;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.view.GameView;
-import lombok.Getter;
+import ch.awae.simtrack.view.Graphics;
 
-public class DebugTools extends EventDrivenTool implements BaseTicker<GameView> {
+public class DebugTools extends GameTool {
 
 	enum Option {
 		InputGuide,
@@ -34,9 +33,9 @@ public class DebugTools extends EventDrivenTool implements BaseTicker<GameView> 
 
 	private HashSet<Option> showing = new HashSet<Option>();
 
-	private @Getter DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
+	private DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
 
-	public DebugTools(Editor editor) {
+	public DebugTools(Editor<GameView> editor) {
 		super(editor, UnloadAction.IGNORE);
 
 		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
@@ -66,8 +65,8 @@ public class DebugTools extends EventDrivenTool implements BaseTicker<GameView> 
 	}
 
 	@Override
-	public void tick(GameView scene) {
-		tick();
+	public void render(Graphics graphics, GameView scene) {
+		this.renderer.render(graphics, scene);
 	}
 
 }

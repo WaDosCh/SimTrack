@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.controller.Editor;
+import ch.awae.simtrack.controller.GameTool;
 import ch.awae.simtrack.controller.OnLoad;
 import ch.awae.simtrack.controller.OnUnload;
-import ch.awae.simtrack.controller.SimpleEventDrivenTool;
 import ch.awae.simtrack.controller.input.Action;
 import ch.awae.simtrack.model.position.TileCoordinate;
 import ch.awae.simtrack.model.tile.FixedTile;
@@ -16,6 +16,7 @@ import ch.awae.simtrack.model.tile.TrackTile;
 import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.tile.track.FusedTrackFactory;
 import ch.awae.simtrack.model.tile.track.TrackValidator;
+import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.Graphics;
 import ch.awae.simtrack.view.renderer.TrackRenderUtil;
 import lombok.Getter;
@@ -25,7 +26,7 @@ import lombok.Getter;
  * 
  * @author Andreas Wälchli
  */
-public class BuildTool extends SimpleEventDrivenTool {
+public class BuildTool extends GameTool {
 
 	private static Stroke bullCursorStroke = new BasicStroke(6);
 	private static Color darkRed = Color.RED.darker();
@@ -42,7 +43,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 	 * @param editor
 	 *            the editor the build tool will operate under
 	 */
-	public BuildTool(Editor editor) {
+	public BuildTool(Editor<GameView> editor) {
 		super(editor, UnloadAction.UNLOAD);
 
 		onTick(this::checkValid);
@@ -148,7 +149,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 
 	private void bulldoze() {
 		if (canDelete()) {
-			if (input.getMousePosition().y < viewPort.getScreenDimensions().y) {
+			if (input.getMousePosition().y < editor.getController().getViewPort().getScreenDimensions().y) {
 				model.removeTileAt(mouseTile);
 			}
 		}
@@ -190,12 +191,12 @@ public class BuildTool extends SimpleEventDrivenTool {
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics g, GameView scene) {
 		TileCoordinate c = mouseTile;
 		if (c == null)
 			return;
 		if (isBulldozeTool) {
-			viewPort.focusHex(c, g);
+			scene.getViewPort().focusHex(c, g);
 			g.setColor(valid ? Color.RED : darkRed);
 			g.setStroke(bullCursorStroke);
 			double angle = Math.PI / 3;
@@ -204,7 +205,7 @@ public class BuildTool extends SimpleEventDrivenTool {
 				g.rotate(angle);
 			}
 		} else {
-			viewPort.focusHex(c, g);
+			scene.getViewPort().focusHex(c, g);
 			TrackRenderUtil.renderRails(g, valid ? placeGood ? Color.LIGHT_GRAY : Color.GRAY : Color.RED,
 					valid ? placeGood ? Color.GRAY : Color.DARK_GRAY : Color.RED, track.getRailPaths());
 		}

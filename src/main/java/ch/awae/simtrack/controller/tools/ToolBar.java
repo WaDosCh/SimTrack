@@ -8,12 +8,11 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.RenderingEventDrivenTool;
+import ch.awae.simtrack.controller.GameTool;
 import ch.awae.simtrack.controller.input.Input;
 import ch.awae.simtrack.model.entity.Signal;
 import ch.awae.simtrack.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.model.tile.track.TrackProvider;
-import ch.awae.simtrack.scene.BaseTicker;
 import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.view.GameView;
 import ch.awae.simtrack.view.Graphics;
@@ -27,7 +26,7 @@ import ch.awae.simtrack.view.renderer.TrackRenderUtil;
  * @version 1.5, 2015-01-26
  * @since SimTrack 0.2.2 (0.2.1)
  */
-public class ToolBar extends RenderingEventDrivenTool implements BaseTicker<GameView> {
+public class ToolBar extends GameTool {
 
 	private int index;
 
@@ -47,7 +46,7 @@ public class ToolBar extends RenderingEventDrivenTool implements BaseTicker<Game
 	 * @param editor
 	 *            the editor owning the build tool
 	 */
-	public ToolBar(Editor editor) {
+	public ToolBar(Editor<GameView> editor) {
 		super(editor, UnloadAction.IGNORE);
 
 		// ######### BINDINGS ##########
@@ -163,11 +162,6 @@ public class ToolBar extends RenderingEventDrivenTool implements BaseTicker<Game
 				bindings.get(i)._2.renderSafe(g, view);
 			g.translate(100, 0);
 		}
-	}
-
-	@Override
-	public void tick(GameView scene) {
-		tick();
 	}
 
 }
