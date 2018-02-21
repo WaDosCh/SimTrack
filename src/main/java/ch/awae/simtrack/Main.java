@@ -25,10 +25,13 @@ public class Main {
 	private static void init() {
 
 		Window window = new MainWindow(1200, 800);
+		GameController controller = new GameController(window);
+		controller.start();
+		
 		Model model = ModelFactory.getModel(25, 13, 10);
 		GameView scene = new GameView(model, window);
-
-		new GameController(window, scene).start();
+		
+		controller.loadScene(scene);
 	}
 
 	public static void main(String[] args) {

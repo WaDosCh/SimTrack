@@ -3,6 +3,7 @@ package ch.awae.simtrack.scene;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.awae.simtrack.controller.GameController;
 import ch.awae.simtrack.controller.input.Input;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ public class Scene<T extends Scene<T>> {
 	protected final @Getter int width, height;
 	protected final @Getter Input input;
 	protected final @Getter Window window;
+	private GameController controller;
 
 	private List<BaseRenderer<T>> renderers;
 	private List<BaseTicker<T>> tickers;
@@ -44,5 +46,27 @@ public class Scene<T extends Scene<T>> {
 	public void setWindowTitle(String title) {
 		this.window.setTitle(title);
 	}
-	
+
+	public final void bindController(GameController controller) {
+		this.controller = controller;
+	}
+
+	public final <S extends Scene<S>> void transitionTo(Scene<S> next) {
+		controller.loadScene(next);
+	}
+
+	public final void transitionBack() {
+		controller.loadPrevious();
+	}
+
+	public final void transitionToHome() {
+		controller.loadRoot();
+	}
+
+	public void onLoad() {
+	}
+
+	public void onUnload() {
+	}
+
 }

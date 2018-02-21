@@ -7,18 +7,18 @@ import ch.awae.simtrack.scene.Graphics;
 import ch.awae.simtrack.scene.Scene;
 import ch.awae.simtrack.scene.Window;
 import ch.awae.simtrack.scene.Graphics.Stack;
+import lombok.NonNull;
 
 public class GameController {
 
 	private HighPrecisionClock gameClock;
 
 	private Window window;
-	private Scene<?> scene;
+	private java.util.Stack<Scene<?>> scenes = new java.util.Stack<>();
 
-	public GameController(Window window, Scene<?> scene) {
+	public GameController(Window window) {
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		this.window = window;
-		this.scene = scene;
 	}
 
 	public void start() {
@@ -35,6 +35,10 @@ public class GameController {
 		buffer.swapBuffer();
 		buffer.clearBuffer();
 		Graphics graphics = buffer.getGraphics();
+		if (scenes.isEmpty())
+			return;
+
+		Scene<?> scene = scenes.peek();
 
 		for (BaseRenderer renderer : scene.getRenderers()) {
 			Stack stack = graphics.getStack();
@@ -46,6 +50,28 @@ public class GameController {
 			ticker.tick(scene);
 		}
 
+		if (scene != scenes.peek()) {
+			scene.onUnload();
+			scene.onLoad();
+		}
+
+	}
+
+	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
+		scenes.push(next);
+		next.bindController(this);
+	}
+
+	public void loadRoot() {
+		if (scenes.size() == 1)
+			return;
+		while (scenes.size() > 1)
+			scenes.pop();
+	}
+
+	public void loadPrevious() {
+		if (scenes.size() > 1)
+			scenes.pop();
 	}
 
 }
