@@ -1,9 +1,6 @@
 package ch.awae.simtrack.scene.game;
 
-import ch.awae.simtrack.core.Controller;
-import ch.awae.simtrack.core.Editor;
-import ch.awae.simtrack.core.Scene;
-import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.*;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.TrainController;
@@ -32,6 +29,7 @@ public class Game extends Scene<Game> {
 	private ToolBar trackbar;
 	private DebugTools debugTools;
 	private TrainController trainController;
+	private boolean pause;
 
 	/**
 	 * instantiates a new game view
@@ -68,7 +66,7 @@ public class Game extends Scene<Game> {
 		addTicker(editor);
 		addTicker(debugTools);
 		addTicker("ViewPort", s -> viewPort.tick());
-		addTicker("Model", s -> this.model.tick(this));
+		addTicker("Model", new ProxyTicker(s -> this.model.tick(this)));
 		addTicker(pathfinder);
 		addTicker(trainController = new TrainController());
 
@@ -127,5 +125,25 @@ public class Game extends Scene<Game> {
 	public void bindWindow(Window window) {
 		super.bindWindow(window);
 		this.viewPort = new ViewPort(this);
+	}
+
+	public void setPaused(boolean pause) {
+		this.pause = pause;
+	}
+
+	private class ProxyTicker implements BaseTicker<Game> {
+
+		private BaseTicker<Game> ticker;
+
+		public ProxyTicker(BaseTicker<Game> ticker) {
+			this.ticker = ticker;
+		}
+
+		@Override
+		public void tick(Game scene) {
+			if (!scene.pause)
+				this.ticker.tick(scene);
+		}
+
 	}
 }
