@@ -202,7 +202,7 @@ public class Model implements Serializable, Observable {
 	}
 
 	public int reserveTiles(Train train, List<TileEdgeCoordinate> path) {
-		return -1;
+		return 1;
 		// TODO
 	}
 
