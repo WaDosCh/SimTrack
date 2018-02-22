@@ -2,11 +2,12 @@ package ch.awae.simtrack.scene.game.model.entity;
 
 import java.util.List;
 import java.util.Stack;
-import java.util.function.Consumer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.position.*;
@@ -56,10 +57,14 @@ public class Train implements Entity {
 		return this.trainElements;
 	}
 
+	public int getTrainLength() {
+		return this.trainElements.stream().mapToInt(element -> element.getLength()).sum();
+	}
+
 	@Override
-	public void tick(Consumer<PathFindingRequest> pathFinding) {
+	public void tick(Game g) {
 		if (this.path == null && this.pathFindingOptions != null) {
-			searchPath(pathFinding);
+			searchPath(g.getModel());
 		}
 		if (this.path != null) {
 			move();
@@ -73,11 +78,10 @@ public class Train implements Entity {
 
 		this.progressedDistance += this.speed;
 		if (this.progressedDistance >= this.currentTilePath.getPathLength()) {
-			this.progressedDistance -= this.currentTilePath.getPathLength();
 			if (this.path.size() > 0) {
+				this.progressedDistance -= this.currentTilePath.getPathLength();
 				createNextTilePath();
-			} else {
-				this.progressedDistance = this.currentTilePath.getPathLength();
+			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
 				this.path = null;
 			}
 		}
@@ -119,13 +123,13 @@ public class Train implements Entity {
 		return null;
 	}
 
-	private void searchPath(Consumer<PathFindingRequest> pathFinding) {
+	private void searchPath(Model model) {
 		PathFindingRequest request = new PathFindingRequest(this, this.currentTileTargetEdge, null,
 				this.pathFindingOptions, (path) -> {
 					this.path = path;
 					logger.info("Train found path to: " + path.firstElement());
 				});
-		pathFinding.accept(request);
+		model.getPathFindingQueue().add(request);
 		this.pathFindingOptions = null;
 	}
 

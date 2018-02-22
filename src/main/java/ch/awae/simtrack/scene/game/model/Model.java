@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ch.awae.simtrack.core.BaseTicker;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
@@ -24,7 +26,7 @@ import ch.awae.simtrack.util.T3;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class Model implements Serializable, Observable {
+public class Model implements Serializable, Observable, BaseTicker<Game> {
 
 	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
@@ -181,9 +183,10 @@ public class Model implements Serializable, Observable {
 		observableHandler = new ObservableHandler();
 	}
 
-	public void tick() {
+	@Override
+	public void tick(Game scene) {
 		for (Entity entity : this.entities) {
-			entity.tick((pathFindingRequest) -> this.pathFindingQueue.addLast(pathFindingRequest));
+			entity.tick(scene);
 		}
 	}
 
