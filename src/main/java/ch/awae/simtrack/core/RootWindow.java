@@ -5,5 +5,9 @@ public interface RootWindow extends Window {
 	void init(Input input);
 
 	void discard();
+	
+	Graphics getGraphics();
+
+	void flipFrame();
 
 }
