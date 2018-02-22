@@ -224,7 +224,7 @@ public class Model implements Serializable, Observable {
 				logger.error("train " + train + " tried to release a tile it does not own!");
 				throw new IllegalArgumentException("tile ownership mismatch");
 			} else {
-				logger.info(train + " released tile [" + coordinate.u + "|" + coordinate.v + "]");
+				logger.debug(train + " released tile [" + coordinate.u + "|" + coordinate.v + "]");
 				tileReservations.remove(coordinate);
 			}
 		}
@@ -254,7 +254,7 @@ public class Model implements Serializable, Observable {
 					throw new IllegalArgumentException("path element " + edge + " references an invalid tile: " + tile);
 				}
 				if (tileReservations.get(coord) != null) {
-					logger.info("path to next signal is blocked for train " + train);
+					logger.debug("path to next signal is blocked for train " + train);
 					return 0;
 				}
 				if (signals.get(edge) == null)
@@ -266,7 +266,7 @@ public class Model implements Serializable, Observable {
 			// we found a signal before we hit a reservation. therefore the path
 			// is clear
 			for (TileCoordinate tile : block) {
-				logger.info("train " + train + " reserved tile [" + tile.u + "|" + tile.v + "]");
+				logger.debug("train " + train + " reserved tile [" + tile.u + "|" + tile.v + "]");
 				tileReservations.put(tile, train);
 			}
 
