@@ -68,7 +68,7 @@ public class Game extends Scene<Game> {
 		addTicker(editor);
 		addTicker(debugTools);
 		addTicker("ViewPort", s -> viewPort.tick());
-		addTicker("Model", s -> this.model.tick());
+		addTicker("Model", s -> this.model.tick(this));
 		addTicker(pathfinder);
 		addTicker(trainController = new TrainController());
 

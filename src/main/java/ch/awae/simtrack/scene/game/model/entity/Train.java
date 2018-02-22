@@ -2,11 +2,12 @@ package ch.awae.simtrack.scene.game.model.entity;
 
 import java.util.List;
 import java.util.Stack;
-import java.util.function.Consumer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.position.*;
@@ -36,14 +37,25 @@ public class Train implements Entity {
 	private DynamicList<TrainElementConfiguration> trainElements;
 	private DynamicList<TilePathCoordinate> reservedTiles;
 
+	private int id;
+	private static int idCounter = 1;
+
+	/**
+	 * number of tiles this train is allowed to enter before he has to make a
+	 * new reservation
+	 */
+	private int amountOfTilesAheadReserved;
+
 	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
 		this.currentTileTargetEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.progressedDistance = 0.;
 		this.speed = 2;
+		this.id = idCounter++;
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
+		this.amountOfTilesAheadReserved = 0;
 
 		// TODO: add moooarr power
 		for (int i = 0; i < 5; i++) {
@@ -52,44 +64,73 @@ public class Train implements Entity {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Train" + this.id;
+	}
+
 	public List<TrainElementConfiguration> getElements() {
 		return this.trainElements;
 	}
 
+	public int getTrainLength() {
+		return this.trainElements.stream().mapToInt(element -> element.getLength()).sum();
+	}
+
 	@Override
-	public void tick(Consumer<PathFindingRequest> pathFinding) {
+	public void tick(Game g) {
 		if (this.path == null && this.pathFindingOptions != null) {
-			searchPath(pathFinding);
+			searchPath(g.getModel());
 		}
 		if (this.path != null) {
-			move();
+			move(g.getModel());
 		}
 	}
 
-	private void move() {
+	private void move(Model model) {
 		if (this.currentTilePath == null) {
-			createNextTilePath();
+			if (!createNextTilePath(model))
+				return;
 		}
 
 		this.progressedDistance += this.speed;
 		if (this.progressedDistance >= this.currentTilePath.getPathLength()) {
-			this.progressedDistance -= this.currentTilePath.getPathLength();
 			if (this.path.size() > 0) {
-				createNextTilePath();
-			} else {
-				this.progressedDistance = this.currentTilePath.getPathLength();
+				this.progressedDistance -= this.currentTilePath.getPathLength();
+				createNextTilePath(model);
+			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
 				this.path = null;
+				model.removeEntity(this);
+			}
+		}
+
+		double sumHistory = this.reservedTiles.stream().mapToDouble(tile -> tile.getPathLength()).sum();
+		double sumNewHistory = sumHistory - this.reservedTiles.get(0).getPathLength();
+		if (getTrainLength() - this.progressedDistance <= sumNewHistory) {
+			if (this.reservedTiles.size() > 0) {
+				TilePathCoordinate tile = this.reservedTiles.remove(0);
+				model.releaseTile(this, tile.getTile());
 			}
 		}
 	}
 
-	private void createNextTilePath() {
+	/**
+	 * @param model
+	 * @return true if the train can enter a new tile
+	 */
+	private boolean createNextTilePath(Model model) {
+		if (this.amountOfTilesAheadReserved == 0) {
+			this.amountOfTilesAheadReserved = model.reserveTiles(this, this.path);
+			if (this.amountOfTilesAheadReserved == 0)
+				return false;
+		}
 		Edge nextStartEdge = this.currentTileTargetEdge.edge.getOpposite();
 
 		this.currentTileTargetEdge = this.path.pop();
 		TilePath nextPath = new TilePath(nextStartEdge, this.currentTileTargetEdge.edge);
 		this.currentTilePath = new TilePathCoordinate(this.currentTileTargetEdge.tile, nextPath);
 		this.reservedTiles.add(this.currentTilePath);
+		return true;
 	}
 
 	public TileEdgeCoordinate getHeadPosition() {
@@ -119,13 +160,13 @@ public class Train implements Entity {
 		return null;
 	}
 
-	private void searchPath(Consumer<PathFindingRequest> pathFinding) {
+	private void searchPath(Model model) {
 		PathFindingRequest request = new PathFindingRequest(this, this.currentTileTargetEdge, null,
 				this.pathFindingOptions, (path) -> {
 					this.path = path;
 					logger.info("Train found path to: " + path.firstElement());
 				});
-		pathFinding.accept(request);
+		model.getPathFindingQueue().add(request);
 		this.pathFindingOptions = null;
 	}
 
