@@ -3,9 +3,6 @@ package ch.awae.simtrack.scene.game.controller.tools;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
@@ -15,10 +12,9 @@ public class DebugTools extends GameTool {
 
 	enum Option {
 		InputGuide,
-		Coordinates;
+		Coordinates,
+		Reservations;
 	}
-
-	private Logger logger = LogManager.getLogger(DebugTools.class);
 
 	private HashSet<Option> showing = new HashSet<Option>();
 
@@ -33,6 +29,7 @@ public class DebugTools extends GameTool {
 
 		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
 		onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
+		onPress(KeyEvent.VK_F8, () -> toggle(Option.Reservations));
 		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
 		onPress(KeyEvent.VK_F4, this::spawnTrain);
 		onPress(KeyEvent.VK_F5, () -> editor.getScene().toggleHex());

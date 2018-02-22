@@ -108,6 +108,7 @@ public class Train implements Entity {
 				}
 			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
 				this.path = null;
+				logger.info(this + " has reached its destination");
 				model.removeEntity(this);
 			}
 		}
@@ -130,7 +131,7 @@ public class Train implements Entity {
 	private boolean createNextTilePath(Model model) {
 		if (this.amountOfTilesAheadReserved == 0) {
 			this.amountOfTilesAheadReserved = model.reserveTiles(this, this.path);
-			logger.info("next tiles: " + this.amountOfTilesAheadReserved);
+			//logger.info("next tiles: " + this.amountOfTilesAheadReserved);
 			if (this.amountOfTilesAheadReserved == 0)
 				return false;
 		}
@@ -175,7 +176,7 @@ public class Train implements Entity {
 		PathFindingRequest request = new PathFindingRequest(this, this.currentTileTargetEdge, null,
 				this.pathFindingOptions, (path) -> {
 					this.path = path;
-					logger.info("Train found path to: " + path.firstElement());
+					logger.info(this + " found path to: " + path.firstElement());
 				});
 		model.getPathFindingQueue().add(request);
 		this.pathFindingOptions = null;
