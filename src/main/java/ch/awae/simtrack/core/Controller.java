@@ -20,7 +20,7 @@ public class Controller {
 	}
 
 	public void start() {
-		this.gameClock.start();
+		 this.gameClock.start();
 	}
 
 	public void stop() {
@@ -30,10 +30,8 @@ public class Controller {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void tick() {
 		RootWindow window = this.window;
-		Buffer buffer = window.getBuffer();
-		buffer.swapBuffer();
-		buffer.clearBuffer();
-		Graphics graphics = buffer.getGraphics();
+		window.flipFrame();
+		Graphics graphics = window.getGraphics();
 		if (scenes.isEmpty())
 			return;
 
@@ -59,7 +57,7 @@ public class Controller {
 			window.init(input);
 			scenes.forEach(sc -> sc.bindWindow(window));
 		}
-
+		
 	}
 
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
