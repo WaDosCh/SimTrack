@@ -68,7 +68,7 @@ public class Train implements Entity {
 	public String toString() {
 		return "Train" + this.id;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -100,8 +100,11 @@ public class Train implements Entity {
 		this.progressedDistance += this.speed;
 		if (this.progressedDistance >= this.currentTilePath.getPathLength()) {
 			if (this.path.size() > 0) {
-				this.progressedDistance -= this.currentTilePath.getPathLength();
-				createNextTilePath(model);
+				if (createNextTilePath(model)) {
+					this.progressedDistance -= this.currentTilePath.getPathLength();
+				} else {
+					this.progressedDistance = this.currentTilePath.getPathLength();
+				}
 			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
 				this.path = null;
 				model.removeEntity(this);
@@ -131,6 +134,7 @@ public class Train implements Entity {
 		Edge nextStartEdge = this.currentTileTargetEdge.edge.getOpposite();
 
 		this.currentTileTargetEdge = this.path.pop();
+		this.amountOfTilesAheadReserved--;
 		TilePath nextPath = new TilePath(nextStartEdge, this.currentTileTargetEdge.edge);
 		this.currentTilePath = new TilePathCoordinate(this.currentTileTargetEdge.tile, nextPath);
 		this.reservedTiles.add(this.currentTilePath);
