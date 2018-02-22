@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
+import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
@@ -194,6 +195,15 @@ public class Model implements Serializable, Observable {
 		if (P.s < 0 || P.t < 0)
 			return false;
 		return P.s <= maxS && P.t <= maxT;
+	}
+
+	public void releaseTile(Train train, TileCoordinate coordinate) {
+		// TODO
+	}
+
+	public int reserveTiles(Train train, List<TileEdgeCoordinate> path) {
+		return -1;
+		// TODO
 	}
 
 }
