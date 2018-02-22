@@ -88,6 +88,7 @@ public final class Profiler {
 				sb.append(" - " + ticker_names[i] + ": " + (ticker_samples[i] / frame) + "ms\n");
 			}
 		}
+		sb.append("\n");
 		{ // renderers
 			long sum = 0;
 			for (long x : renderer_samples)

@@ -2,10 +2,12 @@ package ch.awae.simtrack.core;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.awae.simtrack.core.Graphics.Stack;
+import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.util.T2;
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,11 +20,14 @@ public class Controller {
 	private @Getter final Input input;
 	private java.util.Stack<Scene<?>> scenes = new java.util.Stack<>();
 	private Profiler profiler;
+	private Binding profilerToggle;
+	private boolean showProfiler = false;
 
 	public Controller(RootWindow window) {
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		this.window = window;
 		input = new Input();
+		profilerToggle = input.getBinding(KeyEvent.VK_F6);
 		window.init(input);
 	}
 
@@ -39,6 +44,11 @@ public class Controller {
 		if (profiler != null) {
 			profiler.startFrame();
 			profiler.startSample(true, -1);
+		}
+
+		if (profilerToggle.isPressed() && profilerToggle.isEdge()) {
+			showProfiler = !showProfiler;
+			profilerToggle.consume();
 		}
 
 		RootWindow window = this.window;
@@ -75,16 +85,18 @@ public class Controller {
 			profiler.endSample();
 		}
 
+		if (showProfiler) {
+			graphics.setColor(Color.BLACK);
+			FontMetrics metrics = graphics.getFontMetrics();
+			int sh = metrics.getHeight();
+			String[] digest = profiler.getDigest().split("\n");
+			for (int i = 0; i < digest.length; i++) {
+				graphics.drawString(digest[i], 5, (i + 1) * sh);
+			}
+		}
+
 		profiler.endFrame();
 
-		graphics.setColor(Color.BLACK);
-		FontMetrics metrics = graphics.getFontMetrics();
-		int sh = metrics.getHeight();
-		String[] digest = profiler.getDigest().split("\n");
-		for (int i = 0; i < digest.length; i++) {
-			graphics.drawString(digest[i], 5, (i + 1) * sh);
-		}
-		
 		if (scene != scenes.peek()) {
 			scene.onUnload();
 			scenes.peek().onLoad();
@@ -96,7 +108,7 @@ public class Controller {
 			window.init(input);
 			scenes.forEach(sc -> sc.bindWindow(window));
 		}
-		
+
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -109,7 +121,9 @@ public class Controller {
 		for (T2 renderer : scenes.peek().getRenderers()) {
 			renderers.add((String) renderer._1);
 		}
-		profiler = new Profiler(60, tickers, renderers);
+
+		profiler = new Profiler(Resource.getProperties("core.properties").getInt("profiler.sampleRate"), tickers,
+				renderers);
 	}
 
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
