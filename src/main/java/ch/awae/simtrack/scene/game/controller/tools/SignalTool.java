@@ -87,11 +87,13 @@ public class SignalTool extends GameTool {
 
 		if (bulldoze) {
 			g.setColor(Color.RED);
-			g.drawOval(40, 7, 20, 20);
+			g.drawOval(33, 12, 16, 16);
 		} else {
-			g.setColor(type == Type.ONE_WAY ? Color.PINK : Color.MAGENTA);
-			g.drawOval(41, 8, 18, 18);
-			g.setColor(valid ? Color.BLACK : Color.RED);
+			g.setColor(valid ? Color.DARK_GRAY : Color.RED);
+			if (type == Type.ONE_WAY)
+				g.fillRect(35, 14, 12, 12);
+			else
+				g.fillOval(35, 14, 12, 12);
 			g.drawLine(-40, 0, 40, 0);
 			g.drawLine(30, -10, 40, 0);
 			g.drawLine(30, 10, 40, 0);

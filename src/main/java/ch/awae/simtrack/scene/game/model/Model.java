@@ -162,7 +162,10 @@ public class Model implements Serializable, Observable {
 
 	public void removeSignalAt(TileEdgeCoordinate position) {
 		Signal current = signals.get(position);
-		TrackTile tile = (TrackTile) tiles.get(position.tile);
+		Tile raw_tile = tiles.get(position.tile);
+		if (!(raw_tile instanceof TrackTile))
+			throw new IllegalArgumentException("illegal tile");
+		TrackTile tile = (TrackTile) raw_tile;
 		if (current == null)
 			throw new IllegalArgumentException("no signal exists");
 		if (tile instanceof DestinationTrackTile)
@@ -172,7 +175,10 @@ public class Model implements Serializable, Observable {
 	}
 
 	public boolean canRemoveSignalAt(TileEdgeCoordinate position) {
-		TrackTile tile = (TrackTile) tiles.get(position.tile);
+		Tile raw_tile = tiles.get(position.tile);
+		if (!(raw_tile instanceof TrackTile))
+			return false;
+		TrackTile tile = (TrackTile) raw_tile;
 		Signal current = signals.get(position);
 		return !(current == null || tile instanceof DestinationTrackTile);
 	}

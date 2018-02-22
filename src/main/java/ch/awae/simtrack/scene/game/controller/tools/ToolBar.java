@@ -77,18 +77,16 @@ public class ToolBar extends GameTool {
 			g.drawString("Signal", -30, 5);
 		});
 		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.TWO_WAY), (g, v) -> {
-			g.setColor(Color.MAGENTA);
-			g.fillOval(-25, -25, 50, 50);
 			g.setColor(Color.BLACK);
-			g.setFont(g.getFont().deriveFont(20f));
-			g.drawString("Signal", -30, 5);
+			g.fillOval(-30, -30, 60, 60);
+			g.setColor(Color.RED);
+			g.fillOval(-23, -23, 46, 46);
 		});
 		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.ONE_WAY), (g, v) -> {
-			g.setColor(Color.PINK);
-			g.fillOval(-25, -25, 50, 50);
 			g.setColor(Color.BLACK);
-			g.setFont(g.getFont().deriveFont(20f));
-			g.drawString("Signal", -30, 5);
+			g.fillRect(-30, -30, 60, 60);
+			g.setColor(Color.RED);
+			g.fillOval(-23, -23, 46, 46);
 		});
 
 		onPress(KeyEvent.VK_MINUS, () -> select(0));

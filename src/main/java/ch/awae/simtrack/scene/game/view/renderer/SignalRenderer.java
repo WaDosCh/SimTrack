@@ -20,12 +20,14 @@ public class SignalRenderer implements Renderer {
 
 			g.peek();
 			view.getViewPort().focusHex(position.tile, g);
-			if (signal.getType() == Signal.Type.ONE_WAY)
-				g.setColor(Color.PINK);
-			else
-				g.setColor(Color.MAGENTA);
 			g.rotate(position.getEdge().getAngleOut());
-			g.fillOval(41, 8, 18, 18);
+			g.setColor(Color.black);
+			if (signal.getType() == Signal.Type.ONE_WAY)
+				g.fillRect(35, 14, 12, 12);
+			else
+				g.fillOval(35, 14, 12, 12);
+			g.setColor(Color.RED);
+			g.fillOval(37, 16, 8, 8);
 		}
 	}
 
