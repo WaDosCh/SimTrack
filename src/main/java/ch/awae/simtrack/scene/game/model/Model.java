@@ -6,6 +6,9 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Train;
@@ -23,12 +26,15 @@ import ch.awae.simtrack.util.Observable;
 import ch.awae.simtrack.util.ObservableHandler;
 import ch.awae.simtrack.util.T3;
 import lombok.Getter;
+import lombok.NonNull;
 
 public class Model implements Serializable, Observable {
 
 	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
 	private int maxS, maxT;
+
+	private Logger logger = LogManager.getLogger();
 
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
@@ -197,13 +203,75 @@ public class Model implements Serializable, Observable {
 		return P.s <= maxS && P.t <= maxT;
 	}
 
-	public void releaseTile(Train train, TileCoordinate coordinate) {
-		// TODO
+	private HashMap<TileCoordinate, Train> tileReservations = new HashMap<>();
+
+	/**
+	 * Releases a tile currently owned by a given train
+	 * 
+	 * @param train
+	 *            the train that currently owns the tile
+	 * @param coordinate
+	 *            the tile to be released
+	 * @throws IllegalArgumentException
+	 *             the tile is owned by another train
+	 */
+	public void releaseTile(@NonNull Train train, @NonNull TileCoordinate coordinate) {
+		synchronized (tileReservations) {
+			Train current = tileReservations.get(coordinate);
+			if (current == null)
+				logger.warn("train " + train + " tried to release an unreserved tile!");
+			else if (!current.equals(train)) {
+				logger.error("train " + train + " tried to release a tile it does not own!");
+				throw new IllegalArgumentException("tile ownership mismatch");
+			} else {
+				logger.info(train + " released tile [" + coordinate.u + "|" + coordinate.v + "]");
+				tileReservations.remove(coordinate);
+			}
+		}
 	}
 
-	public int reserveTiles(Train train, List<TileEdgeCoordinate> path) {
-		return 1;
-		// TODO
+	/**
+	 * Request ownership over a sequence of tiles
+	 * 
+	 * @param train
+	 *            the train that wishes to reserve a bunch of tiles
+	 * @param path
+	 *            a sequence of tiles to be reserved (in order)
+	 * @return the number of tiles that have been reserved (may be 0)
+	 * @throws IllegalArgumentException
+	 *             a tile in the path is no track tile
+	 */
+	public int reserveTiles(@NonNull Train train, @NonNull List<TileEdgeCoordinate> path) {
+		synchronized (tileReservations) {
+			List<TileCoordinate> block = new ArrayList<>();
+
+			// search next signal
+			for (TileEdgeCoordinate edge : path) {
+				TileCoordinate coord = edge.tile;
+				Tile tile = tiles.get(coord);
+				if (!(tile instanceof TrackTile)) {
+					logger.error("path element " + edge + " references an invalid tile: " + tile);
+					throw new IllegalArgumentException("path element " + edge + " references an invalid tile: " + tile);
+				}
+				if (tileReservations.get(coord) != null) {
+					logger.info("path to next signal is blocked for train " + train);
+					return 0;
+				}
+				if (signals.get(edge) == null)
+					block.add(coord);
+				else
+					break;
+			}
+
+			// we found a signal before we hit a reservation. therefore the path
+			// is clear
+			for (TileCoordinate tile : block) {
+				logger.info("train " + train + " reserved tile [" + tile.u + "|" + tile.v + "]");
+				tileReservations.put(tile, train);
+			}
+
+			return block.size();
+		}
 	}
 
 }
