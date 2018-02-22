@@ -221,7 +221,7 @@ public class Model implements Serializable, Observable {
 		synchronized (tileReservations) {
 			Train current = tileReservations.get(coordinate);
 			if (current == null)
-				logger.warn("train " + train + " tried to release an unreserved tile!");
+				logger.warn("train " + train + " tried to release an unreserved tile! " + coordinate.u + "|" + coordinate.v + "]");
 			else if (!current.equals(train)) {
 				logger.error("train " + train + " tried to release a tile it does not own!");
 				throw new IllegalArgumentException("tile ownership mismatch");
@@ -256,7 +256,7 @@ public class Model implements Serializable, Observable {
 					throw new IllegalArgumentException("path element " + edge + " references an invalid tile: " + tile);
 				}
 				if (tileReservations.get(coord) != null) {
-					logger.debug("path to next signal is blocked for train " + train);
+					logger.debug("path is blocked for train " + train);
 					return 0;
 				}
 				if (signals.get(edge) == null)
@@ -284,6 +284,10 @@ public class Model implements Serializable, Observable {
 				set.add((T) e);
 		}
 		return set;
+	}
+	
+	public HashMap<TileCoordinate, Train> getTileReservations() {
+		return tileReservations;
 	}
 
 }

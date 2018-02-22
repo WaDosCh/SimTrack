@@ -4,11 +4,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
+import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.view.Design;
@@ -33,8 +38,23 @@ public class DebugToolsRenderer implements Renderer {
 	public void render(Graphics g, Game view) {
 		if (this.showing.contains(Option.InputGuide))
 			renderUserGuide(g, view);
-		if (this.showing.contains(Option.Coordinates))
+		if (this.showing.contains(Option.Coordinates)) {
+			renderBlocked(g, view);
 			renderCoordinate(g, view);
+		}
+	}
+
+	private void renderBlocked(Graphics g, Game view) {
+		GraphicsStack stack = g.getStack();
+		g.setColor(Color.RED);
+		g.push();
+		HashMap<TileCoordinate,Train> tileReservations = view.getModel().getTileReservations();
+		for(Entry<TileCoordinate, Train> t : tileReservations.entrySet()) {
+			view.getViewPort().focusHex(t.getKey(), g);
+			g.setFont(g.getFont().deriveFont((float) 20.0));
+			
+		}
+		
 	}
 
 	private void renderCoordinate(Graphics2D g, Game view) {
