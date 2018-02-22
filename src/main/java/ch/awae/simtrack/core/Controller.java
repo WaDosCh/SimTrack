@@ -120,8 +120,8 @@ public class Controller {
 			renderers.add(renderer::getName);
 		}
 
-		profiler = new Profiler(Resource.getProperties("core.properties").getInt("profiler.sampleRate"), tickers,
-				renderers);
+		int samplingRate = Resource.getProperties("core.properties").getInt("profiler.sampleRate");
+		profiler = new Profiler(samplingRate, tickers, renderers);
 	}
 
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {

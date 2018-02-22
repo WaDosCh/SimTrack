@@ -8,10 +8,10 @@ import lombok.Getter;
 public final class Profiler {
 
 	private final int sampleCount;
-	private final StringSupplier[] renderer_names;
-	private final StringSupplier[] ticker_names;
-	private final long[] renderer_samples;
-	private final long[] ticker_samples;
+	private final StringSupplier[] rendererNames;
+	private final StringSupplier[] tickerNames;
+	private final long[] rendererSamples;
+	private final long[] tickerSamples;
 	private long lastFrameTime;
 	private long frameActiveDuration;
 	private long frameDuration;
@@ -25,24 +25,24 @@ public final class Profiler {
 
 	public Profiler(int sampleCount, List<StringSupplier> tickers, List<StringSupplier> renderers) {
 		this.sampleCount = sampleCount;
-		this.renderer_names = new StringSupplier[renderers.size() + 1];
-		this.ticker_names = new StringSupplier[tickers.size()];
-		this.renderer_samples = new long[renderers.size() + 1];
-		this.ticker_samples = new long[tickers.size()];
+		this.rendererNames = new StringSupplier[renderers.size() + 1];
+		this.tickerNames = new StringSupplier[tickers.size()];
+		this.rendererSamples = new long[renderers.size() + 1];
+		this.tickerSamples = new long[tickers.size()];
 		for (int i = 0; i < renderers.size(); i++) {
-			renderer_names[i + 1] = renderers.get(i);
+			rendererNames[i + 1] = renderers.get(i);
 		}
 		for (int i = 0; i < tickers.size(); i++) {
-			ticker_names[i] = tickers.get(i);
+			tickerNames[i] = tickers.get(i);
 		}
-		renderer_names[0] = () -> "Frame Buffer";
+		rendererNames[0] = () -> "Frame Buffer";
 	}
 
 	private void reset() {
-		for (int i = 0; i < renderer_samples.length; i++)
-			renderer_samples[i] = 0;
-		for (int i = 0; i < ticker_samples.length; i++)
-			ticker_samples[i] = 0;
+		for (int i = 0; i < rendererSamples.length; i++)
+			rendererSamples[i] = 0;
+		for (int i = 0; i < tickerSamples.length; i++)
+			tickerSamples[i] = 0;
 		frameActiveDuration = 0;
 		frameDuration = 0;
 		frame = 0;
@@ -67,7 +67,7 @@ public final class Profiler {
 
 	public void endSample() {
 		long time = System.currentTimeMillis() - currentSampleStart;
-		(currentSampleRenderer ? renderer_samples : ticker_samples)[currentSampleIndex] += time;
+		(currentSampleRenderer ? rendererSamples : tickerSamples)[currentSampleIndex] += time;
 	}
 
 	public void endFrame() {
@@ -85,21 +85,21 @@ public final class Profiler {
 		sb.append("\n");
 		{ // tickers
 			long sum = 0;
-			for (long x : ticker_samples)
+			for (long x : tickerSamples)
 				sum += x;
 			sb.append("Tickers: " + (sum / frame) + "ms\n");
-			for (int i = 0; i < ticker_samples.length; i++) {
-				sb.append(" - " + ticker_names[i].get() + ": " + (ticker_samples[i] / frame) + "ms\n");
+			for (int i = 0; i < tickerSamples.length; i++) {
+				sb.append(" - " + tickerNames[i].get() + ": " + (tickerSamples[i] / frame) + "ms\n");
 			}
 		}
 		sb.append("\n");
 		{ // renderers
 			long sum = 0;
-			for (long x : renderer_samples)
+			for (long x : rendererSamples)
 				sum += x;
 			sb.append("Renderers: " + (sum / frame) + "ms\n");
-			for (int i = 0; i < renderer_samples.length; i++) {
-				sb.append(" - " + renderer_names[i].get() + ": " + (renderer_samples[i] / frame) + "ms\n");
+			for (int i = 0; i < rendererSamples.length; i++) {
+				sb.append(" - " + rendererNames[i].get() + ": " + (rendererSamples[i] / frame) + "ms\n");
 			}
 		}
 		digest = sb.toString();
