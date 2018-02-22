@@ -37,20 +37,36 @@ public class Train implements Entity {
 	private DynamicList<TrainElementConfiguration> trainElements;
 	private DynamicList<TilePathCoordinate> reservedTiles;
 
+	private int id;
+	private static int idCounter = 1;
+
+	/**
+	 * number of tiles this train is allowed to enter before he has to make a
+	 * new reservation
+	 */
+	private int amountOfTilesAheadReserved;
+
 	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
 		this.currentTileTargetEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.progressedDistance = 0.;
 		this.speed = 2;
+		this.id = idCounter++;
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
+		this.amountOfTilesAheadReserved = 0;
 
 		// TODO: add moooarr power
 		for (int i = 0; i < 5; i++) {
 			this.trainElements
 					.add(RandomJS.getObject(TrainElementConfiguration.wagon1, TrainElementConfiguration.wagon2));
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Train" + this.id;
 	}
 
 	public List<TrainElementConfiguration> getElements() {
@@ -73,28 +89,48 @@ public class Train implements Entity {
 
 	private void move(Model model) {
 		if (this.currentTilePath == null) {
-			createNextTilePath();
+			if (!createNextTilePath(model))
+				return;
 		}
 
 		this.progressedDistance += this.speed;
 		if (this.progressedDistance >= this.currentTilePath.getPathLength()) {
 			if (this.path.size() > 0) {
 				this.progressedDistance -= this.currentTilePath.getPathLength();
-				createNextTilePath();
+				createNextTilePath(model);
 			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
 				this.path = null;
 				model.removeEntity(this);
 			}
 		}
+
+		double sumHistory = this.reservedTiles.stream().mapToDouble(tile -> tile.getPathLength()).sum();
+		double sumNewHistory = sumHistory - this.reservedTiles.get(0).getPathLength();
+		if (getTrainLength() - this.progressedDistance <= sumNewHistory) {
+			if (this.reservedTiles.size() > 0) {
+				TilePathCoordinate tile = this.reservedTiles.remove(0);
+				model.releaseTile(this, tile.getTile());
+			}
+		}
 	}
 
-	private void createNextTilePath() {
+	/**
+	 * @param model
+	 * @return true if the train can enter a new tile
+	 */
+	private boolean createNextTilePath(Model model) {
+		if (this.amountOfTilesAheadReserved == 0) {
+			this.amountOfTilesAheadReserved = model.reserveTiles(this, this.path);
+			if (this.amountOfTilesAheadReserved == 0)
+				return false;
+		}
 		Edge nextStartEdge = this.currentTileTargetEdge.edge.getOpposite();
 
 		this.currentTileTargetEdge = this.path.pop();
 		TilePath nextPath = new TilePath(nextStartEdge, this.currentTileTargetEdge.edge);
 		this.currentTilePath = new TilePathCoordinate(this.currentTileTargetEdge.tile, nextPath);
 		this.reservedTiles.add(this.currentTilePath);
+		return true;
 	}
 
 	public TileEdgeCoordinate getHeadPosition() {
