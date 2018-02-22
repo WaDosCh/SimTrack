@@ -2,9 +2,11 @@ package ch.awae.simtrack.window;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -20,7 +22,7 @@ public class BasicWindow implements RootWindow {
 
 	JFrame f;
 	JPanel p;
-	Image i;
+	VolatileImage i;
 	Graphics g;
 	private Input input;
 
@@ -70,6 +72,14 @@ public class BasicWindow implements RootWindow {
 		Toolkit.getDefaultToolkit().sync();
 		if (!snapshotRequests.isEmpty())
 			takeSnapshot();
+		GraphicsConfiguration gc = p.getGraphicsConfiguration();
+		
+		// validate the buffer
+		int valCode = i.validate(gc);
+		if (valCode == VolatileImage.IMAGE_INCOMPATIBLE) {
+			createBuffer();
+		}
+		// start rendering
 		g.clearRect(0, 0, p.getWidth(), p.getHeight());
 	}
 
@@ -88,13 +98,17 @@ public class BasicWindow implements RootWindow {
 		return g;
 	}
 
+	private void createBuffer() {
+		GraphicsConfiguration gc = p.getGraphicsConfiguration();
+		i = gc.createCompatibleVolatileImage(p.getWidth(), p.getHeight());
+		g = new Graphics((Graphics2D) i.getGraphics());
+	}
+
 	@Override
 	public void init(Input input) {
 		f.setVisible(true);
-		i = p.createImage(p.getWidth(), p.getHeight());
-		g = new Graphics((Graphics2D) i.getGraphics());
+		createBuffer();
 		this.input = input;
-
 		p.addMouseListener(input.getMouse());
 		p.addMouseMotionListener(input.getMouse());
 		p.addMouseWheelListener(input.getMouse());
