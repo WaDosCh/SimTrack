@@ -42,6 +42,9 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	@Getter
 	private transient ObservableHandler observableHandler;
 
+	private HashMap<TileCoordinate, Train> tileReservations = new HashMap<>();
+	private Set<Entity> toBeRemoved = new HashSet<>();
+
 	Model(int sizeX, int sizeY) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
@@ -188,6 +191,8 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 		for (Entity entity : this.entities) {
 			entity.tick(scene);
 		}
+		this.entities.removeAll(this.toBeRemoved);
+		this.toBeRemoved.clear();
 	}
 
 	public Set<Entry<TileCoordinate, Tile>> getTileFiltered(Function<Tile, Boolean> filter) {
@@ -201,8 +206,6 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 			return false;
 		return P.s <= maxS && P.t <= maxT;
 	}
-
-	private HashMap<TileCoordinate, Train> tileReservations = new HashMap<>();
 
 	/**
 	 * Releases a tile currently owned by a given train
@@ -281,6 +284,10 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 				set.add((T) e);
 		}
 		return set;
+	}
+
+	public void removeEntity(Train train) {
+		this.toBeRemoved.add(train);
 	}
 
 }

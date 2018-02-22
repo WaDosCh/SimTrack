@@ -1,9 +1,11 @@
 package ch.awae.simtrack.scene.game.model.entity;
 
+import java.io.Serializable;
+
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import lombok.Getter;
 
-public class Signal implements Entity {
+public class Signal implements Serializable {
 
 	private static final long serialVersionUID = 3814126426621063787L;
 

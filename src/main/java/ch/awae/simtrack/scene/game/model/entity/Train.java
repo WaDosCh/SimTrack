@@ -67,11 +67,11 @@ public class Train implements Entity {
 			searchPath(g.getModel());
 		}
 		if (this.path != null) {
-			move();
+			move(g.getModel());
 		}
 	}
 
-	private void move() {
+	private void move(Model model) {
 		if (this.currentTilePath == null) {
 			createNextTilePath();
 		}
@@ -83,6 +83,7 @@ public class Train implements Entity {
 				createNextTilePath();
 			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
 				this.path = null;
+				model.removeEntity(this);
 			}
 		}
 	}
