@@ -22,6 +22,7 @@ import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.TrackTile;
 import ch.awae.simtrack.util.Observable;
 import ch.awae.simtrack.util.ObservableHandler;
+import ch.awae.simtrack.util.T2;
 import ch.awae.simtrack.util.T3;
 import lombok.Getter;
 import lombok.NonNull;
@@ -42,7 +43,7 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	@Getter
 	private transient ObservableHandler observableHandler;
 
-	private HashMap<TileCoordinate, Train> tileReservations = new HashMap<>();
+	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
 
 	Model(int sizeX, int sizeY) {
@@ -225,15 +226,19 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	 */
 	public void releaseTile(@NonNull Train train, @NonNull TileCoordinate coordinate) {
 		synchronized (tileReservations) {
-			Train current = tileReservations.get(coordinate);
+			T2<Train, Integer> current = tileReservations.get(coordinate);
 			if (current == null)
-				logger.warn("train " + train + " tried to release an unreserved tile! " + coordinate.u + "|" + coordinate.v + "]");
-			else if (!current.equals(train)) {
-				logger.error("train " + train + " tried to release a tile it does not own!");
+				logger.warn(train + " tried to release an unreserved tile! " + coordinate.u + "|"
+						+ coordinate.v + "]");
+			else if (!current._1.equals(train)) {
+				logger.error(train + " tried to release a tile it does not own!");
 				throw new IllegalArgumentException("tile ownership mismatch");
-			} else {
+			} else if (current._2 == 1) {
 				logger.debug(train + " released tile [" + coordinate.u + "|" + coordinate.v + "]");
 				tileReservations.remove(coordinate);
+			} else {
+				logger.debug(train + " partially released tile [" + coordinate.u + "|" + coordinate.v + "]");
+				tileReservations.put(coordinate, new T2<Train, Integer>(current._1, current._2 - 1));
 			}
 		}
 	}
@@ -252,7 +257,7 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	public int reserveTiles(@NonNull Train train, @NonNull Stack<TileEdgeCoordinate> path) {
 		synchronized (tileReservations) {
 			List<TileCoordinate> block = new ArrayList<>();
-			
+
 			// search next signal
 			for (int i = path.size() - 1; i >= 0; i--) {
 				TileEdgeCoordinate edge = path.get(i);
@@ -263,8 +268,8 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 					throw new IllegalArgumentException("path element " + edge + " references an invalid tile: " + tile);
 				}
 				if (tileReservations.get(coord) != null) {
-					//logger.debug("path is blocked for train " + train);
-					return 0;
+					if (!tileReservations.get(coord)._1.equals(train))
+						return 0;
 				}
 				block.add(coord);
 				if (signals.get(edge) != null)
@@ -274,8 +279,12 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 			// we found a signal before we hit a reservation. therefore the path
 			// is clear
 			for (TileCoordinate tile : block) {
-				logger.debug("train " + train + " reserved tile [" + tile.u + "|" + tile.v + "]");
-				tileReservations.put(tile, train);
+				logger.debug(train + " reserved tile [" + tile.u + "|" + tile.v + "]");
+				T2<Train, Integer> previous = tileReservations.get(tile);
+				if (previous == null)
+					tileReservations.put(tile, new T2<>(train, 1));
+				else
+					tileReservations.put(tile, new T2<>(train, previous._2 + 1));
 			}
 
 			return block.size();
@@ -291,13 +300,33 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 		}
 		return set;
 	}
-	
-	public HashMap<TileCoordinate, Train> getTileReservations() {
+
+	public HashMap<TileCoordinate, T2<Train, Integer>> getTileReservations() {
 		return tileReservations;
 	}
 
-	public void removeEntity(Train train) {
-		this.toBeRemoved.add(train);
+	public void removeEntity(@NonNull Entity entity) {
+
+		if (entity instanceof Train) {
+			releaseAllTiles((Train) entity);
+		}
+
+		this.toBeRemoved.add(entity);
+	}
+
+	private void releaseAllTiles(Train entity) {
+		synchronized (tileReservations) {
+			List<TileCoordinate> matches = new ArrayList<>();
+			for (Entry<TileCoordinate, T2<Train, Integer>> e : tileReservations.entrySet()) {
+				if (e.getValue()._1.equals(entity)) {
+					matches.add(e.getKey());
+				}
+			}
+			for (TileCoordinate tc : matches) {
+				logger.info(entity + " removed from tile [" +tc.u + "|" + tc.v+"]");
+				tileReservations.remove(tc);
+			}
+		}
 	}
 
 }

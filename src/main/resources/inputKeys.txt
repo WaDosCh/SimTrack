@@ -6,6 +6,7 @@ F4 = spawn a train
 F5 = toggle hex grid
 F6 = toggle profiler
 F7 = pause map ticks
+F8 = show train reservations
 F12 = end game
 ESC = deselect current tool
 1-9 = select tools in hotbar

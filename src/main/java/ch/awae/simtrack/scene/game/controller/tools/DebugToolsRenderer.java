@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
@@ -20,6 +19,7 @@ import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.util.T2;
 
 public class DebugToolsRenderer implements Renderer {
 
@@ -38,21 +38,28 @@ public class DebugToolsRenderer implements Renderer {
 	public void render(Graphics g, Game view) {
 		if (this.showing.contains(Option.InputGuide))
 			renderUserGuide(g, view);
-		if (this.showing.contains(Option.Coordinates)) {
-			renderBlocked(g, view);
+		if (this.showing.contains(Option.Coordinates))
 			renderCoordinate(g, view);
-		}
+		if (showing.contains(Option.Reservations))
+			renderBlocked(g, view);
 	}
 
 	private void renderBlocked(Graphics g, Game view) {
 		GraphicsStack stack = g.getStack();
-		g.setColor(Color.RED);
 		g.push();
-		HashMap<TileCoordinate,Train> tileReservations = view.getModel().getTileReservations();
-		for(Entry<TileCoordinate, Train> t : tileReservations.entrySet()) {
+		HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = view.getModel().getTileReservations();
+		for (Entry<TileCoordinate, T2<Train, Integer>> t : tileReservations.entrySet()) {
 			view.getViewPort().focusHex(t.getKey(), g);
 			g.setFont(g.getFont().deriveFont((float) 20.0));
-			g.drawString(""+t.getValue().getId(), 0, 0);
+			String txt = t.getValue()._1.getId() + "";
+			for (int i = 1; i < t.getValue().get_2(); i++)
+				txt += "+";
+			int w = g.getFontMetrics().stringWidth(txt);
+			int h = g.getFontMetrics().getAscent();
+			g.setColor(Color.BLACK);
+			g.fillRect((-w/2)-3, (-h/2)-3, w+6, h+6);
+			g.setColor(Color.WHITE);
+			g.drawString(txt, -(w/2), (h/2)-1);
 			g.peek();
 		}
 		g.setStack(stack);

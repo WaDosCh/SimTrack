@@ -114,6 +114,7 @@ public class Train implements Entity {
 				}
 			} else if (this.progressedDistance > getTrainLength() + 50 + this.currentTilePath.getPathLength()) {
 				this.path = null;
+				logger.info(this + " has reached its destination");
 				model.removeEntity(this);
 			}
 		}
@@ -181,7 +182,7 @@ public class Train implements Entity {
 				this.pathFindingOptions, (path) -> {
 					this.path = path;
 					this.pathFindingOptions = null;
-					logger.info("Train found path to: " + path.firstElement());
+					logger.info(this + " found path to: " + path.firstElement());
 				}, () -> {
 					this.pathFindingOptions.searchAgainInTicks = 60;
 					logger.info("No path found for " + this + " trying again later");

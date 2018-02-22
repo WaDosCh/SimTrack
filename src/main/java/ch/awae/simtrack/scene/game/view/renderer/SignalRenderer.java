@@ -10,6 +10,7 @@ import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.util.T2;
 
 public class SignalRenderer implements Renderer {
 
@@ -29,15 +30,15 @@ public class SignalRenderer implements Renderer {
 				g.fillRect(35, 14, 12, 12);
 			else
 				g.fillOval(35, 14, 12, 12);
-			
+
 			g.setColor(Color.RED);
-			
-			HashMap<TileCoordinate, Train> reservations = view.getModel().getTileReservations();
-			Train before = reservations.get(position.tile);
-			Train after = reservations.get(position.getOppositeDirection().tile);
-			if (before != null && before.equals(after))
+
+			HashMap<TileCoordinate, T2<Train, Integer>> reservations = view.getModel().getTileReservations();
+			T2<Train, Integer> before = reservations.get(position.tile);
+			T2<Train, Integer> after = reservations.get(position.getOppositeDirection().tile);
+			if (before != null && after != null && before._1.equals(after._1))
 				g.setColor(Color.GREEN);
-			
+
 			g.fillOval(37, 16, 8, 8);
 		}
 	}
