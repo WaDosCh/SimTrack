@@ -1,6 +1,7 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -17,8 +18,10 @@ public class BasePanel implements Component {
 	private boolean needsLayout;
 	private Rectangle rect;
 	private Binding click;
+	private boolean centered;
 
-	public BasePanel(String title, Input input) {
+	public BasePanel(String title, Input input, boolean centered) {
+		this.centered = centered;
 		this.input = input;
 		this.components = new ArrayList<>();
 		this.components.add(new Label(title, true));
@@ -45,18 +48,10 @@ public class BasePanel implements Component {
 			b.render(g, w);
 		}
 
-		for (Component b : this.components) {
-			b.render(g, w);
-		}
-
 		click.onPress(() -> {
-			for (Component b : this.components) {
-				if (b instanceof Button) {
-					Button button = (Button) b;
-					if (button.test(input.getMousePosition()))
-						button.action.run();
-				}
-			}
+			Point pos = this.input.getMousePosition();
+			InputEvent event = new InputEvent(pos, 1);
+			tryConsume(event);
 		});
 	}
 
@@ -66,8 +61,11 @@ public class BasePanel implements Component {
 		// required, this does not scale down components
 		this.needsLayout = false;
 		Dimension size = new Dimension(getPreferedWidth(), getPreferedHeight());
-		this.rect = new Rectangle(x + w / 2 - size.width / 2, y + h / 2 - size.height / 2, size.width + 1,
-				size.height + 1);
+		if (this.centered) {
+			this.rect = new Rectangle(x + w / 2 - size.width / 2, y + h / 2 - size.height / 2, size.width, size.height);
+		} else {
+			this.rect = new Rectangle(x, y, size.width, size.height);
+		}
 		int currentY = 0;
 		for (Component b : this.components) {
 			Dimension componentSize = b.getSize();
@@ -97,6 +95,15 @@ public class BasePanel implements Component {
 	@Override
 	public Dimension getSize() {
 		return this.rect.getSize();
+	}
+
+	@Override
+	public boolean tryConsume(InputEvent event) {
+		for (Component b : this.components) {
+			if (b.tryConsume(event))
+				return true;
+		}
+		return false;
 	}
 
 }

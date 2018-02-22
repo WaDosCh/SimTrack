@@ -30,4 +30,9 @@ public class Label extends BaseComponent {
 		return this.title;
 	}
 
+	@Override
+	public boolean tryConsume(InputEvent event) {
+		return false;
+	}
+
 }

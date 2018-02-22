@@ -27,4 +27,9 @@ public class InputField extends BaseComponent {
 		return StringUtils.repeat("W", this.expectedChar);
 	}
 
+	@Override
+	public boolean tryConsume(InputEvent event) {
+		return false;
+	}
+
 }

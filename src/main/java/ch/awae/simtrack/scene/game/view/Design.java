@@ -23,6 +23,8 @@ public class Design {
 	public static final int toolbarHeight;
 	public static final int buttonTextMarginX;
 	public static final int buttonTextMarginY;
+	public static final Color checkboxSelected;
+	public static final Color checkboxNotSelected;
 
 	static {
 		Properties props = Resource.getProperties("design.properties");
@@ -36,6 +38,9 @@ public class Design {
 		buttonBackground = props.getColor("buttonBackground");
 		buttonHover = props.getColor("buttonHover");
 		buttonBorder = props.getColor("buttonBorder");
+		checkboxSelected = props.getColor("checkboxSelected");
+		checkboxNotSelected = props.getColor("checkboxNotSelected");
+
 		textFieldBg = props.getColor("textFieldBackground");
 		textFieldBorder = props.getColor("textFieldBorder");
 

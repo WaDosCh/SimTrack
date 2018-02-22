@@ -9,7 +9,7 @@ import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 public class InGameMenuRenderer extends BasePanel implements Renderer {
 
 	public InGameMenuRenderer(Input input) {
-		super("Ingame Menu", input);
+		super("Ingame Menu", input, true);
 	}
 
 	@Override

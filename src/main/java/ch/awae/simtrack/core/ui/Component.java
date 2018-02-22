@@ -27,6 +27,12 @@ public interface Component {
 	 * @return
 	 */
 	public Dimension getSize();
-	
+
 	void render(Graphics g, Window w);
+
+	/**
+	 * @param event
+	 * @return true if event is consumed
+	 */
+	public boolean tryConsume(InputEvent event);
 }
