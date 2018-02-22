@@ -26,6 +26,8 @@ public class DebugTools extends GameTool {
 
 	public TrainController trainController;
 
+	private boolean pause;
+
 	public DebugTools(Editor<Game> editor) {
 		super(editor, GameTool.UnloadAction.IGNORE);
 
@@ -34,7 +36,12 @@ public class DebugTools extends GameTool {
 		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
 		onPress(KeyEvent.VK_F4, this::spawnTrain);
 		onPress(KeyEvent.VK_F5, () -> editor.getScene().toggleHex());
+		onPress(KeyEvent.VK_F7, this::pause);
 		onPress(KeyEvent.VK_F12, () -> System.exit(0));
+	}
+
+	private void pause() {
+		this.pause = !this.pause;
 	}
 
 	private void spawnTrain() {
@@ -47,6 +54,12 @@ public class DebugTools extends GameTool {
 			this.showing.remove(option);
 		else
 			this.showing.add(option);
+	}
+
+	@Override
+	public void tick(Game scene) {
+		super.tick(scene);
+		scene.setPaused(this.pause);
 	}
 
 	@Override

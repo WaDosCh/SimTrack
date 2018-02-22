@@ -109,9 +109,9 @@ public class Train implements Entity {
 		}
 
 		double sumHistory = this.reservedTiles.stream().mapToDouble(tile -> tile.getPathLength()).sum();
-		double sumNewHistory = sumHistory - this.reservedTiles.get(0).getPathLength();
-		if (getTrainLength() - this.progressedDistance <= sumNewHistory) {
-			if (this.reservedTiles.size() > 0) {
+		if (this.reservedTiles.size() > 0) {
+			double sumNewHistory = sumHistory - this.reservedTiles.get(0).getPathLength();
+			if (getTrainLength() - this.progressedDistance <= sumNewHistory) {
 				TilePathCoordinate tile = this.reservedTiles.remove(0);
 				model.releaseTile(this, tile.getTile());
 			}
