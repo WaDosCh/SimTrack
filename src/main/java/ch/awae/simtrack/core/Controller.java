@@ -51,6 +51,7 @@ public class Controller {
 			profilerToggle.consume();
 		}
 
+		RootWindow window = this.window;
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
 		if (scenes.isEmpty())
