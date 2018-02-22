@@ -252,9 +252,9 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	public int reserveTiles(@NonNull Train train, @NonNull Stack<TileEdgeCoordinate> path) {
 		synchronized (tileReservations) {
 			List<TileCoordinate> block = new ArrayList<>();
-
+			
 			// search next signal
-			for (int i = path.size() - 1; i>= 0; i--) {
+			for (int i = path.size() - 1; i >= 0; i--) {
 				TileEdgeCoordinate edge = path.get(i);
 				TileCoordinate coord = edge.tile;
 				Tile tile = tiles.get(coord);
@@ -266,9 +266,8 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 					//logger.debug("path is blocked for train " + train);
 					return 0;
 				}
-				if (signals.get(edge) == null)
-					block.add(coord);
-				else
+				block.add(coord);
+				if (signals.get(edge) != null)
 					break;
 			}
 
