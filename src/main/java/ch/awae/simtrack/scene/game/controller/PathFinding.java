@@ -169,7 +169,7 @@ public class PathFinding implements BaseTicker<Game> {
 					request.pathAcceptor.accept(path);
 				} else {
 					logger.warn("No path available for start position:" + request.start);
-					// queue.addLast(request);
+					request.noPathFound.run();
 				}
 			} else {
 				logger.error("Unknown PathFinding option type:", request.options.type);
