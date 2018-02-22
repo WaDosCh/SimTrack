@@ -10,8 +10,8 @@ import org.apache.logging.log4j.Logger;
 import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
-import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
+import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
@@ -194,4 +194,5 @@ public class PathFinding implements BaseTicker<Game> {
 	public void tick(Game scene) {
 		this.tick();
 	}
+
 }

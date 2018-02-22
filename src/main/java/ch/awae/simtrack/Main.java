@@ -28,7 +28,7 @@ public class Main {
 		Controller controller = new Controller(window);
 		controller.start();
 
-		Model model = ModelFactory.getModel(25, 13, 10);
+		Model model = ModelFactory.getModel(15, 7, 5);
 		Game scene = new Game(controller, model);
 
 		controller.loadScene(scene);
