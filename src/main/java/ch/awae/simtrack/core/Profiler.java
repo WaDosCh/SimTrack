@@ -1,14 +1,15 @@
 package ch.awae.simtrack.core;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import lombok.Getter;
 
 public final class Profiler {
 
 	private final int sampleCount;
-	private final String[] renderer_names;
-	private final String[] ticker_names;
+	private final StringSupplier[] renderer_names;
+	private final StringSupplier[] ticker_names;
 	private final long[] renderer_samples;
 	private final long[] ticker_samples;
 	private long lastFrameTime;
@@ -19,10 +20,13 @@ public final class Profiler {
 
 	private @Getter String digest = "no data yet";
 
-	public Profiler(int sampleCount, List<String> tickers, List<String> renderers) {
+	public static interface StringSupplier extends Supplier<String> {
+	};
+
+	public Profiler(int sampleCount, List<StringSupplier> tickers, List<StringSupplier> renderers) {
 		this.sampleCount = sampleCount;
-		this.renderer_names = new String[renderers.size() + 1];
-		this.ticker_names = new String[tickers.size()];
+		this.renderer_names = new StringSupplier[renderers.size() + 1];
+		this.ticker_names = new StringSupplier[tickers.size()];
 		this.renderer_samples = new long[renderers.size() + 1];
 		this.ticker_samples = new long[tickers.size()];
 		for (int i = 0; i < renderers.size(); i++) {
@@ -31,7 +35,7 @@ public final class Profiler {
 		for (int i = 0; i < tickers.size(); i++) {
 			ticker_names[i] = tickers.get(i);
 		}
-		renderer_names[0] = "Window Buffer";
+		renderer_names[0] = () -> "Frame Buffer";
 	}
 
 	private void reset() {
@@ -85,7 +89,7 @@ public final class Profiler {
 				sum += x;
 			sb.append("Tickers: " + (sum / frame) + "ms\n");
 			for (int i = 0; i < ticker_samples.length; i++) {
-				sb.append(" - " + ticker_names[i] + ": " + (ticker_samples[i] / frame) + "ms\n");
+				sb.append(" - " + ticker_names[i].get() + ": " + (ticker_samples[i] / frame) + "ms\n");
 			}
 		}
 		sb.append("\n");
@@ -95,7 +99,7 @@ public final class Profiler {
 				sum += x;
 			sb.append("Renderers: " + (sum / frame) + "ms\n");
 			for (int i = 0; i < renderer_samples.length; i++) {
-				sb.append(" - " + renderer_names[i] + ": " + (renderer_samples[i] / frame) + "ms\n");
+				sb.append(" - " + renderer_names[i].get() + ": " + (renderer_samples[i] / frame) + "ms\n");
 			}
 		}
 		digest = sb.toString();

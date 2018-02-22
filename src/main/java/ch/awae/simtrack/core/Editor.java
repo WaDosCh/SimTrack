@@ -46,6 +46,14 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 		return scene.getInput();
 	}
 
+	@Override
+	public String getName() {
+		if (currentTool == null)
+			return "Editor";
+		else
+			return "Editor (" + currentTool.getName() + ")";
+	}
+
 	/**
 	 * adds a new tool to the editor. If this is the first tool added to the
 	 * editor, it will be directly activated with a {@code null} argument.
@@ -83,7 +91,7 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 			}
 		}
 	}
-	
+
 	/**
 	 * loads a tool and unloads the current one. If the new tool cannot be
 	 * loaded, the current one will not be unloaded and stays active.
@@ -96,7 +104,8 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 	 */
 	@SuppressWarnings("rawtypes")
 	public boolean loadTool(Class<? extends Tool> toolClazz, Object... args) {
-		@NonNull Class<? extends Tool> toolClass = (toolClazz == null) ? baseToolClass : toolClazz;
+		@NonNull
+		Class<? extends Tool> toolClass = (toolClazz == null) ? baseToolClass : toolClazz;
 		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
 		Tool<T> next = this.tools.get(toolClass);
 

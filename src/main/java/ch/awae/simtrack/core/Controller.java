@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.awae.simtrack.core.Graphics.Stack;
+import ch.awae.simtrack.core.Profiler.StringSupplier;
 import ch.awae.simtrack.util.Resource;
-import ch.awae.simtrack.util.T2;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -66,18 +66,18 @@ public class Controller {
 		Scene<?> scene = scenes.peek();
 
 		int index = 0;
-		for (T2 renderer : scene.getRenderers()) {
+		for (BaseRenderer renderer : scene.getRenderers()) {
 			profiler.startSample(true, index);
 			Stack stack = graphics.getStack();
-			((BaseRenderer) renderer._2).render(graphics, scene);
+			renderer.render(graphics, scene);
 			graphics.setStack(stack);
 			index++;
 			profiler.endSample();
 		}
 		index = 0;
-		for (T2 ticker : scene.getTickers()) {
+		for (BaseTicker ticker : scene.getTickers()) {
 			profiler.startSample(false, index);
-			((BaseTicker) ticker._2).tick(scene);
+			ticker.tick(scene);
 			index++;
 			profiler.endSample();
 		}
@@ -110,13 +110,13 @@ public class Controller {
 
 	@SuppressWarnings("rawtypes")
 	private void createProfiler() {
-		List<String> tickers = new ArrayList<>();
-		for (T2 ticker : scenes.peek().getTickers()) {
-			tickers.add((String) ticker._1);
+		List<StringSupplier> tickers = new ArrayList<>();
+		for (BaseTicker ticker : scenes.peek().getTickers()) {
+			tickers.add(ticker::getName);
 		}
-		List<String> renderers = new ArrayList<>();
-		for (T2 renderer : scenes.peek().getRenderers()) {
-			renderers.add((String) renderer._1);
+		List<StringSupplier> renderers = new ArrayList<>();
+		for (BaseRenderer renderer : scenes.peek().getRenderers()) {
+			renderers.add(renderer::getName);
 		}
 
 		profiler = new Profiler(Resource.getProperties("core.properties").getInt("profiler.sampleRate"), tickers,

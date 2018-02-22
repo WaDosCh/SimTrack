@@ -3,7 +3,6 @@ package ch.awae.simtrack.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.awae.simtrack.util.T2;
 import lombok.Getter;
 
 public abstract class Scene<T extends Scene<T>> {
@@ -12,8 +11,8 @@ public abstract class Scene<T extends Scene<T>> {
 	protected @Getter Window window;
 	private final Controller controller;
 
-	private List<T2<String, BaseRenderer<T>>> renderers;
-	private List<T2<String, BaseTicker<T>>> tickers;
+	private List<BaseRenderer<T>> renderers;
+	private List<BaseTicker<T>> tickers;
 
 	public Scene(Controller controller) {
 		renderers = new ArrayList<>();
@@ -23,26 +22,48 @@ public abstract class Scene<T extends Scene<T>> {
 	}
 
 	public void addRenderer(BaseRenderer<T> component) {
-		addRenderer(component.getClass().getSimpleName(), component);
+		renderers.add(component);
 	}
 
 	public void addTicker(BaseTicker<T> component) {
-		addTicker(component.getClass().getSimpleName(), component);
+		tickers.add(component);
 	}
 
 	public void addRenderer(String name, BaseRenderer<T> component) {
-		renderers.add(new T2<>(name, component));
-	}
-	
-	public void addTicker(String name, BaseTicker<T> component) {
-		tickers.add(new T2<>(name, component));
+		renderers.add(new BaseRenderer<T>() {
+
+			@Override
+			public void render(Graphics graphics, T scene) {
+				component.render(graphics, scene);
+			}
+
+			@Override
+			public String getName() {
+				return name;
+			}
+		});
 	}
 
-	public List<T2<String, BaseRenderer<T>>> getRenderers() {
+	public void addTicker(String name, BaseTicker<T> component) {
+		tickers.add(new BaseTicker<T>() {
+
+			@Override
+			public void tick(T scene) {
+				component.tick(scene);
+			}
+
+			@Override
+			public String getName() {
+				return name;
+			}
+		});
+	}
+
+	public List<BaseRenderer<T>> getRenderers() {
 		return renderers;
 	}
 
-	public List<T2<String, BaseTicker<T>>> getTickers() {
+	public List<BaseTicker<T>> getTickers() {
 		return tickers;
 	}
 
