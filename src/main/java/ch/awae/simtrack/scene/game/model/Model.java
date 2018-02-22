@@ -244,17 +244,18 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	 * @param train
 	 *            the train that wishes to reserve a bunch of tiles
 	 * @param path
-	 *            a sequence of tiles to be reserved (in order)
+	 *            a sequence of tiles to be reserved
 	 * @return the number of tiles that have been reserved (may be 0)
 	 * @throws IllegalArgumentException
 	 *             a tile in the path is no track tile
 	 */
-	public int reserveTiles(@NonNull Train train, @NonNull List<TileEdgeCoordinate> path) {
+	public int reserveTiles(@NonNull Train train, @NonNull Stack<TileEdgeCoordinate> path) {
 		synchronized (tileReservations) {
 			List<TileCoordinate> block = new ArrayList<>();
 
 			// search next signal
-			for (TileEdgeCoordinate edge : path) {
+			for (int i = path.size() - 1; i>= 0; i--) {
+				TileEdgeCoordinate edge = path.get(i);
 				TileCoordinate coord = edge.tile;
 				Tile tile = tiles.get(coord);
 				if (!(tile instanceof TrackTile)) {
