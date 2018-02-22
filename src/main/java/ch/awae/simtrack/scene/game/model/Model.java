@@ -328,5 +328,9 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 			}
 		}
 	}
+	
+	public boolean isTileReserved(TileCoordinate tile) {
+		return tileReservations.get(tile) != null;
+	}
 
 }
