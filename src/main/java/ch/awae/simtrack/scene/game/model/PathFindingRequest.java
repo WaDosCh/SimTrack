@@ -15,5 +15,6 @@ public class PathFindingRequest {
 	public final TileEdgeCoordinate end;
 	public final PathFindingOptions options;
 	public final Consumer<Stack<TileEdgeCoordinate>> pathAcceptor;
+	public final Runnable noPathFound;
 
 }

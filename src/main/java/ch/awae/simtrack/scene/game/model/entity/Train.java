@@ -84,7 +84,13 @@ public class Train implements Entity {
 	@Override
 	public void tick(Game g) {
 		if (this.path == null && this.pathFindingOptions != null) {
-			searchPath(g.getModel());
+			if (this.pathFindingOptions.searchAgainInTicks == 0) {
+				searchPath(g.getModel());
+			}
+			if (this.pathFindingOptions.searchAgainInTicks == -300) {
+				logger.info(this + " path request is starving...");
+			}
+			this.pathFindingOptions.searchAgainInTicks--;
 		}
 		if (this.path != null) {
 			move(g.getModel());
@@ -176,10 +182,13 @@ public class Train implements Entity {
 		PathFindingRequest request = new PathFindingRequest(this, this.currentTileTargetEdge, null,
 				this.pathFindingOptions, (path) -> {
 					this.path = path;
-					logger.info(this + " found path to: " + path.firstElement());
+					this.pathFindingOptions = null;
+					logger.info(this+" found path to: " + path.firstElement());
+				}, () -> {
+					this.pathFindingOptions.searchAgainInTicks = 60;
+					logger.info("No path found for " + this + " trying again later");
 				});
 		model.getPathFindingQueue().add(request);
-		this.pathFindingOptions = null;
 	}
 
 }
