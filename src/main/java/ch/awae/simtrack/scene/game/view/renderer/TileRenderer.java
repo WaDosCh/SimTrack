@@ -50,7 +50,7 @@ public class TileRenderer implements Renderer {
 	@Override
 	public void render(Graphics g, Game view) {
 		ViewPort port = view.getViewPort();
-		Graphics.Stack stack = g.getStack();
+		Graphics.GraphicsStack stack = g.getStack();
 		Model model = view.getModel();
 		for (Entry<TileCoordinate, Tile> pair : model.getTiles()) {
 			g.setStack(stack);

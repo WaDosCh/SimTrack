@@ -13,20 +13,20 @@ import lombok.experimental.Delegate;
 
 public class Graphics extends Graphics2D {
 
-	public static interface Stack {
+	public static interface GraphicsStack {
 	};
 
 	@AllArgsConstructor
-	private final static @Data class TStack implements Stack {
+	private final static @Data class PrivateGraphicsStack implements GraphicsStack {
 
 		final AffineTransform Tx;
 		final Stroke stroke;
 		final Color color;
 		final Font font;
 		final Shape clip;
-		final TStack tail;
+		final PrivateGraphicsStack tail;
 
-		public TStack() {
+		public PrivateGraphicsStack() {
 			Tx = null;
 			stroke = null;
 			color = null;
@@ -35,14 +35,14 @@ public class Graphics extends Graphics2D {
 			clip = null;
 		}
 
-		public TStack prep(AffineTransform T, Stroke stroke, Color color, Font font, Shape clip) {
-			return new TStack(T, stroke, color, font, clip, this);
+		public PrivateGraphicsStack prep(AffineTransform T, Stroke stroke, Color color, Font font, Shape clip) {
+			return new PrivateGraphicsStack(T, stroke, color, font, clip, this);
 		}
 	}
 
 	@Delegate
 	private final Graphics2D backer;
-	private TStack stack = new TStack();
+	private PrivateGraphicsStack stack = new PrivateGraphicsStack();
 
 	public Graphics(Graphics2D backer) {
 		this.backer = backer;
@@ -71,14 +71,14 @@ public class Graphics extends Graphics2D {
 		}
 	}
 
-	public Stack getStack() {
+	public GraphicsStack getStack() {
 		push();
 		return stack;
 	}
 
-	public void setStack(Stack stack) {
-		if (stack instanceof TStack) {
-			this.stack = (TStack) stack;
+	public void setStack(GraphicsStack stack) {
+		if (stack instanceof PrivateGraphicsStack) {
+			this.stack = (PrivateGraphicsStack) stack;
 			pop();
 		} else {
 			throw new IllegalArgumentException("unsupported stack type");

@@ -23,7 +23,7 @@ public interface Renderer extends BaseRenderer<Game> {
 	 * @param view
 	 */
 	default void renderSafe(Graphics g, Game view) {
-		Graphics.Stack stack = g.getStack();
+		Graphics.GraphicsStack stack = g.getStack();
 		try {
 			render(g, view);
 		} finally {

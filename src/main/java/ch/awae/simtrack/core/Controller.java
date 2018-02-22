@@ -5,8 +5,9 @@ import java.awt.FontMetrics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-import ch.awae.simtrack.core.Graphics.Stack;
+import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Profiler.StringSupplier;
 import ch.awae.simtrack.util.Resource;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Controller {
 
 	private RootWindow window;
 	private @Getter final Input input;
-	private java.util.Stack<Scene<?>> scenes = new java.util.Stack<>();
+	private Stack<Scene<?>> scenes = new Stack<>();
 	private Profiler profiler;
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
@@ -32,7 +33,7 @@ public class Controller {
 	}
 
 	public void start() {
-		 this.gameClock.start();
+		this.gameClock.start();
 	}
 
 	public void stop() {
@@ -68,7 +69,7 @@ public class Controller {
 		int index = 0;
 		for (BaseRenderer renderer : scene.getRenderers()) {
 			profiler.startSample(true, index);
-			Stack stack = graphics.getStack();
+			GraphicsStack stack = graphics.getStack();
 			renderer.render(graphics, scene);
 			graphics.setStack(stack);
 			index++;
@@ -105,7 +106,7 @@ public class Controller {
 			window.init(input);
 			scenes.forEach(sc -> sc.bindWindow(window));
 		}
-		
+
 	}
 
 	@SuppressWarnings("rawtypes")

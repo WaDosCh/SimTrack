@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.Graphics.Stack;
+import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.util.ReflectionHelper;
 import lombok.NonNull;
 
@@ -153,7 +153,7 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 	public void render(Graphics g, T scene) {
 		if (this.renderer != null)
 			try {
-				Stack stack = g.getStack();
+				GraphicsStack stack = g.getStack();
 				this.renderer.render(g, scene);
 				g.setStack(stack);
 			} catch (Exception e) {
