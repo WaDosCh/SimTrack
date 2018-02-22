@@ -57,7 +57,7 @@ public final class Resource {
 	 * @return the loaded JSON object
 	 */
 	public static JsonObject getJSON(final String id) {
-		try (InputStream stream = asStream(id)) {
+		try (InputStream stream = asStream("config/" + id)) {
 			return JsonProvider.provider().createReader(stream).readObject();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -81,7 +81,7 @@ public final class Resource {
 	public static BufferedImage getImage(String id) {
 		return imageCache.get(id, () -> {
 			logger.info("loading image '" + id + "'");
-			try (InputStream stream = asStream(id)) {
+			try (InputStream stream = asStream("graphics/" + id)) {
 				return ImageIO.read(stream);
 			}
 		});
@@ -93,7 +93,7 @@ public final class Resource {
 	public static Properties getProperties(String id) {
 		return propertyCache.get(id, () -> {
 			java.util.Properties props = new java.util.Properties();
-			try (InputStream stream = asStream(id)) {
+			try (InputStream stream = asStream("config/" + id)) {
 				props.load(stream);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
