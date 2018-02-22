@@ -100,10 +100,11 @@ public class Train implements Entity {
 		this.progressedDistance += this.speed;
 		if (this.progressedDistance >= this.currentTilePath.getPathLength()) {
 			if (this.path.size() > 0) {
+				double length = this.currentTilePath.getPathLength();
 				if (createNextTilePath(model)) {
-					this.progressedDistance -= this.currentTilePath.getPathLength();
+					this.progressedDistance -= length;
 				} else {
-					this.progressedDistance = this.currentTilePath.getPathLength();
+					this.progressedDistance = length;
 				}
 			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
 				this.path = null;
@@ -113,8 +114,9 @@ public class Train implements Entity {
 
 		if (this.reservedTiles.size() > 0) {
 			double sumHistory = this.reservedTiles.stream().mapToDouble(tile -> tile.getPathLength()).sum();
+			sumHistory -= this.currentTilePath.getPathLength() - this.progressedDistance;
 			double sumNewHistory = sumHistory - this.reservedTiles.get(0).getPathLength();
-			if (getTrainLength() - this.progressedDistance <= sumNewHistory) {
+			if (getTrainLength() <= sumNewHistory) {
 				TilePathCoordinate tile = this.reservedTiles.remove(0);
 				model.releaseTile(this, tile.getTile());
 			}
@@ -128,6 +130,7 @@ public class Train implements Entity {
 	private boolean createNextTilePath(Model model) {
 		if (this.amountOfTilesAheadReserved == 0) {
 			this.amountOfTilesAheadReserved = model.reserveTiles(this, this.path);
+			logger.info("next tiles: " + this.amountOfTilesAheadReserved);
 			if (this.amountOfTilesAheadReserved == 0)
 				return false;
 		}
