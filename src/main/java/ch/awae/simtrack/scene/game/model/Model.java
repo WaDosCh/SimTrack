@@ -270,9 +270,14 @@ public class Model implements Serializable, Observable {
 		}
 	}
 
-	public <T> Set<T> getEntitiesByType(Class<T> type) {
-		// TODO: implement
-		return (Set<T>) this.entities;
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> Set<T> getEntitiesByType(Class<T> type) {
+		Set<T> set = new HashSet<>();
+		for (Entity e : entities) {
+			if (type.isInstance(e))
+				set.add((T) e);
+		}
+		return set;
 	}
 
 }

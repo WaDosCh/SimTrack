@@ -15,7 +15,6 @@ final class BasicTileProxy implements SerializationProxy {
 	private final boolean fixed;
 
 	public Object readResolve() throws ObjectStreamException {
-		System.out.println("resolve " + type + "(" + fixed + ")");
 		if (fixed)
 			return BasicFixedTile.getInstance(type);
 		else
