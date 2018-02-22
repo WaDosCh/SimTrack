@@ -112,7 +112,7 @@ public class Train implements Entity {
 				} else {
 					this.progressedDistance = length;
 				}
-			} else if (this.progressedDistance > getTrainLength() + this.currentTilePath.getPathLength()) {
+			} else if (this.progressedDistance > getTrainLength() + 50 + this.currentTilePath.getPathLength()) {
 				this.path = null;
 				model.removeEntity(this);
 			}
@@ -136,7 +136,6 @@ public class Train implements Entity {
 	private boolean createNextTilePath(Model model) {
 		if (this.amountOfTilesAheadReserved == 0) {
 			this.amountOfTilesAheadReserved = model.reserveTiles(this, this.path);
-			logger.info("next tiles: " + this.amountOfTilesAheadReserved);
 			if (this.amountOfTilesAheadReserved == 0)
 				return false;
 		}
