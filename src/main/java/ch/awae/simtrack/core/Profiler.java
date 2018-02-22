@@ -21,16 +21,17 @@ public final class Profiler {
 
 	public Profiler(int sampleCount, List<String> tickers, List<String> renderers) {
 		this.sampleCount = sampleCount;
-		this.renderer_names = new String[renderers.size()];
+		this.renderer_names = new String[renderers.size() + 1];
 		this.ticker_names = new String[tickers.size()];
-		this.renderer_samples = new long[renderers.size()];
-		this.ticker_samples = new long[renderers.size()];
+		this.renderer_samples = new long[renderers.size() + 1];
+		this.ticker_samples = new long[tickers.size()];
 		for (int i = 0; i < renderers.size(); i++) {
-			renderer_names[i] = renderers.get(i);
+			renderer_names[i + 1] = renderers.get(i);
 		}
 		for (int i = 0; i < tickers.size(); i++) {
-			ticker_names[i] = renderers.get(i);
+			ticker_names[i] = tickers.get(i);
 		}
+		renderer_names[0] = "Window Buffer";
 	}
 
 	private void reset() {
@@ -57,7 +58,7 @@ public final class Profiler {
 	public void startSample(boolean renderer, int index) {
 		currentSampleRenderer = renderer;
 		currentSampleStart = System.currentTimeMillis();
-		currentSampleIndex = index;
+		currentSampleIndex = renderer ? index + 1 : index;
 	}
 
 	public void endSample() {
@@ -75,8 +76,8 @@ public final class Profiler {
 
 	private void digest() {
 		StringBuilder sb = new StringBuilder();
-		sb.append((frameDuration / frame) + " FPS\n");
-		sb.append(((100 * frameActiveDuration) / frameDuration) + "% load\n");
+		sb.append(1000 / (frameDuration / frame) + " FPS\n");
+		sb.append((frameActiveDuration / frame) + "ms (" + ((100 * frameActiveDuration) / frameDuration) + "% load)\n");
 		sb.append("\n");
 		{ // tickers
 			long sum = 0;
@@ -96,7 +97,7 @@ public final class Profiler {
 				sb.append(" - " + renderer_names[i] + ": " + (renderer_samples[i] / frame) + "ms\n");
 			}
 		}
-
+		digest = sb.toString();
 	}
 
 }

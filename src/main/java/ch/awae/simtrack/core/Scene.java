@@ -3,6 +3,7 @@ package ch.awae.simtrack.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.awae.simtrack.util.T2;
 import lombok.Getter;
 
 public abstract class Scene<T extends Scene<T>> {
@@ -11,8 +12,8 @@ public abstract class Scene<T extends Scene<T>> {
 	protected @Getter Window window;
 	private final Controller controller;
 
-	private List<BaseRenderer<T>> renderers;
-	private List<BaseTicker<T>> tickers;
+	private List<T2<String, BaseRenderer<T>>> renderers;
+	private List<T2<String, BaseTicker<T>>> tickers;
 
 	public Scene(Controller controller) {
 		renderers = new ArrayList<>();
@@ -22,18 +23,26 @@ public abstract class Scene<T extends Scene<T>> {
 	}
 
 	public void addRenderer(BaseRenderer<T> component) {
-		renderers.add(component);
+		addRenderer(component.getClass().getSimpleName(), component);
 	}
 
 	public void addTicker(BaseTicker<T> component) {
-		tickers.add((BaseTicker<T>) component);
+		addTicker(component.getClass().getSimpleName(), component);
 	}
 
-	public List<BaseRenderer<T>> getRenderers() {
+	public void addRenderer(String name, BaseRenderer<T> component) {
+		renderers.add(new T2<>(name, component));
+	}
+	
+	public void addTicker(String name, BaseTicker<T> component) {
+		tickers.add(new T2<>(name, component));
+	}
+
+	public List<T2<String, BaseRenderer<T>>> getRenderers() {
 		return renderers;
 	}
 
-	public List<BaseTicker<T>> getTickers() {
+	public List<T2<String, BaseTicker<T>>> getTickers() {
 		return tickers;
 	}
 
