@@ -11,13 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
-import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
-import ch.awae.simtrack.scene.game.model.position.Edge;
-import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
-import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.position.TilePath;
+import ch.awae.simtrack.scene.game.model.entity.Train;
+import ch.awae.simtrack.scene.game.model.position.*;
 import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
@@ -272,6 +268,11 @@ public class Model implements Serializable, Observable {
 
 			return block.size();
 		}
+	}
+
+	public <T> Set<T> getEntitiesByType(Class<T> type) {
+		// TODO: implement
+		return (Set<T>) this.entities;
 	}
 
 }

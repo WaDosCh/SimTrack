@@ -6,20 +6,11 @@ import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
-import ch.awae.simtrack.scene.game.controller.tools.BuildTool;
-import ch.awae.simtrack.scene.game.controller.tools.DebugTools;
-import ch.awae.simtrack.scene.game.controller.tools.FreeTool;
-import ch.awae.simtrack.scene.game.controller.tools.InGameMenu;
-import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
-import ch.awae.simtrack.scene.game.controller.tools.SignalTool;
-import ch.awae.simtrack.scene.game.controller.tools.ToolBar;
+import ch.awae.simtrack.scene.game.controller.TrainController;
+import ch.awae.simtrack.scene.game.controller.tools.*;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.ViewPort;
-import ch.awae.simtrack.scene.game.view.renderer.BackgroundRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.EntityRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.HexGridRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.SignalRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
+import ch.awae.simtrack.scene.game.view.renderer.*;
 import lombok.Getter;
 
 /**
@@ -40,6 +31,7 @@ public class Game extends Scene<Game> {
 
 	private ToolBar trackbar;
 	private DebugTools debugTools;
+	private TrainController trainController;
 
 	/**
 	 * instantiates a new game view
@@ -68,8 +60,8 @@ public class Game extends Scene<Game> {
 		addRenderer(new SignalRenderer());
 		addRenderer(new EntityRenderer());
 		addRenderer(editor);
-		addRenderer(debugTools.getRenderer());
 		addRenderer(trackbar);
+		addRenderer(debugTools.getRenderer());
 
 		addTicker(new Navigator(this, input));
 		addTicker(trackbar);
@@ -78,6 +70,9 @@ public class Game extends Scene<Game> {
 		addTicker("ViewPort", s -> viewPort.tick());
 		addTicker("Model", s -> model.tick());
 		addTicker(pathfinder);
+		addTicker(trainController = new TrainController());
+
+		this.debugTools.trainController = trainController;
 	}
 
 	/**

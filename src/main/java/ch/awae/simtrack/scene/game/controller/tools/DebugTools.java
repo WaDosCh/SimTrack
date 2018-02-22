@@ -2,8 +2,6 @@ package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,15 +9,7 @@ import org.apache.logging.log4j.Logger;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
-import ch.awae.simtrack.scene.game.model.PathFindingOptions;
-import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
-import ch.awae.simtrack.scene.game.model.entity.Train;
-import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
-import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
-import ch.awae.simtrack.scene.game.model.tile.Tile;
-import ch.awae.simtrack.util.CollectionUtil;
+import ch.awae.simtrack.scene.game.controller.TrainController;
 
 public class DebugTools extends GameTool {
 
@@ -34,6 +24,8 @@ public class DebugTools extends GameTool {
 
 	private DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
 
+	public TrainController trainController;
+
 	public DebugTools(Editor<Game> editor) {
 		super(editor, GameTool.UnloadAction.IGNORE);
 
@@ -46,14 +38,8 @@ public class DebugTools extends GameTool {
 	}
 
 	private void spawnTrain() {
-		Set<Entry<TileCoordinate, Tile>> spawners = this.model.getTileFiltered(
-				tile -> tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainSpawner());
-		Entry<TileCoordinate, Tile> spawner = CollectionUtil.randomValue(spawners);
-		TileEdgeCoordinate start = this.model.getPaths(spawner.getKey()).get(0)._1;
-
-		Train t = new Train(start, new PathFindingOptions(Type.RandomTarget), TrainElementConfiguration.locomotive1);
-		this.model.getEntities().add(t);
-		logger.info("Train spawned at " + start);
+		if (this.trainController != null)
+			this.trainController.requestSpawnTrain();
 	}
 
 	private void toggle(Option option) {
