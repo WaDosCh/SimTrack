@@ -23,6 +23,7 @@ public class ViewPort {
 	public static int outsideBounds = 100;
 
 	private double minZoom = 0.1;
+	private double maxZoom = 10;
 	private double defaultZoom = 1;
 	private @Getter double zoom;
 	private @Getter double targetZoom;
@@ -73,7 +74,7 @@ public class ViewPort {
 	public Point getScreenDimensions() {
 		return this.screenDimensions;
 	}
-	
+
 	/**
 	 * returns the scene coordinate for a given screen coordinate
 	 * 
@@ -153,6 +154,8 @@ public class ViewPort {
 
 		if (this.targetZoom < this.minZoom)
 			this.targetZoom = this.minZoom;
+		if (this.targetZoom > this.maxZoom)
+			this.targetZoom = this.maxZoom;
 	}
 
 	protected void updateZoomFactor() {
@@ -190,7 +193,7 @@ public class ViewPort {
 		g.translate(p.x, p.y);
 		g.scale(this.zoom, this.zoom);
 	}
-	
+
 	/**
 	 * transforms the screen coordinate system into the the scene coordinate
 	 * system
