@@ -19,7 +19,6 @@ import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
-import ch.awae.simtrack.util.Time;
 
 public class TrainController implements BaseTicker<Game> {
 
@@ -40,13 +39,14 @@ public class TrainController implements BaseTicker<Game> {
 			this.spawnTrains--;
 			spawnTrain(game.getModel());
 		}
-		if (Time.isOver(checkForSpawnTimeMS)) {
-			Model model = game.getModel();
-			if (model.getEntitiesByType(Train.class).size() < 3) {
-				spawnTrain(model);
-			}
-			this.checkForSpawnTimeMS = System.currentTimeMillis() + checkEveryXSec * 1000;
-		}
+		// if (Time.isOver(checkForSpawnTimeMS)) {
+		// Model model = game.getModel();
+		// if (model.getEntitiesByType(Train.class).size() < 3) {
+		// spawnTrain(model);
+		// }
+		// this.checkForSpawnTimeMS = System.currentTimeMillis() +
+		// checkEveryXSec * 1000;
+		// }
 	}
 
 	private void spawnTrain(Model model) {
