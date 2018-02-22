@@ -1,9 +1,9 @@
-package ch.awae.simtrack.ui;
+package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
 
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.Window;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Window;
 
 /**
  * a component is supposed to initialize its base size as the prefered size

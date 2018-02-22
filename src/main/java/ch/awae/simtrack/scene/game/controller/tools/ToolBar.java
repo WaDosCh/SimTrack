@@ -7,13 +7,13 @@ import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
 import ch.awae.simtrack.util.T2;
@@ -45,8 +45,8 @@ public class ToolBar extends GameTool {
 	 * @param editor
 	 *            the editor owning the build tool
 	 */
-	public ToolBar(Editor<GameView> editor) {
-		super(editor, UnloadAction.IGNORE);
+	public ToolBar(Editor<Game> editor) {
+		super(editor, GameTool.UnloadAction.IGNORE);
 
 		// ######### BINDINGS ##########
 		// bind bulldoze
@@ -147,7 +147,7 @@ public class ToolBar extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics g, GameView view) {
+	public void render(Graphics g, Game view) {
 		g.translate(view.getHorizontalScreenSize() / 2 - 500, view.getVerticalScreenSize() - 50);
 		g.setStroke(new BasicStroke(4));
 		for (int i = 0; i < 11; i++) {

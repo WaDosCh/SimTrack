@@ -6,12 +6,12 @@ import java.awt.Point;
 import java.text.DecimalFormat;
 import java.util.HashSet;
 
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.view.Design;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 import ch.awae.simtrack.util.Resource;
@@ -20,7 +20,7 @@ public class DebugToolsRenderer implements Renderer {
 
 	private HashSet<ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option> showing;
 	private String[] inputGuideText;
-	private GameView gameView;
+	private Game gameView;
 	private DebugTools tools;
 
 	public DebugToolsRenderer(HashSet<Option> showing, DebugTools tools) {
@@ -30,14 +30,14 @@ public class DebugToolsRenderer implements Renderer {
 	}
 
 	@Override
-	public void render(Graphics g, GameView view) {
+	public void render(Graphics g, Game view) {
 		if (this.showing.contains(Option.InputGuide))
 			renderUserGuide(g, view);
 		if (this.showing.contains(Option.Coordinates))
 			renderCoordinate(g, view);
 	}
 
-	private void renderCoordinate(Graphics2D g, GameView view) {
+	private void renderCoordinate(Graphics2D g, Game view) {
 		Point screenPos = tools.getMousePosition();
 		TileCoordinate tilePos = tools.getMouseTile();
 		gameView = view;
@@ -72,7 +72,7 @@ public class DebugToolsRenderer implements Renderer {
 		g.drawString("scroll: " + view.getViewPort().getSceneCorner(), screenPos.x + 20, y);
 	}
 
-	public String zoomToString(GameView view) {
+	public String zoomToString(Game view) {
 		DecimalFormat f = new DecimalFormat("#.00");
 		return "Zoom: " + f.format(view.getViewPort().getZoom()) + " -> "
 				+ f.format(view.getViewPort().getTargetZoom());
@@ -82,12 +82,12 @@ public class DebugToolsRenderer implements Renderer {
 		return "ScreenPos: [x=" + screenPos.x + ", y=" + screenPos.y + "]";
 	}
 
-	public String screenSizeToString(GameView view) {
+	public String screenSizeToString(Game view) {
 		Point pos = view.getViewPort().getScreenDimensions();
 		return "ScreenSize: [w=" + pos.x + ", h=" + pos.y + "]";
 	}
 
-	private void renderUserGuide(Graphics2D g, GameView view) {
+	private void renderUserGuide(Graphics2D g, Game view) {
 		int w = view.getHorizontalScreenSize();
 		int h = view.getVerticalScreenSize();
 		g.setColor(new Color(255, 255, 255, 225));

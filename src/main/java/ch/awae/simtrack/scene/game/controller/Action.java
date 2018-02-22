@@ -1,9 +1,9 @@
-package ch.awae.simtrack.controller.input;
+package ch.awae.simtrack.scene.game.controller;
 
+import static ch.awae.simtrack.core.Input.*;
 import static java.awt.event.KeyEvent.*;
-import static ch.awae.simtrack.controller.input.Input.*;
 
-public enum Action {
+public enum Action implements ch.awae.simtrack.core.Action {
 	// MOVEMENT
 	PAN_LEFT(VK_A, VK_LEFT),
 	PAN_RIGHT(VK_D, VK_RIGHT),
@@ -25,5 +25,10 @@ public enum Action {
 
 	Action(int... keycodes) {
 		this.keycodes = keycodes;
+	}
+
+	@Override
+	public int[] getKeyCodes() {
+		return keycodes;
 	}
 }

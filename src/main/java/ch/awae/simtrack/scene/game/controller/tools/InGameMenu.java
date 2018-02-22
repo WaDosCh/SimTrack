@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
-import ch.awae.simtrack.scene.game.view.GameView;
 
 public class InGameMenu extends GameTool {
 
 	private InGameMenuRenderer renderer;
 
-	public InGameMenu(Editor<GameView> editor) {
-		super(editor, UnloadAction.UNLOAD);
+	public InGameMenu(Editor<Game> editor) {
+		super(editor, GameTool.UnloadAction.UNLOAD);
 
 		this.renderer = new InGameMenuRenderer(input);
 		this.renderer.addButton("Resume", this::resume);
@@ -57,7 +57,7 @@ public class InGameMenu extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics graphics, GameView scene) {
+	public void render(Graphics graphics, Game scene) {
 		this.renderer.render(graphics, scene);
 	}
 

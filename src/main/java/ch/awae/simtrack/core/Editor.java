@@ -1,4 +1,4 @@
-package ch.awae.simtrack.controller;
+package ch.awae.simtrack.core;
 
 import java.util.HashMap;
 
@@ -6,12 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.BaseRenderer;
-import ch.awae.simtrack.scene.BaseTicker;
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.Scene;
-import ch.awae.simtrack.scene.Graphics.Stack;
+import ch.awae.simtrack.core.Graphics.Stack;
 import ch.awae.simtrack.util.ReflectionHelper;
 import lombok.NonNull;
 
@@ -26,7 +21,7 @@ import lombok.NonNull;
  */
 public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T> {
 
-	private T owner;
+	private T scene;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
@@ -38,17 +33,17 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 	private Class<? extends Tool> baseToolClass = null;
 
 	/**
-	 * instantiates a new editor for the given controller.
+	 * instantiates a new editor for the given scene.
 	 * 
-	 * @param c
-	 *            the controller
+	 * @param scene
+	 *            the scene
 	 */
-	public Editor(@NonNull T c) {
-		this.owner = c;
+	public Editor(@NonNull T scene) {
+		this.scene = scene;
 	}
 
 	public Input getInput() {
-		return owner.getInput();
+		return scene.getInput();
 	}
 
 	/**
@@ -71,8 +66,8 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 	 * 
 	 * @return the owning controller instance
 	 */
-	public T getController() {
-		return this.owner;
+	public T getScene() {
+		return this.scene;
 	}
 
 	private void unloadCurrentTool() {
@@ -125,12 +120,13 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 
 			this.currentTool = next;
 			this.renderer = this.currentTool.getRenderer();
-			this.owner.setWindowTitle(toolClass.getSimpleName());
+			this.scene.setWindowTitle(toolClass.getSimpleName());
 
 			return true;
 
 		} catch (Exception exception) {
 			logger.error("Error loading tool: " + exception.getMessage());
+			exception.printStackTrace();
 			// error during tool load. remain with old tool
 			return false;
 		}

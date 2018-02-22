@@ -1,4 +1,4 @@
-package ch.awae.simtrack.controller;
+package ch.awae.simtrack.core;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -8,13 +8,8 @@ import java.util.function.BooleanSupplier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.controller.input.Action;
-import ch.awae.simtrack.controller.input.Binding;
-import ch.awae.simtrack.controller.input.Binding.EdgeProcessor;
-import ch.awae.simtrack.controller.input.Binding.SkipConsumeException;
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.BaseRenderer;
-import ch.awae.simtrack.scene.Scene;
+import ch.awae.simtrack.core.Binding.EdgeProcessor;
+import ch.awae.simtrack.core.Binding.SkipConsumeException;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
@@ -26,20 +21,11 @@ public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, Ba
 	protected final T controller;
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected final Logger logger = LogManager.getLogger(getClass());
-	private final Binding drop;
-	private final boolean autoUnload;
 
-	public enum UnloadAction {
-		UNLOAD,
-		IGNORE;
-	}
-
-	public EventDrivenTool(Editor<T> editor, UnloadAction action) {
+	public EventDrivenTool(Editor<T> editor) {
 		this.input = editor.getInput();
-		drop = input.getBinding(Action.DROP_TOOL);
-		autoUnload = action == UnloadAction.UNLOAD;
 		this.editor = editor;
-		this.controller = editor.getController();
+		this.controller = editor.getScene();
 	}
 
 	protected void preTick(T scene) {
@@ -184,12 +170,6 @@ public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, Ba
 	@Override
 	public void tick(T scene) {
 		preTick(scene);
-		if (autoUnload && drop.isPressed() && drop.isEdge()) {
-			drop.consume();
-			editor.loadTool(null);
-			logger.info("auto-unloading tool");
-			return;
-		}
 		try {
 			for (Runnable r : drivers) {
 				r.run();
@@ -220,7 +200,7 @@ public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, Ba
 	protected ConditionalStep ifNot(Logic condition) {
 		return new ConditionalStep(() -> !condition.evaluate());
 	}
-	
+
 	@Override
 	public BaseRenderer<T> getRenderer() {
 		return this;

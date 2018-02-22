@@ -1,7 +1,7 @@
-package ch.awae.simtrack.ui;
+package ch.awae.simtrack.core.ui;
 
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.Window;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
 
 public class Label extends BaseComponent {

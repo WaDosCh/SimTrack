@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene;
+package ch.awae.simtrack.core;
 
 @FunctionalInterface
 public interface BaseRenderer<T extends Scene<T>> {

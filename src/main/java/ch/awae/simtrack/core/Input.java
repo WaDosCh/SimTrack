@@ -1,4 +1,4 @@
-package ch.awae.simtrack.controller.input;
+package ch.awae.simtrack.core;
 
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
@@ -44,7 +44,7 @@ public class Input {
 		if (binding == null) {
 			binding = new Binding();
 			actionBindings.put(action, binding);
-			for (int keycode : action.keycodes) {
+			for (int keycode : action.getKeyCodes()) {
 				bindings.put(keycode, binding);
 			}
 		}

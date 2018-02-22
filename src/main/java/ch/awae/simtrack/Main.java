@@ -2,37 +2,15 @@ package ch.awae.simtrack;
 
 import javax.swing.SwingUtilities;
 
-import ch.awae.simtrack.controller.GameController;
-import ch.awae.simtrack.scene.Window;
+import ch.awae.simtrack.core.Controller;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.ModelFactory;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.util.MacKeyboardHack;
-import ch.awae.simtrack.window.MainWindow;
+import ch.awae.simtrack.window.BasicWindow;
 
-/**
- * Main Class.
- * 
- * Will be replaced by a more elaborate high-logic system.
- * 
- * @author Andreas Wälchli
- * @version 1.3, 2015-01-23
- * @since SimTrack 0.2.1
- */
 @SuppressWarnings("javadoc")
 public class Main {
-
-	private static void init() {
-
-		Window window = new MainWindow(1200, 800);
-		GameController controller = new GameController(window);
-		controller.start();
-		
-		Model model = ModelFactory.getModel(25, 13, 10);
-		GameView scene = new GameView(model, window);
-		
-		controller.loadScene(scene);
-	}
 
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.opengl", "True");
@@ -42,6 +20,18 @@ public class Main {
 			MacKeyboardHack.applyHack();
 
 		SwingUtilities.invokeLater(Main::init);
+	}
+
+	private static void init() {
+
+		BasicWindow window = new BasicWindow(1200, 800);
+		Controller controller = new Controller(window);
+		controller.start();
+
+		Model model = ModelFactory.getModel(25, 13, 10);
+		Game scene = new Game(controller, model);
+
+		controller.loadScene(scene);
 	}
 
 }

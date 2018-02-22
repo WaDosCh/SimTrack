@@ -1,10 +1,10 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.game.view.GameView;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.ui.BasePanel;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
-import ch.awae.simtrack.ui.BasePanel;
 
 public class InGameMenuRenderer extends BasePanel implements Renderer {
 
@@ -13,7 +13,7 @@ public class InGameMenuRenderer extends BasePanel implements Renderer {
 	}
 
 	@Override
-	public void render(Graphics graphics, GameView scene) {
+	public void render(Graphics graphics, Game scene) {
 		super.render(graphics, scene.getWindow());
 	}
 

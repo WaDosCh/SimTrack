@@ -9,14 +9,14 @@ import java.util.Stack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.view.GameView;
 
 public class PathFindingTool extends GameTool {
 
@@ -28,8 +28,8 @@ public class PathFindingTool extends GameTool {
 	private PathFinding pathFinder;
 	private Stack<TileEdgeCoordinate> path;
 
-	public PathFindingTool(Editor<GameView> editor) {
-		super(editor, UnloadAction.UNLOAD);
+	public PathFindingTool(Editor<Game> editor) {
+		super(editor, GameTool.UnloadAction.UNLOAD);
 
 		this.pathFinder = controller.getPathfinder();
 		this.startEdge = Edge.RIGHT;
@@ -67,7 +67,7 @@ public class PathFindingTool extends GameTool {
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	@Override
-	public void render(Graphics g, GameView view) {
+	public void render(Graphics g, Game view) {
 		if (this.path != null) {
 			g.setColor(Color.red);
 			g.setStroke(new BasicStroke(12));

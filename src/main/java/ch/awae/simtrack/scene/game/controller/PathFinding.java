@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.scene.BaseTicker;
+import ch.awae.simtrack.core.BaseTicker;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
@@ -15,7 +16,6 @@ import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;
@@ -23,7 +23,7 @@ import ch.awae.simtrack.util.T3;
 import ch.judos.generic.data.HashMapList;
 import lombok.Getter;
 
-public class PathFinding implements BaseTicker<GameView> {
+public class PathFinding implements BaseTicker<Game> {
 
 	@Getter
 	private Model model;
@@ -191,7 +191,7 @@ public class PathFinding implements BaseTicker<GameView> {
 	}
 
 	@Override
-	public void tick(GameView scene) {
+	public void tick(Game scene) {
 		this.tick();
 	}
 }

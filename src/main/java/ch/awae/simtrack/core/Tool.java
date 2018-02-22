@@ -1,8 +1,4 @@
-package ch.awae.simtrack.controller;
-
-import ch.awae.simtrack.scene.BaseRenderer;
-import ch.awae.simtrack.scene.BaseTicker;
-import ch.awae.simtrack.scene.Scene;
+package ch.awae.simtrack.core;
 
 /**
  * describes the basic behaviour of any editor tool. Each editor tool represents

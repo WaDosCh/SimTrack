@@ -1,24 +1,22 @@
-package ch.awae.simtrack.controller;
+package ch.awae.simtrack.core;
 
-import ch.awae.simtrack.scene.BaseRenderer;
-import ch.awae.simtrack.scene.BaseTicker;
-import ch.awae.simtrack.scene.Buffer;
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.Scene;
-import ch.awae.simtrack.scene.Window;
-import ch.awae.simtrack.scene.Graphics.Stack;
+import ch.awae.simtrack.core.Graphics.Stack;
+import lombok.Getter;
 import lombok.NonNull;
 
-public class GameController {
+public class Controller {
 
 	private HighPrecisionClock gameClock;
 
-	private Window window;
+	private RootWindow window;
+	private @Getter final Input input;
 	private java.util.Stack<Scene<?>> scenes = new java.util.Stack<>();
 
-	public GameController(Window window) {
+	public Controller(RootWindow window) {
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		this.window = window;
+		input = new Input();
+		window.init(input);
 	}
 
 	public void start() {
@@ -31,6 +29,7 @@ public class GameController {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void tick() {
+		RootWindow window = this.window;
 		Buffer buffer = window.getBuffer();
 		buffer.swapBuffer();
 		buffer.clearBuffer();
@@ -55,11 +54,17 @@ public class GameController {
 			scene.onLoad();
 		}
 
+		if (window != this.window) {
+			window.discard();
+			window.init(input);
+			scenes.forEach(sc -> sc.bindWindow(window));
+		}
+
 	}
 
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
 		scenes.push(next);
-		next.bindController(this);
+		next.bindWindow(window);
 	}
 
 	public void loadRoot() {
@@ -72,6 +77,20 @@ public class GameController {
 	public void loadPrevious() {
 		if (scenes.size() > 1)
 			scenes.pop();
+	}
+
+	public <S extends Scene<S>> void replaceWith(@NonNull Scene<S> next) {
+		scenes.pop();
+		loadScene(next);
+	}
+
+	public void setTitle(String title) {
+		if (window != null && !scenes.isEmpty())
+			this.window.setTitle(scenes.peek().getClass().getSimpleName() + " - " + title);
+	}
+
+	public void replaceWindow(RootWindow window) {
+		this.window = window;
 	}
 
 }

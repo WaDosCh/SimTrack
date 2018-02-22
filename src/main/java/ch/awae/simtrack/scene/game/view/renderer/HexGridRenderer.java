@@ -2,9 +2,9 @@ package ch.awae.simtrack.scene.game.view.renderer;
 
 import java.awt.Color;
 
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.util.Resource;
 
@@ -20,7 +20,7 @@ public class HexGridRenderer implements Renderer {
 	private final static Color gridColor = Resource.getProperties("renderer.properties").getColor("gridColor");
 
 	@Override
-	public void render(Graphics g, GameView view) {
+	public void render(Graphics g, Game view) {
 		if (!view.drawHex)
 			return;
 		ViewPort port = view.getViewPort();

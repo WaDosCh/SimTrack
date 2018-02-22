@@ -1,4 +1,4 @@
-package ch.awae.simtrack.controller;
+package ch.awae.simtrack.core;
 
 public class HighPrecisionClock {
 

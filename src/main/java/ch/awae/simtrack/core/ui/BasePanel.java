@@ -1,13 +1,13 @@
-package ch.awae.simtrack.ui;
+package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.controller.input.Binding;
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.Window;
+import ch.awae.simtrack.core.Binding;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
 
 public class BasePanel implements Component {

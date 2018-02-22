@@ -4,11 +4,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.OnLoad;
-import ch.awae.simtrack.controller.OnUnload;
-import ch.awae.simtrack.controller.input.Action;
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.OnLoad;
+import ch.awae.simtrack.core.OnUnload;
+import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
@@ -16,7 +17,6 @@ import ch.awae.simtrack.scene.game.model.tile.TrackTile;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.FusedTrackFactory;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackValidator;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
 import lombok.Getter;
 
@@ -42,8 +42,8 @@ public class BuildTool extends GameTool {
 	 * @param editor
 	 *            the editor the build tool will operate under
 	 */
-	public BuildTool(Editor<GameView> editor) {
-		super(editor, UnloadAction.UNLOAD);
+	public BuildTool(Editor<Game> editor) {
+		super(editor, GameTool.UnloadAction.UNLOAD);
 
 		onTick(this::checkValid);
 
@@ -148,7 +148,7 @@ public class BuildTool extends GameTool {
 
 	private void bulldoze() {
 		if (canDelete()) {
-			if (input.getMousePosition().y < editor.getController().getViewPort().getScreenDimensions().y) {
+			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenDimensions().y) {
 				model.removeTileAt(mouseTile);
 			}
 		}
@@ -160,7 +160,7 @@ public class BuildTool extends GameTool {
 	 */
 	private void place() {
 		if (canPlace() && makesPlaceSense()) {
-			if (input.getMousePosition().y < editor.getController().getViewPort()
+			if (input.getMousePosition().y < editor.getScene().getViewPort()
 					.getScreenDimensions().y) {
 				if (model.getTileAt(mouseTile) == null)
 					model.setTileAt(mouseTile, TrackValidator.intern(track));
@@ -190,7 +190,7 @@ public class BuildTool extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics g, GameView scene) {
+	public void render(Graphics g, Game scene) {
 		TileCoordinate c = mouseTile;
 		if (c == null)
 			return;

@@ -1,4 +1,4 @@
-package ch.awae.simtrack.controller.input;
+package ch.awae.simtrack.core;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

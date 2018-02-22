@@ -2,7 +2,8 @@ package ch.awae.simtrack.scene.game.view;
 
 import java.awt.Point;
 
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.judos.generic.data.geometry.PointD;
@@ -30,7 +31,7 @@ public class ViewPort {
 
 	private PointI screenDimensions;
 	private SceneCoordinate sceneDimensions;
-	private GameView owner;
+	private Game owner;
 
 	private PointI focusedPointForZoom;
 
@@ -39,7 +40,7 @@ public class ViewPort {
 	 * 
 	 * @param owner
 	 */
-	ViewPort(GameView owner) {
+	public ViewPort(Game owner) {
 		this.owner = owner;
 		this.init();
 	}
@@ -111,7 +112,7 @@ public class ViewPort {
 	 * @param dx
 	 * @param dy
 	 */
-	void moveScene(int dx, int dy) {
+	public void moveScene(int dx, int dy) {
 		this.sceneCorner.x += (float) dx;
 		this.sceneCorner.y += (float) dy;
 		updateCorner();
@@ -143,7 +144,7 @@ public class ViewPort {
 	 * @param fixY
 	 *            y-coordinate of the fixed point
 	 */
-	void zoom(int delta, int fixX, int fixY) {
+	public void zoom(int delta, int fixX, int fixY) {
 		this.focusedPointForZoom = new PointI(fixX, fixY);
 		if (delta > 0)
 			this.targetZoom *= 1.3;

@@ -2,11 +2,10 @@ package ch.awae.simtrack.scene.game.controller;
 
 import java.awt.Point;
 
-import ch.awae.simtrack.controller.input.Action;
-import ch.awae.simtrack.controller.input.Binding;
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.BaseTicker;
-import ch.awae.simtrack.scene.game.view.GameView;
+import ch.awae.simtrack.core.BaseTicker;
+import ch.awae.simtrack.core.Binding;
+import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.scene.game.Game;
 
 /**
  * Navigation Tool. Used for Scene movement & zoom
@@ -15,17 +14,17 @@ import ch.awae.simtrack.scene.game.view.GameView;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class Navigator implements BaseTicker<GameView> {
+public class Navigator implements BaseTicker<Game> {
 
 	private Input input;
-	private GameView gameView;
+	private Game gameView;
 
 	private Binding A, S, D, W;
 
 	/**
 	 * instantiates a new navigator
 	 */
-	public Navigator(GameView gameView, Input input) {
+	public Navigator(Game gameView, Input input) {
 		this.gameView = gameView;
 		this.input = input;
 
@@ -87,7 +86,7 @@ public class Navigator implements BaseTicker<GameView> {
 	}
 
 	@Override
-	public void tick(GameView scene) {
+	public void tick(Game scene) {
 		this.tick();
 	}
 }

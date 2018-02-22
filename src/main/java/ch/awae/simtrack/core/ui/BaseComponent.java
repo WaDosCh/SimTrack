@@ -1,4 +1,4 @@
-package ch.awae.simtrack.ui;
+package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
 import java.awt.Font;

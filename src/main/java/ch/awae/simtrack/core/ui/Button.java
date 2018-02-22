@@ -1,10 +1,10 @@
-package ch.awae.simtrack.ui;
+package ch.awae.simtrack.core.ui;
 
 import java.awt.Point;
 
-import ch.awae.simtrack.controller.input.Input;
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.Window;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,4 @@
-package ch.awae.simtrack.scene;
-
-import ch.awae.simtrack.controller.input.Input;
+package ch.awae.simtrack.core;
 
 public interface Window {
 
@@ -9,9 +7,9 @@ public interface Window {
 	int getCanvasHeight();
 
 	Buffer getBuffer();
-	
+
 	void setTitle(String title);
-	
+
 	Input getInput();
 
 }

@@ -8,8 +8,9 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
 import ch.awae.simtrack.scene.game.model.entity.Train;
@@ -18,7 +19,6 @@ import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.util.CollectionUtil;
 
 public class DebugTools extends GameTool {
@@ -34,14 +34,14 @@ public class DebugTools extends GameTool {
 
 	private DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
 
-	public DebugTools(Editor<GameView> editor) {
-		super(editor, UnloadAction.IGNORE);
+	public DebugTools(Editor<Game> editor) {
+		super(editor, GameTool.UnloadAction.IGNORE);
 
 		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
 		onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
 		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
 		onPress(KeyEvent.VK_F4, this::spawnTrain);
-		onPress(KeyEvent.VK_F5, () -> editor.getController().toggleHex());
+		onPress(KeyEvent.VK_F5, () -> editor.getScene().toggleHex());
 		onPress(KeyEvent.VK_F12, () -> System.exit(0));
 	}
 
@@ -64,7 +64,7 @@ public class DebugTools extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics graphics, GameView scene) {
+	public void render(Graphics graphics, Game scene) {
 		this.renderer.render(graphics, scene);
 	}
 

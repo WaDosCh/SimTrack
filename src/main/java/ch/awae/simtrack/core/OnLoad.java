@@ -1,4 +1,4 @@
-package ch.awae.simtrack.controller;
+package ch.awae.simtrack.core;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

@@ -1,8 +1,9 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game;
 
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.scene.Scene;
-import ch.awae.simtrack.scene.Window;
+import ch.awae.simtrack.core.Controller;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Scene;
+import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.tools.BuildTool;
@@ -13,6 +14,7 @@ import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
 import ch.awae.simtrack.scene.game.controller.tools.SignalTool;
 import ch.awae.simtrack.scene.game.controller.tools.ToolBar;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.BackgroundRenderer;
 import ch.awae.simtrack.scene.game.view.renderer.EntityRenderer;
 import ch.awae.simtrack.scene.game.view.renderer.HexGridRenderer;
@@ -27,12 +29,12 @@ import lombok.Getter;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class GameView extends Scene<GameView> {
+public class Game extends Scene<Game> {
 
 	private @Getter PathFinding pathfinder;
 	private Model model;
 	private ViewPort viewPort;
-	private Editor<GameView> editor;
+	private Editor<Game> editor;
 
 	public boolean drawHex = true;
 
@@ -46,11 +48,10 @@ public class GameView extends Scene<GameView> {
 	 * @param screenX
 	 * @param screenY
 	 */
-	public GameView(Model model, Window window) {
-		super(window);
+	public Game(Controller controller, Model model) {
+		super(controller);
 		this.model = model;
-		this.viewPort = new ViewPort(this);
-		this.editor = new Editor<GameView>(this);
+		this.editor = new Editor<Game>(this);
 		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);
 		this.pathfinder = new PathFinding(model);
@@ -106,11 +107,11 @@ public class GameView extends Scene<GameView> {
 	}
 
 	public int getHorizontalScreenSize() {
-		return width;
+		return window.getCanvasWidth();
 	}
 
 	public int getVerticalScreenSize() {
-		return height;
+		return window.getCanvasHeight();
 	}
 
 	public ViewPort getViewPort() {
@@ -127,4 +128,9 @@ public class GameView extends Scene<GameView> {
 		this.drawHex = !this.drawHex;
 	}
 
+	@Override
+	public void bindWindow(Window window) {
+		super.bindWindow(window);
+		this.viewPort = new ViewPort(this);
+	}
 }

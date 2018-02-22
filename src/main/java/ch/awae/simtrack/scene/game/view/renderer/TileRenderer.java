@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.Map.Entry;
 
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -14,7 +15,6 @@ import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.TileType;
 import ch.awae.simtrack.scene.game.model.tile.TrackTile;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
@@ -48,7 +48,7 @@ public class TileRenderer implements Renderer {
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 
 	@Override
-	public void render(Graphics g, GameView view) {
+	public void render(Graphics g, Game view) {
 		ViewPort port = view.getViewPort();
 		Graphics.Stack stack = g.getStack();
 		Model model = view.getModel();

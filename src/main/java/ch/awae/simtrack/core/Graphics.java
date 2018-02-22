@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene;
+package ch.awae.simtrack.core;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -7,11 +7,11 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.scene.Graphics;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
-import ch.awae.simtrack.scene.game.view.GameView;
 import ch.awae.simtrack.util.Resource;
 
 public class TrainRenderUtils {
@@ -20,7 +20,7 @@ public class TrainRenderUtils {
 
 	public static final BufferedImage loc = Resource.getImage("locomotive1.png");
 
-	public static void renderTrain(Train train, Graphics g, GameView view) {
+	public static void renderTrain(Train train, Graphics g, Game view) {
 		g.push();
 		view.getViewPort().transformToScene(g);
 		drawExactCircle(g, train);

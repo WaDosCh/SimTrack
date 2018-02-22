@@ -4,10 +4,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.controller.Editor;
-import ch.awae.simtrack.controller.input.Action;
-import ch.awae.simtrack.scene.Graphics;
-import ch.awae.simtrack.scene.game.view.GameView;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.controller.Action;
 
 /**
  * "Free-Hand" tool. This tool will be used for in-situ tile manipulation
@@ -27,13 +27,13 @@ public class FreeTool extends GameTool {
 	 * @param e
 	 *            the editor owning the tool
 	 */
-	public FreeTool(Editor<GameView> editor) {
-		super(editor, UnloadAction.IGNORE);
+	public FreeTool(Editor<Game> editor) {
+		super(editor, GameTool.UnloadAction.IGNORE);
 		onPress(Action.DROP_TOOL, () -> editor.loadTool(InGameMenu.class));
 	}
 
 	@Override
-	public void render(Graphics g, GameView scene) {
+	public void render(Graphics g, Game scene) {
 		if (mouseTile != null) {
 			g.setStroke(borderStroke);
 			scene.getViewPort().focusHex(mouseTile, g);

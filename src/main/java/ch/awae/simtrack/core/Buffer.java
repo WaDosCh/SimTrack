@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene;
+package ch.awae.simtrack.core;
 
 public interface Buffer {
 
