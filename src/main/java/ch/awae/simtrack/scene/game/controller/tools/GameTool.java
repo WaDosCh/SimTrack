@@ -25,7 +25,6 @@ public abstract class GameTool extends EventDrivenTool<Game> {
 
 	public GameTool(Editor<Game> editor, GameTool.UnloadAction action) {
 		super(editor);
-		model = editor.getScene().getModel();
 		drop = input.getBinding(Action.DROP_TOOL);
 		autoUnload = action == GameTool.UnloadAction.UNLOAD;
 	}
@@ -33,6 +32,7 @@ public abstract class GameTool extends EventDrivenTool<Game> {
 	@Override
 	protected void preTick(Game scene) {
 		super.preTick(scene);
+		model = scene.getModel();
 		mouseScene = scene.getViewPort().toSceneCoordinate(mousePosition);
 		mouseTile = mouseScene.toTileCoordinate();
 	}
