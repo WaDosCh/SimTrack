@@ -68,6 +68,10 @@ public class Train implements Entity {
 	public String toString() {
 		return "Train" + this.id;
 	}
+	
+	public int getId() {
+		return id;
+	}
 
 	public List<TrainElementConfiguration> getElements() {
 		return this.trainElements;

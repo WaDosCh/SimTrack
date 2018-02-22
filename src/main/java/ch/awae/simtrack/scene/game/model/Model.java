@@ -262,7 +262,7 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 					throw new IllegalArgumentException("path element " + edge + " references an invalid tile: " + tile);
 				}
 				if (tileReservations.get(coord) != null) {
-					logger.debug("path is blocked for train " + train);
+					//logger.debug("path is blocked for train " + train);
 					return 0;
 				}
 				if (signals.get(edge) == null)

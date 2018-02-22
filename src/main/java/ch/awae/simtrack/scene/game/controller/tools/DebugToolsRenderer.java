@@ -52,9 +52,10 @@ public class DebugToolsRenderer implements Renderer {
 		for(Entry<TileCoordinate, Train> t : tileReservations.entrySet()) {
 			view.getViewPort().focusHex(t.getKey(), g);
 			g.setFont(g.getFont().deriveFont((float) 20.0));
-			
+			g.drawString(""+t.getValue().getId(), 0, 0);
+			g.peek();
 		}
-		
+		g.setStack(stack);
 	}
 
 	private void renderCoordinate(Graphics2D g, Game view) {
