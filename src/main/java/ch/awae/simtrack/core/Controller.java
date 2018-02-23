@@ -89,6 +89,10 @@ public class Controller {
 		}
 		Scene<?> scene = scenes.peek();
 
+		if (window.resized()) {
+			scene.screenResized(window.getCanvasWidth(), window.getCanvasHeight());
+		}
+
 		int index = 0;
 		for (BaseRenderer renderer : scene.getRenderers()) {
 			profiler.startSample(true, index);

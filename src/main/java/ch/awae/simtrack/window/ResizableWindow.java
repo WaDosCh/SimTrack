@@ -1,10 +1,11 @@
 package ch.awae.simtrack.window;
 
 import java.awt.Canvas;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
@@ -13,40 +14,45 @@ import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.RootWindow;
 
-public class NativeFullscreen implements RootWindow {
+public class ResizableWindow implements RootWindow {
 
-	private GraphicsDevice screen;
 	private JFrame window;
 	private Canvas canvas;
 	private Input input;
 	private BufferStrategy buffer;
 	private Graphics graphics;
-	private int x, y;
+	private boolean resized = false;
+	
+	private ComponentListener compListener = new ComponentAdapter() {
+		@Override
+		public void componentResized(ComponentEvent e) {
+			resized = true;
+		}
+	};
 
-	public NativeFullscreen() {
-		screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		window = new JFrame();
+	public ResizableWindow(int x, int y) {
+		window = new JFrame("SimTrack");
 		canvas = new Canvas();
-		Rectangle bounds = screen.getDefaultConfiguration().getBounds();
-		x = bounds.width;
-		y = bounds.height;
+		canvas.setPreferredSize(new Dimension(x, y));
 		window.add(canvas);
-		System.out.println(screen.isFullScreenSupported());
 	}
 
 	@Override
 	public int getCanvasWidth() {
-		return x;
+		return canvas.getWidth();
 	}
 
 	@Override
 	public int getCanvasHeight() {
-		return y;
+		return canvas.getHeight();
 	}
 
 	@Override
 	public void setTitle(String title) {
-		// title not supported in fullscreen mode
+		if (title == null || title.isEmpty())
+			window.setTitle("SimTrack");
+		else
+			window.setTitle("SimTrack - " + title);
 	}
 
 	@Override
@@ -58,36 +64,35 @@ public class NativeFullscreen implements RootWindow {
 	public void init(Input input) {
 		this.input = input;
 
+		window.setIgnoreRepaint(true);
+		canvas.setIgnoreRepaint(true);
+		window.pack();
 		window.setVisible(true);
-		window.setResizable(false);
-
-		screen.setFullScreenWindow(window);
 
 		canvas.createBufferStrategy(2);
 		buffer = canvas.getBufferStrategy();
 
-		window.setVisible(false);
-		window.setVisible(true);
 		canvas.setFocusable(false);
 
 		canvas.addMouseListener(input.getMouse());
 		canvas.addMouseMotionListener(input.getMouse());
 		canvas.addMouseWheelListener(input.getMouse());
 		window.addKeyListener(input.getKeyboard());
+		window.addComponentListener(compListener);
 
 	}
 
 	@Override
 	public void discard() {
 		buffer.dispose();
-		screen.setFullScreenWindow(null);
-		
-		window.setVisible(false);
 
 		canvas.removeMouseListener(input.getMouse());
 		canvas.removeMouseMotionListener(input.getMouse());
 		canvas.removeMouseWheelListener(input.getMouse());
 		window.removeKeyListener(input.getKeyboard());
+		window.removeComponentListener(compListener);
+		
+		window.setVisible(false);
 	}
 
 	@Override
@@ -101,7 +106,14 @@ public class NativeFullscreen implements RootWindow {
 			graphics.dispose();
 		buffer.show();
 		graphics = new Graphics((Graphics2D) buffer.getDrawGraphics());
-		graphics.clearRect(0, 0, x, y);
+		graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+	}
+
+	@Override
+	public boolean resized() {
+		boolean res = resized;
+		resized = false;
+		return res;
 	}
 
 }

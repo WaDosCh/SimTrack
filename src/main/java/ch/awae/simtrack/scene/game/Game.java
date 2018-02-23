@@ -147,4 +147,10 @@ public class Game extends Scene<Game> {
 		}
 
 	}
+	
+	@Override
+	public void screenResized(int width, int height) {
+		viewPort.update();
+	}
+	
 }

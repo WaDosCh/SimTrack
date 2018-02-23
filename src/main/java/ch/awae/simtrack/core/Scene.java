@@ -122,4 +122,15 @@ public abstract class Scene<T extends Scene<T>> {
 	public void preTick(long millis) {
 	}
 
+	/**
+	 * Notifies the scene that screen has been resized
+	 * 
+	 * @param width
+	 *            the new width
+	 * @param height
+	 *            the new height
+	 */
+	public void screenResized(int width, int height) {
+	}
+
 }

@@ -64,6 +64,18 @@ public class ViewPort {
 		this.sceneCorner = new PointD(0, 0);
 		updateCorner();
 	}
+	
+	public void update() {
+		int hScreen = this.owner.getHorizontalScreenSize();
+		int vScreen = this.owner.getVerticalScreenSize() - 150;
+		this.screenDimensions = new PointI(hScreen, vScreen);
+		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
+		if (minH > this.minZoom)
+			this.minZoom = minH * 0.01;
+		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
+				((this.owner.getModel().getVerticalSize() - 1) * Math.sqrt(3) * 50));
+		updateCorner();
+	}
 
 	/**
 	 * returns the dimension of the section of the drawing surface reserved for
