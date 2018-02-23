@@ -148,9 +148,9 @@ public class ViewPort {
 	public void zoom(int delta, int fixX, int fixY) {
 		this.focusedPointForZoom = new PointI(fixX, fixY);
 		if (delta > 0)
-			this.targetZoom *= 1.3;
+			this.targetZoom *= 1.2;
 		if (delta < 0)
-			this.targetZoom /= 1.3;
+			this.targetZoom /= 1.2;
 
 		if (this.targetZoom < this.minZoom)
 			this.targetZoom = this.minZoom;
