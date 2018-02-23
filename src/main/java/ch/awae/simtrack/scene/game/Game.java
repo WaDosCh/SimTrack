@@ -1,5 +1,7 @@
 package ch.awae.simtrack.scene.game;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import ch.awae.simtrack.core.*;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
@@ -24,12 +26,13 @@ public class Game extends Scene<Game> {
 	private ViewPort viewPort;
 	private Editor<Game> editor;
 
-	public boolean drawHex = true;
+	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
 
 	private ToolBar trackbar;
 	private DebugTools debugTools;
 	private TrainController trainController;
-	private boolean pause;
+
+	private @Getter AtomicBoolean paused = new AtomicBoolean(false);
 
 	/**
 	 * instantiates a new game view
@@ -45,11 +48,13 @@ public class Game extends Scene<Game> {
 		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);
 		this.pathfinder = new PathFinding(model);
+		this.trainController = new TrainController();
 
 		editor.addTool(new FreeTool(editor));
 		editor.addTool(new BuildTool(editor));
 		editor.addTool(new PathFindingTool(editor));
 		editor.addTool(new InGameMenu(editor));
+		editor.addTool(new DebugToolsView(editor, this.debugTools, this.trainController));
 		editor.addTool(new SignalTool(editor));
 
 		addRenderer(new BackgroundRenderer());
@@ -68,9 +73,8 @@ public class Game extends Scene<Game> {
 		addTicker("ViewPort", s -> viewPort.tick());
 		addTicker("Model", new ProxyTicker(s -> this.model.tick(this)));
 		addTicker(pathfinder);
-		addTicker(trainController = new TrainController());
+		addTicker(this.trainController);
 
-		this.debugTools.trainController = trainController;
 	}
 
 	/**
@@ -117,18 +121,10 @@ public class Game extends Scene<Game> {
 		this.pathfinder.setModel(model);
 	}
 
-	public void toggleHex() {
-		this.drawHex = !this.drawHex;
-	}
-
 	@Override
 	public void bindWindow(Window window) {
 		super.bindWindow(window);
 		this.viewPort = new ViewPort(this);
-	}
-
-	public void setPaused(boolean pause) {
-		this.pause = pause;
 	}
 
 	private class ProxyTicker implements BaseTicker<Game> {
@@ -141,7 +137,7 @@ public class Game extends Scene<Game> {
 
 		@Override
 		public void tick(Game scene) {
-			if (!scene.pause)
+			if (!scene.paused.get())
 				this.ticker.tick(scene);
 		}
 

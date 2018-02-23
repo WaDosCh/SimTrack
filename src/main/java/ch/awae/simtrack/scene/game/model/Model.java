@@ -228,8 +228,7 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 		synchronized (tileReservations) {
 			T2<Train, Integer> current = tileReservations.get(coordinate);
 			if (current == null)
-				logger.warn(train + " tried to release an unreserved tile! " + coordinate.u + "|"
-						+ coordinate.v + "]");
+				logger.warn(train + " tried to release an unreserved tile! " + coordinate.u + "|" + coordinate.v + "]");
 			else if (!current._1.equals(train)) {
 				logger.error(train + " tried to release a tile it does not own!");
 				throw new IllegalArgumentException("tile ownership mismatch");
@@ -323,14 +322,23 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 				}
 			}
 			for (TileCoordinate tc : matches) {
-				logger.info(entity + " removed from tile [" +tc.u + "|" + tc.v+"]");
+				logger.info(entity + " removed from tile [" + tc.u + "|" + tc.v + "]");
 				tileReservations.remove(tc);
 			}
 		}
 	}
-	
+
 	public boolean isTileReserved(TileCoordinate tile) {
 		return tileReservations.get(tile) != null;
+	}
+
+	public Set<Entry<TileCoordinate, Tile>> getPossibleSpawnPoints() {
+		return this.tiles.entrySet().stream().filter(this::spawnFilter).collect(Collectors.toSet());
+	}
+
+	private boolean spawnFilter(Entry<TileCoordinate, Tile> entry) {
+		return entry.getValue() instanceof DestinationTrackTile
+				&& ((DestinationTrackTile) entry.getValue()).isTrainSpawner() && !isTileReserved(entry.getKey());
 	}
 
 }

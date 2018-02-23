@@ -19,30 +19,31 @@ public class BasePanel implements Component {
 	private Rectangle rect;
 	private Binding click;
 	private boolean centered;
+	public int margin = 0;
 
-	public BasePanel(String title, Input input, boolean centered) {
+	public BasePanel(Input input, boolean centered) {
 		this.centered = centered;
 		this.input = input;
 		this.components = new ArrayList<>();
-		this.components.add(new Label(title, true));
 		this.click = input.getBinding(Input.MOUSE_LEFT);
 		this.needsLayout = true;
 	}
 
-	public void addButton(String title, Runnable action) {
-		this.components.add(new Button(title, input, action));
+	public void add(Component component) {
+		this.components.add(component);
 		this.needsLayout = true;
 	}
 
 	@Override
 	public void render(Graphics g, Window w) {
 		if (this.needsLayout)
-			layout(0, 0, w.getCanvasWidth(), w.getCanvasHeight() - Design.toolbarHeight);
+			layout(margin, margin, w.getCanvasWidth() - 2 * margin,
+					w.getCanvasHeight() - Design.toolbarHeight - 2 * margin);
 
 		g.setColor(Design.almostOpaque);
-		g.draw(this.rect);
-		g.setColor(Design.grayBorder);
 		g.fill(this.rect);
+		g.setColor(Design.grayBorder);
+		g.draw(this.rect);
 
 		for (Component b : this.components) {
 			b.render(g, w);

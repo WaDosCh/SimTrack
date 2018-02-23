@@ -1,5 +1,11 @@
 package ch.awae.simtrack.core.ui;
 
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
@@ -26,6 +32,14 @@ public class Label extends BaseComponent {
 	}
 
 	@Override
+	protected Dimension getPreferedDimension() {
+		Font f = this.font;
+		FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
+		Rectangle2D bounds = f.getStringBounds(getTextForSizeCalculation(), frc);
+		return new Dimension((int) bounds.getWidth() + 2 * Design.buttonTextMarginX,
+				(int) bounds.getHeight() + 2 * Design.buttonTextMarginY);
+	}
+
 	protected String getTextForSizeCalculation() {
 		return this.title;
 	}

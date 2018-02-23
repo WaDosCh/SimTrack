@@ -1,5 +1,7 @@
 package ch.awae.simtrack.core.ui;
 
+import java.awt.Dimension;
+
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
@@ -22,7 +24,6 @@ public class InputField extends BaseComponent {
 		g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 	}
 
-	@Override
 	protected String getTextForSizeCalculation() {
 		return StringUtils.repeat("W", this.expectedChar);
 	}
@@ -30,6 +31,12 @@ public class InputField extends BaseComponent {
 	@Override
 	public boolean tryConsume(InputEvent event) {
 		return false;
+	}
+
+	@Override
+	protected Dimension getPreferedDimension() {
+
+		return null;
 	}
 
 }

@@ -2,6 +2,7 @@ package ch.awae.simtrack.scene.game.controller;
 
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,10 +17,10 @@ import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Time;
+import lombok.Getter;
 
 public class TrainController implements BaseTicker<Game> {
 
@@ -29,12 +30,10 @@ public class TrainController implements BaseTicker<Game> {
 	private Logger logger = LogManager.getLogger(DebugTools.class);
 	private int spawnTrains;
 	private long checkForSpawnTimeMS;
-	private boolean active;
+	private @Getter AtomicBoolean active = new AtomicBoolean(false);
 
 	public TrainController() {
 		this.checkForSpawnTimeMS = System.currentTimeMillis() + firstCheckAfterXSec * 1000;
-		this.active = false;
-		// this.active = true;
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class TrainController implements BaseTicker<Game> {
 			this.spawnTrains--;
 			spawnTrain(game.getModel());
 		}
-		if (Time.isOver(checkForSpawnTimeMS) && this.active) {
+		if (Time.isOver(checkForSpawnTimeMS) && this.active.get()) {
 			Model model = game.getModel();
 			if (model.getEntitiesByType(Train.class).size() < 3) {
 				spawnTrain(model);
@@ -53,8 +52,7 @@ public class TrainController implements BaseTicker<Game> {
 	}
 
 	private void spawnTrain(Model model) {
-		Set<Entry<TileCoordinate, Tile>> spawners = model.getTileFiltered(
-				tile -> tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainSpawner());
+		Set<Entry<TileCoordinate, Tile>> spawners = model.getPossibleSpawnPoints();
 		Entry<TileCoordinate, Tile> spawner = CollectionUtil.randomValue(spawners);
 		TileEdgeCoordinate start = model.getPaths(spawner.getKey()).get(0)._1;
 

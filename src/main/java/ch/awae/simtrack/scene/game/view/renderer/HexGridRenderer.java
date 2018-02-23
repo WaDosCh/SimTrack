@@ -21,7 +21,7 @@ public class HexGridRenderer implements Renderer {
 
 	@Override
 	public void render(Graphics g, Game view) {
-		if (!view.drawHex)
+		if (!view.getDrawGrid().get())
 			return;
 		ViewPort port = view.getViewPort();
 		g.setColor(gridColor);
