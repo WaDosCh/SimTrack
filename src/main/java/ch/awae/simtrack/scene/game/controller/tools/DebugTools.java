@@ -7,6 +7,7 @@ import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.util.DataMapper;
 
 public class DebugTools extends GameTool {
 
@@ -44,6 +45,23 @@ public class DebugTools extends GameTool {
 	@Override
 	public void render(Graphics graphics, Game scene) {
 		this.renderer.render(graphics, scene);
+	}
+
+	public DataMapper<Boolean> dataMapper(Option debugOption) {
+		return new DataMapper<Boolean>() {
+			@Override
+			public Boolean get() {
+				return showing.contains(debugOption);
+			}
+
+			@Override
+			public void set(Boolean value) {
+				if (value)
+					showing.add(debugOption);
+				else
+					showing.remove(debugOption);
+			}
+		};
 	}
 
 }
