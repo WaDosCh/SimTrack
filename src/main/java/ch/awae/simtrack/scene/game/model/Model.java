@@ -45,6 +45,7 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
+	private GameClock clock;
 
 	Model(int sizeX, int sizeY) {
 		this.sizeX = sizeX;
@@ -339,6 +340,12 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	private boolean spawnFilter(Entry<TileCoordinate, Tile> entry) {
 		return entry.getValue() instanceof DestinationTrackTile
 				&& ((DestinationTrackTile) entry.getValue()).isTrainSpawner() && !isTileReserved(entry.getKey());
+	}
+	
+	public GameClock getClock() {
+		if (clock == null)
+			clock = new GameClock();
+		return clock;
 	}
 
 }

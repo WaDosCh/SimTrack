@@ -126,6 +126,11 @@ public class Game extends Scene<Game> {
 		super.bindWindow(window);
 		this.viewPort = new ViewPort(this);
 	}
+	
+	@Override
+	public void preTick(long millis) {
+		model.getClock().tick(millis);
+	}
 
 	private class ProxyTicker implements BaseTicker<Game> {
 

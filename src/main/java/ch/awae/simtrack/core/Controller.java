@@ -45,8 +45,15 @@ public class Controller {
 		this.gameClock.stop();
 	}
 
+	private long startOfLastTick = System.currentTimeMillis();
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void tick() {
+
+		long newStart = System.currentTimeMillis();
+		long deltaT = newStart - startOfLastTick;
+		startOfLastTick = newStart;
+
 		if (profiler != null) {
 			profiler.startFrame();
 			profiler.startSample(true, -1);
@@ -96,6 +103,9 @@ public class Controller {
 			index++;
 			profiler.endSample();
 		}
+
+		scene.preTick(deltaT);
+
 		index = 0;
 		for (BaseTicker ticker : scene.getTickers()) {
 			profiler.startSample(false, index);
