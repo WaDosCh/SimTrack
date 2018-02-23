@@ -5,9 +5,9 @@ import lombok.Getter;
 public class GameClock {
 
 	private @Getter boolean running = true;
-	private @Getter double scale = 1.0;
-	private @Getter double time = 0;
-	private @Getter double tickDuration = 0;
+	private double scale = 1.0;
+	private double time = 0;
+	private double tickDuration = 0;
 
 	public void tick(long millis) {
 		if (running) {
@@ -16,20 +16,55 @@ public class GameClock {
 		}
 	}
 
+	/**
+	 * resume the clock. if the scale set to 0 it will be reset to 1
+	 */
 	public void resume() {
-		if (running && scale == 0)
+		running = true;
+		if (scale == 0)
 			scale = 1;
-		else
-			running = true;
 	}
 
+	/**
+	 * Pause the clock
+	 */
 	public void pause() {
 		running = false;
 	}
 
+	/**
+	 * set a new game speed. it the clock is currently paused, it will be
+	 * resumed at that speed
+	 */
 	public void setScale(double scale) {
 		running = true;
 		this.scale = scale;
+	}
+
+	/**
+	 * the speed at which the clock moves (relative to real-life)
+	 * 
+	 * if paused this may still provide a non-zero value
+	 */
+	public double getScale() {
+		return scale;
+	}
+
+	/*
+	 * the total time passed in the game.
+	 * 
+	 * the milliseconds should remain accurate for approximately 316'888 years
+	 * (so it probably is fine :P)
+	 */
+	public double getTime() {
+		return time;
+	}
+
+	/**
+	 * The time passed in the game since the last tick
+	 */
+	public double getTickDuration() {
+		return tickDuration;
 	}
 
 }
