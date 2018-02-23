@@ -1,7 +1,5 @@
 package ch.awae.simtrack.scene.game;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import ch.awae.simtrack.core.*;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
@@ -10,6 +8,7 @@ import ch.awae.simtrack.scene.game.controller.tools.*;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.*;
+import ch.awae.simtrack.util.DataMapper.Store;
 import lombok.Getter;
 
 /**
@@ -26,13 +25,13 @@ public class Game extends Scene<Game> {
 	private ViewPort viewPort;
 	private Editor<Game> editor;
 
-	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
+	private @Getter Store<Boolean> drawGrid = new Store<>(true);
 
 	private ToolBar trackbar;
 	private DebugTools debugTools;
 	private TrainController trainController;
 
-	private @Getter AtomicBoolean paused = new AtomicBoolean(false);
+	private @Getter Store<Boolean> paused = new Store<>(false);
 
 	/**
 	 * instantiates a new game view
