@@ -4,6 +4,8 @@ import java.io.*;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.OnLoad;
+import ch.awae.simtrack.core.OnUnload;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
@@ -23,6 +25,16 @@ public class InGameMenu extends GameTool {
 		this.renderer.add(new Button("Save", input, this::save));
 		this.renderer.add(new Button("Load", input, this::load));
 		this.renderer.add(new Button("Quit Game", input, () -> System.exit(0)));
+	}
+
+	@OnLoad
+	private void onToolLoad() {
+		this.editor.getScene().getIsPaused().set(true);
+	}
+
+	@OnUnload
+	private void onToolUnload() {
+		this.editor.getScene().getIsPaused().set(false);
 	}
 
 	@Override
