@@ -1,29 +1,33 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.ui.BasePanel;
+import ch.awae.simtrack.core.ui.Button;
+import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 
 public class InGameMenu extends GameTool {
 
-	private InGameMenuRenderer renderer;
+	private BasePanel renderer;
 
 	public InGameMenu(Editor<Game> editor) {
 		super(editor, GameTool.UnloadAction.UNLOAD);
 
-		this.renderer = new InGameMenuRenderer(input);
-		this.renderer.addButton("Resume", this::resume);
-		this.renderer.addButton("Save", this::save);
-		this.renderer.addButton("Load", this::load);
-		this.renderer.addButton("Quit Game", () -> System.exit(0));
+		this.renderer = new BasePanel(input, true);
+		this.renderer.add(new Label("Ingame Menu", true));
+		this.renderer.add(new Button("Resume", input, this::resume));
+		this.renderer.add(new Button("Save", input, this::save));
+		this.renderer.add(new Button("Load", input, this::load));
+		this.renderer.add(new Button("Quit Game", input, () -> System.exit(0)));
+	}
+
+	@Override
+	public void render(Graphics graphics, Game scene) {
+		this.renderer.render(graphics, scene.getWindow());
 	}
 
 	private void save() {
@@ -54,11 +58,6 @@ public class InGameMenu extends GameTool {
 
 	private void resume() {
 		this.editor.loadTool(FreeTool.class);
-	}
-
-	@Override
-	public void render(Graphics graphics, Game scene) {
-		this.renderer.render(graphics, scene);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 
 public class DebugTools extends GameTool {
@@ -22,31 +23,21 @@ public class DebugTools extends GameTool {
 
 	public TrainController trainController;
 
-	private boolean pause;
-
 	public DebugTools(Editor<Game> editor) {
 		super(editor, GameTool.UnloadAction.IGNORE);
 
 		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
-		onPress(KeyEvent.VK_F2, () -> toggle(Option.Coordinates));
-		onPress(KeyEvent.VK_F8, () -> toggle(Option.Reservations));
-		onPress(KeyEvent.VK_F3, () -> editor.loadTool(PathFindingTool.class));
-		onPress(KeyEvent.VK_F4, this::spawnTrain);
-		onPress(KeyEvent.VK_F5, () -> editor.getScene().toggleHex());
-		onPress(KeyEvent.VK_F7, this::pause);
+		onPress(Action.DEBUG_TOOL, () -> editor.loadTool(DebugToolsView.class));
+
 		onPress(KeyEvent.VK_F12, () -> System.exit(0));
 	}
 
-	private void pause() {
-		this.pause = !this.pause;
-	}
-
-	private void spawnTrain() {
+	public void spawnTrain() {
 		if (this.trainController != null)
 			this.trainController.requestSpawnTrain();
 	}
 
-	private void toggle(Option option) {
+	public void toggle(Option option) {
 		if (this.showing.contains(option))
 			this.showing.remove(option);
 		else
@@ -56,7 +47,6 @@ public class DebugTools extends GameTool {
 	@Override
 	public void tick(Game scene) {
 		super.tick(scene);
-		scene.setPaused(this.pause);
 	}
 
 	@Override

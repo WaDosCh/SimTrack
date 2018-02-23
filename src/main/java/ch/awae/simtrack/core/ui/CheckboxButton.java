@@ -2,6 +2,7 @@ package ch.awae.simtrack.core.ui;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import ch.awae.simtrack.core.Graphics;
@@ -21,9 +22,13 @@ public class CheckboxButton extends Label {
 
 	public CheckboxButton(String title, Input input, boolean selected, Consumer<Boolean> action) {
 		super(title);
-		this.selected = selected;
 		this.input = input;
+		this.selected = selected;
 		this.action = action;
+	}
+
+	public CheckboxButton(String title, Input input, AtomicBoolean mapper) {
+		this(title, input, mapper.get(), mapper::set);
 	}
 
 	public void render(Graphics g, Window view) {
