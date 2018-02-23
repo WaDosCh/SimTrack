@@ -4,10 +4,8 @@ import java.awt.Canvas;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
-import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 
@@ -54,12 +52,6 @@ public class NativeFullscreen implements RootWindow {
 	@Override
 	public Input getInput() {
 		return input;
-	}
-
-	@Override
-	public void takeSnapshot(Consumer<Image> callback) {
-		// TODO: make screenshots possible
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

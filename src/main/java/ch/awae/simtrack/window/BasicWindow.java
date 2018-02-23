@@ -3,13 +3,8 @@ package ch.awae.simtrack.window;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
-import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,8 +20,6 @@ public class BasicWindow implements RootWindow {
 	VolatileImage i;
 	Graphics g;
 	private Input input;
-
-	private final List<Consumer<Image>> snapshotRequests = new ArrayList<>();
 
 	public BasicWindow(int x, int y) {
 		f = new JFrame("SimTrack");
@@ -70,10 +63,8 @@ public class BasicWindow implements RootWindow {
 	public void flipFrame() {
 		p.getGraphics().drawImage(i, 0, 0, p);
 		Toolkit.getDefaultToolkit().sync();
-		if (!snapshotRequests.isEmpty())
-			takeSnapshot();
 		GraphicsConfiguration gc = p.getGraphicsConfiguration();
-		
+
 		// validate the buffer
 		int valCode = i.validate(gc);
 		if (valCode == VolatileImage.IMAGE_INCOMPATIBLE) {
@@ -81,16 +72,6 @@ public class BasicWindow implements RootWindow {
 		}
 		// start rendering
 		g.clearRect(0, 0, p.getWidth(), p.getHeight());
-	}
-
-	private void takeSnapshot() {
-		BufferedImage snap = new BufferedImage(p.getWidth(), p.getHeight(), BufferedImage.TYPE_INT_RGB);
-		snap.getGraphics().drawImage(i, 0, 0, null);
-		synchronized (snapshotRequests) {
-			for (Consumer<Image> consumer : snapshotRequests) {
-				consumer.accept(snap);
-			}
-		}
 	}
 
 	@Override
@@ -121,13 +102,6 @@ public class BasicWindow implements RootWindow {
 		i = null;
 		g.dispose();
 		g = null;
-	}
-
-	@Override
-	public void takeSnapshot(Consumer<Image> callback) {
-		synchronized (snapshotRequests) {
-			snapshotRequests.add(callback);
-		}
 	}
 
 }
