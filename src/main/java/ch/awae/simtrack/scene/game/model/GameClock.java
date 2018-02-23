@@ -1,9 +1,13 @@
 package ch.awae.simtrack.scene.game.model;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 
-public class GameClock {
+public class GameClock implements Serializable {
 
+	private static final long serialVersionUID = 4291755235720865036L;
+	
 	private @Getter boolean running = true;
 	private double scale = 1.0;
 	private double time = 0;
