@@ -36,7 +36,7 @@ public class DebugToolsView extends GameTool {
 		}));
 		this.renderer.add(new CheckboxButton("Toggle grid", input, game.getDrawGrid()));
 		this.renderer.add(new CheckboxButton("Pause", input, game.getPaused()));
-		this.renderer.add(new Label("Trains"));
+		this.renderer.add(new Label("Trains:"));
 		this.renderer.add(new Button("Pathfinding Tool", input, () -> {
 			editor.loadTool(PathFindingTool.class);
 		}));

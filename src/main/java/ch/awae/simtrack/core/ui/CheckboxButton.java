@@ -1,6 +1,7 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -32,19 +33,31 @@ public class CheckboxButton extends Label {
 	}
 
 	public void render(Graphics g, Window view) {
-		Color color = Design.checkboxNotSelected;
-		if (this.selected)
-			color = Design.checkboxSelected;
+		Color color = Design.buttonBackground;
 		if (test(this.input.getMousePosition()))
-			color = color.brighter();
+			color = Design.buttonHover;
 		g.setColor(color);
 		g.fillRect(pos.x, pos.y, size.width, size.height);
+
+		color = Design.checkboxNotSelected;
+		if (this.selected)
+			color = Design.checkboxSelected;
+		g.setColor(color);
+		g.fillRect(pos.x + 5, pos.y + size.height / 2 - 10, 20, 20);
+
 		g.setColor(Design.buttonBorder);
 		g.drawRect(pos.x, pos.y, size.width, size.height);
 		g.setFont(Design.textFont);
 		g.setColor(Design.textColor);
-		g.drawString(this.title, pos.x + Design.buttonTextMarginX,
+		g.drawString(this.title, 30 + pos.x + Design.buttonTextMarginX,
 				pos.y + Design.buttonTextMarginY + this.size.height / 2);
+	}
+
+	@Override
+	protected Dimension getPreferedDimension() {
+		Dimension baseSize = super.getPreferedDimension();
+		baseSize.width += 30;
+		return baseSize;
 	}
 
 	@Override
