@@ -53,6 +53,10 @@ public class TrainController implements BaseTicker<Game> {
 
 	private void spawnTrain(Model model) {
 		Set<Entry<TileCoordinate, Tile>> spawners = model.getPossibleSpawnPoints();
+		if (spawners.size() == 0) {
+			logger.warn("No possible spawn points for a new train.");
+			return;
+		}
 		Entry<TileCoordinate, Tile> spawner = CollectionUtil.randomValue(spawners);
 		TileEdgeCoordinate start = model.getPaths(spawner.getKey()).get(0)._1;
 
