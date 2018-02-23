@@ -4,6 +4,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.OnLoad;
@@ -13,11 +16,14 @@ import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.judos.generic.data.geometry.Angle;
 import ch.judos.generic.data.geometry.PointD;
 
 public class SignalTool extends GameTool {
 
 	private final static Stroke borderStroke = new BasicStroke(6);
+
+	private static Logger logger = LogManager.getLogger(SignalTool.class);
 
 	private boolean bulldoze;
 	private Type type;
@@ -40,12 +46,9 @@ public class SignalTool extends GameTool {
 	private void updatePosition() {
 		center = mouseTile.toSceneCoordinate().getPointD();
 		mouse = mouseScene.getPointD();
-		double angle = center.getAngleTo(mouse);
-		if (angle < 0)
-			angle += 2 * Math.PI;
-
-		int sector = (int) (6 * angle / Math.PI);
-		Edge edge = Edge.byIndex(((sector + 1) / 2) % 6);
+		Angle angle = center.getAAngleTo(mouse);
+		int sector = (int) angle.getDegree() / 60;
+		Edge edge = Edge.byIndex(sector);
 		position = mouseTile.getEdge(edge);
 	}
 
