@@ -2,14 +2,17 @@ package ch.awae.simtrack.core;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Profiler.StringSupplier;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.utils.functional.Try;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -153,6 +156,10 @@ public class Controller {
 
 	public void replaceWindow(RootWindow window) {
 		this.window = window;
+	}
+
+	public void requestSnapshot(Consumer<Try<Image>> callback) {
+		callback.accept(Try.failure(new UnsupportedOperationException()));
 	}
 
 }

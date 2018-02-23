@@ -97,7 +97,7 @@ public abstract class Scene<T extends Scene<T>> {
 	}
 
 	public final void requestSnapshot(Consumer<Try<Image>> callback) {
-		// TODO: implement
+		this.controller.requestSnapshot(callback);
 	}
 	
 }
