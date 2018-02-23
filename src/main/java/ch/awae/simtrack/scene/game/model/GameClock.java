@@ -13,6 +13,8 @@ public class GameClock {
 		if (running) {
 			tickDuration = millis * scale;
 			time += tickDuration;
+		} else {
+			tickDuration = 0;
 		}
 	}
 
