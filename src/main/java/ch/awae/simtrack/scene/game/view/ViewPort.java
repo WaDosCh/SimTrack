@@ -260,4 +260,8 @@ public class ViewPort {
 		return this.sceneCorner.getPoint();
 	}
 
+	public void reloadBounds() {
+		init();
+	}
+
 }

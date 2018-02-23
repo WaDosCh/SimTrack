@@ -118,6 +118,7 @@ public class Game extends Scene<Game> {
 		this.model = model;
 		this.model.load();
 		this.pathfinder.setModel(model);
+		this.viewPort.reloadBounds();
 	}
 
 	@Override
