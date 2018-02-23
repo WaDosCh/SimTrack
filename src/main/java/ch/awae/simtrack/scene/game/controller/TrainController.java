@@ -16,7 +16,6 @@ import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Time;
@@ -53,8 +52,7 @@ public class TrainController implements BaseTicker<Game> {
 	}
 
 	private void spawnTrain(Model model) {
-		Set<Entry<TileCoordinate, Tile>> spawners = model.getTileFiltered(
-				tile -> tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainSpawner());
+		Set<Entry<TileCoordinate, Tile>> spawners = model.getPossibleSpawnPoints();
 		Entry<TileCoordinate, Tile> spawner = CollectionUtil.randomValue(spawners);
 		TileEdgeCoordinate start = model.getPaths(spawner.getKey()).get(0)._1;
 
