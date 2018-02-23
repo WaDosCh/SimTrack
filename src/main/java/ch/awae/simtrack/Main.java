@@ -30,7 +30,7 @@ public class Main {
 		
 		controller.start();
 
-		Model model = ModelFactory.getModel(23, 15, 15);
+		Model model = ModelFactory.getDefaultModel();
 		Game scene = new Game(controller, model);
 
 		controller.loadScene(scene);

@@ -10,4 +10,8 @@ public class ModelFactory {
 		return model;
 	}
 
+	public static Model getDefaultModel() {
+		return getModel(23, 15, 15);
+	}
+
 }

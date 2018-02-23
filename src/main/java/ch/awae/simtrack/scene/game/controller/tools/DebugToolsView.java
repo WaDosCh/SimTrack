@@ -10,6 +10,7 @@ import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
+import ch.awae.simtrack.scene.game.model.ModelFactory;
 
 public class DebugToolsView extends GameTool {
 
@@ -35,7 +36,11 @@ public class DebugToolsView extends GameTool {
 			debugTools.toggle(Option.Coordinates);
 		}));
 		this.renderer.add(new CheckboxButton("Toggle grid", input, game.getDrawGrid()));
+		this.renderer.add(new Button("New map", input, () -> {
+			game.loadModel(ModelFactory.getDefaultModel());
+		}));
 		this.renderer.add(new CheckboxButton("Pause", input, game.getPaused()));
+
 		this.renderer.add(new Label("Trains:"));
 		this.renderer.add(new Button("Pathfinding Tool", input, () -> {
 			editor.loadTool(PathFindingTool.class);
