@@ -8,6 +8,7 @@ import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.ModelFactory;
 import ch.awae.simtrack.util.MacKeyboardHack;
 import ch.awae.simtrack.window.BasicWindow;
+import ch.awae.simtrack.window.NativeFullscreen;
 
 @SuppressWarnings("javadoc")
 public class Main {
@@ -23,9 +24,10 @@ public class Main {
 	}
 
 	private static void init() {
-
-		BasicWindow window = new BasicWindow(1200, 800);
-		Controller controller = new Controller(window);
+		
+		//Controller controller = new Controller(new NativeFullscreen());
+		Controller controller = new Controller(new BasicWindow(1200, 800));
+		
 		controller.start();
 
 		Model model = ModelFactory.getModel(23, 15, 15);
