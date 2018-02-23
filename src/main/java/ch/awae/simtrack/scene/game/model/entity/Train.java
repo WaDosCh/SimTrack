@@ -17,13 +17,22 @@ import ch.judos.generic.data.RandomJS;
 public class Train implements Entity {
 
 	private static Logger logger = LogManager.getLogger();
-
 	private static final long serialVersionUID = -559986357702522674L;
 
+	public static final double maxSpeed = 5;
+
 	private PathFindingOptions pathFindingOptions;
+
+	/**
+	 * stack of target edges where the next signal could be located at before
+	 * the train leaves a tile
+	 */
 	private Stack<TileEdgeCoordinate> path;
 
-	private double progressedDistance; // distance progressed to reach next edge
+	/**
+	 * distance progressed to reach next edge
+	 */
+	private double progressedDistance;
 	private double speed;
 
 	/**
@@ -48,20 +57,39 @@ public class Train implements Entity {
 
 	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
-		this.currentTileTargetEdge = start;
-		this.pathFindingOptions = pathFindingOptions;
-		this.progressedDistance = 0.;
-		this.speed = 2;
-		this.id = idCounter++;
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
 		this.amountOfTilesAheadReserved = 0;
+		this.speed = 5;
+		this.id = idCounter++;
+
+		setStartingPosition(start, pathFindingOptions);
+		addStarterHistory();
 
 		// TODO: add moooarr power
 		for (int i = 0; i < 5; i++) {
 			this.trainElements
 					.add(RandomJS.getObject(TrainElementConfiguration.wagon1, TrainElementConfiguration.wagon2));
 		}
+	}
+
+	private void setStartingPosition(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
+		this.currentTileTargetEdge = start;
+		this.pathFindingOptions = pathFindingOptions;
+		this.currentTilePath = new TilePathCoordinate(start.tile,
+				new TilePath(start.getEdge().getOpposite(), start.getEdge()));
+		this.progressedDistance = this.currentTilePath.getPathLength();
+	}
+
+	private void addStarterHistory() {
+		// add some starter tiles to the history in order for the train to draw
+		// correctly when entering the map
+		TileEdgeCoordinate start = this.currentTileTargetEdge;
+		TileCoordinate earlier = start.tile.getNeighbour(start.edge.getOpposite());
+
+		this.reservedTiles.add(new TilePathCoordinate(earlier, new TilePath(start.edge.getOpposite(), start.edge)));
+		this.reservedTiles.add(new TilePathCoordinate(start.tile, new TilePath(start.edge.getOpposite(), start.edge)));
+
 	}
 
 	@Override
@@ -98,6 +126,8 @@ public class Train implements Entity {
 	}
 
 	private void move(Model model) {
+		// this.speed = MathJS.clamp(this.amountOfTilesAheadReserved, 2, 6);
+
 		if (this.currentTilePath == null) {
 			if (!createNextTilePath(model))
 				return;
