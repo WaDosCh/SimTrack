@@ -7,7 +7,6 @@ import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
-import ch.awae.simtrack.scene.game.controller.TrainController;
 
 public class DebugTools extends GameTool {
 
@@ -21,8 +20,6 @@ public class DebugTools extends GameTool {
 
 	private DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
 
-	public TrainController trainController;
-
 	public DebugTools(Editor<Game> editor) {
 		super(editor, GameTool.UnloadAction.IGNORE);
 
@@ -30,11 +27,6 @@ public class DebugTools extends GameTool {
 		onPress(Action.DEBUG_TOOL, () -> editor.loadTool(DebugToolsView.class));
 
 		onPress(KeyEvent.VK_F12, () -> System.exit(0));
-	}
-
-	public void spawnTrain() {
-		if (this.trainController != null)
-			this.trainController.requestSpawnTrain();
 	}
 
 	public void toggle(Option option) {

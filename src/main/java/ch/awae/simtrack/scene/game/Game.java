@@ -32,7 +32,7 @@ public class Game extends Scene<Game> {
 	private DebugTools debugTools;
 	private TrainController trainController;
 
-	private @Getter AtomicBoolean isPaused = new AtomicBoolean(false);
+	private @Getter AtomicBoolean paused = new AtomicBoolean(false);
 
 	/**
 	 * instantiates a new game view
@@ -48,12 +48,13 @@ public class Game extends Scene<Game> {
 		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);
 		this.pathfinder = new PathFinding(model);
+		this.trainController = new TrainController();
 
 		editor.addTool(new FreeTool(editor));
 		editor.addTool(new BuildTool(editor));
 		editor.addTool(new PathFindingTool(editor));
 		editor.addTool(new InGameMenu(editor));
-		editor.addTool(new DebugToolsView(editor, this.debugTools));
+		editor.addTool(new DebugToolsView(editor, this.debugTools, this.trainController));
 		editor.addTool(new SignalTool(editor));
 
 		addRenderer(new BackgroundRenderer());
@@ -72,9 +73,8 @@ public class Game extends Scene<Game> {
 		addTicker("ViewPort", s -> viewPort.tick());
 		addTicker("Model", new ProxyTicker(s -> this.model.tick(this)));
 		addTicker(pathfinder);
-		addTicker(trainController = new TrainController());
+		addTicker(this.trainController);
 
-		this.debugTools.trainController = trainController;
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class Game extends Scene<Game> {
 
 		@Override
 		public void tick(Game scene) {
-			if (!scene.isPaused.get())
+			if (!scene.paused.get())
 				this.ticker.tick(scene);
 		}
 

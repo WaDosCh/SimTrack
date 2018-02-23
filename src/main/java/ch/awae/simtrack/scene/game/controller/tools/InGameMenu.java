@@ -29,12 +29,12 @@ public class InGameMenu extends GameTool {
 
 	@OnLoad
 	private void onToolLoad() {
-		this.editor.getScene().getIsPaused().set(true);
+		this.editor.getScene().getPaused().set(true);
 	}
 
 	@OnUnload
 	private void onToolUnload() {
-		this.editor.getScene().getIsPaused().set(false);
+		this.editor.getScene().getPaused().set(false);
 	}
 
 	@Override
