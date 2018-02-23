@@ -4,9 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.OnLoad;
@@ -22,8 +19,6 @@ import ch.judos.generic.data.geometry.PointD;
 public class SignalTool extends GameTool {
 
 	private final static Stroke borderStroke = new BasicStroke(6);
-
-	private static Logger logger = LogManager.getLogger(SignalTool.class);
 
 	private boolean bulldoze;
 	private Type type;

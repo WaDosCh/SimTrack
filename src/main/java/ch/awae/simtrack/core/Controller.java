@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -12,7 +13,6 @@ import java.util.function.Consumer;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Profiler.StringSupplier;
 import ch.awae.simtrack.util.Resource;
-import ch.awae.utils.functional.Try;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -26,6 +26,8 @@ public class Controller {
 	private Profiler profiler;
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
+
+	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
 
 	public Controller(RootWindow window) {
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
@@ -55,6 +57,17 @@ public class Controller {
 			profilerToggle.consume();
 		}
 
+		// setup screenshot buffers if required
+		List<Consumer<Image>> requests = null;
+		BufferedImage snapshot = null;
+		Graphics snapshotGraphics = null;
+		if (!snapshotRequests.isEmpty()) {
+			requests = snapshotRequests;
+			snapshotRequests = new ArrayList<>();
+			snapshot = new BufferedImage(window.getCanvasWidth(), window.getCanvasHeight(), BufferedImage.TYPE_INT_RGB);
+			snapshotGraphics = new Graphics(snapshot.createGraphics());
+		}
+
 		RootWindow window = this.window;
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
@@ -75,6 +88,11 @@ public class Controller {
 			GraphicsStack stack = graphics.getStack();
 			renderer.render(graphics, scene);
 			graphics.setStack(stack);
+			if (snapshotGraphics != null) {
+				GraphicsStack stack2 = snapshotGraphics.getStack();
+				renderer.render(snapshotGraphics, scene);
+				snapshotGraphics.setStack(stack2);
+			}
 			index++;
 			profiler.endSample();
 		}
@@ -87,13 +105,21 @@ public class Controller {
 		}
 
 		if (showProfiler) {
-			graphics.setColor(Color.BLACK);
-			FontMetrics metrics = graphics.getFontMetrics();
-			int sh = metrics.getHeight();
-			String[] digest = profiler.getDigest().split("\n");
-			for (int i = 0; i < digest.length; i++) {
-				graphics.drawString(digest[i], 5, (i + 1) * sh);
+			renderProfiler(graphics);
+			if (snapshotGraphics != null) {
+				renderProfiler(snapshotGraphics);
 			}
+		}
+
+		if (snapshot != null) {
+			// this assertion is here to stop my compiler from complaining about
+			// potential null pointers (which is actually impossible, but
+			// hey...)
+			assert (snapshotGraphics != null && requests != null);
+			snapshotGraphics.dispose();
+			for (Consumer<Image> callback : requests)
+				callback.accept(snapshot);
+			// requester list does not need to be cleared, as it has replaced
 		}
 
 		profiler.endFrame();
@@ -109,7 +135,16 @@ public class Controller {
 			window.init(input);
 			scenes.forEach(sc -> sc.bindWindow(window));
 		}
+	}
 
+	private void renderProfiler(Graphics graphics) {
+		graphics.setColor(Color.BLACK);
+		FontMetrics metrics = graphics.getFontMetrics();
+		int sh = metrics.getHeight();
+		String[] digest = profiler.getDigest().split("\n");
+		for (int i = 0; i < digest.length; i++) {
+			graphics.drawString(digest[i], 5, (i + 1) * sh);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -158,8 +193,8 @@ public class Controller {
 		this.window = window;
 	}
 
-	public void requestSnapshot(Consumer<Try<Image>> callback) {
-		callback.accept(Try.failure(new UnsupportedOperationException()));
+	public void requestSnapshot(Consumer<Image> callback) {
+		snapshotRequests.add(callback);
 	}
 
 }

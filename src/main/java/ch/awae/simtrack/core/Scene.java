@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import ch.awae.utils.functional.Try;
 import lombok.Getter;
 
 public abstract class Scene<T extends Scene<T>> {
@@ -96,7 +95,7 @@ public abstract class Scene<T extends Scene<T>> {
 		this.window = window;
 	}
 
-	public final void requestSnapshot(Consumer<Try<Image>> callback) {
+	public final void requestSnapshot(Consumer<Image> callback) {
 		this.controller.requestSnapshot(callback);
 	}
 	
