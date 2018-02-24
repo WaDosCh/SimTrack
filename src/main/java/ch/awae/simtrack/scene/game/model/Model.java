@@ -254,7 +254,7 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	 * @throws IllegalArgumentException
 	 *             a tile in the path is no track tile
 	 */
-	public int reserveTiles(@NonNull Train train, @NonNull Stack<TileEdgeCoordinate> path) {
+	public int reserveTiles(@NonNull Train train, @NonNull List<TileEdgeCoordinate> path) {
 		synchronized (tileReservations) {
 			List<TileCoordinate> block = new ArrayList<>();
 
@@ -341,7 +341,7 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 		return entry.getValue() instanceof DestinationTrackTile
 				&& ((DestinationTrackTile) entry.getValue()).isTrainSpawner() && !isTileReserved(entry.getKey());
 	}
-	
+
 	public GameClock getClock() {
 		if (clock == null)
 			clock = new GameClock();

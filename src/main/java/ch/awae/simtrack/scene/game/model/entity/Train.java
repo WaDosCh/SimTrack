@@ -55,7 +55,7 @@ public class Train implements Entity {
 	 */
 	private int amountOfTilesAheadReserved;
 
-	public Train(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
+	public Train(Model model, TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
@@ -63,7 +63,7 @@ public class Train implements Entity {
 		this.speed = 5;
 		this.id = idCounter++;
 
-		setStartingPosition(start, pathFindingOptions);
+		setStartingPosition(model, start, pathFindingOptions);
 		addStarterHistory();
 
 		// TODO: add moooarr power
@@ -73,12 +73,14 @@ public class Train implements Entity {
 		}
 	}
 
-	private void setStartingPosition(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
+	private void setStartingPosition(Model model, TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
 		this.currentTileTargetEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.currentTilePath = new TilePathCoordinate(start.tile,
 				new TilePath(start.getEdge().getOpposite(), start.getEdge()));
-		this.progressedDistance = this.currentTilePath.getPathLength();
+		this.progressedDistance = 0;
+
+		model.reserveTiles(this, new DynamicList<TileEdgeCoordinate>(this.currentTileTargetEdge));
 	}
 
 	private void addStarterHistory() {
@@ -89,7 +91,6 @@ public class Train implements Entity {
 
 		this.reservedTiles.add(new TilePathCoordinate(earlier, new TilePath(start.edge.getOpposite(), start.edge)));
 		this.reservedTiles.add(new TilePathCoordinate(start.tile, new TilePath(start.edge.getOpposite(), start.edge)));
-
 	}
 
 	@Override

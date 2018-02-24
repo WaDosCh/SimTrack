@@ -58,9 +58,10 @@ public class TrainController implements BaseTicker<Game> {
 			return;
 		}
 		Entry<TileCoordinate, Tile> spawner = CollectionUtil.randomValue(spawners);
-		TileEdgeCoordinate start = model.getPaths(spawner.getKey()).get(0)._1;
+		TileEdgeCoordinate start = model.getPaths(spawner.getKey()).get(0)._2;
 
-		Train t = new Train(start, new PathFindingOptions(Type.RandomTarget), TrainElementConfiguration.locomotive1);
+		Train t = new Train(model, start, new PathFindingOptions(Type.RandomTarget),
+				TrainElementConfiguration.locomotive1);
 		model.getEntities().add(t);
 		logger.info("Train spawned at " + start);
 	}
