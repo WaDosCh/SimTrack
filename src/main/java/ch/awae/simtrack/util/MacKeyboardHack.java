@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ch.awae.utils.Shutdown;
+
 /**
  * macOS does some weird stuff with non-standard keyboard behaviour: By default
  * on macOS holding a key does not always repeat it, but can produce a popup
@@ -27,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 public class MacKeyboardHack {
 
 	private static Logger logger = LogManager.getLogger();
+	private static Shutdown shutdown = Shutdown.getDefaultShutdown();
 
 	public static void applyHack() {
 
@@ -51,7 +54,7 @@ public class MacKeyboardHack {
 
 			logger.info("Hacking...");
 			Runtime.getRuntime().exec("defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false").waitFor();
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			shutdown.add(() -> {
 				try {
 					logger.info("Reverting Keyboard Hack...");
 					Runtime.getRuntime().exec("defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool true")
@@ -61,7 +64,7 @@ public class MacKeyboardHack {
 						| InterruptedException e) {
 					e.printStackTrace();
 				}
-			}));
+			});
 			logger.info("Hack completed");
 
 		} catch (
