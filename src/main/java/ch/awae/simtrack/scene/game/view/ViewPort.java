@@ -20,7 +20,7 @@ import lombok.Getter;
  */
 public class ViewPort {
 
-	public static int outsideBounds = 100;
+	public static int outsideBounds = 0;
 
 	private double minZoom = 0.1;
 	private double maxZoom = 10;
@@ -50,24 +50,15 @@ public class ViewPort {
 	 * initialises the viewport
 	 */
 	void init() {
-		int hScreen = this.owner.getHorizontalScreenSize();
-		int vScreen = this.owner.getVerticalScreenSize() - 150;
-		this.screenDimensions = new PointI(hScreen, vScreen);
-		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
-		if (minH > this.minZoom)
-			this.minZoom = minH * 0.01;
-
 		this.zoom = this.defaultZoom;
 		this.targetZoom = this.zoom;
-		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
-				((this.owner.getModel().getVerticalSize() - 1) * Math.sqrt(3) * 50));
 		this.sceneCorner = new PointD(0, 0);
-		updateCorner();
+		update();
 	}
-	
+
 	public void update() {
 		int hScreen = this.owner.getHorizontalScreenSize();
-		int vScreen = this.owner.getVerticalScreenSize() - 150;
+		int vScreen = this.owner.getVerticalScreenSize();
 		this.screenDimensions = new PointI(hScreen, vScreen);
 		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
 		if (minH > this.minZoom)
@@ -133,18 +124,20 @@ public class ViewPort {
 
 	private void updateCorner() {
 		double minX = this.screenDimensions.x - (this.zoom * this.sceneDimensions.s);
-		double minY = this.screenDimensions.y - (this.zoom * this.sceneDimensions.t);
+		double minY = this.screenDimensions.y - Design.toolbarHeight - (this.zoom * this.sceneDimensions.t);
 		double x = this.sceneCorner.x;
 		double y = this.sceneCorner.y;
 		if (x > outsideBounds)
 			x = outsideBounds;
 		if (x < minX - outsideBounds)
 			x = (int) minX - outsideBounds;
-		if (y > outsideBounds)
+		if (y > outsideBounds && y < minY - outsideBounds)
+			y = minY / 2;
+		else if (y > outsideBounds)
 			y = outsideBounds;
-		if (y < minY - outsideBounds)
+		else if (y < minY - outsideBounds)
 			y = (int) minY - outsideBounds;
-		this.sceneCorner = new PointD(x, y);
+		this.sceneCorner.setLocation(x, y);
 	}
 
 	/**
@@ -261,7 +254,8 @@ public class ViewPort {
 	 * @see #isVisible(Point, int)
 	 */
 	public boolean isVisible(TileCoordinate tileCoordinate) {
-		return isVisible(tileCoordinate.toSceneCoordinate(), 80);
+		// use default radius size of tiles (which is something below 60)
+		return isVisible(tileCoordinate.toSceneCoordinate(), 60);
 	}
 
 	public void tick() {
