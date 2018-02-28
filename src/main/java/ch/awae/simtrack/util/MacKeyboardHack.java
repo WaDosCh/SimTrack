@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.wados.util.Shutdown;
+import ch.awae.utils.Shutdown;
 
 /**
  * macOS does some weird stuff with non-standard keyboard behaviour: By default
