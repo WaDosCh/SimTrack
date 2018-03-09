@@ -11,9 +11,9 @@ import javax.swing.JFrame;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
-import ch.awae.simtrack.core.RootWindow;
+import ch.awae.simtrack.core.GameWindow;
 
-public class NativeFullscreen implements RootWindow {
+public class NativeFullscreen implements GameWindow {
 
 	private GraphicsDevice screen;
 	private JFrame window;

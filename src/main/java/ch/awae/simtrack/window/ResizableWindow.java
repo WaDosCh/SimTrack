@@ -12,9 +12,9 @@ import javax.swing.JFrame;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
-import ch.awae.simtrack.core.RootWindow;
+import ch.awae.simtrack.core.GameWindow;
 
-public class ResizableWindow implements RootWindow {
+public class ResizableWindow implements GameWindow {
 
 	private JFrame window;
 	private Canvas canvas;

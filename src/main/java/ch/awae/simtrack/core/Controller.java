@@ -20,7 +20,7 @@ public class Controller {
 
 	private HighPrecisionClock gameClock;
 
-	private RootWindow window;
+	private GameWindow window;
 	private @Getter final Input input;
 	private Stack<Scene<?>> scenes = new Stack<>();
 	private Profiler profiler;
@@ -29,7 +29,7 @@ public class Controller {
 
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
 
-	public Controller(RootWindow window) {
+	public Controller(GameWindow window) {
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		this.window = window;
 		input = new Input();
@@ -75,7 +75,7 @@ public class Controller {
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
 		}
 
-		RootWindow window = this.window;
+		GameWindow window = this.window;
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
 		if (scenes.isEmpty())
@@ -203,7 +203,7 @@ public class Controller {
 			this.window.setTitle(scenes.peek().getClass().getSimpleName() + " - " + title);
 	}
 
-	public void replaceWindow(RootWindow window) {
+	public void replaceWindow(GameWindow window) {
 		this.window = window;
 	}
 
