@@ -35,6 +35,7 @@ public class ResizableWindow implements GameWindow {
 		canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(x, y));
 		window.add(canvas);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@Override

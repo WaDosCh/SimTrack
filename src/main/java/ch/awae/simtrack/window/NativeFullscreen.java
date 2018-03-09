@@ -31,6 +31,7 @@ public class NativeFullscreen implements GameWindow {
 		x = bounds.width;
 		y = bounds.height;
 		window.add(canvas);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		System.out.println(screen.isFullScreenSupported());
 	}
 
