@@ -18,6 +18,7 @@ import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Profiler.StringSupplier;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.utils.AccessLock;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -32,6 +33,7 @@ public class Controller {
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
 	private final Logger logger = LogManager.getLogger();
+	private final AccessLock sceneStackLock = new AccessLock("scene stack");
 
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
 
@@ -183,46 +185,65 @@ public class Controller {
 	}
 
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
-		logger.info("#### SCENE TRANSITION START ####");
-		logger.info("# transition type: push");
-		if (!scenes.isEmpty())
-			onSceneUnload(scenes.peek());
-		scenes.push(next);
-		next.bindWindow(window);
-		onSceneLoad(next);
-		logger.info("#### SCENE TRANSITION END   ####");
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: push");
+			if (!scenes.isEmpty())
+				onSceneUnload(scenes.peek());
+			scenes.push(next);
+			next.bindWindow(window);
+			onSceneLoad(next);
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
+		}
 	}
 
 	public void loadRoot() {
-		logger.info("#### SCENE TRANSITION START ####");
-		logger.info("# transition type: root");
-		if (scenes.size() == 1)
-			return;
-		onSceneUnload(scenes.peek());
-		while (scenes.size() > 1)
-			scenes.pop();
-		onSceneLoad(scenes.peek());
-		logger.info("#### SCENE TRANSITION END   ####");
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: root");
+			if (scenes.size() == 1)
+				return;
+			onSceneUnload(scenes.peek());
+			while (scenes.size() > 1)
+				scenes.pop();
+			onSceneLoad(scenes.peek());
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
+		}
 	}
 
 	public void loadPrevious() {
-		logger.info("#### SCENE TRANSITION START ####");
-		logger.info("# transition type: pop");
-		if (scenes.size() > 1) {
-			onSceneUnload(scenes.pop());
-			onSceneLoad(scenes.peek());
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: pop");
+			if (scenes.size() > 1) {
+				onSceneUnload(scenes.pop());
+				onSceneLoad(scenes.peek());
+			}
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
 		}
-		logger.info("#### SCENE TRANSITION END   ####");
 	}
 
 	public <S extends Scene<S>> void replaceWith(@NonNull Scene<S> next) {
-		logger.info("#### SCENE TRANSITION START ####");
-		logger.info("# transition type: replace");
-		onSceneUnload(scenes.pop());
-		scenes.push(next);
-		next.bindWindow(window);
-		onSceneLoad(next);
-		logger.info("#### SCENE TRANSITION END   ####");
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: replace");
+			onSceneUnload(scenes.pop());
+			scenes.push(next);
+			onSceneLoad(next);
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
+		}
 	}
 
 	private void onSceneLoad(Scene<?> scene) {
