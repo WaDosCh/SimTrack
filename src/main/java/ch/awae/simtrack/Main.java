@@ -3,11 +3,9 @@ package ch.awae.simtrack;
 import javax.swing.SwingUtilities;
 
 import ch.awae.simtrack.core.Controller;
-import ch.awae.simtrack.scene.game.Game;
-import ch.awae.simtrack.scene.game.model.Model;
-import ch.awae.simtrack.scene.game.model.ModelFactory;
+import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.util.MacKeyboardHack;
-import ch.awae.simtrack.window.*;
+import ch.awae.simtrack.window.ResizableWindow;
 
 @SuppressWarnings("javadoc")
 public class Main {
@@ -29,9 +27,8 @@ public class Main {
 		
 		controller.start();
 
-		Model model = ModelFactory.getDefaultModel();
-		Game scene = new Game(controller, model);
-
+		Menu scene = new Menu(controller);
+		
 		controller.loadScene(scene);
 	}
 

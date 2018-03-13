@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import lombok.Getter;
 
 public abstract class Scene<T extends Scene<T>> {
 
 	protected @Getter Input input;
 	protected @Getter Window window;
-	private final Controller controller;
+	protected final Controller controller;
+	protected final Logger logger;
 
 	private List<BaseRenderer<T>> renderers;
 	private List<BaseTicker<T>> tickers;
@@ -21,6 +25,7 @@ public abstract class Scene<T extends Scene<T>> {
 		tickers = new ArrayList<>();
 		this.controller = controller;
 		this.input = controller.getInput();
+		this.logger = LogManager.getLogger();
 	}
 
 	public void addRenderer(BaseRenderer<T> component) {
