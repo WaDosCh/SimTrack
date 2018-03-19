@@ -24,7 +24,8 @@ public class InGameMenu extends GameTool {
 		this.renderer.add(new Button("Resume", input, this::resume));
 		this.renderer.add(new Button("Save", input, this::save));
 		this.renderer.add(new Button("Load", input, this::load));
-		this.renderer.add(new Button("Quit Game", input, () -> System.exit(0)));
+		this.renderer.add(new Button("Quit Game", input, this::quitToMenu));
+		this.renderer.add(new Button("Exit Game", input, () -> System.exit(0)));
 	}
 
 	@OnLoad
@@ -54,6 +55,10 @@ public class InGameMenu extends GameTool {
 		}
 	}
 
+	private void quitToMenu() {
+		controller.transitionToHome();
+	}
+	
 	private void load() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));

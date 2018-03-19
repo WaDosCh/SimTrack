@@ -11,9 +11,9 @@ import javax.swing.JFrame;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
-import ch.awae.simtrack.core.RootWindow;
+import ch.awae.simtrack.core.GameWindow;
 
-public class NativeFullscreen implements RootWindow {
+public class NativeFullscreen implements GameWindow {
 
 	private GraphicsDevice screen;
 	private JFrame window;
@@ -31,6 +31,7 @@ public class NativeFullscreen implements RootWindow {
 		x = bounds.width;
 		y = bounds.height;
 		window.add(canvas);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		System.out.println(screen.isFullScreenSupported());
 	}
 

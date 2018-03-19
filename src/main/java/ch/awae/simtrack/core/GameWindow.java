@@ -1,6 +1,6 @@
 package ch.awae.simtrack.core;
 
-public interface RootWindow extends Window {
+public interface GameWindow extends Window {
 
 	void init(Input input);
 

@@ -5,14 +5,20 @@ import java.awt.FontMetrics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.function.Consumer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Profiler.StringSupplier;
+import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.utils.AccessLock;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -20,16 +26,18 @@ public class Controller {
 
 	private HighPrecisionClock gameClock;
 
-	private RootWindow window;
+	private GameWindow window;
 	private @Getter final Input input;
 	private Stack<Scene<?>> scenes = new Stack<>();
 	private Profiler profiler;
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
+	private final Logger logger = LogManager.getLogger();
+	private final AccessLock sceneStackLock = new AccessLock("scene stack");
 
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
 
-	public Controller(RootWindow window) {
+	public Controller(GameWindow window) {
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		this.window = window;
 		input = new Input();
@@ -75,7 +83,7 @@ public class Controller {
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
 		}
 
-		RootWindow window = this.window;
+		GameWindow window = this.window;
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
 		if (scenes.isEmpty())
@@ -177,33 +185,108 @@ public class Controller {
 	}
 
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
-		scenes.push(next);
-		next.bindWindow(window);
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: push");
+			if (!scenes.isEmpty())
+				onSceneUnload(scenes.peek());
+			scenes.push(next);
+			next.bindWindow(window);
+			onSceneLoad(next);
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
+		}
 	}
 
 	public void loadRoot() {
-		if (scenes.size() == 1)
-			return;
-		while (scenes.size() > 1)
-			scenes.pop();
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: root");
+			if (scenes.size() == 1)
+				return;
+			onSceneUnload(scenes.peek());
+			while (scenes.size() > 1)
+				scenes.pop();
+			onSceneLoad(scenes.peek());
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
+		}
 	}
 
 	public void loadPrevious() {
-		if (scenes.size() > 1)
-			scenes.pop();
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: pop");
+			if (scenes.size() > 1) {
+				onSceneUnload(scenes.pop());
+				onSceneLoad(scenes.peek());
+			}
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
+		}
 	}
 
 	public <S extends Scene<S>> void replaceWith(@NonNull Scene<S> next) {
-		scenes.pop();
-		loadScene(next);
+		sceneStackLock.testAndLock();
+		try {
+			logger.info("#### SCENE TRANSITION START ####");
+			logger.info("# transition type: replace");
+			onSceneUnload(scenes.pop());
+			scenes.push(next);
+			onSceneLoad(next);
+			logger.info("#### SCENE TRANSITION END   ####");
+		} finally {
+			sceneStackLock.unlock();
+		}
+	}
+
+	private void onSceneLoad(Scene<?> scene) {
+		logger.info("loading scene " + scene);
+		setTitle(null);
+		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
+		try {
+			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
+		} catch (NoSuchMethodException e) {
+			logger.info("no @OnLoad method found");
+		} catch (
+				IllegalAccessException
+				| IllegalArgumentException
+				| InvocationTargetException e) {
+			logger.error("error in @OnLoad method", e);
+		}
+	}
+
+	private void onSceneUnload(Scene<?> scene) {
+		logger.info("unloading scene " + scene);
+		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
+		try {
+			reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
+		} catch (NoSuchMethodException e) {
+			logger.info("no @OnUnload method found");
+		} catch (
+				IllegalAccessException
+				| IllegalArgumentException
+				| InvocationTargetException e) {
+			logger.error("error in @OnUnload method", e);
+		}
 	}
 
 	public void setTitle(String title) {
-		if (window != null && !scenes.isEmpty())
-			this.window.setTitle(scenes.peek().getClass().getSimpleName() + " - " + title);
+		if (window != null && !scenes.isEmpty()) {
+			if (title != null && !title.isEmpty())
+				this.window.setTitle(scenes.peek().getClass().getSimpleName() + " - " + title);
+			else
+				this.window.setTitle(scenes.peek().getClass().getSimpleName());
+		}
 	}
 
-	public void replaceWindow(RootWindow window) {
+	public void replaceWindow(GameWindow window) {
 		this.window = window;
 	}
 
