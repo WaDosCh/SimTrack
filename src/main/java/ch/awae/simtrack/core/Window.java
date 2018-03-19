@@ -1,10 +1,10 @@
 package ch.awae.simtrack.core;
 
+import java.awt.Dimension;
+
 public interface Window {
 
-	int getCanvasWidth();
-
-	int getCanvasHeight();
+	Dimension getCanvasSize();
 
 	void setTitle(String title);
 

@@ -39,13 +39,8 @@ public class ResizableWindow implements GameWindow {
 	}
 
 	@Override
-	public int getCanvasWidth() {
-		return canvas.getWidth();
-	}
-
-	@Override
-	public int getCanvasHeight() {
-		return canvas.getHeight();
+	public Dimension getCanvasSize() {
+		return canvas.getSize();
 	}
 
 	@Override

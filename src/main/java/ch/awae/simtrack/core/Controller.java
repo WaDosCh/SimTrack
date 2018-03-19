@@ -79,7 +79,7 @@ public class Controller {
 		if (!snapshotRequests.isEmpty()) {
 			requests = snapshotRequests;
 			snapshotRequests = new ArrayList<>();
-			snapshot = new BufferedImage(window.getCanvasWidth(), window.getCanvasHeight(), BufferedImage.TYPE_INT_RGB);
+			snapshot = new BufferedImage(window.getCanvasSize().width, window.getCanvasSize().height, BufferedImage.TYPE_INT_RGB);
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
 		}
 
@@ -98,7 +98,7 @@ public class Controller {
 		Scene<?> scene = scenes.peek();
 
 		if (window.resized()) {
-			scene.screenResized(window.getCanvasWidth(), window.getCanvasHeight());
+			scene.screenResized(window.getCanvasSize().width, window.getCanvasSize().height);
 		}
 
 		int index = 0;

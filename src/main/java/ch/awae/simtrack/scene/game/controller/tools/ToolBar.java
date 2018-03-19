@@ -132,9 +132,9 @@ public class ToolBar extends GameTool {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= controller.getHorizontalScreenSize() / 2;
+		p.x -= controller.getScreenSize().width / 2;
 		p.x += 550;
-		p.y -= controller.getVerticalScreenSize();
+		p.y -= controller.getScreenSize().height;
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;
@@ -146,7 +146,7 @@ public class ToolBar extends GameTool {
 
 	@Override
 	public void render(Graphics g, Game view) {
-		g.translate(view.getHorizontalScreenSize() / 2 - 500, view.getVerticalScreenSize() - 50);
+		g.translate(view.getScreenSize().width / 2 - 500, view.getScreenSize().height - 50);
 		g.setStroke(new BasicStroke(4));
 		for (int i = 0; i < 11; i++) {
 			// box

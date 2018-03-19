@@ -1,5 +1,6 @@
 package ch.awae.simtrack.scene.game.view;
 
+import java.awt.Dimension;
 import java.awt.Point;
 
 import ch.awae.simtrack.core.Graphics;
@@ -57,10 +58,9 @@ public class ViewPort {
 	}
 
 	public void update() {
-		int hScreen = this.owner.getHorizontalScreenSize();
-		int vScreen = this.owner.getVerticalScreenSize();
-		this.screenDimensions = new PointI(hScreen, vScreen);
-		double minH = hScreen / (this.owner.getModel().getHorizontalSize() - 1.0);
+		Dimension size = this.owner.getScreenSize();
+		this.screenDimensions = new PointI(size.width, size.height);
+		double minH = size.width / (this.owner.getModel().getHorizontalSize() - 1.0);
 		if (minH > this.minZoom)
 			this.minZoom = minH * 0.01;
 		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,

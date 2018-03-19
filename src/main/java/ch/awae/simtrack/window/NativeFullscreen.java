@@ -1,6 +1,7 @@
 package ch.awae.simtrack.window;
 
 import java.awt.Canvas;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -36,13 +37,8 @@ public class NativeFullscreen implements GameWindow {
 	}
 
 	@Override
-	public int getCanvasWidth() {
-		return x;
-	}
-
-	@Override
-	public int getCanvasHeight() {
-		return y;
+	public Dimension getCanvasSize() {
+		return new Dimension(x,y);
 	}
 
 	@Override

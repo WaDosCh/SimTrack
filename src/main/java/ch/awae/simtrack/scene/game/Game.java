@@ -1,5 +1,7 @@
 package ch.awae.simtrack.scene.game;
 
+import java.awt.Dimension;
+
 import ch.awae.simtrack.core.*;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
@@ -102,12 +104,8 @@ public class Game extends Scene<Game> {
 		return this.model;
 	}
 
-	public int getHorizontalScreenSize() {
-		return window.getCanvasWidth();
-	}
-
-	public int getVerticalScreenSize() {
-		return window.getCanvasHeight();
+	public Dimension getScreenSize() {
+		return window.getCanvasSize();
 	}
 
 	public ViewPort getViewPort() {

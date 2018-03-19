@@ -1,6 +1,7 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.text.DecimalFormat;
@@ -116,12 +117,11 @@ public class DebugToolsRenderer implements Renderer {
 	}
 
 	private void renderUserGuide(Graphics2D g, Game view) {
-		int w = view.getHorizontalScreenSize();
-		int h = view.getVerticalScreenSize();
+		Dimension size = view.getScreenSize();
 		g.setColor(new Color(255, 255, 255, 225));
-		g.fillRect(50, 50, w - 100, h - 100 - Design.toolbarHeight);
+		g.fillRect(50, 50, size.width - 100, size.height - 100 - Design.toolbarHeight);
 		g.setColor(new Color(128, 128, 128, 255));
-		g.drawRect(50, 50, w - 100, h - 100 - Design.toolbarHeight);
+		g.drawRect(50, 50, size.width - 100, size.height - 100 - Design.toolbarHeight);
 
 		int y = 80;
 		g.setColor(Color.black);

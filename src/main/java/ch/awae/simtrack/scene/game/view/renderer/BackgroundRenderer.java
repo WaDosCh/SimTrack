@@ -1,6 +1,7 @@
 package ch.awae.simtrack.scene.game.view.renderer;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
@@ -12,10 +13,9 @@ public class BackgroundRenderer implements Renderer {
 
 	@Override
 	public void render(Graphics g, Game view) {
-		int x = view.getHorizontalScreenSize();
-		int y = view.getVerticalScreenSize();
+		Dimension size = view.getScreenSize();
 		g.setColor(color);
-		g.fillRect(0, 0, x, y);
+		g.fillRect(0, 0, size.width,size.height);
 	}
 
 }

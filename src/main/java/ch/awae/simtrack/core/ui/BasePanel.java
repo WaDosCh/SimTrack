@@ -36,9 +36,12 @@ public class BasePanel implements Component {
 
 	@Override
 	public void render(Graphics g, Window w) {
-		if (this.needsLayout)
-			layout(margin, margin, w.getCanvasWidth() - 2 * margin,
-					w.getCanvasHeight() - Design.toolbarHeight - 2 * margin);
+		
+		if (this.needsLayout) {
+			Dimension size = w.getCanvasSize();
+			layout(margin, margin, size.width - 2 * margin,
+					size.height - Design.toolbarHeight - 2 * margin);
+		}
 
 		g.setColor(Design.almostOpaque);
 		g.fill(this.rect);
