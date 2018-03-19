@@ -72,6 +72,22 @@ public class Train implements Entity {
 					.add(RandomJS.getObject(TrainElementConfiguration.wagon1, TrainElementConfiguration.wagon2));
 		}
 	}
+	
+	/**
+	 * @return
+	 */
+	private double getAccelerationPerSecond() {
+		//TODO: implement value based on power of locomotives and weight of wagons
+		return 0.5;
+	}
+	
+	private double getTimeToFullStop() {
+		return this.speed / getAccelerationPerSecond();
+	}
+	
+	private double getBreakingDistance() {
+		return Math.pow(this.speed, 2) / (2*this.getAccelerationPerSecond());
+	}
 
 	private void setStartingPosition(Model model, TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
 		this.currentTileTargetEdge = start;
