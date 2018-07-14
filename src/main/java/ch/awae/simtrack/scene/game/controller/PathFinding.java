@@ -39,7 +39,7 @@ public class PathFinding implements BaseTicker<Game>, GraphDataProvider<TileEdge
 		this.model = model;
 		this.connectionCache = new EnhancedH2<>();
 		this.modelObserver = this.model.createObserver();
-		this.pathfinder = new AStarPathfinder<>(this);
+		this.pathfinder = new DijkstraPathfinder<>(this);
 	}
 
 	/**
