@@ -16,7 +16,7 @@ import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
-import ch.awae.simtrack.util.T2;
+import ch.awae.utils.functional.T2;
 
 /**
  * Track tool-bar used for track selection while editing the board

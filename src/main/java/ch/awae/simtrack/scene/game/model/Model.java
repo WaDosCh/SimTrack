@@ -22,8 +22,8 @@ import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.TrackTile;
 import ch.awae.simtrack.util.Observable;
 import ch.awae.simtrack.util.ObservableHandler;
-import ch.awae.simtrack.util.T2;
-import ch.awae.simtrack.util.T3;
+import ch.awae.utils.functional.T2;
+import ch.awae.utils.functional.T3;
 import lombok.Getter;
 import lombok.NonNull;
 

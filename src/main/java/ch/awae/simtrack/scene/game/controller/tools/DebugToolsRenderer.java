@@ -20,7 +20,7 @@ import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 import ch.awae.simtrack.util.Resource;
-import ch.awae.simtrack.util.T2;
+import ch.awae.utils.functional.T2;
 
 public class DebugToolsRenderer implements Renderer {
 
@@ -53,7 +53,7 @@ public class DebugToolsRenderer implements Renderer {
 			view.getViewPort().focusHex(t.getKey(), g);
 			g.setFont(g.getFont().deriveFont((float) 20.0));
 			String txt = t.getValue()._1.getId() + "";
-			for (int i = 1; i < t.getValue().get_2(); i++)
+			for (int i = 1; i < t.getValue()._2; i++)
 				txt += "+";
 			int w = g.getFontMetrics().stringWidth(txt);
 			int h = g.getFontMetrics().getAscent();

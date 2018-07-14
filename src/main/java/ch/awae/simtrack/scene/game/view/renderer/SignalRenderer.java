@@ -10,7 +10,7 @@ import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.util.T2;
+import ch.awae.utils.functional.T2;
 
 public class SignalRenderer implements Renderer {
 
