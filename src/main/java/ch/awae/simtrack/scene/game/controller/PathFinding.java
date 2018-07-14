@@ -19,24 +19,27 @@ import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Observer;
 import ch.awae.simtrack.util.T2;
-import ch.awae.simtrack.util.T3;
-import ch.judos.generic.data.HashMapList;
+import ch.awae.utils.pathfinding.*;
+import ch.judos.generic.data.HashMap2;
 import lombok.Getter;
+import lombok.val;
 
-public class PathFinding implements BaseTicker<Game> {
+public class PathFinding implements BaseTicker<Game>, GraphDataProvider<TileEdgeCoordinate> {
 
 	@Getter
 	private Model model;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private HashMapList<TileEdgeCoordinate, T2<TileEdgeCoordinate, Float>> connectionCache;
+	private EnhancedH2<TileEdgeCoordinate, TileEdgeCoordinate, Float> connectionCache;
 	private Observer modelObserver;
+	private Pathfinder<TileEdgeCoordinate> pathfinder;
 
 	public PathFinding(Model model) {
 		this.model = model;
-		this.connectionCache = new HashMapList<>();
+		this.connectionCache = new EnhancedH2<>();
 		this.modelObserver = this.model.createObserver();
+		this.pathfinder = new AStarPathfinder<>(this);
 	}
 
 	/**
@@ -51,9 +54,9 @@ public class PathFinding implements BaseTicker<Game> {
 	}
 
 	private void buildGraphForTileCoordinate(TileCoordinate tileCoordinate) {
-		List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> paths = this.model.getPaths(tileCoordinate);
-		for (T3<TileEdgeCoordinate, TileEdgeCoordinate, Float> path : paths) {
-			this.connectionCache.put(path._1, new T2<>(path._2, path._3));
+		val paths = this.model.getPaths(tileCoordinate);
+		for (val path : paths) {
+			this.connectionCache.put(path._1, path._2, path._3);
 		}
 	}
 
@@ -61,7 +64,7 @@ public class PathFinding implements BaseTicker<Game> {
 	 * @param start
 	 * @param end
 	 * @return Returns a path of TileEdgeCoordinates from start (exclusive: the
-	 *         train is anyway already on this edge) to end (inclusiv)<br>
+	 *         train is anyway already on this edge) to end (inclusive)<br>
 	 *         Use pop operation to get the next tileEdgeCoordinate where the
 	 *         train should be heading.<br>
 	 *         <b>Note:</b> If there is no path, null will be returned.
@@ -73,58 +76,26 @@ public class PathFinding implements BaseTicker<Game> {
 		}
 		this.modelObserver.ifChanged(this::buildGraph);
 
-		// active search elements
-		ArrayList<T2<TileEdgeCoordinate, Float>> searchGraph = new ArrayList<>();
-		searchGraph.add(new T2<>(start, 0f));
+		val result = this.pathfinder.execute(start, end);
 
-		// how did I get here, and how much did it cost *to* here
-		HashMap<TileEdgeCoordinate, T2<TileEdgeCoordinate, Float>> wayBack = new HashMap<>();
-
-		while (true) {
-			// check outgoing paths from the best tile (shortest path + dist to
-			// target)
-			T2<TileEdgeCoordinate, Float> current = searchGraph.remove(0);
-
-			// goal reached?
-			if (current._1.equals(end))
-				break;
-
-			// search all paths from here
-			if (this.connectionCache.containsKey(current._1)) {
-				ArrayList<T2<TileEdgeCoordinate, Float>> connections = this.connectionCache.getList(current._1);
-				for (T2<TileEdgeCoordinate, Float> connection : connections) {
-					float cost = current._2 + connection._2;
-					// only use this connection if there is no previous to this
-					// edge, or this path is shorter
-					if (!wayBack.containsKey(connection._1) || cost < wayBack.get(connection._1)._2) {
-
-						wayBack.put(connection._1, new T2<>(current._1, cost));
-
-						T2<TileEdgeCoordinate, Float> newElem = new T2<>(connection._1, current._2 + connection._2);
-						searchGraph.add(newElem);
-					}
-				}
-			}
-
-			if (searchGraph.size() == 0)
+		switch (result.getType()) {
+			case SUCCESS:
+				logger.debug("found a path of length " + result.getPath().size() + " (steps: " + result.getSearchSteps()
+						+ ", time: " + result.getSearchTime() + "ms).");
+				// the result path may be a list but is in reverse order
+				val stack = new Stack<TileEdgeCoordinate>();
+				stack.addAll(result.getPath());
+				return stack;
+			case FAILURE:
+				logger.debug("no path found (steps: " + result.getSearchSteps() + ", time: " + result.getSearchTime()
+						+ "ms)!");
 				return null;
-
-			Collections.sort(searchGraph, (_1, _2) -> this.searchComparator(_1, _2, end.tile));
+			case TIMEOUT:
+				logger.warn("pathfinder timeout");
+				return null;
+			default:
+				throw new AssertionError();
 		}
-
-		// track back found path
-		Stack<TileEdgeCoordinate> path = new Stack<>();
-		TileEdgeCoordinate current = end;
-		do {
-			path.push(current);
-			T2<TileEdgeCoordinate, Float> last = wayBack.get(current);
-			if (last == null) {
-				logger.error("Found target, but could not trace back to start");
-				return null;
-			}
-			current = last._1;
-		} while (!current.equals(start));
-		return path;
 	}
 
 	/**
@@ -158,7 +129,8 @@ public class PathFinding implements BaseTicker<Game> {
 		this.modelObserver = this.model.createObserver();
 	}
 
-	public void tick() {
+	@Override
+	public void tick(Game scene) {
 		int maxWorkPerTick = 5;
 		LinkedList<PathFindingRequest> queue = this.model.getPathFindingQueue();
 		while (maxWorkPerTick-- > 0 && queue.size() > 0) {
@@ -191,8 +163,22 @@ public class PathFinding implements BaseTicker<Game> {
 	}
 
 	@Override
-	public void tick(Game scene) {
-		this.tick();
+	public Iterable<TileEdgeCoordinate> getNeighbours(TileEdgeCoordinate vertex) {
+		return this.connectionCache.getInnerKeySet(vertex);
 	}
 
+	@Override
+	public double getDistance(TileEdgeCoordinate from, TileEdgeCoordinate to) {
+		return this.connectionCache.get(from, to);
+	}
+
+}
+
+class EnhancedH2<K1, K2, V> extends HashMap2<K1, K2, V> {
+	public Set<K2> getInnerKeySet(K1 key) {
+		val map = super.map1.get(key);
+		if (map == null)
+			return Collections.emptySet();
+		return map.keySet();
+	}
 }
