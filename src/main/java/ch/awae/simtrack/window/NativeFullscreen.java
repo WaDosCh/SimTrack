@@ -42,11 +42,6 @@ public class NativeFullscreen implements GameWindow {
 	}
 
 	@Override
-	public void setTitle(String title) {
-		// title not supported in fullscreen mode
-	}
-
-	@Override
 	public Input getInput() {
 		return input;
 	}

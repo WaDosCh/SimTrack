@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.util.Properties;
+import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.core.GameWindow;
 
 public class ResizableWindow implements GameWindow {
@@ -31,7 +33,8 @@ public class ResizableWindow implements GameWindow {
 	};
 
 	public ResizableWindow(int x, int y) {
-		window = new JFrame("SimTrack");
+		Properties p = Resource.getProperties("application.properties", "");
+		window = new JFrame("SimTrack "+p.getString("version"));
 		canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(x, y));
 		window.add(canvas);
@@ -41,14 +44,6 @@ public class ResizableWindow implements GameWindow {
 	@Override
 	public Dimension getCanvasSize() {
 		return canvas.getSize();
-	}
-
-	@Override
-	public void setTitle(String title) {
-		if (title == null || title.isEmpty())
-			window.setTitle("SimTrack");
-		else
-			window.setTitle("SimTrack - " + title);
 	}
 
 	@Override

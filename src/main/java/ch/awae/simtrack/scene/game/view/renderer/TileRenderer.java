@@ -34,7 +34,7 @@ public class TileRenderer implements Renderer {
 	private static final Stroke arrowStroke;
 
 	static {
-		Properties props = Resource.getProperties("renderer.properties");
+		Properties props = Resource.getConfigProperties("renderer.properties");
 
 		bedColour = props.getColor("railbedColor");
 		bgColour = props.getColor("grassColor");

@@ -27,7 +27,7 @@ public class Design {
 	public static final Color checkboxNotSelected;
 
 	static {
-		Properties props = Resource.getProperties("design.properties");
+		Properties props = Resource.getConfigProperties("design.properties");
 
 		toolbarHeight = props.getInt("toolbarHeight");
 		buttonTextMarginX = props.getInt("buttonMarginX");

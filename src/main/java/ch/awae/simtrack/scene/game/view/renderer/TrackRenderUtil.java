@@ -30,7 +30,7 @@ public class TrackRenderUtil {
 	private final static double halfSide = (int) (50 / Math.sqrt(3));
 
 	static {
-		Properties props = Resource.getProperties("trackRenderer.properties");
+		Properties props = Resource.getConfigProperties("trackRenderer.properties");
 
 		sleeperCount = props.getInt("sleeperCount");
 		sleeperWidth = props.getInt("sleeperWidth");

@@ -180,7 +180,7 @@ public class Controller {
 			renderers.add(renderer::getName);
 		}
 
-		int samplingRate = Resource.getProperties("core.properties").getInt("profiler.sampleRate");
+		int samplingRate = Resource.getConfigProperties("core.properties").getInt("profiler.sampleRate");
 		profiler = new Profiler(samplingRate, tickers, renderers);
 	}
 
@@ -248,7 +248,6 @@ public class Controller {
 
 	private void onSceneLoad(Scene<?> scene) {
 		logger.debug("loading scene " + scene);
-		setTitle(null);
 		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
 		try {
 			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
@@ -274,15 +273,6 @@ public class Controller {
 				| IllegalArgumentException
 				| InvocationTargetException e) {
 			logger.error("error in @OnUnload method", e);
-		}
-	}
-
-	public void setTitle(String title) {
-		if (window != null && !scenes.isEmpty()) {
-			if (title != null && !title.isEmpty())
-				this.window.setTitle(scenes.peek().getClass().getSimpleName() + " - " + title);
-			else
-				this.window.setTitle(scenes.peek().getClass().getSimpleName());
 		}
 	}
 

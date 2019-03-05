@@ -6,8 +6,6 @@ public interface Window {
 
 	Dimension getCanvasSize();
 
-	void setTitle(String title);
-
 	Input getInput();
 
 }

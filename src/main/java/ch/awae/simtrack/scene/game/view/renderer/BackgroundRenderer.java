@@ -9,7 +9,7 @@ import ch.awae.simtrack.util.Resource;
 
 public class BackgroundRenderer implements Renderer {
 
-	private Color color = Resource.getProperties("renderer.properties").getColor("grassColor");
+	private Color color = Resource.getConfigProperties("renderer.properties").getColor("grassColor");
 
 	@Override
 	public void render(Graphics g, Game view) {

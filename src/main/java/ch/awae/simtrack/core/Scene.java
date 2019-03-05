@@ -35,9 +35,9 @@ public abstract class Scene<T extends Scene<T>> {
 	public void addTicker(BaseTicker<T> component) {
 		tickers.add(component);
 	}
-
-	public void setWindowTitle(String title) {
-		this.controller.setTitle(title);
+	
+	public String getSceneName() {
+		return this.getClass().getSimpleName();
 	}
 
 	public final <S extends Scene<S>> void transitionTo(Scene<S> next) {

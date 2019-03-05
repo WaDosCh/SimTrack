@@ -89,11 +89,15 @@ public final class Resource {
 
 	private static Cache<String, Properties> propertyCache = CollectionUtil.softValueCache();
 
+	public static Properties getConfigProperties(String id) {
+		return getProperties(id, "config/");
+	}
+
 	@SneakyThrows(ExecutionException.class)
-	public static Properties getProperties(String id) {
+	public static Properties getProperties(String id, String path) {
 		return propertyCache.get(id, () -> {
 			java.util.Properties props = new java.util.Properties();
-			try (InputStream stream = asStream("config/" + id)) {
+			try (InputStream stream = asStream(path + id)) {
 				props.load(stream);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -102,8 +106,7 @@ public final class Resource {
 			for (Entry<Object, Object> entry : props.entrySet()) {
 				logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
 			}
-			Properties p = new Properties(props);
-			return p;
+			return new Properties(props);
 		});
 	}
 

@@ -129,7 +129,6 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 
 			this.currentTool = next;
 			this.renderer = this.currentTool.getRenderer();
-			this.scene.setWindowTitle(toolClass.getSimpleName());
 
 			return true;
 

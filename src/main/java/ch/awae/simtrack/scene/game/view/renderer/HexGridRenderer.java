@@ -17,7 +17,7 @@ import ch.awae.simtrack.util.Resource;
  */
 public class HexGridRenderer implements Renderer {
 
-	private final static Color gridColor = Resource.getProperties("renderer.properties").getColor("gridColor");
+	private final static Color gridColor = Resource.getConfigProperties("renderer.properties").getColor("gridColor");
 
 	@Override
 	public void render(Graphics g, Game view) {
