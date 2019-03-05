@@ -43,7 +43,7 @@ public class PathFindingTool extends GameTool {
 		this.start = mouseTile;
 		this.startEdge = this.startEdge.getNeighbour(true);
 		if (this.start != null) {
-			logger.info("Start:" + new TileEdgeCoordinate(this.start, this.startEdge));
+			logger.debug("Start:" + new TileEdgeCoordinate(this.start, this.startEdge));
 		}
 		updatePath();
 	}
@@ -52,7 +52,7 @@ public class PathFindingTool extends GameTool {
 		this.end = mouseTile;
 		this.endEdge = this.endEdge.getNeighbour(true);
 		if (this.end != null)
-			logger.info("Ende: " + new TileEdgeCoordinate(this.end, this.endEdge));
+			logger.debug("Ende: " + new TileEdgeCoordinate(this.end, this.endEdge));
 		updatePath();
 	}
 

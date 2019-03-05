@@ -42,7 +42,7 @@ public abstract class GameTool extends EventDrivenTool<Game> {
 		if (autoUnload && drop.isPressed() && drop.isEdge()) {
 			drop.consume();
 			editor.loadTool(null);
-			logger.info("auto-unloading tool");
+			logger.debug("auto-unloading tool");
 			return;
 		}
 		super.tick(scene);

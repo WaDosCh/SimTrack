@@ -5,7 +5,6 @@ import java.awt.FontMetrics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -79,7 +78,8 @@ public class Controller {
 		if (!snapshotRequests.isEmpty()) {
 			requests = snapshotRequests;
 			snapshotRequests = new ArrayList<>();
-			snapshot = new BufferedImage(window.getCanvasSize().width, window.getCanvasSize().height, BufferedImage.TYPE_INT_RGB);
+			snapshot = new BufferedImage(window.getCanvasSize().width, window.getCanvasSize().height,
+					BufferedImage.TYPE_INT_RGB);
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
 		}
 
@@ -188,7 +188,7 @@ public class Controller {
 		sceneStackLock.lock();
 		try {
 			logger.debug("#### SCENE TRANSITION START ####");
-			logger.info("transition push: {}", next.getClass().getSimpleName());
+			logger.info("scene transition push: {}", next.getSceneName());
 			if (!scenes.isEmpty())
 				onSceneUnload(scenes.peek());
 			scenes.push(next);
@@ -203,15 +203,15 @@ public class Controller {
 	public void loadRoot() {
 		sceneStackLock.lock();
 		try {
-			logger.info("#### SCENE TRANSITION START ####");
-			logger.info("# transition type: root");
+			logger.debug("#### SCENE TRANSITION START ####");
+			logger.info("scene transition to root");
 			if (scenes.size() == 1)
 				return;
 			onSceneUnload(scenes.peek());
 			while (scenes.size() > 1)
 				scenes.pop();
 			onSceneLoad(scenes.peek());
-			logger.info("#### SCENE TRANSITION END   ####");
+			logger.debug("#### SCENE TRANSITION END   ####");
 		} finally {
 			sceneStackLock.unlock();
 		}
@@ -220,27 +220,14 @@ public class Controller {
 	public void loadPrevious() {
 		sceneStackLock.lock();
 		try {
-			logger.info("#### SCENE TRANSITION START ####");
-			logger.info("# transition type: pop");
+			logger.debug("#### SCENE TRANSITION START ####");
+			logger.info("scene transition pop from {} to {}", scenes.peek().getSceneName(),
+					scenes.get(scenes.size() - 2).getSceneName());
 			if (scenes.size() > 1) {
 				onSceneUnload(scenes.pop());
 				onSceneLoad(scenes.peek());
 			}
-			logger.info("#### SCENE TRANSITION END   ####");
-		} finally {
-			sceneStackLock.unlock();
-		}
-	}
-
-	public <S extends Scene<S>> void replaceWith(@NonNull Scene<S> next) {
-		sceneStackLock.lock();
-		try {
-			logger.info("#### SCENE TRANSITION START ####");
-			logger.info("# transition type: replace");
-			onSceneUnload(scenes.pop());
-			scenes.push(next);
-			onSceneLoad(next);
-			logger.info("#### SCENE TRANSITION END   ####");
+			logger.debug("#### SCENE TRANSITION END   ####");
 		} finally {
 			sceneStackLock.unlock();
 		}

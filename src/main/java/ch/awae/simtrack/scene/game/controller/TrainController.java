@@ -63,7 +63,7 @@ public class TrainController implements BaseTicker<Game> {
 		Train t = new Train(model, start, new PathFindingOptions(Type.RandomTarget),
 				TrainElementConfiguration.locomotive1);
 		model.getEntities().add(t);
-		logger.info("Train spawned at " + start);
+		logger.debug("Train {} spawned at {}", t, start);
 	}
 
 	public void requestSpawnTrain() {

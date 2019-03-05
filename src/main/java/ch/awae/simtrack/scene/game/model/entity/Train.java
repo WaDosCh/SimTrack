@@ -229,7 +229,7 @@ public class Train implements Entity {
 				this.pathFindingOptions, (path) -> {
 					this.path = path;
 					this.pathFindingOptions = null;
-					logger.info(this + " found path to: " + path.firstElement());
+					logger.debug(this + " found path to: " + path.firstElement());
 				}, () -> {
 					this.pathFindingOptions.searchAgainInTicks = 60;
 					logger.info("No path found for " + this + " trying again later");

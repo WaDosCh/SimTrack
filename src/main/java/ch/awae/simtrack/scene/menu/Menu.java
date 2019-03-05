@@ -38,18 +38,18 @@ public class Menu extends Scene<Menu> {
 	}
 
 	private void loadScenario() {
-		logger.info("LOAD SCENARIO");
+		logger.debug("LOAD SCENARIO");
 	}
 
 	private void newGame() {
-		logger.info("NEW GAME");
+		logger.debug("NEW GAME");
 		Model model = ModelFactory.getDefaultModel();
 		Game game = new Game(controller, model);
 		transitionTo(game);
 	}
 
 	private void loadGame() {
-		logger.info("LOAD GAME");
+		logger.debug("LOAD GAME");
 		ObjectInputStream in;
 		try {
 			in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
@@ -65,7 +65,7 @@ public class Menu extends Scene<Menu> {
 	}
 
 	private void openOptions() {
-		logger.info("OPTIONS");
+		logger.debug("OPTIONS");
 	}
 
 	private void exitGame() {

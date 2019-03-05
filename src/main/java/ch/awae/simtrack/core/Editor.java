@@ -100,7 +100,7 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 	public boolean loadTool(Class<? extends Tool> toolClazz, Object... args) {
 		@NonNull
 		Class<? extends Tool> toolClass = (toolClazz == null) ? baseToolClass : toolClazz;
-		logger.info("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
+		logger.debug("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
 		Tool<T> next = this.tools.get(toolClass);
 
 		if (next == null) {
