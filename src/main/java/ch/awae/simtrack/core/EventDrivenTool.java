@@ -14,7 +14,6 @@ import ch.awae.simtrack.scene.game.Game;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
-//TODO: maybe implement abstract getRenderer instead of implementing BaseRenderer ?
 public abstract class EventDrivenTool implements Tool, BaseRenderer {
 
 	private List<Runnable> drivers = new ArrayList<>();

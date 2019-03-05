@@ -43,7 +43,6 @@ public class BasePanel implements Component, BaseRenderer {
 		render(graphics, this.window);
 	}
 
-	@Override
 	public void render(Graphics g, Window w) {
 
 		if (this.needsLayout) {

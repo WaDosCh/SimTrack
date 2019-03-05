@@ -44,7 +44,7 @@ public class InGameSaveMenu extends GameTool {
 
 	@Override
 	public void render(Graphics graphics) {
-		this.panel.render(graphics, this.scene.getWindow());
+		this.panel.render(graphics);
 	}
 
 }
