@@ -45,7 +45,7 @@ public class DebugToolsView extends GameTool {
 		}));
 		this.renderer.add(new CheckboxButton("Pause", input, game.getPaused()));
 		this.renderer.add(new Button("Screenshot", input, () -> {
-			this.controller.requestSnapshot(image -> {
+			this.scene.requestSnapshot(image -> {
 				try {
 					ImageIO.write(ImageUtils.toBufferedImage(image), "jpg", new File("screenshot.jpg"));
 				} catch (IOException e) {

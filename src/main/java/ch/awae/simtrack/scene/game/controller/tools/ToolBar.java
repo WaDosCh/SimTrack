@@ -132,9 +132,9 @@ public class ToolBar extends GameTool {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= controller.getScreenSize().width / 2;
+		p.x -= scene.getScreenSize().width / 2;
 		p.x += 550;
-		p.y -= controller.getScreenSize().height;
+		p.y -= scene.getScreenSize().height;
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;

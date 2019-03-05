@@ -31,7 +31,7 @@ public class PathFindingTool extends GameTool {
 	public PathFindingTool(Editor<Game> editor) {
 		super(editor, GameTool.UnloadAction.UNLOAD);
 
-		this.pathFinder = controller.getPathfinder();
+		this.pathFinder = scene.getPathfinder();
 		this.startEdge = Edge.RIGHT;
 		this.endEdge = Edge.RIGHT;
 

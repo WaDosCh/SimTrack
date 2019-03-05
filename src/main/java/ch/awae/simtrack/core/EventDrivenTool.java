@@ -18,14 +18,14 @@ public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, Ba
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
 	protected final Editor<T> editor;
-	protected final T controller;
+	protected final T scene;
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected final Logger logger = LogManager.getLogger(getClass());
 
 	public EventDrivenTool(Editor<T> editor) {
 		this.input = editor.getInput();
 		this.editor = editor;
-		this.controller = editor.getScene();
+		this.scene = editor.getScene();
 	}
 
 	protected void preTick(T scene) {

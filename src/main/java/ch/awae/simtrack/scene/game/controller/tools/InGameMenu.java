@@ -17,7 +17,7 @@ public class InGameMenu extends GameTool {
 	private BasePanel renderer;
 
 	public InGameMenu(Editor<Game> editor) {
-		super(editor, GameTool.UnloadAction.UNLOAD);
+		super(editor, UnloadAction.UNLOAD);
 
 		this.renderer = new BasePanel(input, true);
 		this.renderer.add(new Label("Ingame Menu", true));
@@ -56,15 +56,15 @@ public class InGameMenu extends GameTool {
 	}
 
 	private void quitToMenu() {
-		controller.transitionToHome();
+		scene.transitionToHome();
 	}
-	
+
 	private void load() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
 			Model model = (Model) in.readObject();
 			in.close();
-			this.controller.loadModel(model);
+			this.scene.loadModel(model);
 			this.editor.loadTool(FreeTool.class);
 		} catch (
 				IOException
