@@ -12,21 +12,16 @@ import lombok.Getter;
 
 public abstract class GameTool extends EventDrivenTool<Game> {
 
-	public enum UnloadAction {
-		UNLOAD,
-		IGNORE;
-	}
-
 	protected @Getter TileCoordinate mouseTile = null;
 	protected @Getter SceneCoordinate mouseScene = null;
 	protected Model model = null;
 	private final Binding drop;
 	private final boolean autoUnload;
 
-	public GameTool(Editor<Game> editor, GameTool.UnloadAction action) {
+	public GameTool(Editor<Game> editor, boolean autoUnloadTool) {
 		super(editor);
 		drop = input.getBinding(Action.DROP_TOOL);
-		autoUnload = action == GameTool.UnloadAction.UNLOAD;
+		autoUnload = autoUnloadTool;
 	}
 
 	@Override

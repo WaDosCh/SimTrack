@@ -14,7 +14,7 @@ import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
 //TODO: maybe implement abstract getRenderer instead of implementing BaseRenderer ?
-public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, BaseRenderer<T> {
+public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, BaseRenderer {
 
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
@@ -203,7 +203,7 @@ public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, Ba
 	}
 
 	@Override
-	public BaseRenderer<T> getRenderer() {
+	public BaseRenderer getRenderer() {
 		return this;
 	}
 

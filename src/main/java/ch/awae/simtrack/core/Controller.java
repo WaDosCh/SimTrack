@@ -51,7 +51,6 @@ public class Controller implements SceneController {
 		this.gameClock.stop();
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void tick() {
 
 		long newStart = System.currentTimeMillis();
@@ -102,11 +101,11 @@ public class Controller implements SceneController {
 		for (BaseRenderer renderer : scene.getRenderers()) {
 			profiler.startSample(true, index);
 			GraphicsStack stack = graphics.getStack();
-			renderer.render(graphics, scene);
+			renderer.render(graphics);
 			graphics.setStack(stack);
 			if (snapshotGraphics != null) {
 				GraphicsStack stack2 = snapshotGraphics.getStack();
-				renderer.render(snapshotGraphics, scene);
+				renderer.render(snapshotGraphics);
 				snapshotGraphics.setStack(stack2);
 			}
 			index++;
@@ -155,7 +154,6 @@ public class Controller implements SceneController {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void createProfiler() {
 		List<StringSupplier> tickers = new ArrayList<>();
 		for (BaseTicker ticker : this.currentScene.getTickers()) {

@@ -17,6 +17,7 @@ import ch.awae.simtrack.scene.game.model.tile.TrackTile;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.FusedTrackFactory;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackValidator;
+import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
 import lombok.Getter;
 
@@ -43,7 +44,7 @@ public class BuildTool extends GameTool {
 	 *            the editor the build tool will operate under
 	 */
 	public BuildTool(Editor<Game> editor) {
-		super(editor, GameTool.UnloadAction.UNLOAD);
+		super(editor, true);
 
 		onTick(this::checkValid);
 
@@ -190,12 +191,13 @@ public class BuildTool extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics g, Game scene) {
+	public void render(Graphics g) {
 		TileCoordinate c = mouseTile;
 		if (c == null)
 			return;
+		ViewPort viewPort = this.scene.getViewPort();
 		if (isBulldozeTool) {
-			scene.getViewPort().focusHex(c, g);
+			viewPort.focusHex(c, g);
 			g.setColor(valid ? Color.RED : darkRed);
 			g.setStroke(bullCursorStroke);
 			double angle = Math.PI / 3;
@@ -204,7 +206,7 @@ public class BuildTool extends GameTool {
 				g.rotate(angle);
 			}
 		} else {
-			scene.getViewPort().focusHex(c, g);
+			viewPort.focusHex(c, g);
 			TrackRenderUtil.renderRails(g, valid ? placeGood ? Color.LIGHT_GRAY : Color.GRAY : Color.RED,
 					valid ? placeGood ? Color.GRAY : Color.DARK_GRAY : Color.RED, track.getRailPaths());
 		}

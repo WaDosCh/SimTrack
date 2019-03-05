@@ -7,7 +7,6 @@ import java.awt.Stroke;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -46,19 +45,25 @@ public class TileRenderer implements Renderer {
 	private final static int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
+	private Model model;
+	private ViewPort viewPort;
 
+	public TileRenderer(ViewPort viewPort, Model model) {
+		this.viewPort = viewPort;
+		this.model = model;
+	}
+	
+	
 	@Override
-	public void render(Graphics g, Game view) {
-		ViewPort port = view.getViewPort();
+	public void render(Graphics g) {
 		Graphics.GraphicsStack stack = g.getStack();
-		Model model = view.getModel();
-		for (Entry<TileCoordinate, Tile> pair : model.getTiles()) {
+		for (Entry<TileCoordinate, Tile> pair : this.model.getTiles()) {
 			g.setStack(stack);
 			TileCoordinate pos = pair.getKey();
 			Tile tile = pair.getValue();
-			if (!port.isVisible(pos))
+			if (!this.viewPort.isVisible(pos))
 				continue;
-			port.focusHex(pos, g);
+			this.viewPort.focusHex(pos, g);
 			g.setColor(bgColour);
 			g.fillPolygon(hexEdges[0], hexEdges[1], 6);
 

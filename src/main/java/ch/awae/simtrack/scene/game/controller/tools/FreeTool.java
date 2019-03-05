@@ -28,15 +28,15 @@ public class FreeTool extends GameTool {
 	 *            the editor owning the tool
 	 */
 	public FreeTool(Editor<Game> editor) {
-		super(editor, GameTool.UnloadAction.IGNORE);
+		super(editor, false);
 		onPress(Action.DROP_TOOL, () -> editor.loadTool(InGameMenu.class));
 	}
 
 	@Override
-	public void render(Graphics g, Game scene) {
+	public void render(Graphics g) {
 		if (mouseTile != null) {
 			g.setStroke(borderStroke);
-			scene.getViewPort().focusHex(mouseTile, g);
+			this.scene.getViewPort().focusHex(mouseTile, g);
 			g.setColor(Color.ORANGE);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {

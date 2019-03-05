@@ -8,10 +8,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
+import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.util.Resource;
 
 public class TrainRenderUtils {
@@ -20,9 +20,9 @@ public class TrainRenderUtils {
 
 	public static final BufferedImage loc = Resource.getImage("locomotive1.png");
 
-	public static void renderTrain(Train train, Graphics g, Game view) {
+	public static void renderTrain(Train train, Graphics g, ViewPort viewPort) {
 		g.push();
-		view.getViewPort().transformToScene(g);
+		viewPort.transformToScene(g);
 		drawExactCircle(g, train);
 		g.pop();
 	}

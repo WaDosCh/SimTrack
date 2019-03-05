@@ -13,7 +13,7 @@ import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
 
-public class BasePanel<T extends Scene<T>> implements Component, BaseRenderer<T> {
+public class BasePanel<T extends Scene<T>> implements Component, BaseRenderer {
 
 	private ArrayList<Component> components;
 	private Input input;
@@ -22,10 +22,12 @@ public class BasePanel<T extends Scene<T>> implements Component, BaseRenderer<T>
 	private Binding click;
 	private boolean centered;
 	public int margin = 0;
+	private Window window;
 
-	public BasePanel(Input input, boolean centered) {
+	public BasePanel(Input input, boolean centered, Window window) {
 		this.centered = centered;
 		this.input = input;
+		this.window = window;
 		this.components = new ArrayList<>();
 		this.click = input.getBinding(Input.MOUSE_LEFT);
 		this.needsLayout = true;
@@ -38,15 +40,15 @@ public class BasePanel<T extends Scene<T>> implements Component, BaseRenderer<T>
 	
 
 	@Override
-	public void render(Graphics graphics, T scene) {
-		render(graphics, scene.getWindow());
+	public void render(Graphics graphics) {
+		render(graphics, this.window);
 	}
 
 	@Override
 	public void render(Graphics g, Window w) {
 
 		if (this.needsLayout) {
-			Dimension size = w.getCanvasSize();
+			Dimension size = this.window.getCanvasSize();
 			layout(margin, margin, size.width - 2 * margin, size.height - Design.toolbarHeight - 2 * margin);
 		}
 
@@ -56,7 +58,7 @@ public class BasePanel<T extends Scene<T>> implements Component, BaseRenderer<T>
 		g.draw(this.rect);
 
 		for (Component b : this.components) {
-			b.render(g, w);
+			b.render(g, this.window);
 		}
 
 		click.onPress(() -> {

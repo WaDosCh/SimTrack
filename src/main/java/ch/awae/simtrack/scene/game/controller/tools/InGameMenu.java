@@ -18,9 +18,9 @@ public class InGameMenu extends GameTool {
 	private BasePanel<Game> renderer;
 
 	public InGameMenu(Editor<Game> editor) {
-		super(editor, UnloadAction.UNLOAD);
+		super(editor, true);
 
-		this.renderer = new BasePanel<>(input, true);
+		this.renderer = new BasePanel<>(input, true, this.editor.getScene().getWindow());
 		this.renderer.add(new Label("Ingame Menu", true));
 		this.renderer.add(new Button("Resume", input, this::resume));
 		this.renderer.add(new Button("Save", input, this::save));
@@ -40,8 +40,8 @@ public class InGameMenu extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics graphics, Game scene) {
-		this.renderer.render(graphics, scene.getWindow());
+	public void render(Graphics graphics) {
+		this.renderer.render(graphics, this.scene.getWindow());
 	}
 
 	private void save() {

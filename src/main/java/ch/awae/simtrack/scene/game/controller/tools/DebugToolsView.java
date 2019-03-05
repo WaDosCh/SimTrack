@@ -24,11 +24,11 @@ public class DebugToolsView extends GameTool {
 	private TrainController trainController;
 
 	public DebugToolsView(Editor<Game> editor, DebugTools debugTools, TrainController trainController) {
-		super(editor, GameTool.UnloadAction.UNLOAD);
+		super(editor, true);
 		this.debugTools = debugTools;
 		this.trainController = trainController;
 
-		this.renderer = new BasePanel<Game>(input, false);
+		this.renderer = new BasePanel<Game>(input, false, this.scene.getWindow());
 		this.renderer.margin = 10;
 		addButtons(editor.getScene());
 
@@ -66,8 +66,8 @@ public class DebugToolsView extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics graphics, Game scene) {
-		this.renderer.render(graphics, scene.getWindow());
+	public void render(Graphics graphics) {
+		this.renderer.render(graphics, this.scene.getWindow());
 	}
 
 }

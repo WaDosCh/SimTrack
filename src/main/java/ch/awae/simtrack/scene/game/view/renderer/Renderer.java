@@ -12,7 +12,7 @@ import ch.awae.simtrack.scene.game.Game;
  * @since SimTrack 0.1.1 (0.0.1)
  */
 @FunctionalInterface
-public interface Renderer extends BaseRenderer<Game> {
+public interface Renderer extends BaseRenderer {
 
 	/**
 	 * calls the {@link #render(Graphics2D, Game)} function with a new
@@ -22,10 +22,10 @@ public interface Renderer extends BaseRenderer<Game> {
 	 * @param g
 	 * @param view
 	 */
-	default void renderSafe(Graphics g, Game view) {
+	default void renderSafe(Graphics g) {
 		Graphics.GraphicsStack stack = g.getStack();
 		try {
-			render(g, view);
+			render(g);
 		} finally {
 			g.setStack(stack);
 		}

@@ -27,7 +27,7 @@ public class SignalTool extends GameTool {
 	private PointD center, mouse;
 
 	public SignalTool(Editor<Game> editor) {
-		super(editor, GameTool.UnloadAction.UNLOAD);
+		super(editor, true);
 
 		onTick(this::updatePosition);
 		ifNot(() -> bulldoze).onTick(this::checkPlace);
@@ -77,8 +77,8 @@ public class SignalTool extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics g, Game scene) {
-		scene.getViewPort().focusHex(position.getTile(), g);
+	public void render(Graphics g) {
+		this.scene.getViewPort().focusHex(position.getTile(), g);
 		g.setStroke(borderStroke);
 		double angle = position.getEdge().getAngleOut();
 		g.rotate(angle);

@@ -6,8 +6,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.scene.game.view.ViewPort;
 
 public class DebugTools extends GameTool {
 
@@ -21,14 +23,14 @@ public class DebugTools extends GameTool {
 
 	private DebugToolsRenderer renderer;
 
-	public DebugTools(Editor<Game> editor) {
-		super(editor, GameTool.UnloadAction.IGNORE);
+	public DebugTools(Editor<Game> editor, ViewPort viewPort, Window window) {
+		super(editor, false);
 		
 		this.showing = new HashMap<>();
 		this.showing.put(Option.Coordinates, new AtomicBoolean(false));
 		this.showing.put(Option.InputGuide, new AtomicBoolean(false));
 		this.showing.put(Option.Reservations, new AtomicBoolean(false));
-		this.renderer = new DebugToolsRenderer(showing, this);
+		this.renderer = new DebugToolsRenderer(showing, this, viewPort, window);
 
 		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
 		onPress(Action.DEBUG_TOOL, () -> editor.loadTool(DebugToolsView.class));
@@ -41,8 +43,8 @@ public class DebugTools extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics graphics, Game scene) {
-		this.renderer.render(graphics, scene);
+	public void render(Graphics graphics) {
+		this.renderer.render(graphics);
 	}
 
 	public AtomicBoolean getOptionActive(Option option) {

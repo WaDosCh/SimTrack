@@ -2,6 +2,7 @@ package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
@@ -46,11 +47,11 @@ public class ToolBar extends GameTool {
 	 *            the editor owning the build tool
 	 */
 	public ToolBar(Editor<Game> editor) {
-		super(editor, GameTool.UnloadAction.IGNORE);
+		super(editor, false);
 
 		// ######### BINDINGS ##########
 		// bind bulldoze
-		bind(() -> editor.loadTool(BuildTool.class), (g, v) -> {
+		bind(() -> editor.loadTool(BuildTool.class), (g) -> {
 			g.setColor(Color.RED);
 			g.setStroke(this.xstr);
 			g.drawLine(-25, -25, 25, 25);
@@ -60,14 +61,14 @@ public class ToolBar extends GameTool {
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			if (i != 3 && i != 4 && i != 8) {
 				TransformableTrackTile tile = TrackProvider.getTileInstance(i);
-				bind(() -> editor.loadTool(BuildTool.class, tile), (g, v) -> {
+				bind(() -> editor.loadTool(BuildTool.class, tile), (g) -> {
 					g.scale(0.8, 0.8);
 					TrackRenderUtil.renderRails(g, this.rbeds, this.rails, tile.getRailPaths());
 				});
 			}
 		}
 		// signal
-		bind(() -> editor.loadTool(SignalTool.class), (g, v) -> {
+		bind(() -> editor.loadTool(SignalTool.class), (g) -> {
 			g.setColor(Color.RED);
 			g.setStroke(this.xstr);
 			g.drawLine(-25, -25, 25, 25);
@@ -76,13 +77,13 @@ public class ToolBar extends GameTool {
 			g.setFont(g.getFont().deriveFont(20f));
 			g.drawString("Signal", -30, 5);
 		});
-		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.TWO_WAY), (g, v) -> {
+		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.TWO_WAY), (g) -> {
 			g.setColor(Color.BLACK);
 			g.fillOval(-30, -30, 60, 60);
 			g.setColor(Color.RED);
 			g.fillOval(-23, -23, 46, 46);
 		});
-		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.ONE_WAY), (g, v) -> {
+		bind(() -> editor.loadTool(SignalTool.class, Signal.Type.ONE_WAY), (g) -> {
 			g.setColor(Color.BLACK);
 			g.fillRect(-30, -30, 60, 60);
 			g.setColor(Color.RED);
@@ -145,8 +146,9 @@ public class ToolBar extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics g, Game view) {
-		g.translate(view.getScreenSize().width / 2 - 500, view.getScreenSize().height - 50);
+	public void render(Graphics g) {
+		Dimension screenSize = this.scene.getScreenSize();
+		g.translate(screenSize.width / 2 - 500, screenSize.height - 50);
 		g.setStroke(new BasicStroke(4));
 		for (int i = 0; i < 11; i++) {
 			// box
@@ -156,7 +158,7 @@ public class ToolBar extends GameTool {
 			g.setColor(this.bdcol);
 			g.drawRect(-50, -50, 100, 100);
 			if (bindings.size() > i)
-				bindings.get(i)._2.renderSafe(g, view);
+				bindings.get(i)._2.renderSafe(g);
 			g.translate(100, 0);
 		}
 	}

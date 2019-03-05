@@ -17,6 +17,7 @@ import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.scene.game.view.ViewPort;
 
 public class PathFindingTool extends GameTool {
 
@@ -29,7 +30,7 @@ public class PathFindingTool extends GameTool {
 	private Stack<TileEdgeCoordinate> path;
 
 	public PathFindingTool(Editor<Game> editor) {
-		super(editor, GameTool.UnloadAction.UNLOAD);
+		super(editor, true);
 
 		this.pathFinder = scene.getPathfinder();
 		this.startEdge = Edge.RIGHT;
@@ -67,15 +68,16 @@ public class PathFindingTool extends GameTool {
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	@Override
-	public void render(Graphics g, Game view) {
+	public void render(Graphics g) {
+		ViewPort viewPort = this.scene.getViewPort();
 		if (this.path != null) {
 			g.setColor(Color.red);
 			g.setStroke(new BasicStroke(12));
 			for (int i = 0; i < this.path.size() - 1; i++) {
 				TileCoordinate tile1 = this.path.get(i).tile;
 				TileCoordinate tile2 = this.path.get(i + 1).tile;
-				Point p1 = view.getViewPort().toScreenCoordinate(tile1.toSceneCoordinate());
-				Point p2 = view.getViewPort().toScreenCoordinate(tile2.toSceneCoordinate());
+				Point p1 = viewPort.toScreenCoordinate(tile1.toSceneCoordinate());
+				Point p2 = viewPort.toScreenCoordinate(tile2.toSceneCoordinate());
 
 				g.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}
@@ -84,7 +86,7 @@ public class PathFindingTool extends GameTool {
 		if (start != null) {
 			g.push();
 			g.setStroke(borderStroke);
-			view.getViewPort().focusHex(start, g);
+			viewPort.focusHex(start, g);
 			g.setColor(Color.GREEN);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {
@@ -101,7 +103,7 @@ public class PathFindingTool extends GameTool {
 		if (end != null) {
 			g.push();
 			g.setStroke(borderStroke);
-			view.getViewPort().focusHex(end, g);
+			viewPort.focusHex(end, g);
 			g.setColor(Color.ORANGE);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {

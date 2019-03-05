@@ -8,6 +8,7 @@ package ch.awae.simtrack.core;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.0.1
  */
+//TODO: remove generics?
 public interface Tool<T extends Scene<T>> extends BaseTicker {
 
 	/**
@@ -15,6 +16,6 @@ public interface Tool<T extends Scene<T>> extends BaseTicker {
 	 * 
 	 * @return the tool renderer
 	 */
-	public BaseRenderer<T> getRenderer();
+	public BaseRenderer getRenderer();
 
 }

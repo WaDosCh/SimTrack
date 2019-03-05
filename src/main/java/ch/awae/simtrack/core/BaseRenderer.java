@@ -1,8 +1,8 @@
 package ch.awae.simtrack.core;
 
 @FunctionalInterface
-public interface BaseRenderer<T extends Scene<T>> extends NamedComponent {
+public interface BaseRenderer extends NamedComponent {
 
-	void render(Graphics graphics, T scene);
+	void render(Graphics graphics);
 
 }

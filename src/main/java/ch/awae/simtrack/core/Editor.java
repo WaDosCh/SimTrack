@@ -19,14 +19,14 @@ import lombok.NonNull;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer<T> {
+public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer {
 
 	private T scene;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private Tool<T> currentTool;
-	private BaseRenderer<T> renderer;
+	private BaseRenderer renderer;
 	@SuppressWarnings("rawtypes")
 	private HashMap<Class<? extends Tool>, Tool<T>> tools = new HashMap<>();
 	@SuppressWarnings("rawtypes")
@@ -136,11 +136,11 @@ public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer<T> {
 	 *            the view
 	 */
 	@Override
-	public void render(Graphics g, T scene) {
+	public void render(Graphics g) {
 		if (this.renderer != null)
 			try {
 				GraphicsStack stack = g.getStack();
-				this.renderer.render(g, scene);
+				this.renderer.render(g);
 				g.setStack(stack);
 			} catch (Exception e) {
 				logger.error("failed to render " + currentTool.getClass().getSimpleName(), e);

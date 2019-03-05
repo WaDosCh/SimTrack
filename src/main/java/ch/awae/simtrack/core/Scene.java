@@ -18,7 +18,7 @@ public abstract class Scene<T extends Scene<T>> {
 	protected final Controller controller;
 	protected final Logger logger;
 
-	private @Getter List<BaseRenderer<T>> renderers;
+	private @Getter List<BaseRenderer> renderers;
 	private @Getter List<BaseTicker> tickers;
 
 	public Scene(Controller controller, Window window) {
@@ -31,7 +31,7 @@ public abstract class Scene<T extends Scene<T>> {
 		this.logger = LogManager.getLogger();
 	}
 
-	public void addRenderer(BaseRenderer<T> component) {
+	public void addRenderer(BaseRenderer component) {
 		renderers.add(component);
 	}
 

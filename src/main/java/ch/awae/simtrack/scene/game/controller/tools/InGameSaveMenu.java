@@ -18,9 +18,9 @@ public class InGameSaveMenu extends GameTool {
 	private BasePanel<Game> panel;
 
 	public InGameSaveMenu(Editor<Game> editor) {
-		super(editor, UnloadAction.UNLOAD);
+		super(editor, true);
 
-		this.panel = new BasePanel<>(input, true);
+		this.panel = new BasePanel<>(input, true, this.scene.getWindow());
 		this.panel.add(new Label("Save game", true));
 		this.panel.add(new InputField(32, this.input));
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
@@ -41,8 +41,8 @@ public class InGameSaveMenu extends GameTool {
 	}
 
 	@Override
-	public void render(Graphics graphics, Game scene) {
-		this.panel.render(graphics, scene.getWindow());
+	public void render(Graphics graphics) {
+		this.panel.render(graphics, this.scene.getWindow());
 	}
 
 }

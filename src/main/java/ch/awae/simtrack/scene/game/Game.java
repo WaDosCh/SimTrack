@@ -62,10 +62,10 @@ public class Game extends Scene<Game> {
 		this.model.load(this.getPaused());
 		this.editor = new Editor<Game>(this);
 		this.trackbar = new ToolBar(editor);
-		this.debugTools = new DebugTools(editor);
-		this.pathfinder = new PathFinding(model);
-		this.trainController = new TrainController(model);
-		this.viewPort = new ViewPort(this); //TODO: don't pass game
+		this.viewPort = new ViewPort(this); //TODO: don't pass game if possible
+		this.debugTools = new DebugTools(editor,this.viewPort, this.window);
+		this.pathfinder = new PathFinding(this.model);
+		this.trainController = new TrainController(this.model);
 
 		editor.addTool(new FreeTool(editor));
 		editor.addTool(new BuildTool(editor));
@@ -75,11 +75,11 @@ public class Game extends Scene<Game> {
 		editor.addTool(new DebugToolsView(editor, this.debugTools, this.trainController));
 		editor.addTool(new SignalTool(editor));
 
-		addRenderer(new BackgroundRenderer());
-		addRenderer(new TileRenderer());
-		addRenderer(new HexGridRenderer());
-		addRenderer(new SignalRenderer());
-		addRenderer(new EntityRenderer());
+		addRenderer(new BackgroundRenderer(this.window));
+		addRenderer(new TileRenderer(this.viewPort, this.model));
+		addRenderer(new HexGridRenderer(this.drawGrid,this.viewPort, this.model));
+		addRenderer(new SignalRenderer(this.viewPort, this.model));
+		addRenderer(new EntityRenderer(this.model, this.viewPort));
 		addRenderer(editor);
 		addRenderer(trackbar);
 		addRenderer(debugTools.getRenderer());

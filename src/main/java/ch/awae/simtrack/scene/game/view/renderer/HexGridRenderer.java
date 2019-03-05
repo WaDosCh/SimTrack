@@ -1,9 +1,10 @@
 package ch.awae.simtrack.scene.game.view.renderer;
 
 import java.awt.Color;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.util.Resource;
@@ -18,21 +19,30 @@ import ch.awae.simtrack.util.Resource;
 public class HexGridRenderer implements Renderer {
 
 	private final static Color gridColor = Resource.getConfigProperties("renderer.properties").getColor("gridColor");
+	private AtomicBoolean drawGrid;
+	private Model model;
+	private ViewPort viewPort;
 
+	public HexGridRenderer(AtomicBoolean drawGrid, ViewPort viewPort, Model model) {
+		this.drawGrid = drawGrid;
+		this.viewPort = viewPort;
+		this.model = model;
+	}
+	
+	
 	@Override
-	public void render(Graphics g, Game view) {
-		if (!view.getDrawGrid().get())
+	public void render(Graphics g) {
+		if (!this.drawGrid.get())
 			return;
-		ViewPort port = view.getViewPort();
 		g.setColor(gridColor);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
-		for (int i = 0; i < view.getModel().getHorizontalSize(); i++) {
-			for (int j = 0; j < view.getModel().getVerticalSize(); j++) {
+		for (int i = 0; i < this.model.getHorizontalSize(); i++) {
+			for (int j = 0; j < this.model.getVerticalSize(); j++) {
 				TileCoordinate hex = new TileCoordinate(i - (j / 2), j);
-				if (!port.isVisible(hex))
+				if (!this.viewPort.isVisible(hex))
 					continue;
 				g.push();
-				port.focusHex(hex, g);
+				this.viewPort.focusHex(hex, g);
 				for (int k = 0; k < 3; k++) {
 					g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
 					g.rotate(Math.PI / 3);
