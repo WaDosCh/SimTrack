@@ -1,13 +1,13 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
-import ch.awae.simtrack.util.DataMapper;
 
 public class DebugTools extends GameTool {
 
@@ -17,7 +17,7 @@ public class DebugTools extends GameTool {
 		Reservations;
 	}
 
-	private HashSet<Option> showing = new HashSet<Option>();
+	private HashMap<Option,AtomicBoolean> showing = new HashMap<>();
 
 	private DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
 
@@ -31,10 +31,7 @@ public class DebugTools extends GameTool {
 	}
 
 	public void toggle(Option option) {
-		if (this.showing.contains(option))
-			this.showing.remove(option);
-		else
-			this.showing.add(option);
+		this.showing.get(option).set(!this.showing.get(option).get());
 	}
 
 	@Override
@@ -47,21 +44,8 @@ public class DebugTools extends GameTool {
 		this.renderer.render(graphics, scene);
 	}
 
-	public DataMapper<Boolean> dataMapper(Option debugOption) {
-		return new DataMapper<Boolean>() {
-			@Override
-			public Boolean get() {
-				return showing.contains(debugOption);
-			}
-
-			@Override
-			public void set(Boolean value) {
-				if (value)
-					showing.add(debugOption);
-				else
-					showing.remove(debugOption);
-			}
-		};
+	public AtomicBoolean getOptionActive(Option option) {
+		return this.showing.get(option);
 	}
 
 }

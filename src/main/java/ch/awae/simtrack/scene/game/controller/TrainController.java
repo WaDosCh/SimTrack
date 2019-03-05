@@ -2,6 +2,7 @@ package ch.awae.simtrack.scene.game.controller;
 
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,6 @@ import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
-import ch.awae.simtrack.util.DataMapper;
 import ch.awae.simtrack.util.Time;
 import lombok.Getter;
 
@@ -30,7 +30,7 @@ public class TrainController implements BaseTicker<Game> {
 	private Logger logger = LogManager.getLogger(DebugTools.class);
 	private int spawnTrains;
 	private long checkForSpawnTimeMS;
-	private @Getter DataMapper<Boolean> active = new DataMapper.Store<>(false);
+	private @Getter AtomicBoolean active = new AtomicBoolean(false);
 
 	public TrainController() {
 		this.checkForSpawnTimeMS = System.currentTimeMillis() + firstCheckAfterXSec * 1000;

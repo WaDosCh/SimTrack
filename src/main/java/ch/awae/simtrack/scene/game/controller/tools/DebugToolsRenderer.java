@@ -6,8 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
@@ -25,12 +25,12 @@ import ch.awae.utils.functional.T2;
 
 public class DebugToolsRenderer implements Renderer {
 
-	private HashSet<ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option> showing;
+	private HashMap<Option, AtomicBoolean> showing;
 	private String[] inputGuideText;
 	private Game gameView;
 	private DebugTools tools;
 
-	public DebugToolsRenderer(HashSet<Option> showing, DebugTools tools) {
+	public DebugToolsRenderer(HashMap<Option,AtomicBoolean> showing, DebugTools tools) {
 		this.showing = showing;
 		this.tools = tools;
 		this.inputGuideText = Resource.getText("inputKeys.txt");
@@ -38,11 +38,11 @@ public class DebugToolsRenderer implements Renderer {
 
 	@Override
 	public void render(Graphics g, Game view) {
-		if (this.showing.contains(Option.InputGuide))
+		if (this.showing.get(Option.InputGuide).get())
 			renderUserGuide(g, view);
-		if (this.showing.contains(Option.Coordinates))
+		if (this.showing.get(Option.Coordinates).get())
 			renderCoordinate(g, view);
-		if (showing.contains(Option.Reservations))
+		if (showing.get(Option.Reservations).get())
 			renderBlocked(g, view);
 	}
 

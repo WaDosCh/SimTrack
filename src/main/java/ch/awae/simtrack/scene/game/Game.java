@@ -1,14 +1,30 @@
 package ch.awae.simtrack.scene.game;
 
-import ch.awae.simtrack.core.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import ch.awae.simtrack.core.Controller;
+import ch.awae.simtrack.core.Editor;
+import ch.awae.simtrack.core.Scene;
+import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.TrainController;
-import ch.awae.simtrack.scene.game.controller.tools.*;
+import ch.awae.simtrack.scene.game.controller.tools.BuildTool;
+import ch.awae.simtrack.scene.game.controller.tools.DebugTools;
+import ch.awae.simtrack.scene.game.controller.tools.DebugToolsView;
+import ch.awae.simtrack.scene.game.controller.tools.FreeTool;
+import ch.awae.simtrack.scene.game.controller.tools.InGameMenu;
+import ch.awae.simtrack.scene.game.controller.tools.InGameSaveMenu;
+import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
+import ch.awae.simtrack.scene.game.controller.tools.SignalTool;
+import ch.awae.simtrack.scene.game.controller.tools.ToolBar;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.ViewPort;
-import ch.awae.simtrack.scene.game.view.renderer.*;
-import ch.awae.simtrack.util.DataMapper.Store;
+import ch.awae.simtrack.scene.game.view.renderer.BackgroundRenderer;
+import ch.awae.simtrack.scene.game.view.renderer.EntityRenderer;
+import ch.awae.simtrack.scene.game.view.renderer.HexGridRenderer;
+import ch.awae.simtrack.scene.game.view.renderer.SignalRenderer;
+import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
 import lombok.Getter;
 
 /**
@@ -25,13 +41,13 @@ public class Game extends Scene<Game> {
 	private ViewPort viewPort;
 	private Editor<Game> editor;
 
-	private @Getter Store<Boolean> drawGrid = new Store<>(true);
+	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
 
 	private ToolBar trackbar;
 	private DebugTools debugTools;
 	private TrainController trainController;
 
-	private @Getter Store<Boolean> paused = new Store<>(false);
+	private @Getter AtomicBoolean paused = new AtomicBoolean(false);
 
 	/**
 	 * instantiates a new game view
@@ -68,12 +84,12 @@ public class Game extends Scene<Game> {
 		addRenderer(debugTools.getRenderer());
 
 		addTicker(new Navigator(this, this.viewPort, input));
-		addTicker(trackbar);
-		addTicker(editor);
-		addTicker(debugTools);
-		addTicker(BaseTicker.getNamed("ViewPort", s -> viewPort.tick()));
-		addTicker(BaseTicker.getNamed("Model", new ProxyTicker(s -> this.model.tick(this))));
-		addTicker(pathfinder);
+		addTicker(this.trackbar);
+		addTicker(this.editor);
+		addTicker(this.debugTools);
+		addTicker(this.viewPort);
+		addTicker(this.model);
+		addTicker(this.pathfinder);
 		addTicker(this.trainController);
 	}
 
@@ -95,22 +111,6 @@ public class Game extends Scene<Game> {
 	@Override
 	public void preTick(long millis) {
 		model.getClock().tick(millis);
-	}
-
-	private class ProxyTicker implements BaseTicker<Game> {
-
-		private BaseTicker<Game> ticker;
-
-		public ProxyTicker(BaseTicker<Game> ticker) {
-			this.ticker = ticker;
-		}
-
-		@Override
-		public void tick(Game scene) {
-			if (!scene.paused.get())
-				this.ticker.tick(scene);
-		}
-
 	}
 	
 	@Override

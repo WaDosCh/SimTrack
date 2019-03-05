@@ -14,12 +14,12 @@ import ch.awae.simtrack.scene.game.model.Model;
 
 public class InGameMenu extends GameTool {
 
-	private BasePanel renderer;
+	private BasePanel<Game> renderer;
 
 	public InGameMenu(Editor<Game> editor) {
 		super(editor, UnloadAction.UNLOAD);
 
-		this.renderer = new BasePanel(input, true);
+		this.renderer = new BasePanel<>(input, true);
 		this.renderer.add(new Label("Ingame Menu", true));
 		this.renderer.add(new Button("Resume", input, this::resume));
 		this.renderer.add(new Button("Save", input, this::save));

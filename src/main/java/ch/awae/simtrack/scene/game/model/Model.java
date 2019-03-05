@@ -196,6 +196,8 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 
 	@Override
 	public void tick(Game scene) {
+		if (scene.getPaused().get())
+			return;
 		for (Entity entity : this.entities) {
 			entity.tick(scene);
 		}

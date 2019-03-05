@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
@@ -18,18 +17,18 @@ import ch.awae.simtrack.scene.game.model.ModelFactory;
 
 public class Menu extends Scene<Menu> {
 
-	private BasePanel panel;
+	private BasePanel<Menu> panel;
 
 	public Menu(Controller controller, Window window) {
 		super(controller, window);
 
 		initMenu();
 
-		addRenderer(BaseRenderer.getNamed("Menu", (g, m) -> panel.render(g, m.getWindow())));
+		addRenderer(panel);
 	}
 
 	private void initMenu() {
-		panel = new BasePanel(input, true);
+		panel = new BasePanel<Menu>(input, true);
 		panel.add(new Label("Main Menu", true));
 		panel.add(new Button("Load Scenario", input, this::loadScenario));
 		panel.add(new Button("New Custom Game", input, this::newGame));

@@ -4,12 +4,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
-import ch.awae.simtrack.util.DataMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,9 +18,9 @@ import lombok.EqualsAndHashCode;
 public class CheckboxButton extends Label {
 
 	public final Input input;
-	private DataMapper<Boolean> dataMapping;
+	private AtomicBoolean dataMapping;
 
-	public CheckboxButton(String title, Input input, DataMapper<Boolean> mapper) {
+	public CheckboxButton(String title, Input input, AtomicBoolean mapper) {
 		super(title);
 		this.input = input;
 		this.dataMapping = mapper;
@@ -63,7 +63,7 @@ public class CheckboxButton extends Label {
 	@Override
 	public boolean tryConsume(Point mousePos, int mouseButton) {
 		if (mouseButton == 1 && test(mousePos)) {
-			this.dataMapping.update(x -> !x);
+			this.dataMapping.set(!this.dataMapping.get());
 			return true;
 		}
 		return false;

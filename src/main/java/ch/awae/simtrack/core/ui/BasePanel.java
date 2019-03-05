@@ -5,13 +5,15 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.Binding;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
 
-public class BasePanel implements Component {
+public class BasePanel<T extends Scene<T>> implements Component, BaseRenderer<T> {
 
 	private ArrayList<Component> components;
 	private Input input;
@@ -32,6 +34,12 @@ public class BasePanel implements Component {
 	public void add(Component component) {
 		this.components.add(component);
 		this.needsLayout = true;
+	}
+	
+
+	@Override
+	public void render(Graphics graphics, T scene) {
+		render(graphics, scene.getWindow());
 	}
 
 	@Override

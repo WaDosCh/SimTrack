@@ -20,7 +20,7 @@ import ch.judos.generic.graphics.ImageUtils;
 
 public class DebugToolsView extends GameTool {
 
-	private BasePanel renderer;
+	private BasePanel<Game> renderer;
 	private DebugTools debugTools;
 	private TrainController trainController;
 
@@ -29,7 +29,7 @@ public class DebugToolsView extends GameTool {
 		this.debugTools = debugTools;
 		this.trainController = trainController;
 
-		this.renderer = new BasePanel(input, false);
+		this.renderer = new BasePanel<Game>(input, false);
 		this.renderer.margin = 10;
 		addButtons(editor.getScene());
 
@@ -38,7 +38,7 @@ public class DebugToolsView extends GameTool {
 
 	private void addButtons(Game game) {
 		this.renderer.add(new Label("Debug Tools"));
-		this.renderer.add(new CheckboxButton("Show coordinates", input, debugTools.dataMapper(Option.Coordinates)));
+		this.renderer.add(new CheckboxButton("Show coordinates", input, debugTools.getOptionActive(Option.Coordinates)));
 		this.renderer.add(new CheckboxButton("Toggle grid", input, game.getDrawGrid()));
 		this.renderer.add(new Button("New map", input, () -> {
 			game.loadModel(ModelFactory.getDefaultModel());
@@ -58,7 +58,7 @@ public class DebugToolsView extends GameTool {
 		this.renderer.add(new Button("Pathfinding Tool", input, () -> {
 			editor.loadTool(PathFindingTool.class);
 		}));
-		this.renderer.add(new CheckboxButton("Show reservations", input, debugTools.dataMapper(Option.Reservations)));
+		this.renderer.add(new CheckboxButton("Show reservations", input, debugTools.getOptionActive(Option.Reservations)));
 		this.renderer.add(new Button("Spawn train", input, this.trainController::requestSpawnTrain));
 		this.renderer.add(new CheckboxButton("Enable train spawning", input, this.trainController.getActive()));
 

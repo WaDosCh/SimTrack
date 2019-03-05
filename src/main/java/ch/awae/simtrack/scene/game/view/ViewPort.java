@@ -3,6 +3,7 @@ package ch.awae.simtrack.scene.game.view;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
@@ -19,7 +20,7 @@ import lombok.Getter;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class ViewPort {
+public class ViewPort implements BaseTicker<Game> {
 
 	public static int outsideBounds = 0;
 
@@ -262,7 +263,8 @@ public class ViewPort {
 		return isVisible(tileCoordinate.toSceneCoordinate(), 60);
 	}
 
-	public void tick() {
+	@Override
+	public void tick(Game scene) {
 		updateZoomFactor();
 	}
 
@@ -273,5 +275,6 @@ public class ViewPort {
 	public void reloadBounds() {
 		init();
 	}
+
 
 }
