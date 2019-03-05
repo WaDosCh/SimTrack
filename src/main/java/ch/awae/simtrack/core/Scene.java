@@ -17,8 +17,8 @@ public abstract class Scene<T extends Scene<T>> {
 	protected final Controller controller;
 	protected final Logger logger;
 
-	private List<BaseRenderer<T>> renderers;
-	private List<BaseTicker<T>> tickers;
+	private @Getter List<BaseRenderer<T>> renderers;
+	private @Getter List<BaseTicker<T>> tickers;
 
 	public Scene(Controller controller) {
 		renderers = new ArrayList<>();
@@ -34,44 +34,6 @@ public abstract class Scene<T extends Scene<T>> {
 
 	public void addTicker(BaseTicker<T> component) {
 		tickers.add(component);
-	}
-
-	public void addRenderer(String name, BaseRenderer<T> component) {
-		renderers.add(new BaseRenderer<T>() {
-
-			@Override
-			public void render(Graphics graphics, T scene) {
-				component.render(graphics, scene);
-			}
-
-			@Override
-			public String getName() {
-				return name;
-			}
-		});
-	}
-
-	public void addTicker(String name, BaseTicker<T> component) {
-		tickers.add(new BaseTicker<T>() {
-
-			@Override
-			public void tick(T scene) {
-				component.tick(scene);
-			}
-
-			@Override
-			public String getName() {
-				return name;
-			}
-		});
-	}
-
-	public List<BaseRenderer<T>> getRenderers() {
-		return renderers;
-	}
-
-	public List<BaseTicker<T>> getTickers() {
-		return tickers;
 	}
 
 	public void setWindowTitle(String title) {

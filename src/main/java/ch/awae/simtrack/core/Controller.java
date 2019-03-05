@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +19,6 @@ import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Profiler.StringSupplier;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.util.Resource;
-import ch.awae.utils.AccessLock;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -33,7 +33,7 @@ public class Controller {
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
 	private final Logger logger = LogManager.getLogger();
-	private final AccessLock sceneStackLock = new AccessLock("scene stack");
+	private final ReentrantLock sceneStackLock = new ReentrantLock();
 
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
 
@@ -185,7 +185,7 @@ public class Controller {
 	}
 
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
-		sceneStackLock.testAndLock();
+		sceneStackLock.lock();
 		try {
 			logger.info("#### SCENE TRANSITION START ####");
 			logger.info("# transition type: push");
@@ -201,7 +201,7 @@ public class Controller {
 	}
 
 	public void loadRoot() {
-		sceneStackLock.testAndLock();
+		sceneStackLock.lock();
 		try {
 			logger.info("#### SCENE TRANSITION START ####");
 			logger.info("# transition type: root");
@@ -218,7 +218,7 @@ public class Controller {
 	}
 
 	public void loadPrevious() {
-		sceneStackLock.testAndLock();
+		sceneStackLock.lock();
 		try {
 			logger.info("#### SCENE TRANSITION START ####");
 			logger.info("# transition type: pop");
@@ -233,7 +233,7 @@ public class Controller {
 	}
 
 	public <S extends Scene<S>> void replaceWith(@NonNull Scene<S> next) {
-		sceneStackLock.testAndLock();
+		sceneStackLock.lock();
 		try {
 			logger.info("#### SCENE TRANSITION START ####");
 			logger.info("# transition type: replace");

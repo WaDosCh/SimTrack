@@ -7,7 +7,6 @@ import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.util.MacKeyboardHack;
 import ch.awae.simtrack.window.ResizableWindow;
 
-@SuppressWarnings("javadoc")
 public class Main {
 
 	public static void main(String[] args) {
