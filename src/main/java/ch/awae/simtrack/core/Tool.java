@@ -8,7 +8,7 @@ package ch.awae.simtrack.core;
  * @version 1.2, 2015-01-26
  * @since SimTrack 0.0.1
  */
-public interface Tool<T extends Scene<T>> extends BaseTicker<T> {
+public interface Tool<T extends Scene<T>> extends BaseTicker {
 
 	/**
 	 * retrieves the renderer for this tool

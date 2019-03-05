@@ -6,11 +6,15 @@ import java.util.Stack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
-import ch.awae.simtrack.scene.game.model.position.*;
+import ch.awae.simtrack.scene.game.model.position.Edge;
+import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TilePath;
+import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.judos.generic.data.DynamicList;
 import ch.judos.generic.data.RandomJS;
 
@@ -129,7 +133,7 @@ public class Train implements Entity {
 	}
 
 	@Override
-	public void tick(Game g) {
+	public void tick() {
 		if (this.path == null && this.pathFindingOptions != null) {
 			if (this.pathFindingOptions.searchAgainInTicks == 0) {
 				searchPath(this.model);

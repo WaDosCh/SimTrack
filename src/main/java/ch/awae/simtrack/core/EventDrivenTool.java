@@ -29,7 +29,7 @@ public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, Ba
 		this.scene = editor.getScene();
 	}
 
-	protected void preTick(T scene) {
+	protected void preTick() {
 		mousePosition = input.getMousePosition();
 	}
 
@@ -169,8 +169,8 @@ public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, Ba
 	}
 
 	@Override
-	public void tick(T scene) {
-		preTick(scene);
+	public void tick() {
+		preTick();
 		try {
 			for (Runnable r : drivers) {
 				r.run();

@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.BaseTicker;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions;
@@ -22,7 +21,7 @@ import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Time;
 import lombok.Getter;
 
-public class TrainController implements BaseTicker<Game> {
+public class TrainController implements BaseTicker {
 
 	public static final int firstCheckAfterXSec = 5;
 	public static final int checkEveryXSec = 3;
@@ -39,7 +38,7 @@ public class TrainController implements BaseTicker<Game> {
 	}
 
 	@Override
-	public void tick(Game game) {
+	public void tick() {
 		while (this.spawnTrains > 0) {
 			this.spawnTrains--;
 			spawnTrain(this.model);

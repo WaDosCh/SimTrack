@@ -118,7 +118,7 @@ public class Controller implements SceneController {
 		index = 0;
 		for (BaseTicker ticker : scene.getTickers()) {
 			profiler.startSample(false, index);
-			ticker.tick(scene);
+			ticker.tick();
 			index++;
 			profiler.endSample();
 		}
@@ -175,7 +175,7 @@ public class Controller implements SceneController {
 	}
 
 	@Override
-	public <T extends Scene<T>> void loadScene(Class<T> sceneClass, Object... args) {
+	public <T extends Scene<T>> Scene<?> loadScene(Class<T> sceneClass, Object... args) {
 		Scene<?> scene = this.sceneFactory.createScene(sceneClass, args);
 		if (scene != null) {
 			if (this.currentScene != null) {
@@ -190,6 +190,7 @@ public class Controller implements SceneController {
 			this.currentScene = scene;
 			createProfiler();
 		}
+		return this.currentScene;
 	}
 	
 

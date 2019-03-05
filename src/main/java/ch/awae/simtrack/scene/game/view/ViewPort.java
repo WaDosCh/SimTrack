@@ -20,7 +20,7 @@ import lombok.Getter;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class ViewPort implements BaseTicker<Game> {
+public class ViewPort implements BaseTicker {
 
 	public static int outsideBounds = 0;
 
@@ -264,7 +264,7 @@ public class ViewPort implements BaseTicker<Game> {
 	}
 
 	@Override
-	public void tick(Game scene) {
+	public void tick() {
 		updateZoomFactor();
 	}
 

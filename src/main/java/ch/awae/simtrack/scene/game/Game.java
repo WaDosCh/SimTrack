@@ -59,6 +59,7 @@ public class Game extends Scene<Game> {
 	public Game(Controller controller, Model model, Window window) {
 		super(controller, window);
 		this.model = model;
+		this.model.load(this.getPaused());
 		this.editor = new Editor<Game>(this);
 		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);

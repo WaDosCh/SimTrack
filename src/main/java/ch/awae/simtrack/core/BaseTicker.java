@@ -1,7 +1,7 @@
 package ch.awae.simtrack.core;
 
-public interface BaseTicker<T extends Scene<T>> extends NamedComponent {
+public interface BaseTicker extends NamedComponent {
 
-	void tick(T scene);
+	void tick();
 
 }

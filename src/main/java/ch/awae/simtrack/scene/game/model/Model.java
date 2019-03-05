@@ -1,8 +1,16 @@
 package ch.awae.simtrack.scene.game.model;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -10,12 +18,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.BaseTicker;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
 import ch.awae.simtrack.scene.game.model.entity.Train;
-import ch.awae.simtrack.scene.game.model.position.*;
+import ch.awae.simtrack.scene.game.model.position.Edge;
+import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TilePath;
 import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
@@ -27,7 +38,7 @@ import ch.awae.utils.functional.T3;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class Model implements Serializable, Observable, BaseTicker<Game> {
+public class Model implements Serializable, Observable, BaseTicker {
 
 	private static final long serialVersionUID = -2351561961256044096L;
 	private int sizeX, sizeY;
@@ -42,6 +53,8 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 	private LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	@Getter
 	private transient ObservableHandler observableHandler;
+	
+	private transient AtomicBoolean isPaused;
 
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
@@ -190,16 +203,17 @@ public class Model implements Serializable, Observable, BaseTicker<Game> {
 		return !(current == null || tile instanceof DestinationTrackTile);
 	}
 
-	public void load() {
+	public void load(AtomicBoolean isPaused) {
 		observableHandler = new ObservableHandler();
+		this.isPaused = isPaused;
 	}
 
 	@Override
-	public void tick(Game scene) {
-		if (scene.getPaused().get())
+	public void tick() {
+		if (this.isPaused.get())
 			return;
 		for (Entity entity : this.entities) {
-			entity.tick(scene);
+			entity.tick();
 		}
 		this.entities.removeAll(this.toBeRemoved);
 		this.toBeRemoved.clear();

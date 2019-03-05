@@ -7,7 +7,6 @@ import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.core.Binding;
 import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Scene;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 
 /**
@@ -17,7 +16,7 @@ import ch.awae.simtrack.scene.game.view.ViewPort;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class Navigator implements BaseTicker<Game> {
+public class Navigator implements BaseTicker {
 
 	private Input input;
 	private ViewPort viewPort;
@@ -66,6 +65,7 @@ public class Navigator implements BaseTicker<Game> {
 	/**
 	 * performs an update tick on the navigator
 	 */
+	@Override
 	public void tick() {
 		if (!this.isActive)
 			return;
@@ -91,8 +91,4 @@ public class Navigator implements BaseTicker<Game> {
 			this.viewPort.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
 	}
 
-	@Override
-	public void tick(Game scene) {
-		this.tick();
-	}
 }

@@ -19,7 +19,7 @@ import lombok.NonNull;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T> {
+public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer<T> {
 
 	private T scene;
 
@@ -148,9 +148,9 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 	}
 
 	@Override
-	public void tick(T scene) {
+	public void tick() {
 		if (this.currentTool != null)
-			this.currentTool.tick(scene);
+			this.currentTool.tick();
 	}
 
 }

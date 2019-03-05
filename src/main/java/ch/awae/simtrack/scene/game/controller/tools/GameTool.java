@@ -30,22 +30,22 @@ public abstract class GameTool extends EventDrivenTool<Game> {
 	}
 
 	@Override
-	protected void preTick(Game scene) {
-		super.preTick(scene);
-		model = scene.getModel();
-		mouseScene = scene.getViewPort().toSceneCoordinate(mousePosition);
+	protected void preTick() {
+		super.preTick();
+		model = this.scene.getModel();
+		mouseScene = this.scene.getViewPort().toSceneCoordinate(mousePosition);
 		mouseTile = mouseScene.toTileCoordinate();
 	}
 
 	@Override
-	public void tick(Game scene) {
+	public void tick() {
 		if (autoUnload && drop.isPressed() && drop.isEdge()) {
 			drop.consume();
 			editor.loadTool(null);
 			logger.debug("auto-unloading tool");
 			return;
 		}
-		super.tick(scene);
+		super.tick();
 	}
 
 }

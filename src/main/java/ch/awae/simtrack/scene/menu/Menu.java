@@ -53,7 +53,6 @@ public class Menu extends Scene<Menu> {
 		try {
 			in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
 			Model model = (Model) in.readObject();
-			model.load();
 			this.controller.loadScene(Game.class, model);
 		} catch (
 				IOException

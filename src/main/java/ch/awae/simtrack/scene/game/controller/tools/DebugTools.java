@@ -41,11 +41,6 @@ public class DebugTools extends GameTool {
 	}
 
 	@Override
-	public void tick(Game scene) {
-		super.tick(scene);
-	}
-
-	@Override
 	public void render(Graphics graphics, Game scene) {
 		this.renderer.render(graphics, scene);
 	}

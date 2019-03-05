@@ -1,14 +1,18 @@
 package ch.awae.simtrack.scene.game.controller;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.BaseTicker;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
@@ -19,12 +23,14 @@ import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Observer;
 import ch.awae.utils.functional.T2;
-import ch.awae.utils.pathfinding.*;
+import ch.awae.utils.pathfinding.DijkstraPathfinder;
+import ch.awae.utils.pathfinding.GraphDataProvider;
+import ch.awae.utils.pathfinding.Pathfinder;
 import ch.judos.generic.data.HashMap2;
 import lombok.Getter;
 import lombok.val;
 
-public class PathFinding implements BaseTicker<Game>, GraphDataProvider<TileEdgeCoordinate> {
+public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordinate> {
 
 	@Getter
 	private Model model;
@@ -130,7 +136,7 @@ public class PathFinding implements BaseTicker<Game>, GraphDataProvider<TileEdge
 	}
 
 	@Override
-	public void tick(Game scene) {
+	public void tick() {
 		int maxWorkPerTick = 5;
 		LinkedList<PathFindingRequest> queue = this.model.getPathFindingQueue();
 		while (maxWorkPerTick-- > 0 && queue.size() > 0) {
