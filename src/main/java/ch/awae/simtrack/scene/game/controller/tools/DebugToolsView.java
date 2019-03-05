@@ -1,5 +1,10 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.ui.BasePanel;
@@ -11,6 +16,7 @@ import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.scene.game.model.ModelFactory;
+import ch.judos.generic.graphics.ImageUtils;
 
 public class DebugToolsView extends GameTool {
 
@@ -38,6 +44,15 @@ public class DebugToolsView extends GameTool {
 			game.loadModel(ModelFactory.getDefaultModel());
 		}));
 		this.renderer.add(new CheckboxButton("Pause", input, game.getPaused()));
+		this.renderer.add(new Button("Screenshot", input, () -> {
+			this.controller.requestSnapshot(image -> {
+				try {
+					ImageIO.write(ImageUtils.toBufferedImage(image), "jpg", new File("screenshot.jpg"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		}));
 
 		this.renderer.add(new Label("Trains:"));
 		this.renderer.add(new Button("Pathfinding Tool", input, () -> {
