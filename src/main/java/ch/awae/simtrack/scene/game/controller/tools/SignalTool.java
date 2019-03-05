@@ -7,8 +7,8 @@ import java.awt.Stroke;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.OnLoad;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
 import ch.awae.simtrack.scene.game.model.position.Edge;
@@ -25,9 +25,11 @@ public class SignalTool extends GameTool {
 	private boolean valid;
 	private TileEdgeCoordinate position;
 	private PointD center, mouse;
+	private Model model;
 
-	public SignalTool(Editor<Game> editor) {
+	public SignalTool(Editor editor, Model model) {
 		super(editor, true);
+		this.model = model;
 
 		onTick(this::updatePosition);
 		ifNot(() -> bulldoze).onTick(this::checkPlace);

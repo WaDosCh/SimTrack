@@ -9,11 +9,10 @@ import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.Binding;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
-import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
 
-public class BasePanel<T extends Scene<T>> implements Component, BaseRenderer {
+public class BasePanel implements Component, BaseRenderer {
 
 	private ArrayList<Component> components;
 	private Input input;

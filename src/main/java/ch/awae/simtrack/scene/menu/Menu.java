@@ -17,7 +17,7 @@ import ch.awae.simtrack.scene.game.model.ModelFactory;
 
 public class Menu extends Scene<Menu> {
 
-	private BasePanel<Menu> panel;
+	private BasePanel panel;
 
 	public Menu(Controller controller, Window window) {
 		super(controller, window);
@@ -28,7 +28,7 @@ public class Menu extends Scene<Menu> {
 	}
 
 	private void initMenu() {
-		panel = new BasePanel<Menu>(input, true, this.window);
+		panel = new BasePanel(input, true, this.window);
 		panel.add(new Label("Main Menu", true));
 		panel.add(new Button("Load Scenario", input, this::loadScenario));
 		panel.add(new Button("New Custom Game", input, this::newGame));

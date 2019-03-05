@@ -19,16 +19,16 @@ import ch.judos.generic.graphics.ImageUtils;
 
 public class DebugToolsView extends GameTool {
 
-	private BasePanel<Game> renderer;
+	private BasePanel renderer;
 	private DebugTools debugTools;
 	private TrainController trainController;
 
-	public DebugToolsView(Editor<Game> editor, DebugTools debugTools, TrainController trainController) {
+	public DebugToolsView(Editor editor, DebugTools debugTools, TrainController trainController) {
 		super(editor, true);
 		this.debugTools = debugTools;
 		this.trainController = trainController;
 
-		this.renderer = new BasePanel<Game>(input, false, this.scene.getWindow());
+		this.renderer = new BasePanel(input, false, this.scene.getWindow());
 		this.renderer.margin = 10;
 		addButtons(editor.getScene());
 

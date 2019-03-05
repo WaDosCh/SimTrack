@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -29,7 +28,7 @@ public class PathFindingTool extends GameTool {
 	private PathFinding pathFinder;
 	private Stack<TileEdgeCoordinate> path;
 
-	public PathFindingTool(Editor<Game> editor) {
+	public PathFindingTool(Editor editor) {
 		super(editor, true);
 
 		this.pathFinder = scene.getPathfinder();

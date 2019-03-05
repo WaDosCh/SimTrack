@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 
 public class DebugTools extends GameTool {
@@ -23,8 +23,11 @@ public class DebugTools extends GameTool {
 
 	private DebugToolsRenderer renderer;
 
-	public DebugTools(Editor<Game> editor, ViewPort viewPort, Window window) {
+	protected Model model;
+
+	public DebugTools(Editor editor, ViewPort viewPort, Window window, Model model) {
 		super(editor, false);
+		this.model = model;
 		
 		this.showing = new HashMap<>();
 		this.showing.put(Option.Coordinates, new AtomicBoolean(false));

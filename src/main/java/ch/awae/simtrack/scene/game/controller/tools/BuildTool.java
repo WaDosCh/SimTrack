@@ -8,8 +8,8 @@ import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.OnLoad;
 import ch.awae.simtrack.core.OnUnload;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
@@ -36,6 +36,7 @@ public class BuildTool extends GameTool {
 	private @Getter boolean valid = false;
 	private boolean placeGood = false;
 	private @Getter TransformableTrackTile track;
+	private Model model;
 
 	/**
 	 * instantiates a new build tool
@@ -43,8 +44,9 @@ public class BuildTool extends GameTool {
 	 * @param editor
 	 *            the editor the build tool will operate under
 	 */
-	public BuildTool(Editor<Game> editor) {
+	public BuildTool(Editor editor, Model model) {
 		super(editor, true);
+		this.model = model;
 
 		onTick(this::checkValid);
 

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
@@ -46,7 +45,7 @@ public class ToolBar extends GameTool {
 	 * @param editor
 	 *            the editor owning the build tool
 	 */
-	public ToolBar(Editor<Game> editor) {
+	public ToolBar(Editor editor) {
 		super(editor, false);
 
 		// ######### BINDINGS ##########

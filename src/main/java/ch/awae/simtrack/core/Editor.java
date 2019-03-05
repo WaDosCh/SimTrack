@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.util.ReflectionHelper;
 import lombok.NonNull;
 
@@ -19,17 +20,15 @@ import lombok.NonNull;
  * @version 2.2, 2015-01-26
  * @since SimTrack 0.2.1
  */
-public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer {
+public class Editor implements BaseTicker, BaseRenderer {
 
-	private T scene;
+	private Game scene;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private Tool<T> currentTool;
+	private Tool currentTool;
 	private BaseRenderer renderer;
-	@SuppressWarnings("rawtypes")
-	private HashMap<Class<? extends Tool>, Tool<T>> tools = new HashMap<>();
-	@SuppressWarnings("rawtypes")
+	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
 	private Class<? extends Tool> baseToolClass = null;
 
 	/**
@@ -38,7 +37,7 @@ public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer {
 	 * @param scene
 	 *            the scene
 	 */
-	public Editor(@NonNull T scene) {
+	public Editor(@NonNull Game scene) {
 		this.scene = scene;
 	}
 
@@ -61,7 +60,7 @@ public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer {
 	 * @param tool
 	 *            the tool to add.
 	 */
-	public void addTool(@NonNull Tool<T> tool) {
+	public void addTool(@NonNull Tool tool) {
 		this.tools.put(tool.getClass(), tool);
 		if (this.currentTool == null) {
 			loadTool(tool.getClass());
@@ -74,13 +73,12 @@ public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer {
 	 * 
 	 * @return the owning controller instance
 	 */
-	public T getScene() {
+	public Game getScene() {
 		return this.scene;
 	}
 
 	private void unloadCurrentTool() {
 		if (currentTool != null) {
-			@SuppressWarnings("rawtypes")
 			ReflectionHelper<Tool> oldHelper = new ReflectionHelper<Tool>(currentTool);
 			oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
 		}
@@ -96,12 +94,11 @@ public class Editor<T extends Scene<T>> implements BaseTicker, BaseRenderer {
 	 *            additional arguments to hand over to the new tool
 	 * @return {@code true} if the tool switch was successful
 	 */
-	@SuppressWarnings("rawtypes")
 	public boolean loadTool(Class<? extends Tool> toolClazz, Object... args) {
 		@NonNull
 		Class<? extends Tool> toolClass = (toolClazz == null) ? baseToolClass : toolClazz;
 		logger.debug("Load tool: " + toolClass.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
-		Tool<T> next = this.tools.get(toolClass);
+		Tool next = this.tools.get(toolClass);
 
 		if (next == null) {
 			logger.warn("Tool " + toolClass.getSimpleName() + " was not found.");

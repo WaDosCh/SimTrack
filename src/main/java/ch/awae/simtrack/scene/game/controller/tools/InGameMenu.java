@@ -1,6 +1,9 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
@@ -9,18 +12,17 @@ import ch.awae.simtrack.core.OnUnload;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.menu.Menu;
 
 public class InGameMenu extends GameTool {
 
-	private BasePanel<Game> renderer;
+	private BasePanel renderer;
 
-	public InGameMenu(Editor<Game> editor) {
+	public InGameMenu(Editor editor) {
 		super(editor, true);
 
-		this.renderer = new BasePanel<>(input, true, this.editor.getScene().getWindow());
+		this.renderer = new BasePanel(input, true, this.editor.getScene().getWindow());
 		this.renderer.add(new Label("Ingame Menu", true));
 		this.renderer.add(new Button("Resume", input, this::resume));
 		this.renderer.add(new Button("Save", input, this::save));

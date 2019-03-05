@@ -39,7 +39,7 @@ public class Game extends Scene<Game> {
 	private @Getter PathFinding pathfinder;
 	private Model model;
 	private ViewPort viewPort;
-	private Editor<Game> editor;
+	private Editor editor;
 
 	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
 
@@ -60,31 +60,31 @@ public class Game extends Scene<Game> {
 		super(controller, window);
 		this.model = model;
 		this.model.load(this.getPaused());
-		this.editor = new Editor<Game>(this);
-		this.trackbar = new ToolBar(editor);
-		this.viewPort = new ViewPort(this); //TODO: don't pass game if possible
-		this.debugTools = new DebugTools(editor,this.viewPort, this.window);
+		this.editor = new Editor(this); // TODO: don't pass game if possible
+		this.trackbar = new ToolBar(this.editor);
+		this.viewPort = new ViewPort(this); // TODO: don't pass game if possible
+		this.debugTools = new DebugTools(this.editor, this.viewPort, this.window, this.model);
 		this.pathfinder = new PathFinding(this.model);
 		this.trainController = new TrainController(this.model);
 
-		editor.addTool(new FreeTool(editor));
-		editor.addTool(new BuildTool(editor));
-		editor.addTool(new PathFindingTool(editor));
-		editor.addTool(new InGameMenu(editor));
-		editor.addTool(new InGameSaveMenu(editor));
-		editor.addTool(new DebugToolsView(editor, this.debugTools, this.trainController));
-		editor.addTool(new SignalTool(editor));
+		editor.addTool(new FreeTool(this.editor));
+		editor.addTool(new BuildTool(this.editor, this.model));
+		editor.addTool(new PathFindingTool(this.editor));
+		editor.addTool(new InGameMenu(this.editor));
+		editor.addTool(new InGameSaveMenu(this.editor, this.model));
+		editor.addTool(new DebugToolsView(this.editor, this.debugTools, this.trainController));
+		editor.addTool(new SignalTool(this.editor, this.model));
 
 		addRenderer(new BackgroundRenderer(this.window));
 		addRenderer(new TileRenderer(this.viewPort, this.model));
-		addRenderer(new HexGridRenderer(this.drawGrid,this.viewPort, this.model));
+		addRenderer(new HexGridRenderer(this.drawGrid, this.viewPort, this.model));
 		addRenderer(new SignalRenderer(this.viewPort, this.model));
 		addRenderer(new EntityRenderer(this.model, this.viewPort));
-		addRenderer(editor);
-		addRenderer(trackbar);
-		addRenderer(debugTools.getRenderer());
+		addRenderer(this.editor);
+		addRenderer(this.trackbar);
+		addRenderer(this.debugTools.getRenderer());
 
-		addTicker(new Navigator(this, this.viewPort, input));
+		addTicker(new Navigator(this, this.viewPort, this.input));
 		addTicker(this.trackbar);
 		addTicker(this.editor);
 		addTicker(this.debugTools);
@@ -106,10 +106,10 @@ public class Game extends Scene<Game> {
 	public void preTick(long millis) {
 		model.getClock().tick(millis);
 	}
-	
+
 	@Override
 	public void screenResized(int width, int height) {
 		viewPort.update();
 	}
-	
+
 }

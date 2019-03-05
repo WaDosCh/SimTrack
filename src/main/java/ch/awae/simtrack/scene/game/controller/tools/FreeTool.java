@@ -6,7 +6,6 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
 
 /**
@@ -27,7 +26,7 @@ public class FreeTool extends GameTool {
 	 * @param e
 	 *            the editor owning the tool
 	 */
-	public FreeTool(Editor<Game> editor) {
+	public FreeTool(Editor editor) {
 		super(editor, false);
 		onPress(Action.DROP_TOOL, () -> editor.loadTool(InGameMenu.class));
 	}

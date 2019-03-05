@@ -10,20 +10,21 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Binding.EdgeProcessor;
 import ch.awae.simtrack.core.Binding.SkipConsumeException;
+import ch.awae.simtrack.scene.game.Game;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
 //TODO: maybe implement abstract getRenderer instead of implementing BaseRenderer ?
-public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, BaseRenderer {
+public abstract class EventDrivenTool implements Tool, BaseRenderer {
 
 	private List<Runnable> drivers = new ArrayList<>();
 	protected final Input input;
-	protected final Editor<T> editor;
-	protected final T scene;
+	protected final Editor editor;
+	protected final Game scene;
 	protected @Getter Point mousePosition = new Point(0, 0);
 	protected final Logger logger = LogManager.getLogger(getClass());
 
-	public EventDrivenTool(Editor<T> editor) {
+	public EventDrivenTool(Editor editor) {
 		this.input = editor.getInput();
 		this.editor = editor;
 		this.scene = editor.getScene();

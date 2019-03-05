@@ -11,16 +11,18 @@ import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.InputField;
 import ch.awae.simtrack.core.ui.Label;
-import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.model.Model;
 
 public class InGameSaveMenu extends GameTool {
 
-	private BasePanel<Game> panel;
+	private BasePanel panel;
+	private Model model;
 
-	public InGameSaveMenu(Editor<Game> editor) {
+	public InGameSaveMenu(Editor editor, Model model) {
 		super(editor, true);
+		this.model = model;
 
-		this.panel = new BasePanel<>(input, true, this.scene.getWindow());
+		this.panel = new BasePanel(input, true, this.scene.getWindow());
 		this.panel.add(new Label("Save game", true));
 		this.panel.add(new InputField(32, this.input));
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
