@@ -187,14 +187,14 @@ public class Controller {
 	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
 		sceneStackLock.lock();
 		try {
-			logger.info("#### SCENE TRANSITION START ####");
-			logger.info("# transition type: push");
+			logger.debug("#### SCENE TRANSITION START ####");
+			logger.info("transition push: {}", next.getClass().getSimpleName());
 			if (!scenes.isEmpty())
 				onSceneUnload(scenes.peek());
 			scenes.push(next);
 			next.bindWindow(window);
 			onSceneLoad(next);
-			logger.info("#### SCENE TRANSITION END   ####");
+			logger.debug("#### SCENE TRANSITION END   ####");
 		} finally {
 			sceneStackLock.unlock();
 		}
@@ -247,13 +247,13 @@ public class Controller {
 	}
 
 	private void onSceneLoad(Scene<?> scene) {
-		logger.info("loading scene " + scene);
+		logger.debug("loading scene " + scene);
 		setTitle(null);
 		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
 		try {
 			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
 		} catch (NoSuchMethodException e) {
-			logger.info("no @OnLoad method found");
+			logger.debug("no @OnLoad method found");
 		} catch (
 				IllegalAccessException
 				| IllegalArgumentException
@@ -263,12 +263,12 @@ public class Controller {
 	}
 
 	private void onSceneUnload(Scene<?> scene) {
-		logger.info("unloading scene " + scene);
+		logger.debug("unloading scene " + scene);
 		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
 		try {
 			reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
 		} catch (NoSuchMethodException e) {
-			logger.info("no @OnUnload method found");
+			logger.debug("no @OnUnload method found");
 		} catch (
 				IllegalAccessException
 				| IllegalArgumentException

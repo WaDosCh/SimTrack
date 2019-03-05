@@ -80,7 +80,7 @@ public final class Resource {
 	@SneakyThrows(ExecutionException.class)
 	public static BufferedImage getImage(String id) {
 		return imageCache.get(id, () -> {
-			logger.info("loading image '" + id + "'");
+			logger.debug("loading image '" + id + "'");
 			try (InputStream stream = asStream("graphics/" + id)) {
 				return ImageIO.read(stream);
 			}
@@ -98,7 +98,7 @@ public final class Resource {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-			logger.info("loading '" + id + "' with " + props.size() + " entries");
+			logger.debug("loading '" + id + "' with " + props.size() + " entries");
 			for (Entry<Object, Object> entry : props.entrySet()) {
 				logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
 			}

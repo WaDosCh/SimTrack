@@ -10,9 +10,9 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Root level="ALL">
-			<AppenderRef ref="Console" />
-			<AppenderRef ref="MyFile" />
+		<Root level="TRACE">
+			<AppenderRef ref="Console" level="INFO" />
+			<AppenderRef ref="MyFile" level="ALL" />
 		</Root>
 	</Loggers>
 </Configuration>
