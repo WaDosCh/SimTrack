@@ -44,15 +44,7 @@ public class InGameMenu extends GameTool {
 	}
 
 	private void save() {
-		try {
-			new File("saves/").mkdir();
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File("saves/map1.simtrack.save")));
-			out.writeObject(this.model);
-			out.close();
-			this.editor.loadTool(FreeTool.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.editor.loadTool(InGameSaveMenu.class);
 	}
 
 	private void quitToMenu() {

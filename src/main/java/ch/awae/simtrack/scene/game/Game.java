@@ -55,6 +55,7 @@ public class Game extends Scene<Game> {
 		editor.addTool(new BuildTool(editor));
 		editor.addTool(new PathFindingTool(editor));
 		editor.addTool(new InGameMenu(editor));
+		editor.addTool(new InGameSaveMenu(editor));
 		editor.addTool(new DebugToolsView(editor, this.debugTools, this.trainController));
 		editor.addTool(new SignalTool(editor));
 

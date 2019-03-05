@@ -1,19 +1,35 @@
 package ch.awae.simtrack.core.ui;
 
-import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.judos.generic.data.StringUtils;
 
-public class InputField extends BaseComponent {
+public class InputField extends Label {
 
-	private int expectedChar;
+	private static Logger logger = LogManager.getLogger();
+	private int expectedLength;
+	private Input input;
+	private boolean focused;
+	private String text;
 
-	public InputField(int expectedChar) {
-		super(Design.textFont);
-		this.expectedChar = expectedChar;
+	public InputField(int expectedLength, Input input) {
+		super(null);
+		this.input = input;
+		this.text = "";
+		this.expectedLength = expectedLength;
+
+		input.getBinding(KeyEvent.VK_A).ifPressed(() -> {
+			this.text += "A";
+			logger.info("text is now: {}", this.text);
+			//TODO: input doesn't work
+		});
 	}
 
 	@Override
@@ -22,21 +38,23 @@ public class InputField extends BaseComponent {
 		g.fillRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 		g.setColor(Design.textFieldBorder);
 		g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
+		g.setFont(Design.textFont);
+		g.setColor(Design.textColor);
+		g.drawString(this.text, this.pos.x, this.pos.y);
 	}
 
 	protected String getTextForSizeCalculation() {
-		return StringUtils.repeat("W", this.expectedChar);
+		return StringUtils.repeat("W", this.expectedLength);
 	}
 
 	@Override
 	public boolean tryConsume(InputEvent event) {
+		if (test(event.mousePos)) {
+			this.focused = true;
+			return true;
+		}
+		this.focused = false;
 		return false;
-	}
-
-	@Override
-	protected Dimension getPreferedDimension() {
-
-		return null;
 	}
 
 }
