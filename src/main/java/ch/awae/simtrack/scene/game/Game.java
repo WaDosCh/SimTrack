@@ -1,7 +1,5 @@
 package ch.awae.simtrack.scene.game;
 
-import java.awt.Dimension;
-
 import ch.awae.simtrack.core.*;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
@@ -68,7 +66,7 @@ public class Game extends Scene<Game> {
 		addRenderer(trackbar);
 		addRenderer(debugTools.getRenderer());
 
-		addTicker(new Navigator(this, input));
+		addTicker(new Navigator(this, this.viewPort, input));
 		addTicker(trackbar);
 		addTicker(editor);
 		addTicker(debugTools);
@@ -76,37 +74,10 @@ public class Game extends Scene<Game> {
 		addTicker(BaseTicker.getNamed("Model", new ProxyTicker(s -> this.model.tick(this))));
 		addTicker(pathfinder);
 		addTicker(this.trainController);
-
-	}
-
-	/**
-	 * moves the view by the given amount
-	 * 
-	 * @param dx
-	 * @param dy
-	 */
-	public void moveScene(int dx, int dy) {
-		this.viewPort.moveScene(dx, dy);
-	}
-
-	/**
-	 * zooms the view by the given amount at the given point. the given point
-	 * remains stationary while zooming.
-	 * 
-	 * @param dzoom
-	 * @param fixX
-	 * @param fixY
-	 */
-	public void zoom(float dzoom, int fixX, int fixY) {
-		this.viewPort.zoom((int) (100 * dzoom), fixX, fixY);
 	}
 
 	public Model getModel() {
 		return this.model;
-	}
-
-	public Dimension getScreenSize() {
-		return window.getCanvasSize();
 	}
 
 	public ViewPort getViewPort() {

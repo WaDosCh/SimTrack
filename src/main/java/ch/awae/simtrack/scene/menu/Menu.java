@@ -44,7 +44,7 @@ public class Menu extends Scene<Menu> {
 	private void newGame() {
 		logger.debug("NEW GAME");
 		Model model = ModelFactory.getDefaultModel();
-		Game game = new Game(controller, model);
+		Scene<Game> game = new Game(controller, model);
 		transitionTo(game);
 	}
 
@@ -55,7 +55,7 @@ public class Menu extends Scene<Menu> {
 			in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
 			Model model = (Model) in.readObject();
 			model.load();
-			Game game = new Game(controller, model);
+			Scene<Game> game = new Game(controller, model);
 			transitionTo(game);
 		} catch (
 				IOException

@@ -1,5 +1,6 @@
 package ch.awae.simtrack.core;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,10 @@ public abstract class Scene<T extends Scene<T>> {
 	 *            the new height
 	 */
 	public void screenResized(int width, int height) {
+	}
+
+	public Dimension getScreenSize() {
+		return window.getCanvasSize();
 	}
 
 }

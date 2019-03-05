@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
+import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.scene.game.model.entity.Train;
@@ -116,7 +117,7 @@ public class DebugToolsRenderer implements Renderer {
 		return "ScreenSize: [w=" + pos.x + ", h=" + pos.y + "]";
 	}
 
-	private void renderUserGuide(Graphics2D g, Game view) {
+	private void renderUserGuide(Graphics2D g, Scene<Game> view) {
 		Dimension size = view.getScreenSize();
 		g.setColor(new Color(255, 255, 255, 225));
 		g.fillRect(50, 50, size.width - 100, size.height - 100 - Design.toolbarHeight);

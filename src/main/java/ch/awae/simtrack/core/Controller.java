@@ -60,7 +60,8 @@ public class Controller {
 		long newStart = System.currentTimeMillis();
 		long deltaT = newStart - startOfLastTick;
 		startOfLastTick = newStart;
-
+		GameWindow window = this.window;
+		
 		if (profiler != null) {
 			profiler.startFrame();
 			profiler.startSample(true, -1);
@@ -83,7 +84,6 @@ public class Controller {
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
 		}
 
-		GameWindow window = this.window;
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
 		if (scenes.isEmpty())
@@ -152,11 +152,6 @@ public class Controller {
 			profiler = null;
 		}
 
-		if (window != this.window) {
-			window.discard();
-			window.init(input);
-			scenes.forEach(sc -> sc.bindWindow(window));
-		}
 	}
 
 	private void renderProfiler(Graphics graphics) {

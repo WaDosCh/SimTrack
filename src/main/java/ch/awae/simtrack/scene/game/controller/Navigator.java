@@ -6,7 +6,9 @@ import java.awt.Point;
 import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.core.Binding;
 import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.view.ViewPort;
 
 /**
  * Navigation Tool. Used for Scene movement & zoom
@@ -18,15 +20,17 @@ import ch.awae.simtrack.scene.game.Game;
 public class Navigator implements BaseTicker<Game> {
 
 	private Input input;
-	private Game gameView;
+	private ViewPort viewPort;
+	private Scene<?> scene;
 
 	private Binding A, S, D, W;
 
 	/**
 	 * instantiates a new navigator
 	 */
-	public Navigator(Game gameView, Input input) {
-		this.gameView = gameView;
+	public Navigator(Scene<?> scene, ViewPort viewPort, Input input) {
+		this.scene = scene;
+		this.viewPort = viewPort;
 		this.input = input;
 
 		A = input.getBinding(Action.PAN_LEFT);
@@ -69,7 +73,7 @@ public class Navigator implements BaseTicker<Game> {
 		if (mouse == null)
 			return;
 		int dx = 0, dy = 0;
-		Dimension size = this.gameView.getScreenSize();
+		Dimension size = this.scene.getScreenSize();
 		if (mouse.x < BORDER || A.isPressed())
 			dx = 1;
 		if (mouse.y < BORDER || W.isPressed())
@@ -80,11 +84,11 @@ public class Navigator implements BaseTicker<Game> {
 			dy = -1;
 		dx *= MOVE_SPEED;
 		dy *= MOVE_SPEED;
-		this.gameView.moveScene(dx, dy);
+		this.viewPort.moveScene(dx, dy);
 
 		double amount = input.getScroll();
 		if (amount != 0)
-			this.gameView.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
+			this.viewPort.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
 	}
 
 	@Override

@@ -141,7 +141,8 @@ public class ViewPort {
 	}
 
 	/**
-	 * sets the zoom level.
+	 * sets the zoom level. the given point
+	 * remains stationary while zooming.
 	 * 
 	 * @param delta
 	 *            difference between new zoom and current
@@ -150,13 +151,16 @@ public class ViewPort {
 	 * @param fixY
 	 *            y-coordinate of the fixed point
 	 */
-	public void zoom(int delta, int fixX, int fixY) {
+	public void zoom(float dzoom, int fixX, int fixY) {
+		
+		int delta = (int) (100 * dzoom);
+		
 		this.focusedPointForZoom = new PointI(fixX, fixY);
 		if (delta > 0)
 			this.targetZoom *= 1.2;
 		if (delta < 0)
 			this.targetZoom /= 1.2;
-
+		
 		if (this.targetZoom < this.minZoom)
 			this.targetZoom = this.minZoom;
 		if (this.targetZoom > this.maxZoom)
