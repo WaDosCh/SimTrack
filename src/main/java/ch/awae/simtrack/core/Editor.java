@@ -82,13 +82,7 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 		if (currentTool != null) {
 			@SuppressWarnings("rawtypes")
 			ReflectionHelper<Tool> oldHelper = new ReflectionHelper<Tool>(currentTool);
-			try {
-				oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
-			} catch (NoSuchMethodException nsm) {
-				// ignore
-			} catch (Exception e) {
-				logger.error("failure to unload", e);
-			}
+			oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
 		}
 	}
 
@@ -116,14 +110,7 @@ public class Editor<T extends Scene<T>> implements BaseTicker<T>, BaseRenderer<T
 
 		try {
 			ReflectionHelper<Tool> helper = new ReflectionHelper<>(next);
-
-			try {
-				helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);
-			} catch (NoSuchMethodException nsm) {
-				// ignore
-				if (args.length > 0)
-					throw new IllegalArgumentException("no method found for non-empty parameter list");
-			}
+			helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);
 			if (currentTool != next)
 				unloadCurrentTool();
 

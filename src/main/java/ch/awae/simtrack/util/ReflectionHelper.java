@@ -1,12 +1,13 @@
 package ch.awae.simtrack.util;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import lombok.SneakyThrows;
 
 public class ReflectionHelper<T> {
 
@@ -77,16 +78,21 @@ public class ReflectionHelper<T> {
 		throw new NoSuchMethodException();
 	}
 
-	public Object findAndInvokeCompatibleMethod(Class<? extends Annotation> annotation, String name, Object... params)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
+	@SneakyThrows
+	public Object findAndInvokeCompatibleMethod(Class<? extends Annotation> annotation, String name, Object... params) {
 		Class<?>[] paramTypes = new Class<?>[params.length];
 		for (int i = 0; i < paramTypes.length; i++) {
 			Object param = params[i];
 			paramTypes[i] = param == null ? null : param.getClass();
 		}
-		Method method = findCompatibleMethod(annotation, name, paramTypes);
-		logger.info("invoking " + shortMethodString(method));
-		return method.invoke(this.instance, params);
+		try {
+			Method method = findCompatibleMethod(annotation, name, paramTypes);
+			logger.debug("invoking " + shortMethodString(method));
+			return method.invoke(this.instance, params);
+		} catch (NoSuchMethodException e) {
+			logger.debug("no @OnLoad method found in {}", this.instance);
+			return null;
+		}
 	}
 
 	private String shortMethodString(Method m) {

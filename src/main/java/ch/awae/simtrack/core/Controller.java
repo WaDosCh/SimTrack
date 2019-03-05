@@ -249,31 +249,13 @@ public class Controller {
 	private void onSceneLoad(Scene<?> scene) {
 		logger.debug("loading scene " + scene);
 		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
-		try {
-			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
-		} catch (NoSuchMethodException e) {
-			logger.debug("no @OnLoad method found");
-		} catch (
-				IllegalAccessException
-				| IllegalArgumentException
-				| InvocationTargetException e) {
-			logger.error("error in @OnLoad method", e);
-		}
+		reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
 	}
 
 	private void onSceneUnload(Scene<?> scene) {
 		logger.debug("unloading scene " + scene);
 		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
-		try {
-			reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
-		} catch (NoSuchMethodException e) {
-			logger.debug("no @OnUnload method found");
-		} catch (
-				IllegalAccessException
-				| IllegalArgumentException
-				| InvocationTargetException e) {
-			logger.error("error in @OnUnload method", e);
-		}
+		reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
 	}
 
 	public void replaceWindow(GameWindow window) {
