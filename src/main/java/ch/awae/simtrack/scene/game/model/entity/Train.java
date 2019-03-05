@@ -163,6 +163,7 @@ public class Train implements Entity {
 				this.path = null;
 				logger.info(this + " has reached its destination");
 				model.removeEntity(this);
+				this.reservedTiles.clear();
 			}
 		}
 
