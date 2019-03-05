@@ -1,6 +1,6 @@
 package ch.awae.simtrack.core;
 
-public interface BaseComponent<T extends Scene<T>> {
+public interface NamedComponent {
 
 	default String getName() {
 		return this.getClass().getSimpleName();
