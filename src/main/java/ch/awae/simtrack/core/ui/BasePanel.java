@@ -36,11 +36,10 @@ public class BasePanel implements Component {
 
 	@Override
 	public void render(Graphics g, Window w) {
-		
+
 		if (this.needsLayout) {
 			Dimension size = w.getCanvasSize();
-			layout(margin, margin, size.width - 2 * margin,
-					size.height - Design.toolbarHeight - 2 * margin);
+			layout(margin, margin, size.width - 2 * margin, size.height - Design.toolbarHeight - 2 * margin);
 		}
 
 		g.setColor(Design.almostOpaque);
@@ -54,8 +53,7 @@ public class BasePanel implements Component {
 
 		click.onPress(() -> {
 			Point pos = this.input.getMousePosition();
-			InputEvent event = new InputEvent(pos, 1);
-			tryConsume(event);
+			tryConsume(pos, 1);
 		});
 	}
 
@@ -102,9 +100,9 @@ public class BasePanel implements Component {
 	}
 
 	@Override
-	public boolean tryConsume(InputEvent event) {
+	public boolean tryConsume(Point mousePos, int mouseButton) {
 		for (Component b : this.components) {
-			if (b.tryConsume(event))
+			if (b.tryConsume(mousePos, mouseButton))
 				return true;
 		}
 		return false;

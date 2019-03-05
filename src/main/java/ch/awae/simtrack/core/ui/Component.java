@@ -1,6 +1,7 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
+import java.awt.Point;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
@@ -34,5 +35,5 @@ public interface Component {
 	 * @param event
 	 * @return true if event is consumed
 	 */
-	public boolean tryConsume(InputEvent event);
+	public boolean tryConsume(Point mousePosition, int mouseButton);
 }

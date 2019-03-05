@@ -1,5 +1,7 @@
 package ch.awae.simtrack.core.ui;
 
+import java.awt.Point;
+
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Window;
@@ -34,8 +36,8 @@ public class Button extends Label {
 	}
 
 	@Override
-	public boolean tryConsume(InputEvent event) {
-		if (test(event.mousePos)) {
+	public boolean tryConsume(Point mousePos, int mouseButton) {
+		if (mouseButton == 1 && test(mousePos)) {
 			this.action.run();
 			return true;
 		}

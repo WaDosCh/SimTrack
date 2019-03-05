@@ -61,8 +61,8 @@ public class CheckboxButton extends Label {
 	}
 
 	@Override
-	public boolean tryConsume(InputEvent event) {
-		if (test(event.mousePos)) {
+	public boolean tryConsume(Point mousePos, int mouseButton) {
+		if (mouseButton == 1 && test(mousePos)) {
 			this.dataMapping.update(x -> !x);
 			return true;
 		}

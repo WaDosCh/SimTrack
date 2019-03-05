@@ -1,5 +1,6 @@
 package ch.awae.simtrack.core.ui;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 
 import org.apache.logging.log4j.LogManager;
@@ -48,8 +49,8 @@ public class InputField extends Label {
 	}
 
 	@Override
-	public boolean tryConsume(InputEvent event) {
-		if (test(event.mousePos)) {
+	public boolean tryConsume(Point mousePos, int mouseButton) {
+		if (mouseButton == 1 && test(mousePos)) {
 			this.focused = true;
 			return true;
 		}

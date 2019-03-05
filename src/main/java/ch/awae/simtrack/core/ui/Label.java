@@ -2,6 +2,7 @@ package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -45,7 +46,7 @@ public class Label extends BaseComponent {
 	}
 
 	@Override
-	public boolean tryConsume(InputEvent event) {
+	public boolean tryConsume(Point mousePos, int mouseButton) {
 		return false;
 	}
 
