@@ -27,9 +27,8 @@ public class Main {
 		
 		Controller controller = new Controller(window);
 		controller.start();
-		Menu scene = new Menu(controller, window);
+		controller.loadScene(Menu.class);
 		
-		controller.loadScene(scene);
 	}
 
 }

@@ -7,8 +7,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,27 +17,28 @@ import ch.awae.simtrack.core.Profiler.StringSupplier;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.util.Resource;
 import lombok.Getter;
-import lombok.NonNull;
 
-public class Controller {
+public class Controller implements SceneController {
 
 	private HighPrecisionClock gameClock;
+	protected GameWindow window;
+	protected @Getter final Input input;
+	protected Scene<?> currentScene = null;
+	protected final Logger logger = LogManager.getLogger();
 
-	private GameWindow window;
-	private @Getter final Input input;
-	private Stack<Scene<?>> scenes = new Stack<>();
 	private Profiler profiler;
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
-	private final Logger logger = LogManager.getLogger();
-	private final ReentrantLock sceneStackLock = new ReentrantLock();
-
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
+	
+	private long startOfLastTick = System.currentTimeMillis();
+	private SceneFactory sceneFactory;
 
 	public Controller(GameWindow window) {
-		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		this.window = window;
-		input = new Input();
+		this.input = new Input();
+		this.sceneFactory = new SceneFactory(this, window);
+		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		profilerToggle = input.getBinding(KeyEvent.VK_F6);
 		window.init(input);
 	}
@@ -51,9 +50,7 @@ public class Controller {
 	public void stop() {
 		this.gameClock.stop();
 	}
-
-	private long startOfLastTick = System.currentTimeMillis();
-
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void tick() {
 
@@ -61,7 +58,7 @@ public class Controller {
 		long deltaT = newStart - startOfLastTick;
 		startOfLastTick = newStart;
 		GameWindow window = this.window;
-		
+
 		if (profiler != null) {
 			profiler.startFrame();
 			profiler.startSample(true, -1);
@@ -86,7 +83,7 @@ public class Controller {
 
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
-		if (scenes.isEmpty())
+		if (this.currentScene == null)
 			return;
 
 		if (profiler == null) {
@@ -95,7 +92,7 @@ public class Controller {
 		} else {
 			profiler.endSample();
 		}
-		Scene<?> scene = scenes.peek();
+		Scene<?> scene = this.currentScene;
 
 		if (window.resized()) {
 			scene.screenResized(window.getCanvasSize().width, window.getCanvasSize().height);
@@ -146,12 +143,6 @@ public class Controller {
 
 		profiler.endFrame();
 
-		if (scene != scenes.peek()) {
-			scene.onUnload();
-			scenes.peek().onLoad();
-			profiler = null;
-		}
-
 	}
 
 	private void renderProfiler(Graphics graphics) {
@@ -167,11 +158,11 @@ public class Controller {
 	@SuppressWarnings("rawtypes")
 	private void createProfiler() {
 		List<StringSupplier> tickers = new ArrayList<>();
-		for (BaseTicker ticker : scenes.peek().getTickers()) {
+		for (BaseTicker ticker : this.currentScene.getTickers()) {
 			tickers.add(ticker::getName);
 		}
 		List<StringSupplier> renderers = new ArrayList<>();
-		for (BaseRenderer renderer : scenes.peek().getRenderers()) {
+		for (BaseRenderer renderer : this.currentScene.getRenderers()) {
 			renderers.add(renderer::getName);
 		}
 
@@ -179,73 +170,27 @@ public class Controller {
 		profiler = new Profiler(samplingRate, tickers, renderers);
 	}
 
-	public <S extends Scene<S>> void loadScene(@NonNull Scene<S> next) {
-		sceneStackLock.lock();
-		try {
-			logger.debug("#### SCENE TRANSITION START ####");
-			logger.info("scene transition push: {}", next.getSceneName());
-			if (!scenes.isEmpty())
-				onSceneUnload(scenes.peek());
-			scenes.push(next);
-			onSceneLoad(next);
-			logger.debug("#### SCENE TRANSITION END   ####");
-		} finally {
-			sceneStackLock.unlock();
-		}
-	}
-
-	public void loadRoot() {
-		sceneStackLock.lock();
-		try {
-			logger.debug("#### SCENE TRANSITION START ####");
-			logger.info("scene transition to root");
-			if (scenes.size() == 1)
-				return;
-			onSceneUnload(scenes.peek());
-			while (scenes.size() > 1)
-				scenes.pop();
-			onSceneLoad(scenes.peek());
-			logger.debug("#### SCENE TRANSITION END   ####");
-		} finally {
-			sceneStackLock.unlock();
-		}
-	}
-
-	public void loadPrevious() {
-		sceneStackLock.lock();
-		try {
-			logger.debug("#### SCENE TRANSITION START ####");
-			logger.info("scene transition pop from {} to {}", scenes.peek().getSceneName(),
-					scenes.get(scenes.size() - 2).getSceneName());
-			if (scenes.size() > 1) {
-				onSceneUnload(scenes.pop());
-				onSceneLoad(scenes.peek());
-			}
-			logger.debug("#### SCENE TRANSITION END   ####");
-		} finally {
-			sceneStackLock.unlock();
-		}
-	}
-
-	private void onSceneLoad(Scene<?> scene) {
-		logger.debug("loading scene " + scene);
-		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
-		reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
-	}
-
-	private void onSceneUnload(Scene<?> scene) {
-		logger.debug("unloading scene " + scene);
-		ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
-		reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
-	}
-
-	public void replaceWindow(GameWindow window) {
-		this.window.discard();
-		window.init(input);
-	}
-
 	public void requestSnapshot(Consumer<Image> callback) {
 		snapshotRequests.add(callback);
 	}
+
+	@Override
+	public <T extends Scene<T>> void loadScene(Class<T> sceneClass, Object... args) {
+		Scene<?> scene = this.sceneFactory.createScene(sceneClass, args);
+		if (scene != null) {
+			if (this.currentScene != null) {
+				logger.debug("unloading scene " + this.currentScene);
+				ReflectionHelper<?> reflector = new ReflectionHelper<>(this.currentScene);
+				reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
+			}
+			
+			logger.debug("loading scene " + scene);
+			ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
+			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
+			this.currentScene = scene;
+			createProfiler();
+		}
+	}
+	
 
 }

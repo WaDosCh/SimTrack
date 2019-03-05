@@ -15,7 +15,6 @@ import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
-import ch.awae.simtrack.scene.game.model.ModelFactory;
 import ch.judos.generic.graphics.ImageUtils;
 
 public class DebugToolsView extends GameTool {
@@ -38,10 +37,11 @@ public class DebugToolsView extends GameTool {
 
 	private void addButtons(Game game) {
 		this.renderer.add(new Label("Debug Tools"));
-		this.renderer.add(new CheckboxButton("Show coordinates", input, debugTools.getOptionActive(Option.Coordinates)));
+		this.renderer
+				.add(new CheckboxButton("Show coordinates", input, debugTools.getOptionActive(Option.Coordinates)));
 		this.renderer.add(new CheckboxButton("Toggle grid", input, game.getDrawGrid()));
 		this.renderer.add(new Button("New map", input, () -> {
-			game.loadModel(ModelFactory.getDefaultModel());
+			editor.getScene().getSceneController().loadScene(Game.class);
 		}));
 		this.renderer.add(new CheckboxButton("Pause", input, game.getPaused()));
 		this.renderer.add(new Button("Screenshot", input, () -> {
@@ -58,7 +58,8 @@ public class DebugToolsView extends GameTool {
 		this.renderer.add(new Button("Pathfinding Tool", input, () -> {
 			editor.loadTool(PathFindingTool.class);
 		}));
-		this.renderer.add(new CheckboxButton("Show reservations", input, debugTools.getOptionActive(Option.Reservations)));
+		this.renderer
+				.add(new CheckboxButton("Show reservations", input, debugTools.getOptionActive(Option.Reservations)));
 		this.renderer.add(new Button("Spawn train", input, this.trainController::requestSpawnTrain));
 		this.renderer.add(new CheckboxButton("Enable train spawning", input, this.trainController.getActive()));
 

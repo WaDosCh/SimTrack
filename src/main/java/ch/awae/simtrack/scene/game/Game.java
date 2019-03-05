@@ -63,7 +63,7 @@ public class Game extends Scene<Game> {
 		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);
 		this.pathfinder = new PathFinding(model);
-		this.trainController = new TrainController();
+		this.trainController = new TrainController(model);
 		this.viewPort = new ViewPort(this); //TODO: don't pass game
 
 		editor.addTool(new FreeTool(editor));
@@ -99,13 +99,6 @@ public class Game extends Scene<Game> {
 
 	public ViewPort getViewPort() {
 		return this.viewPort;
-	}
-
-	public void loadModel(Model model) {
-		this.model = model;
-		this.model.load();
-		this.pathfinder.setModel(model);
-		this.viewPort.resetZoomAndScrolling();
 	}
 
 	@Override

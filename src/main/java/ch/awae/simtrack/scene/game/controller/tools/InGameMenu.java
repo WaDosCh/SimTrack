@@ -11,6 +11,7 @@ import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.menu.Menu;
 
 public class InGameMenu extends GameTool {
 
@@ -48,7 +49,7 @@ public class InGameMenu extends GameTool {
 	}
 
 	private void quitToMenu() {
-		scene.transitionToHome();
+		this.editor.getScene().getSceneController().loadScene(Menu.class);
 	}
 
 	private void load() {
@@ -56,7 +57,10 @@ public class InGameMenu extends GameTool {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
 			Model model = (Model) in.readObject();
 			in.close();
-			this.scene.loadModel(model);
+			// TODO: not allowed to switch model in running game, too many
+			// issues may arise
+			// instead force creation of new game scene.
+			// this.scene.loadModel(model);
 			this.editor.loadTool(FreeTool.class);
 		} catch (
 				IOException

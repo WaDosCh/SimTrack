@@ -31,8 +31,10 @@ public class TrainController implements BaseTicker<Game> {
 	private int spawnTrains;
 	private long checkForSpawnTimeMS;
 	private @Getter AtomicBoolean active = new AtomicBoolean(false);
+	private Model model;
 
-	public TrainController() {
+	public TrainController(Model model) {
+		this.model = model;
 		this.checkForSpawnTimeMS = System.currentTimeMillis() + firstCheckAfterXSec * 1000;
 	}
 
@@ -40,12 +42,11 @@ public class TrainController implements BaseTicker<Game> {
 	public void tick(Game game) {
 		while (this.spawnTrains > 0) {
 			this.spawnTrains--;
-			spawnTrain(game.getModel());
+			spawnTrain(this.model);
 		}
 		if (Time.isOver(checkForSpawnTimeMS) && this.active.get()) {
-			Model model = game.getModel();
-			if (model.getEntitiesByType(Train.class).size() < 3) {
-				spawnTrain(model);
+			if (this.model.getEntitiesByType(Train.class).size() < 3) {
+				spawnTrain(this.model);
 			}
 			this.checkForSpawnTimeMS = System.currentTimeMillis() + checkEveryXSec * 1000;
 		}

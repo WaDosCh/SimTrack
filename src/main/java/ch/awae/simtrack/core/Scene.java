@@ -42,23 +42,9 @@ public abstract class Scene<T extends Scene<T>> {
 	public String getSceneName() {
 		return this.getClass().getSimpleName();
 	}
-
-	public final <S extends Scene<S>> void transitionTo(Scene<S> next) {
-		controller.loadScene(next);
-	}
-
-	public final void transitionBack() {
-		controller.loadPrevious();
-	}
-
-	public final void transitionToHome() {
-		controller.loadRoot();
-	}
-
-	public void onLoad() {
-	}
-
-	public void onUnload() {
+	
+	public SceneController getSceneController() {
+		return this.controller;
 	}
 
 	public final void requestSnapshot(Consumer<Image> callback) {

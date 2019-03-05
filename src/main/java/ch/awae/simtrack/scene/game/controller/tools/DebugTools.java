@@ -17,12 +17,18 @@ public class DebugTools extends GameTool {
 		Reservations;
 	}
 
-	private HashMap<Option,AtomicBoolean> showing = new HashMap<>();
+	private HashMap<Option,AtomicBoolean> showing;
 
-	private DebugToolsRenderer renderer = new DebugToolsRenderer(showing, this);
+	private DebugToolsRenderer renderer;
 
 	public DebugTools(Editor<Game> editor) {
 		super(editor, GameTool.UnloadAction.IGNORE);
+		
+		this.showing = new HashMap<>();
+		this.showing.put(Option.Coordinates, new AtomicBoolean(false));
+		this.showing.put(Option.InputGuide, new AtomicBoolean(false));
+		this.showing.put(Option.Reservations, new AtomicBoolean(false));
+		this.renderer = new DebugToolsRenderer(showing, this);
 
 		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
 		onPress(Action.DEBUG_TOOL, () -> editor.loadTool(DebugToolsView.class));

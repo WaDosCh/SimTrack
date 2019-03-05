@@ -54,9 +54,11 @@ public class Train implements Entity {
 	 * new reservation
 	 */
 	private int amountOfTilesAheadReserved;
+	private Model model;
 
 	public Train(Model model, TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
+		this.model = model;
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
 		this.amountOfTilesAheadReserved = 0;
@@ -130,7 +132,7 @@ public class Train implements Entity {
 	public void tick(Game g) {
 		if (this.path == null && this.pathFindingOptions != null) {
 			if (this.pathFindingOptions.searchAgainInTicks == 0) {
-				searchPath(g.getModel());
+				searchPath(this.model);
 			}
 			if (this.pathFindingOptions.searchAgainInTicks == -300) {
 				logger.info(this + " path request is starving...");
@@ -138,15 +140,15 @@ public class Train implements Entity {
 			this.pathFindingOptions.searchAgainInTicks--;
 		}
 		if (this.path != null) {
-			move(g.getModel());
+			move();
 		}
 	}
 
-	private void move(Model model) {
+	private void move() {
 		// this.speed = MathJS.clamp(this.amountOfTilesAheadReserved, 2, 6);
 
 		if (this.currentTilePath == null) {
-			if (!createNextTilePath(model))
+			if (!createNextTilePath(this.model))
 				return;
 		}
 
@@ -154,7 +156,7 @@ public class Train implements Entity {
 		if (this.progressedDistance >= this.currentTilePath.getPathLength()) {
 			if (this.path.size() > 0) {
 				double length = this.currentTilePath.getPathLength();
-				if (createNextTilePath(model)) {
+				if (createNextTilePath(this.model)) {
 					this.progressedDistance -= length;
 				} else {
 					this.progressedDistance = length;
@@ -162,7 +164,7 @@ public class Train implements Entity {
 			} else if (this.progressedDistance > getTrainLength() + 50 + this.currentTilePath.getPathLength()) {
 				this.path = null;
 				logger.info(this + " has reached its destination");
-				model.removeEntity(this);
+				this.model.removeEntity(this);
 				this.reservedTiles.clear();
 			}
 		}
@@ -173,7 +175,7 @@ public class Train implements Entity {
 			double sumNewHistory = sumHistory - this.reservedTiles.get(0).getPathLength();
 			if (getTrainLength() + 50 <= sumNewHistory) {
 				TilePathCoordinate tile = this.reservedTiles.remove(0);
-				model.releaseTile(this, tile.getTile());
+				this.model.releaseTile(this, tile.getTile());
 			}
 		}
 	}

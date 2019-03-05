@@ -44,8 +44,7 @@ public class Menu extends Scene<Menu> {
 	private void newGame() {
 		logger.debug("NEW GAME");
 		Model model = ModelFactory.getDefaultModel();
-		Scene<Game> game = new Game(controller, model, this.window);
-		transitionTo(game);
+		this.controller.loadScene(Game.class, model);
 	}
 
 	private void loadGame() {
@@ -55,8 +54,7 @@ public class Menu extends Scene<Menu> {
 			in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
 			Model model = (Model) in.readObject();
 			model.load();
-			Scene<Game> game = new Game(controller, model, this.window);
-			transitionTo(game);
+			this.controller.loadScene(Game.class, model);
 		} catch (
 				IOException
 				| ClassNotFoundException e) {

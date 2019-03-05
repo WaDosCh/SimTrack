@@ -13,6 +13,7 @@ import ch.awae.simtrack.core.Binding.SkipConsumeException;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
 
+//TODO: maybe implement abstract getRenderer instead of implementing BaseRenderer ?
 public abstract class EventDrivenTool<T extends Scene<T>> implements Tool<T>, BaseRenderer<T> {
 
 	private List<Runnable> drivers = new ArrayList<>();
