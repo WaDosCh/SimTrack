@@ -45,13 +45,13 @@ public class ViewPort implements BaseTicker<Game> {
 	 */
 	public ViewPort(Game owner) {
 		this.owner = owner;
-		this.init();
+		this.resetZoomAndScrolling();
 	}
 
 	/**
 	 * initialises the viewport
 	 */
-	void init() {
+	public void resetZoomAndScrolling() {
 		this.zoom = this.defaultZoom;
 		this.targetZoom = this.zoom;
 		this.sceneCorner = new PointD(0, 0);
@@ -232,7 +232,7 @@ public class ViewPort implements BaseTicker<Game> {
 	 * @param point
 	 *            the scene coordinate
 	 * @param radius
-	 *            the radius of the area to be checked
+	 *            the radius of the rectangle area to be checked
 	 * @return false if it can be proven that the area is invisible, true
 	 *         otherwise
 	 */
@@ -271,10 +271,5 @@ public class ViewPort implements BaseTicker<Game> {
 	public Point getSceneCorner() {
 		return this.sceneCorner.getPoint();
 	}
-
-	public void reloadBounds() {
-		init();
-	}
-
 
 }
