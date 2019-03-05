@@ -187,7 +187,6 @@ public class Controller {
 			if (!scenes.isEmpty())
 				onSceneUnload(scenes.peek());
 			scenes.push(next);
-			next.bindWindow(window);
 			onSceneLoad(next);
 			logger.debug("#### SCENE TRANSITION END   ####");
 		} finally {
@@ -241,7 +240,8 @@ public class Controller {
 	}
 
 	public void replaceWindow(GameWindow window) {
-		this.window = window;
+		this.window.discard();
+		window.init(input);
 	}
 
 	public void requestSnapshot(Consumer<Image> callback) {

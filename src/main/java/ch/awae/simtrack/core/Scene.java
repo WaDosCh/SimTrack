@@ -21,10 +21,12 @@ public abstract class Scene<T extends Scene<T>> {
 	private @Getter List<BaseRenderer<T>> renderers;
 	private @Getter List<BaseTicker<T>> tickers;
 
-	public Scene(Controller controller) {
-		renderers = new ArrayList<>();
-		tickers = new ArrayList<>();
+	public Scene(Controller controller, Window window) {
 		this.controller = controller;
+		this.window = window;
+		
+		tickers = new ArrayList<>();
+		renderers = new ArrayList<>();
 		this.input = controller.getInput();
 		this.logger = LogManager.getLogger();
 	}
@@ -57,10 +59,6 @@ public abstract class Scene<T extends Scene<T>> {
 	}
 
 	public void onUnload() {
-	}
-
-	public void bindWindow(Window window) {
-		this.window = window;
 	}
 
 	public final void requestSnapshot(Consumer<Image> callback) {

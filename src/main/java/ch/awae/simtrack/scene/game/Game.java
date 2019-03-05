@@ -40,14 +40,15 @@ public class Game extends Scene<Game> {
 	 * @param screenX
 	 * @param screenY
 	 */
-	public Game(Controller controller, Model model) {
-		super(controller);
+	public Game(Controller controller, Model model, Window window) {
+		super(controller, window);
 		this.model = model;
 		this.editor = new Editor<Game>(this);
 		this.trackbar = new ToolBar(editor);
 		this.debugTools = new DebugTools(editor);
 		this.pathfinder = new PathFinding(model);
 		this.trainController = new TrainController();
+		this.viewPort = new ViewPort(this); //TODO: don't pass game
 
 		editor.addTool(new FreeTool(editor));
 		editor.addTool(new BuildTool(editor));
@@ -91,12 +92,6 @@ public class Game extends Scene<Game> {
 		this.viewPort.reloadBounds();
 	}
 
-	@Override
-	public void bindWindow(Window window) {
-		super.bindWindow(window);
-		this.viewPort = new ViewPort(this);
-	}
-	
 	@Override
 	public void preTick(long millis) {
 		model.getClock().tick(millis);

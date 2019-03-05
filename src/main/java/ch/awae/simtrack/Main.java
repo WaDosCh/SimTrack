@@ -3,6 +3,7 @@ package ch.awae.simtrack;
 import javax.swing.SwingUtilities;
 
 import ch.awae.simtrack.core.Controller;
+import ch.awae.simtrack.core.GameWindow;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.util.MacKeyboardHack;
 import ch.awae.simtrack.window.ResizableWindow;
@@ -21,12 +22,12 @@ public class Main {
 
 	private static void init() {
 		
-		//Controller controller = new Controller(new NativeFullscreen());
-		Controller controller = new Controller(new ResizableWindow(1200, 800));
+//		GameWindow window = new NativeFullscreen();
+		GameWindow window = new ResizableWindow(1200, 800);
 		
+		Controller controller = new Controller(window);
 		controller.start();
-
-		Menu scene = new Menu(controller);
+		Menu scene = new Menu(controller, window);
 		
 		controller.loadScene(scene);
 	}

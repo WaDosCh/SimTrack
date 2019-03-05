@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
+import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
@@ -19,8 +20,8 @@ public class Menu extends Scene<Menu> {
 
 	private BasePanel panel;
 
-	public Menu(Controller controller) {
-		super(controller);
+	public Menu(Controller controller, Window window) {
+		super(controller, window);
 
 		initMenu();
 
@@ -44,7 +45,7 @@ public class Menu extends Scene<Menu> {
 	private void newGame() {
 		logger.debug("NEW GAME");
 		Model model = ModelFactory.getDefaultModel();
-		Scene<Game> game = new Game(controller, model);
+		Scene<Game> game = new Game(controller, model, this.window);
 		transitionTo(game);
 	}
 
@@ -55,7 +56,7 @@ public class Menu extends Scene<Menu> {
 			in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
 			Model model = (Model) in.readObject();
 			model.load();
-			Scene<Game> game = new Game(controller, model);
+			Scene<Game> game = new Game(controller, model, this.window);
 			transitionTo(game);
 		} catch (
 				IOException
