@@ -26,8 +26,8 @@ public class NativeFullscreen implements GameWindow {
 	private Canvas canvas;
 	private BufferStrategy buffer;
 
-	
-	public NativeFullscreen() {
+	public NativeFullscreen(Input input) {
+		this.input = input;
 		screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		window = new JFrame();
 		canvas = new Canvas();
@@ -35,11 +35,10 @@ public class NativeFullscreen implements GameWindow {
 		this.canvasSize = bounds.getSize();
 		window.add(canvas);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		init();
 	}
 
-	@Override
-	public void init(Input input) {
-		this.input = input;
+	private void init() {
 
 		window.setVisible(true);
 		window.setResizable(false);
@@ -57,7 +56,6 @@ public class NativeFullscreen implements GameWindow {
 		canvas.addMouseMotionListener(input.getMouse());
 		canvas.addMouseWheelListener(input.getMouse());
 		window.addKeyListener(input.getKeyboard());
-
 	}
 
 	@Override

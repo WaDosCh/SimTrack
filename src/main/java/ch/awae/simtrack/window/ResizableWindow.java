@@ -14,17 +14,19 @@ import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
+import lombok.Getter;
 import ch.awae.simtrack.core.GameWindow;
 
 public class ResizableWindow implements GameWindow {
 
+	private @Getter Input input;
+	private @Getter Graphics graphics;
+
 	private JFrame window;
 	private Canvas canvas;
-	private Input input;
 	private BufferStrategy buffer;
-	private Graphics graphics;
 	private boolean resized = false;
-	
+
 	private ComponentListener compListener = new ComponentAdapter() {
 		@Override
 		public void componentResized(ComponentEvent e) {
@@ -32,13 +34,16 @@ public class ResizableWindow implements GameWindow {
 		}
 	};
 
-	public ResizableWindow(int x, int y) {
+	public ResizableWindow(int x, int y, Input input) {
+		this.input = input;
+
 		Properties p = Resource.getProperties("application.properties", "");
-		window = new JFrame("SimTrack "+p.getString("version"));
+		window = new JFrame("SimTrack " + p.getString("version"));
 		canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(x, y));
 		window.add(canvas);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		init();
 	}
 
 	@Override
@@ -46,15 +51,7 @@ public class ResizableWindow implements GameWindow {
 		return canvas.getSize();
 	}
 
-	@Override
-	public Input getInput() {
-		return input;
-	}
-
-	@Override
-	public void init(Input input) {
-		this.input = input;
-
+	private void init() {
 		window.setIgnoreRepaint(true);
 		canvas.setIgnoreRepaint(true);
 		window.pack();
@@ -70,7 +67,6 @@ public class ResizableWindow implements GameWindow {
 		canvas.addMouseWheelListener(input.getMouse());
 		window.addKeyListener(input.getKeyboard());
 		window.addComponentListener(compListener);
-
 	}
 
 	@Override
@@ -82,13 +78,8 @@ public class ResizableWindow implements GameWindow {
 		canvas.removeMouseWheelListener(input.getMouse());
 		window.removeKeyListener(input.getKeyboard());
 		window.removeComponentListener(compListener);
-		
-		window.setVisible(false);
-	}
 
-	@Override
-	public Graphics getGraphics() {
-		return this.graphics;
+		window.setVisible(false);
 	}
 
 	@Override

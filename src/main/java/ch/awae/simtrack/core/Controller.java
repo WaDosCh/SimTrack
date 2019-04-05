@@ -36,14 +36,13 @@ public class Controller implements SceneController {
 
 	public Controller(GameWindow window) {
 		this.window = window;
-		this.input = new Input();
+		this.input = window.getInput();
 		this.sceneFactory = new SceneFactory(this, window);
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		profilerToggle = input.getBinding(KeyEvent.VK_F6);
 
 		int samplingRate = Resource.getConfigProperties("core.properties").getInt("profiler.sampleRate");
 		profiler = new Profiler(samplingRate);
-		window.init(input);
 	}
 
 	public void start() {

@@ -2,8 +2,6 @@ package ch.awae.simtrack.core;
 
 public interface GameWindow extends Window {
 
-	void init(Input input);
-
 	void discard();
 
 	Graphics getGraphics();
