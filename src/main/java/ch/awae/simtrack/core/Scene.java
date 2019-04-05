@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import lombok.Getter;
 
-public abstract class Scene<T extends Scene<T>> {
+public abstract class Scene {
 
 	protected @Getter Input input;
 	protected @Getter Window window;

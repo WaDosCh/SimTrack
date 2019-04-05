@@ -34,7 +34,7 @@ import lombok.Getter;
  * @version 1.1, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class Game extends Scene<Game> {
+public class Game extends Scene {
 
 	private @Getter PathFinding pathfinder;
 	private Model model;

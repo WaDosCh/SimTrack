@@ -23,14 +23,14 @@ public class Controller implements SceneController {
 	private HighPrecisionClock gameClock;
 	protected GameWindow window;
 	protected @Getter final Input input;
-	protected Scene<?> currentScene = null;
+	protected Scene currentScene = null;
 	protected final Logger logger = LogManager.getLogger();
 
 	private Profiler profiler;
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
-	
+
 	private long startOfLastTick = System.currentTimeMillis();
 	private SceneFactory sceneFactory;
 
@@ -50,7 +50,7 @@ public class Controller implements SceneController {
 	public void stop() {
 		this.gameClock.stop();
 	}
-	
+
 	private void tick() {
 
 		long newStart = System.currentTimeMillis();
@@ -91,7 +91,7 @@ public class Controller implements SceneController {
 		} else {
 			profiler.endSample();
 		}
-		Scene<?> scene = this.currentScene;
+		Scene scene = this.currentScene;
 
 		if (window.resized()) {
 			scene.screenResized(window.getCanvasSize().width, window.getCanvasSize().height);
@@ -173,15 +173,15 @@ public class Controller implements SceneController {
 	}
 
 	@Override
-	public <T extends Scene<T>> Scene<?> loadScene(Class<T> sceneClass, Object... args) {
-		Scene<?> scene = this.sceneFactory.createScene(sceneClass, args);
+	public Scene loadScene(Class<? extends Scene> sceneClass, Object... args) {
+		Scene scene = this.sceneFactory.createScene(sceneClass, args);
 		if (scene != null) {
 			if (this.currentScene != null) {
 				logger.debug("unloading scene " + this.currentScene);
 				ReflectionHelper<?> reflector = new ReflectionHelper<>(this.currentScene);
 				reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
 			}
-			
+
 			logger.debug("loading scene " + scene);
 			ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
 			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
@@ -190,6 +190,5 @@ public class Controller implements SceneController {
 		}
 		return this.currentScene;
 	}
-	
 
 }

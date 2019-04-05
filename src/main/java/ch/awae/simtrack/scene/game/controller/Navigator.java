@@ -20,14 +20,14 @@ public class Navigator implements BaseTicker {
 
 	private Input input;
 	private ViewPort viewPort;
-	private Scene<?> scene;
+	private Scene scene;
 
 	private Binding A, S, D, W;
 
 	/**
 	 * instantiates a new navigator
 	 */
-	public Navigator(Scene<?> scene, ViewPort viewPort, Input input) {
+	public Navigator(Scene scene, ViewPort viewPort, Input input) {
 		this.scene = scene;
 		this.viewPort = viewPort;
 		this.input = input;

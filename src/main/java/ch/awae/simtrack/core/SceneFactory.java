@@ -12,7 +12,7 @@ import ch.awae.simtrack.scene.menu.Menu;
 
 public class SceneFactory {
 	protected final Logger logger = LogManager.getLogger();
-	
+
 	private Window window;
 	private Controller controller;
 
@@ -20,8 +20,8 @@ public class SceneFactory {
 		this.controller = controller;
 		this.window = window;
 	}
-	
-	public Scene<?> createScene(Class<?> sceneClass, Object ... args) {
+
+	public Scene createScene(Class<? extends Scene> sceneClass, Object... args) {
 		HashMap<Class<?>, Object> mapArgs = mapArguments(args);
 		if (sceneClass == Game.class) {
 			Model model = (Model) mapArgs.get(Model.class);
@@ -30,19 +30,17 @@ public class SceneFactory {
 				model = ModelFactory.getDefaultModel();
 			}
 			return new Game(controller, model, window);
-		}
-		else if (sceneClass == Menu.class) {
+		} else if (sceneClass == Menu.class) {
 			return new Menu(controller, window);
-		}
-		else {
+		} else {
 			logger.error("Can't create scene of type {}", sceneClass);
 			return null;
 		}
 	}
 
-	private HashMap<Class<?>,Object> mapArguments(Object[] args) {
-		HashMap<Class<?>,Object> result = new HashMap<>();
-		for (Object arg: args)
+	private HashMap<Class<?>, Object> mapArguments(Object[] args) {
+		HashMap<Class<?>, Object> result = new HashMap<>();
+		for (Object arg : args)
 			result.put(arg.getClass(), arg);
 		return result;
 	}

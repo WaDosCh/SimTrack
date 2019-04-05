@@ -51,14 +51,14 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private Set<Entity> entities = new HashSet<>();
 	@Getter
 	private LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
-	@Getter
-	private transient ObservableHandler observableHandler;
-	
-	private transient AtomicBoolean isPaused;
-
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
 	private GameClock clock;
+	
+	@Getter
+	private transient ObservableHandler observableHandler;
+	private transient AtomicBoolean isPaused;
+
 
 	Model(int sizeX, int sizeY) {
 		this.sizeX = sizeX;

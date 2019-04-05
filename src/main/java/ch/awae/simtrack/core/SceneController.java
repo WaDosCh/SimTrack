@@ -2,6 +2,6 @@ package ch.awae.simtrack.core;
 
 public interface SceneController {
 
-	public <T extends Scene<T>> Scene<?> loadScene(Class<T> scene, Object... arg);
+	public Scene loadScene(Class<? extends Scene> scene, Object... arg);
 
 }

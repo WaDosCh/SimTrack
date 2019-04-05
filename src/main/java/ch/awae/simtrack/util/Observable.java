@@ -19,7 +19,8 @@ public interface Observable {
 	}
 
 	default void notifyChanged() {
-		getObservableHandler().notifyObservers();
+		if (getObservableHandler() != null)
+			getObservableHandler().notifyObservers();
 	}
 
 }

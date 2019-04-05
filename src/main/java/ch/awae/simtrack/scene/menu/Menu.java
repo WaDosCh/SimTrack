@@ -15,7 +15,7 @@ import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.ModelFactory;
 
-public class Menu extends Scene<Menu> {
+public class Menu extends Scene {
 
 	private BasePanel panel;
 
