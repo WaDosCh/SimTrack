@@ -21,7 +21,7 @@ import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.util.CollectionUtil;
-import ch.awae.simtrack.util.Observer;
+import ch.awae.simtrack.util.observe.Observer;
 import ch.awae.utils.functional.T2;
 import ch.awae.utils.pathfinding.DijkstraPathfinder;
 import ch.awae.utils.pathfinding.GraphDataProvider;

@@ -1,4 +1,4 @@
-package ch.awae.simtrack.util;
+package ch.awae.simtrack.util.observe;
 
 public class Observer {
 

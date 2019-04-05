@@ -1,4 +1,4 @@
-package ch.awae.simtrack.util;
+package ch.awae.simtrack.util.observe;
 
 import java.util.ArrayList;
 
@@ -12,8 +12,7 @@ public class ObservableHandler {
 	}
 
 	public void unregister(Observer observer) {
-		if (observers.contains(observer))
-			observers.remove(observer);
+		observers.remove(observer);
 	}
 
 	public void notifyObservers() {
