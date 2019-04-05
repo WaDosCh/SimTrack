@@ -13,7 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
-import ch.awae.simtrack.core.Profiler.StringSupplier;
+import ch.awae.simtrack.core.profiler.Profiler;
+import ch.awae.simtrack.core.profiler.ProfilerI;
 import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.util.Resource;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Controller implements SceneController {
 	protected Scene currentScene = null;
 	protected final Logger logger = LogManager.getLogger();
 
-	private Profiler profiler;
+	private ProfilerI profiler;
 	private Binding profilerToggle;
 	private boolean showProfiler = false;
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
@@ -40,6 +41,9 @@ public class Controller implements SceneController {
 		this.sceneFactory = new SceneFactory(this, window);
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		profilerToggle = input.getBinding(KeyEvent.VK_F6);
+
+		int samplingRate = Resource.getConfigProperties("core.properties").getInt("profiler.sampleRate");
+		profiler = new Profiler(samplingRate);
 		window.init(input);
 	}
 
@@ -60,7 +64,6 @@ public class Controller implements SceneController {
 
 		if (profiler != null) {
 			profiler.startFrame();
-			profiler.startSample(true, -1);
 		}
 
 		if (profilerToggle.isPressed() && profilerToggle.isEdge()) {
@@ -85,12 +88,6 @@ public class Controller implements SceneController {
 		if (this.currentScene == null)
 			return;
 
-		if (profiler == null) {
-			createProfiler();
-			profiler.startFrame();
-		} else {
-			profiler.endSample();
-		}
 		Scene scene = this.currentScene;
 
 		if (window.resized()) {
@@ -99,7 +96,7 @@ public class Controller implements SceneController {
 
 		int index = 0;
 		for (BaseRenderer renderer : scene.getRenderers()) {
-			profiler.startSample(true, index);
+			profiler.startSample(renderer);
 			GraphicsStack stack = graphics.getStack();
 			renderer.render(graphics);
 			graphics.setStack(stack);
@@ -108,18 +105,18 @@ public class Controller implements SceneController {
 				renderer.render(snapshotGraphics);
 				snapshotGraphics.setStack(stack2);
 			}
+			profiler.endSample(renderer);
 			index++;
-			profiler.endSample();
 		}
 
 		scene.preTick(deltaT);
 
 		index = 0;
 		for (BaseTicker ticker : scene.getTickers()) {
-			profiler.startSample(false, index);
+			profiler.startSample(ticker);
 			ticker.tick();
 			index++;
-			profiler.endSample();
+			profiler.endSample(ticker);
 		}
 
 		if (showProfiler) {
@@ -148,24 +145,10 @@ public class Controller implements SceneController {
 		graphics.setColor(Color.BLACK);
 		FontMetrics metrics = graphics.getFontMetrics();
 		int sh = metrics.getHeight();
-		String[] digest = profiler.getDigest().split("\n");
+		String[] digest = profiler.getProfilerOutput().split("\n");
 		for (int i = 0; i < digest.length; i++) {
 			graphics.drawString(digest[i], 5, (i + 1) * sh);
 		}
-	}
-
-	private void createProfiler() {
-		List<StringSupplier> tickers = new ArrayList<>();
-		for (BaseTicker ticker : this.currentScene.getTickers()) {
-			tickers.add(ticker::getName);
-		}
-		List<StringSupplier> renderers = new ArrayList<>();
-		for (BaseRenderer renderer : this.currentScene.getRenderers()) {
-			renderers.add(renderer::getName);
-		}
-
-		int samplingRate = Resource.getConfigProperties("core.properties").getInt("profiler.sampleRate");
-		profiler = new Profiler(samplingRate, tickers, renderers);
 	}
 
 	public void requestSnapshot(Consumer<Image> callback) {
@@ -186,7 +169,6 @@ public class Controller implements SceneController {
 			ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
 			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
 			this.currentScene = scene;
-			createProfiler();
 		}
 		return this.currentScene;
 	}
