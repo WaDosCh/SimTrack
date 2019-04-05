@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.scene.game.Game;
-import ch.awae.simtrack.util.ReflectionHelper;
 import lombok.NonNull;
 
 /**
@@ -77,13 +76,6 @@ public class Editor implements BaseTicker, BaseRenderer {
 		return this.scene;
 	}
 
-	private void unloadCurrentTool() {
-		if (currentTool != null) {
-			ReflectionHelper<Tool> oldHelper = new ReflectionHelper<Tool>(currentTool);
-			oldHelper.findAndInvokeCompatibleMethod(OnUnload.class, null, new Object[] {});
-		}
-	}
-
 	/**
 	 * loads a tool and unloads the current one. If the new tool cannot be
 	 * loaded, the current one will not be unloaded and stays active.
@@ -106,10 +98,9 @@ public class Editor implements BaseTicker, BaseRenderer {
 		}
 
 		try {
-			ReflectionHelper<Tool> helper = new ReflectionHelper<>(next);
-			helper.findAndInvokeCompatibleMethod(OnLoad.class, null, args);
-			if (currentTool != next)
-				unloadCurrentTool();
+			next.loadTool(args);
+			if (this.currentTool != next && this.currentTool != null)
+				this.currentTool.unloadTool();
 
 			this.currentTool = next;
 			this.renderer = this.currentTool.getRenderer();

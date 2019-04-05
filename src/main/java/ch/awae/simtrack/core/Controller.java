@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.profiler.Profiler;
 import ch.awae.simtrack.core.profiler.ProfilerI;
-import ch.awae.simtrack.util.ReflectionHelper;
 import ch.awae.simtrack.util.Resource;
 import lombok.Getter;
 
@@ -161,13 +160,11 @@ public class Controller implements SceneController {
 		if (scene != null) {
 			if (this.currentScene != null) {
 				logger.debug("unloading scene " + this.currentScene);
-				ReflectionHelper<?> reflector = new ReflectionHelper<>(this.currentScene);
-				reflector.findAndInvokeCompatibleMethod(OnUnload.class, null);
+				this.currentScene.unloadScene();
 			}
 
 			logger.debug("loading scene " + scene);
-			ReflectionHelper<?> reflector = new ReflectionHelper<>(scene);
-			reflector.findAndInvokeCompatibleMethod(OnLoad.class, null);
+			scene.loadScene();
 			this.currentScene = scene;
 		}
 		return this.currentScene;

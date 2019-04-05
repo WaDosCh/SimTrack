@@ -6,8 +6,6 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.OnLoad;
-import ch.awae.simtrack.core.OnUnload;
 import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -60,19 +58,20 @@ public class BuildTool extends GameTool {
 
 	}
 
-	@OnLoad
-	public void loadBulldoze() {
-		isBulldozeTool = true;
+	@Override
+	public void loadTool(Object... args) {
+		if (args.length == 1 && args[0] instanceof TransformableTrackTile) {
+			isBulldozeTool = false;
+			track = (TransformableTrackTile) args[0];
+		} else if (args.length == 0) {
+			isBulldozeTool = true;
+		} else {
+			logger.error("Invalid arguments to load Build Tool: {}", args);
+		}
 	}
 
-	@OnLoad
-	public void loadBuilder(TransformableTrackTile tile) {
-		isBulldozeTool = false;
-		track = tile;
-	}
-
-	@OnUnload
-	public void unloadTile() {
+	@Override
+	public void unloadTool() {
 		track = null;
 	}
 
@@ -163,8 +162,7 @@ public class BuildTool extends GameTool {
 	 */
 	private void place() {
 		if (canPlace() && makesPlaceSense()) {
-			if (input.getMousePosition().y < editor.getScene().getViewPort()
-					.getScreenDimensions().y) {
+			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenDimensions().y) {
 				if (model.getTileAt(mouseTile) == null)
 					model.setTileAt(mouseTile, TrackValidator.intern(track));
 				else {

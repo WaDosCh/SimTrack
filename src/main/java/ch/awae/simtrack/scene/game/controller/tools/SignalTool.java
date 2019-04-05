@@ -6,7 +6,6 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.OnLoad;
 import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
@@ -67,15 +66,16 @@ public class SignalTool extends GameTool {
 			model.removeSignalAt(position);
 	}
 
-	@OnLoad
-	public void loadBulldoze() {
-		this.bulldoze = true;
-	}
-
-	@OnLoad
-	public void load(Type type) {
-		this.bulldoze = false;
-		this.type = type;
+	@Override
+	public void loadTool(Object... args) {
+		if (args.length == 1 && args[0].getClass() == Type.class) {
+			this.bulldoze = false;
+			this.type = (Type) args[0];
+		} else if (args.length == 0) {
+			this.bulldoze = true;
+		} else {
+			throw new RuntimeException("Invalid args to load tool");
+		}
 	}
 
 	@Override

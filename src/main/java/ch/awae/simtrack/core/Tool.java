@@ -16,5 +16,11 @@ public interface Tool extends BaseTicker {
 	 * @return the tool renderer
 	 */
 	public BaseRenderer getRenderer();
+	
+	public default void loadTool(Object... args) {
+	}
+	
+	public default void unloadTool() {
+	}
 
 }

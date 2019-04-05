@@ -84,9 +84,15 @@ public abstract class Scene {
 	 */
 	public void screenResized(int width, int height) {
 	}
-
+	
 	public Dimension getScreenSize() {
 		return window.getCanvasSize();
+	}
+	
+	public void loadScene() {
+	}
+	
+	public void unloadScene() {
 	}
 
 }

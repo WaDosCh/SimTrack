@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.OnLoad;
-import ch.awae.simtrack.core.OnUnload;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
@@ -31,13 +29,13 @@ public class InGameMenu extends GameTool {
 		this.renderer.add(new Button("Exit Game", input, () -> System.exit(0)));
 	}
 
-	@OnLoad
-	public void onToolLoad() {
+	@Override
+	public void loadTool(Object ... args) {
 		this.editor.getScene().getPaused().set(true);
 	}
 
-	@OnUnload
-	public void onToolUnload() {
+	@Override
+	public void unloadTool() {
 		this.editor.getScene().getPaused().set(false);
 	}
 
