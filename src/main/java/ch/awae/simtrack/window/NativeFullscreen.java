@@ -12,38 +12,29 @@ import javax.swing.JFrame;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Input;
+import lombok.Getter;
 import ch.awae.simtrack.core.GameWindow;
 
 public class NativeFullscreen implements GameWindow {
 
+	private @Getter Input input;
+	private @Getter Graphics graphics;
+	private @Getter Dimension canvasSize;
+
 	private GraphicsDevice screen;
 	private JFrame window;
 	private Canvas canvas;
-	private Input input;
 	private BufferStrategy buffer;
-	private Graphics graphics;
-	private int x, y;
 
+	
 	public NativeFullscreen() {
 		screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		window = new JFrame();
 		canvas = new Canvas();
 		Rectangle bounds = screen.getDefaultConfiguration().getBounds();
-		x = bounds.width;
-		y = bounds.height;
+		this.canvasSize = bounds.getSize();
 		window.add(canvas);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		System.out.println(screen.isFullScreenSupported());
-	}
-
-	@Override
-	public Dimension getCanvasSize() {
-		return new Dimension(x,y);
-	}
-
-	@Override
-	public Input getInput() {
-		return input;
 	}
 
 	@Override
@@ -73,7 +64,7 @@ public class NativeFullscreen implements GameWindow {
 	public void discard() {
 		buffer.dispose();
 		screen.setFullScreenWindow(null);
-		
+
 		window.setVisible(false);
 
 		canvas.removeMouseListener(input.getMouse());
@@ -83,17 +74,12 @@ public class NativeFullscreen implements GameWindow {
 	}
 
 	@Override
-	public Graphics getGraphics() {
-		return this.graphics;
-	}
-
-	@Override
 	public void flipFrame() {
 		if (graphics != null)
 			graphics.dispose();
 		buffer.show();
 		graphics = new Graphics((Graphics2D) buffer.getDrawGraphics());
-		graphics.clearRect(0, 0, x, y);
+		graphics.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height);
 	}
 
 }
