@@ -86,7 +86,7 @@ public abstract class Scene {
 	}
 	
 	public Dimension getScreenSize() {
-		return window.getCanvasSize();
+		return window.getScreenSize();
 	}
 	
 	public void loadScene() {

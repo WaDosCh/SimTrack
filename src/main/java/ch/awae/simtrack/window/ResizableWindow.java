@@ -47,7 +47,7 @@ public class ResizableWindow implements GameWindow {
 	}
 
 	@Override
-	public Dimension getCanvasSize() {
+	public Dimension getScreenSize() {
 		return canvas.getSize();
 	}
 

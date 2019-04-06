@@ -121,7 +121,7 @@ public class DebugToolsRenderer implements Renderer {
 	}
 
 	private void renderUserGuide(Graphics2D g) {
-		Dimension size = this.window.getCanvasSize();
+		Dimension size = this.window.getScreenSize();
 		g.setColor(new Color(255, 255, 255, 225));
 		g.fillRect(50, 50, size.width - 100, size.height - 100 - Design.toolbarHeight);
 		g.setColor(new Color(128, 128, 128, 255));

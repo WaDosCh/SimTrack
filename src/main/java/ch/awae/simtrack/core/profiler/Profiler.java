@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.NamedComponent;
+import ch.awae.simtrack.util.Resource;
 
 public final class Profiler implements ProfilerI {
 
@@ -40,8 +41,8 @@ public final class Profiler implements ProfilerI {
 
 	private String digest = "no data yet";
 
-	public Profiler(int sampleCount) {
-		this.sampleCount = sampleCount;
+	public Profiler() {
+		this.sampleCount = Resource.getConfigProperties("core.properties").getInt("profiler.sampleRate");
 		this.activeTimeOfComponents = new HashMap<>();
 		this.currentFrameStart = System.currentTimeMillis();
 	}

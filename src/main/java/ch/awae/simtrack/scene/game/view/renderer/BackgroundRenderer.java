@@ -18,7 +18,7 @@ public class BackgroundRenderer implements Renderer {
 	
 	@Override
 	public void render(Graphics g) {
-		Dimension size = window.getCanvasSize();
+		Dimension size = window.getScreenSize();
 		g.setColor(color);
 		g.fillRect(0, 0, size.width,size.height);
 	}

@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.profiler.Profiler;
 import ch.awae.simtrack.core.profiler.ProfilerI;
-import ch.awae.simtrack.util.Resource;
 import lombok.Getter;
 
 public class Controller implements SceneController {
@@ -41,8 +40,7 @@ public class Controller implements SceneController {
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 		profilerToggle = input.getBinding(KeyEvent.VK_F6);
 
-		int samplingRate = Resource.getConfigProperties("core.properties").getInt("profiler.sampleRate");
-		profiler = new Profiler(samplingRate);
+		profiler = new Profiler();
 	}
 
 	public void start() {
@@ -53,6 +51,9 @@ public class Controller implements SceneController {
 		this.gameClock.stop();
 	}
 
+	/**
+	 * Main loop of the game, rendering, updating everything
+	 */
 	private void tick() {
 
 		long newStart = System.currentTimeMillis();
@@ -70,13 +71,10 @@ public class Controller implements SceneController {
 		}
 
 		// setup screenshot buffers if required
-		List<Consumer<Image>> requests = null;
 		BufferedImage snapshot = null;
 		Graphics snapshotGraphics = null;
 		if (!snapshotRequests.isEmpty()) {
-			requests = snapshotRequests;
-			snapshotRequests = new ArrayList<>();
-			snapshot = new BufferedImage(window.getCanvasSize().width, window.getCanvasSize().height,
+			snapshot = new BufferedImage(window.getScreenSize().width, window.getScreenSize().height,
 					BufferedImage.TYPE_INT_RGB);
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
 		}
@@ -89,10 +87,9 @@ public class Controller implements SceneController {
 		Scene scene = this.currentScene;
 
 		if (window.resized()) {
-			scene.screenResized(window.getCanvasSize().width, window.getCanvasSize().height);
+			scene.screenResized(window.getScreenSize().width, window.getScreenSize().height);
 		}
 
-		int index = 0;
 		for (BaseRenderer renderer : scene.getRenderers()) {
 			profiler.startSample(renderer);
 			GraphicsStack stack = graphics.getStack();
@@ -104,16 +101,13 @@ public class Controller implements SceneController {
 				snapshotGraphics.setStack(stack2);
 			}
 			profiler.endSample(renderer);
-			index++;
 		}
 
 		scene.preTick(deltaT);
 
-		index = 0;
 		for (BaseTicker ticker : scene.getTickers()) {
 			profiler.startSample(ticker);
 			ticker.tick();
-			index++;
 			profiler.endSample(ticker);
 		}
 
@@ -128,11 +122,11 @@ public class Controller implements SceneController {
 			// this assertion is here to stop my compiler from complaining about
 			// potential null pointers (which is actually impossible, but
 			// hey...)
-			assert (snapshotGraphics != null && requests != null);
+			assert (snapshotGraphics != null);
 			snapshotGraphics.dispose();
-			for (Consumer<Image> callback : requests)
+			for (Consumer<Image> callback : this.snapshotRequests)
 				callback.accept(snapshot);
-			// requester list does not need to be cleared, as it has replaced
+			this.snapshotRequests.clear();
 		}
 
 		profiler.endFrame();
@@ -140,10 +134,13 @@ public class Controller implements SceneController {
 	}
 
 	private void renderProfiler(Graphics graphics) {
-		graphics.setColor(Color.BLACK);
 		FontMetrics metrics = graphics.getFontMetrics();
 		int sh = metrics.getHeight();
 		String[] digest = profiler.getProfilerOutput().split("\n");
+
+		graphics.setColor(new Color(255, 255, 255, 200));
+		graphics.fillRect(0, 0, 200, sh * (digest.length + 2));
+		graphics.setColor(Color.BLACK);
 		for (int i = 0; i < digest.length; i++) {
 			graphics.drawString(digest[i], 5, (i + 1) * sh);
 		}

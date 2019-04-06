@@ -46,7 +46,7 @@ public class BasePanel implements Component, BaseRenderer {
 	public void render(Graphics g, Window w) {
 
 		if (this.needsLayout) {
-			Dimension size = this.window.getCanvasSize();
+			Dimension size = this.window.getScreenSize();
 			layout(margin, margin, size.width - 2 * margin, size.height - Design.toolbarHeight - 2 * margin);
 		}
 
