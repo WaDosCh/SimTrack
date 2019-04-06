@@ -7,12 +7,12 @@ import javax.imageio.ImageIO;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.CheckboxButton;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.scene.game.Game;
-import ch.awae.simtrack.scene.game.controller.Action;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
 import ch.judos.generic.graphics.ImageUtils;
@@ -32,7 +32,7 @@ public class DebugToolsView extends GameTool {
 		this.renderer.margin = 10;
 		addButtons(editor.getScene());
 
-		onPress(Action.DEBUG_TOOL, () -> editor.loadTool(FreeTool.class));
+		onPress(InputAction.DEBUG_TOOL, () -> editor.loadTool(FreeTool.class));
 	}
 
 	private void addButtons(Game game) {

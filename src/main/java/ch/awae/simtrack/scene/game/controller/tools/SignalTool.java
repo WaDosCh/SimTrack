@@ -6,7 +6,7 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
@@ -34,9 +34,9 @@ public class SignalTool extends GameTool {
 		ifNot(() -> bulldoze).onTick(this::checkPlace);
 		ifMet(() -> bulldoze).onTick(this::checkDelete);
 
-		ifNot(() -> bulldoze).onPress(Action.ST_BUILD_SIGNAL, this::buildSignal);
-		ifMet(() -> bulldoze).onPress(Action.ST_BUILD_SIGNAL, this::deleteSignal);
-		onPress(Action.ST_DELETE_SIGNAL, this::deleteSignal);
+		ifNot(() -> bulldoze).onPress(InputAction.ST_BUILD_SIGNAL, this::buildSignal);
+		ifMet(() -> bulldoze).onPress(InputAction.ST_BUILD_SIGNAL, this::deleteSignal);
+		onPress(InputAction.ST_DELETE_SIGNAL, this::deleteSignal);
 	}
 
 	private void updatePosition() {

@@ -1,4 +1,4 @@
-package ch.awae.simtrack.core;
+package ch.awae.simtrack.core.input;
 
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
@@ -9,10 +9,15 @@ import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.judos.generic.data.HashMapList;
 import lombok.Getter;
 
-public class Input {
+public class InputController {
+
+	protected final Logger logger = LogManager.getLogger();
 
 	// CONSTANTS
 	public static final int MOUSE_LEFT = 0x0001_0000;
@@ -25,7 +30,7 @@ public class Input {
 
 	// LISTENER REGISTRY
 	private HashMap<Integer, Binding> keycodeBindings = new HashMap<>();
-	private HashMap<Action, Binding> actionBindings = new HashMap<>();
+	private HashMap<InputActionI, Binding> actionBindings = new HashMap<>();
 	private HashMapList<Integer, Binding> bindings = new HashMapList<>();
 
 	// BINDING PROVIDERS
@@ -39,7 +44,7 @@ public class Input {
 		return binding;
 	}
 
-	public Binding getBinding(Action action) {
+	public Binding getBinding(InputActionI action) {
 		Binding binding = actionBindings.get(action);
 		if (binding == null) {
 			binding = new Binding();
@@ -102,7 +107,7 @@ public class Input {
 			Point p = e.getPoint();
 			if (p == null)
 				return;
-			Input.this.mousePosition = p;
+			InputController.this.mousePosition = p;
 		}
 
 		@Override
@@ -117,7 +122,7 @@ public class Input {
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			Input.this.scroll = e.getPreciseWheelRotation();
+			InputController.this.scroll = e.getPreciseWheelRotation();
 		}
 
 		private void setBtn(int button, boolean value) {
@@ -132,6 +137,7 @@ public class Input {
 					handle(MOUSE_RIGHT, value);
 					break;
 				default:
+					logger.info("Unknown mouse button: " + button);
 					break;
 			}
 		}

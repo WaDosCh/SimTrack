@@ -4,9 +4,10 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import ch.awae.simtrack.core.BaseTicker;
-import ch.awae.simtrack.core.Binding;
-import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Scene;
+import ch.awae.simtrack.core.input.Binding;
+import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 
 /**
@@ -18,7 +19,7 @@ import ch.awae.simtrack.scene.game.view.ViewPort;
  */
 public class Navigator implements BaseTicker {
 
-	private Input input;
+	private InputController input;
 	private ViewPort viewPort;
 	private Scene scene;
 
@@ -27,15 +28,15 @@ public class Navigator implements BaseTicker {
 	/**
 	 * instantiates a new navigator
 	 */
-	public Navigator(Scene scene, ViewPort viewPort, Input input) {
+	public Navigator(Scene scene, ViewPort viewPort, InputController input) {
 		this.scene = scene;
 		this.viewPort = viewPort;
 		this.input = input;
 
-		A = input.getBinding(Action.PAN_LEFT);
-		S = input.getBinding(Action.PAN_DOWN);
-		D = input.getBinding(Action.PAN_RIGHT);
-		W = input.getBinding(Action.PAN_UP);
+		A = input.getBinding(InputAction.PAN_LEFT);
+		S = input.getBinding(InputAction.PAN_DOWN);
+		D = input.getBinding(InputAction.PAN_RIGHT);
+		W = input.getBinding(InputAction.PAN_UP);
 
 	}
 

@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
-import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 
@@ -36,7 +36,7 @@ public class DebugTools extends GameTool {
 		this.renderer = new DebugToolsRenderer(showing, this, viewPort, window);
 
 		onPress(KeyEvent.VK_F1, () -> toggle(Option.InputGuide));
-		onPress(Action.DEBUG_TOOL, () -> editor.loadTool(DebugToolsView.class));
+		onPress(InputAction.DEBUG_TOOL, () -> editor.loadTool(DebugToolsView.class));
 
 		onPress(KeyEvent.VK_F12, () -> System.exit(0));
 	}

@@ -6,7 +6,7 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
@@ -48,13 +48,13 @@ public class BuildTool extends GameTool {
 
 		onTick(this::checkValid);
 
-		onPress(Action.BT_ROTATE_LEFT, this::rotateLeft);
-		onPress(Action.BT_ROTATE_RIGHT, this::rotateRight);
-		onPress(Action.BT_MIRROR, this::mirror);
+		onPress(InputAction.BT_ROTATE_LEFT, this::rotateLeft);
+		onPress(InputAction.BT_ROTATE_RIGHT, this::rotateRight);
+		onPress(InputAction.BT_MIRROR, this::mirror);
 
-		ifPressed(Action.BT_DELETE_TILE, this::bulldoze);
-		ifMet(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this::bulldoze);
-		ifNot(this::isBulldozeTool).ifPressed(Action.BT_BUILD_TILE, this::place);
+		ifPressed(InputAction.BT_DELETE_TILE, this::bulldoze);
+		ifMet(this::isBulldozeTool).ifPressed(InputAction.BT_BUILD_TILE, this::bulldoze);
+		ifNot(this::isBulldozeTool).ifPressed(InputAction.BT_BUILD_TILE, this::place);
 
 	}
 

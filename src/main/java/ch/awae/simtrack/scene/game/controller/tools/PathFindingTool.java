@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -35,8 +35,8 @@ public class PathFindingTool extends GameTool {
 		this.startEdge = Edge.RIGHT;
 		this.endEdge = Edge.RIGHT;
 
-		onPress(Input.MOUSE_LEFT, this::updateOrigin);
-		onPress(Input.MOUSE_RIGHT, this::updateTarget);
+		onPress(InputController.MOUSE_LEFT, this::updateOrigin);
+		onPress(InputController.MOUSE_RIGHT, this::updateTarget);
 	}
 
 	private void updateOrigin() {

@@ -7,8 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.judos.generic.data.StringUtils;
 
@@ -16,11 +16,11 @@ public class InputField extends Label {
 
 	private static Logger logger = LogManager.getLogger();
 	private int expectedLength;
-	private Input input;
+	private InputController input;
 	private boolean focused;
 	private String text;
 
-	public InputField(int expectedLength, Input input) {
+	public InputField(int expectedLength, InputController input) {
 		super(null);
 		this.input = input;
 		this.text = "";

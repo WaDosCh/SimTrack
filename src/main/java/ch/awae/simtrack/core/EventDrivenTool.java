@@ -8,8 +8,11 @@ import java.util.function.BooleanSupplier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.Binding.EdgeProcessor;
-import ch.awae.simtrack.core.Binding.SkipConsumeException;
+import ch.awae.simtrack.core.input.Binding;
+import ch.awae.simtrack.core.input.InputActionI;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.Binding.EdgeProcessor;
+import ch.awae.simtrack.core.input.Binding.SkipConsumeException;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.utils.logic.Logic;
 import lombok.Getter;
@@ -17,7 +20,7 @@ import lombok.Getter;
 public abstract class EventDrivenTool implements Tool, BaseRenderer {
 
 	private List<Runnable> drivers = new ArrayList<>();
-	protected final Input input;
+	protected final InputController input;
 	protected final Editor editor;
 	protected final Game scene;
 	protected @Getter Point mousePosition = new Point(0, 0);
@@ -47,7 +50,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 	 * @param action
 	 * @param r
 	 */
-	protected void ifPressed(Action action, Runnable r) {
+	protected void ifPressed(InputActionI action, Runnable r) {
 		Binding binding = input.getBinding(action);
 		drivers.add(() -> binding.ifPressed(r));
 	}
@@ -71,7 +74,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 	 * @param action
 	 * @param r
 	 */
-	protected void ifReleased(Action action, Runnable r) {
+	protected void ifReleased(InputActionI action, Runnable r) {
 		Binding binding = input.getBinding(action);
 		drivers.add(() -> binding.ifPressed(r));
 	}
@@ -95,7 +98,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 	 * @param action
 	 * @param r
 	 */
-	protected void onPress(Action action, EdgeProcessor r) {
+	protected void onPress(InputActionI action, EdgeProcessor r) {
 		Binding binding = input.getBinding(action);
 		drivers.add(() -> {
 			try {
@@ -135,7 +138,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 	 * @param action
 	 * @param r
 	 */
-	protected void onRelease(Action action, EdgeProcessor r) {
+	protected void onRelease(InputActionI action, EdgeProcessor r) {
 		Binding binding = input.getBinding(action);
 		drivers.add(() -> {
 			try {
@@ -231,7 +234,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 			});
 		}
 
-		public void ifPressed(Action action, Runnable r) {
+		public void ifPressed(InputActionI action, Runnable r) {
 			Binding binding = input.getBinding(action);
 			onTick(() -> binding.ifPressed(r));
 		}
@@ -255,7 +258,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 		 * @param action
 		 * @param r
 		 */
-		public void ifReleased(Action action, Runnable r) {
+		public void ifReleased(InputActionI action, Runnable r) {
 			Binding binding = input.getBinding(action);
 			onTick(() -> binding.ifPressed(r));
 		}
@@ -279,7 +282,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 		 * @param action
 		 * @param r
 		 */
-		public void onPress(Action action, EdgeProcessor r) {
+		public void onPress(InputActionI action, EdgeProcessor r) {
 			Binding binding = input.getBinding(action);
 			onTick(() -> {
 				try {
@@ -314,7 +317,7 @@ public abstract class EventDrivenTool implements Tool, BaseRenderer {
 			});
 		}
 
-		public void onRelease(Action action, EdgeProcessor r) {
+		public void onRelease(InputActionI action, EdgeProcessor r) {
 			Binding binding = input.getBinding(action);
 			onTick(() -> {
 				try {

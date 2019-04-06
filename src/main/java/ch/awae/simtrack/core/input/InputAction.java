@@ -1,10 +1,10 @@
-package ch.awae.simtrack.scene.game.controller;
+package ch.awae.simtrack.core.input;
 
-import static ch.awae.simtrack.core.Input.MOUSE_LEFT;
-import static ch.awae.simtrack.core.Input.MOUSE_RIGHT;
+import static ch.awae.simtrack.core.input.InputController.MOUSE_LEFT;
+import static ch.awae.simtrack.core.input.InputController.MOUSE_RIGHT;
 import static java.awt.event.KeyEvent.*;
 
-public enum Action implements ch.awae.simtrack.core.Action {
+public enum InputAction implements InputActionI {
 
 	// MOVEMENT
 	PAN_LEFT(VK_A, VK_LEFT),
@@ -29,7 +29,7 @@ public enum Action implements ch.awae.simtrack.core.Action {
 
 	public final int[] keycodes;
 
-	Action(int... keycodes) {
+	InputAction(int... keycodes) {
 		this.keycodes = keycodes;
 	}
 

@@ -6,7 +6,7 @@ import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.core.input.InputAction;
 
 /**
  * "Free-Hand" tool. This tool will be used for in-situ tile manipulation
@@ -28,7 +28,7 @@ public class FreeTool extends GameTool {
 	 */
 	public FreeTool(Editor editor) {
 		super(editor, false);
-		onPress(Action.DROP_TOOL, () -> editor.loadTool(InGameMenu.class));
+		onPress(InputAction.DROP_TOOL, () -> editor.loadTool(InGameMenu.class));
 	}
 
 	@Override

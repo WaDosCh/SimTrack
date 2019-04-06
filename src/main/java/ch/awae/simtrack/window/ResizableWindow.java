@@ -11,7 +11,7 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import ch.awae.simtrack.core.GameWindow;
 
 public class ResizableWindow implements GameWindow {
 
-	private @Getter Input input;
+	private @Getter InputController input;
 	private @Getter Graphics graphics;
 
 	private JFrame window;
@@ -34,7 +34,7 @@ public class ResizableWindow implements GameWindow {
 		}
 	};
 
-	public ResizableWindow(int x, int y, Input input) {
+	public ResizableWindow(int x, int y, InputController input) {
 		this.input = input;
 
 		Properties p = Resource.getProperties("application.properties", "");

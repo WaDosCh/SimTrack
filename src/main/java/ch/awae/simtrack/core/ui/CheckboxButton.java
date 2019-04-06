@@ -7,8 +7,8 @@ import java.awt.Point;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,10 +17,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CheckboxButton extends Label {
 
-	public final Input input;
+	public final InputController input;
 	private AtomicBoolean dataMapping;
 
-	public CheckboxButton(String title, Input input, AtomicBoolean mapper) {
+	public CheckboxButton(String title, InputController input, AtomicBoolean mapper) {
 		super(title);
 		this.input = input;
 		this.dataMapping = mapper;

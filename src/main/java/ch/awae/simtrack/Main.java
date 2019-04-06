@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.GameWindow;
-import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.util.MacKeyboardHack;
 import ch.awae.simtrack.window.ResizableWindow;
@@ -23,7 +23,7 @@ public class Main {
 
 	private static void init() {
 		
-		Input input = new Input();
+		InputController input = new InputController();
 //		GameWindow window = new NativeFullscreen(input);
 		GameWindow window = new ResizableWindow(1200, 800, input);
 		

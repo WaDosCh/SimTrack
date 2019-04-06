@@ -6,16 +6,16 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.core.BaseRenderer;
-import ch.awae.simtrack.core.Binding;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.Binding;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.view.Design;
 
 public class BasePanel implements Component, BaseRenderer {
 
 	private ArrayList<Component> components;
-	private Input input;
+	private InputController input;
 	private boolean needsLayout;
 	private Rectangle rect;
 	private Binding click;
@@ -23,12 +23,12 @@ public class BasePanel implements Component, BaseRenderer {
 	public int margin = 0;
 	private Window window;
 
-	public BasePanel(Input input, boolean centered, Window window) {
+	public BasePanel(InputController input, boolean centered, Window window) {
 		this.centered = centered;
 		this.input = input;
 		this.window = window;
 		this.components = new ArrayList<>();
-		this.click = input.getBinding(Input.MOUSE_LEFT);
+		this.click = input.getBinding(InputController.MOUSE_LEFT);
 		this.needsLayout = true;
 	}
 

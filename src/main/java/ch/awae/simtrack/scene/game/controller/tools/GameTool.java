@@ -1,9 +1,9 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
-import ch.awae.simtrack.core.Binding;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.EventDrivenTool;
-import ch.awae.simtrack.scene.game.controller.Action;
+import ch.awae.simtrack.core.input.Binding;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public abstract class GameTool extends EventDrivenTool {
 
 	public GameTool(Editor editor, boolean autoUnloadTool) {
 		super(editor);
-		drop = input.getBinding(Action.DROP_TOOL);
+		drop = input.getBinding(InputAction.DROP_TOOL);
 		autoUnload = autoUnloadTool;
 	}
 

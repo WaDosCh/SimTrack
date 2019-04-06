@@ -11,28 +11,28 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.input.InputController;
 import lombok.Getter;
 import ch.awae.simtrack.core.GameWindow;
 
 public class NativeFullscreen implements GameWindow {
 
-	private @Getter Input input;
+	private @Getter InputController input;
 	private @Getter Graphics graphics;
-	private @Getter Dimension canvasSize;
+	private @Getter Dimension screenSize;
 
 	private GraphicsDevice screen;
 	private JFrame window;
 	private Canvas canvas;
 	private BufferStrategy buffer;
 
-	public NativeFullscreen(Input input) {
+	public NativeFullscreen(InputController input) {
 		this.input = input;
 		screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		window = new JFrame();
 		canvas = new Canvas();
 		Rectangle bounds = screen.getDefaultConfiguration().getBounds();
-		this.canvasSize = bounds.getSize();
+		this.screenSize = bounds.getSize();
 		window.add(canvas);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init();
@@ -77,7 +77,7 @@ public class NativeFullscreen implements GameWindow {
 			graphics.dispose();
 		buffer.show();
 		graphics = new Graphics((Graphics2D) buffer.getDrawGraphics());
-		graphics.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height);
+		graphics.clearRect(0, 0, this.screenSize.width, this.screenSize.height);
 	}
 
 }

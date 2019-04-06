@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.Game;
 import lombok.NonNull;
 
@@ -40,7 +41,7 @@ public class Editor implements BaseTicker, BaseRenderer {
 		this.scene = scene;
 	}
 
-	public Input getInput() {
+	public InputController getInput() {
 		return scene.getInput();
 	}
 

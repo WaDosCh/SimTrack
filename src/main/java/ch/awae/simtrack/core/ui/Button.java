@@ -3,8 +3,8 @@ package ch.awae.simtrack.core.ui;
 import java.awt.Point;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,9 +14,9 @@ import lombok.EqualsAndHashCode;
 public class Button extends Label {
 
 	public final Runnable action;
-	public final Input input;
+	public final InputController input;
 
-	public Button(String title, Input input, Runnable action) {
+	public Button(String title, InputController input, Runnable action) {
 		super(title);
 		this.input = input;
 		this.action = action;

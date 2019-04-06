@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Input;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
@@ -102,7 +102,7 @@ public class ToolBar extends GameTool {
 		onPress(KeyEvent.VK_0, () -> select(10));
 
 		onTick(this::updateByMouse);
-		ifMet(() -> index >= 0).onPress(Input.MOUSE_LEFT, this::select);
+		ifMet(() -> index >= 0).onPress(InputController.MOUSE_LEFT, this::select);
 	}
 
 	int getIndex() {

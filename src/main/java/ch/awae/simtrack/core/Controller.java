@@ -13,6 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
+import ch.awae.simtrack.core.input.Binding;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.profiler.Profiler;
 import ch.awae.simtrack.core.profiler.ProfilerI;
 import lombok.Getter;
@@ -21,7 +23,7 @@ public class Controller implements SceneController {
 
 	private HighPrecisionClock gameClock;
 	protected GameWindow window;
-	protected @Getter final Input input;
+	protected @Getter final InputController input;
 	protected Scene currentScene = null;
 	protected final Logger logger = LogManager.getLogger();
 
