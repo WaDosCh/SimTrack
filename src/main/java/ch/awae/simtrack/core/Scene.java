@@ -28,15 +28,15 @@ public abstract class Scene {
 		
 		tickers = new ArrayList<>();
 		renderers = new ArrayList<>();
-		this.input = controller.getInput();
+		this.input = this.controller.getInput();
 		this.logger = LogManager.getLogger();
 	}
 
-	public void addRenderer(BaseRenderer component) {
+	protected void addRenderer(BaseRenderer component) {
 		renderers.add(component);
 	}
 
-	public void addTicker(BaseTicker component) {
+	protected void addTicker(BaseTicker component) {
 		tickers.add(component);
 	}
 	
