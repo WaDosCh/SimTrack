@@ -27,14 +27,25 @@ public enum InputAction implements InputActionI {
 	ST_BUILD_SIGNAL(MOUSE_LEFT),
 	ST_DELETE_SIGNAL(MOUSE_RIGHT);
 
+	/**
+	 * possible keycodes to execute this action
+	 */
 	public final int[] keycodes;
 
-	InputAction(int... keycodes) {
-		this.keycodes = keycodes;
+	InputAction(int... defaultKeycodes) {
+		this.keycodes = defaultKeycodes;
 	}
 
 	@Override
 	public int[] getKeyCodes() {
 		return keycodes;
+	}
+	
+	public boolean isActivatedBy(int keyCode) {
+		for (int possibleKeyCode : this.keycodes) {
+			if (keyCode == possibleKeyCode)
+				return true;
+		}
+		return false;
 	}
 }
