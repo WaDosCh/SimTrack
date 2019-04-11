@@ -13,8 +13,7 @@ import lombok.experimental.Delegate;
 
 public class Graphics extends Graphics2D {
 
-	public static interface GraphicsStack {
-	};
+	public static interface GraphicsStack {};
 
 	@AllArgsConstructor
 	private final static @Data class PrivateGraphicsStack implements GraphicsStack {
