@@ -6,6 +6,8 @@ import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.controller.Navigator;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.TrainController;
@@ -29,10 +31,6 @@ import lombok.Getter;
 
 /**
  * the game view implementation
- * 
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-26
- * @since SimTrack 0.2.2
  */
 public class Game extends Scene {
 
@@ -48,6 +46,7 @@ public class Game extends Scene {
 	private TrainController trainController;
 
 	private @Getter AtomicBoolean paused = new AtomicBoolean(false);
+	private Navigator navigator;
 
 	/**
 	 * instantiates a new game view
@@ -60,20 +59,22 @@ public class Game extends Scene {
 		super(controller, window);
 		this.model = model;
 		this.model.load(this.getPaused());
+		InputController input = this.controller.getInput();
 		this.editor = new Editor(this); // TODO: don't pass game if possible
-		this.trackbar = new ToolBar(this.editor);
+		this.trackbar = new ToolBar(this.editor, input);
 		this.viewPort = new ViewPort(this); // TODO: don't pass game if possible
-		this.debugTools = new DebugTools(this.editor, this.viewPort, this.window, this.model);
+		this.debugTools = new DebugTools(this.editor, this.viewPort, this.window, this.model, input);
 		this.pathfinder = new PathFinding(this.model);
 		this.trainController = new TrainController(this.model);
+		this.navigator = new Navigator(this, this.viewPort, this.controller.getInput());
 
-		editor.addTool(new FreeTool(this.editor));
-		editor.addTool(new BuildTool(this.editor, this.model));
+		editor.addTool(new FreeTool(this.editor, input));
+		editor.addTool(new BuildTool(this.editor, this.model, input));
 		editor.addTool(new PathFindingTool(this.editor));
-		editor.addTool(new InGameMenu(this.editor));
-		editor.addTool(new InGameSaveMenu(this.editor, this.model));
-		editor.addTool(new DebugToolsView(this.editor, this.debugTools, this.trainController));
-		editor.addTool(new SignalTool(this.editor, this.model));
+		editor.addTool(new InGameMenu(this.editor, input));
+		editor.addTool(new InGameSaveMenu(this.editor, this.model, input));
+		editor.addTool(new DebugToolsView(this.editor, this.debugTools, this.trainController, input));
+		editor.addTool(new SignalTool(this.editor, this.model, input));
 
 		addRenderer(new BackgroundRenderer(this.window));
 		addRenderer(new TileRenderer(this.viewPort, this.model));
@@ -84,7 +85,7 @@ public class Game extends Scene {
 		addRenderer(this.trackbar);
 		addRenderer(this.debugTools.getRenderer());
 
-		addTicker(new Navigator(this, this.viewPort, this.input));
+		addTicker(this.navigator);
 		addTicker(this.trackbar);
 		addTicker(this.editor);
 		addTicker(this.debugTools);
@@ -110,6 +111,20 @@ public class Game extends Scene {
 	@Override
 	public void screenResized(int width, int height) {
 		viewPort.update();
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		this.navigator.handleInput(event);
+		if (event.isConsumed)
+			return;
+		this.trackbar.handleInput(event);
+		if (event.isConsumed)
+			return;
+		this.editor.handleInput(event);
+		if (event.isConsumed)
+			return;
+		this.debugTools.handleInput(event);
 	}
 
 }

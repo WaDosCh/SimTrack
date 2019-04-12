@@ -1,42 +1,32 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
+import java.awt.Point;
+
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.EventDrivenTool;
-import ch.awae.simtrack.core.input.Binding;
 import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
-import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import lombok.Getter;
 
 public abstract class GameTool extends EventDrivenTool {
 
-	protected @Getter TileCoordinate mouseTile = null;
-	protected @Getter SceneCoordinate mouseScene = null;
-	private final Binding drop;
 	private final boolean autoUnload;
 
 	public GameTool(Editor editor, boolean autoUnloadTool) {
 		super(editor);
-		drop = input.getBinding(InputAction.DROP_TOOL);
 		autoUnload = autoUnloadTool;
 	}
 
-	@Override
-	protected void preTick() {
-		super.preTick();
-		mouseScene = this.scene.getViewPort().toSceneCoordinate(mousePosition);
-		mouseTile = mouseScene.toTileCoordinate();
+	protected SceneCoordinate getMouseSceneCoordinate(Point mousePosition) {
+		return this.scene.getViewPort().toSceneCoordinate(mousePosition);
 	}
 
 	@Override
-	public void tick() {
-		if (autoUnload && drop.isPressed() && drop.isEdge()) {
-			drop.consume();
+	public void handleInput(InputEvent event) {
+		if (autoUnload && event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
 			editor.loadTool(null);
 			logger.debug("auto-unloading tool");
-			return;
 		}
-		super.tick();
 	}
 
 }

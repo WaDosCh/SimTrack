@@ -1,7 +1,6 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -96,15 +95,6 @@ public class BasePanel implements Component, BaseRenderer, InputHandler {
 	@Override
 	public Dimension getSize() {
 		return this.rect.getSize();
-	}
-
-	@Override
-	public boolean tryConsume(Point mousePos, int mouseButton) {
-		for (Component b : this.components) {
-			if (b.tryConsume(mousePos, mouseButton))
-				return true;
-		}
-		return false;
 	}
 
 	@Override

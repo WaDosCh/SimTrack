@@ -2,15 +2,20 @@ package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
 import ch.awae.simtrack.scene.game.model.position.Edge;
+import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.judos.generic.data.geometry.Angle;
 import ch.judos.generic.data.geometry.PointD;
@@ -25,21 +30,44 @@ public class SignalTool extends GameTool {
 	private TileEdgeCoordinate position;
 	private PointD center, mouse;
 	private Model model;
+	private InputController input;
 
-	public SignalTool(Editor editor, Model model) {
+	public SignalTool(Editor editor, Model model, InputController input) {
 		super(editor, true);
 		this.model = model;
-
-		onTick(this::updatePosition);
-		ifNot(() -> bulldoze).onTick(this::checkPlace);
-		ifMet(() -> bulldoze).onTick(this::checkDelete);
-
-		ifNot(() -> bulldoze).onPress(InputAction.ST_BUILD_SIGNAL, this::buildSignal);
-		ifMet(() -> bulldoze).onPress(InputAction.ST_BUILD_SIGNAL, this::deleteSignal);
-		onPress(InputAction.ST_DELETE_SIGNAL, this::deleteSignal);
+		this.input = input;
+	}
+	
+	@Override
+	public void tick() {
+		super.tick();
+		updatePosition();
+		if (this.bulldoze)
+			checkDelete();
+		else
+			checkPlace();
+	}
+	
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.ST_BUILD_SIGNAL)) {
+			if (this.bulldoze)
+				deleteSignal();
+			else
+				buildSignal();
+			return;
+		}
+		if (event.isPressActionAndConsume(InputAction.ST_DELETE_SIGNAL)) {
+			deleteSignal();
+			return;
+		}
+		super.handleInput(event);
 	}
 
 	private void updatePosition() {
+		Point mousePos = this.input.getMousePosition();
+		SceneCoordinate mouseScene = this.getMouseSceneCoordinate(mousePos);
+		TileCoordinate mouseTile = mouseScene.toTileCoordinate();
 		center = mouseTile.toSceneCoordinate().getPointD();
 		mouse = mouseScene.getPointD();
 		Angle angle = center.getAAngleTo(mouse);

@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.InputField;
@@ -17,12 +18,14 @@ public class InGameSaveMenu extends GameTool {
 
 	private BasePanel panel;
 	private Model model;
+	private InputController input;
 
-	public InGameSaveMenu(Editor editor, Model model) {
+	public InGameSaveMenu(Editor editor, Model model, InputController input) {
 		super(editor, true);
 		this.model = model;
+		this.input = input;
 
-		this.panel = new BasePanel(input, true, this.scene.getWindow());
+		this.panel = new BasePanel(true, this.scene.getWindow());
 		this.panel.add(new Label("Save game", true));
 		this.panel.add(new InputField(32, this.input));
 		this.panel.add(new Button("Quicksave", input, this::quicksave));

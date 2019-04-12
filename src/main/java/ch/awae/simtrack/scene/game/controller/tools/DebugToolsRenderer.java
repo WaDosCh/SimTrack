@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Train;
@@ -31,11 +32,13 @@ public class DebugToolsRenderer implements Renderer {
 	private ViewPort viewPort;
 	private Model model;
 	private Window window;
+	private InputController input;
 
 	public DebugToolsRenderer(HashMap<Option, AtomicBoolean> showing, DebugTools tools, ViewPort viewPort,
-			Window window) {
+			Window window, InputController input) {
 		this.showing = showing;
 		this.tools = tools;
+		this.input = input;
 		this.inputGuideText = Resource.getText("inputKeys.txt");
 		this.model = tools.model;
 		this.viewPort = viewPort;
@@ -74,9 +77,10 @@ public class DebugToolsRenderer implements Renderer {
 	}
 
 	private void renderCoordinate(Graphics2D g) {
-		Point screenPos = tools.getMousePosition();
-		TileCoordinate tilePos = tools.getMouseTile();
-		SceneCoordinate scenePos = viewPort.toSceneCoordinate(screenPos);
+		
+		Point screenPos = this.input.getMousePosition();
+		SceneCoordinate scenePos = tools.getMouseSceneCoordinate(screenPos);
+		TileCoordinate tilePos = scenePos.toTileCoordinate();
 
 		if (screenPos.y > viewPort.getScreenDimensions().y - Design.toolbarHeight)
 			screenPos.y -= 150;

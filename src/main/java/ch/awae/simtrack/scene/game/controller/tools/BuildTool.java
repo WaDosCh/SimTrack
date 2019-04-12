@@ -2,11 +2,14 @@ package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
@@ -30,32 +33,58 @@ public class BuildTool extends GameTool {
 	private static Color darkRed = Color.RED.darker();
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
-	private @Getter boolean isBulldozeTool;
+	private boolean isBulldozeTool;
 	private @Getter boolean valid = false;
 	private boolean placeGood = false;
 	private @Getter TransformableTrackTile track;
 	private Model model;
+	private InputController input;
+	private TileCoordinate mouseTile;
 
 	/**
 	 * instantiates a new build tool
 	 * 
-	 * @param editor
-	 *            the editor the build tool will operate under
+	 * @param editor the editor the build tool will operate under
 	 */
-	public BuildTool(Editor editor, Model model) {
+	public BuildTool(Editor editor, Model model, InputController input) {
 		super(editor, true);
 		this.model = model;
+		this.input = input;
+	}
 
-		onTick(this::checkValid);
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.BT_ROTATE_LEFT)) {
+			rotateLeft();
+			return;
+		}
+		if (event.isPressActionAndConsume(InputAction.BT_ROTATE_RIGHT)) {
+			rotateRight();
+			return;
+		}
+		if (event.isPressActionAndConsume(InputAction.BT_MIRROR)) {
+			mirror();
+			return;
+		}
+		if (event.isPressActionAndConsume(InputAction.BT_DELETE_TILE)) {
+			bulldoze();
+			return;
+		}
+		if (event.isPressActionAndConsume(InputAction.BT_BUILD_TILE)) {
+			if (this.isBulldozeTool)
+				bulldoze();
+			else
+				place();
+		}
+		super.handleInput(event);
+	}
 
-		onPress(InputAction.BT_ROTATE_LEFT, this::rotateLeft);
-		onPress(InputAction.BT_ROTATE_RIGHT, this::rotateRight);
-		onPress(InputAction.BT_MIRROR, this::mirror);
-
-		ifPressed(InputAction.BT_DELETE_TILE, this::bulldoze);
-		ifMet(this::isBulldozeTool).ifPressed(InputAction.BT_BUILD_TILE, this::bulldoze);
-		ifNot(this::isBulldozeTool).ifPressed(InputAction.BT_BUILD_TILE, this::place);
-
+	@Override
+	public void tick() {
+		Point mousePos = this.input.getMousePosition();
+		this.mouseTile = this.getMouseSceneCoordinate(mousePos).toTileCoordinate();
+		super.tick();
+		checkValid();
 	}
 
 	@Override
@@ -132,12 +161,9 @@ public class BuildTool extends GameTool {
 	/**
 	 * checks if the tile at a given location in a given model can be deleted
 	 * 
-	 * @param c
-	 *            the location to check on
-	 * @param m
-	 *            the model to check in
-	 * @return {@code true} if and only if the given position in the given model
-	 *         contains a tile and it can be deleted.
+	 * @param c the location to check on
+	 * @param m the model to check in
+	 * @return {@code true} if and only if the given position in the given model contains a tile and it can be deleted.
 	 */
 	private boolean canDelete() {
 		if (mouseTile == null)
@@ -157,8 +183,7 @@ public class BuildTool extends GameTool {
 	}
 
 	/**
-	 * places the tile at the current location or (if applicable) fuses the new
-	 * tile onto the current one.
+	 * places the tile at the current location or (if applicable) fuses the new tile onto the current one.
 	 */
 	private void place() {
 		if (canPlace() && makesPlaceSense()) {

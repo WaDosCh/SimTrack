@@ -5,9 +5,10 @@ import java.awt.Point;
 
 import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.core.Scene;
-import ch.awae.simtrack.core.input.Binding;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.input.InputHandler;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 
 /**
@@ -17,13 +18,18 @@ import ch.awae.simtrack.scene.game.view.ViewPort;
  * @version 1.4, 2015-01-26
  * @since SimTrack 0.2.2
  */
-public class Navigator implements BaseTicker {
+public class Navigator implements BaseTicker, InputHandler {
 
+	private final static int BORDER = 40;
+	private final static float deltaZoom = -.05f;
+	private final static int MOVE_SPEED = 8;
+
+	private boolean isActive = true;
 	private InputController input;
 	private ViewPort viewPort;
 	private Scene scene;
-
-	private Binding A, S, D, W;
+	private int dx = 0, dy = 0;
+	private double scrollAmount = 0;
 
 	/**
 	 * instantiates a new navigator
@@ -32,18 +38,7 @@ public class Navigator implements BaseTicker {
 		this.scene = scene;
 		this.viewPort = viewPort;
 		this.input = input;
-
-		A = input.getBinding(InputAction.PAN_LEFT);
-		S = input.getBinding(InputAction.PAN_DOWN);
-		D = input.getBinding(InputAction.PAN_RIGHT);
-		W = input.getBinding(InputAction.PAN_UP);
-
 	}
-
-	private final static int BORDER = 40;
-	private final static float deltaZoom = -.05f;
-	private boolean isActive = true;
-	private final static int MOVE_SPEED = 8;
 
 	/**
 	 * indicates whether or not the navigator is active
@@ -73,23 +68,46 @@ public class Navigator implements BaseTicker {
 		Point mouse = input.getMousePosition();
 		if (mouse == null)
 			return;
-		int dx = 0, dy = 0;
-		Dimension size = this.scene.getScreenSize();
-		if (mouse.x < BORDER || A.isPressed())
-			dx = 1;
-		if (mouse.y < BORDER || W.isPressed())
-			dy = 1;
-		if (mouse.x > size.width - BORDER || D.isPressed())
-			dx = -1;
-		if (mouse.y > size.height - BORDER || S.isPressed())
-			dy = -1;
-		dx *= MOVE_SPEED;
-		dy *= MOVE_SPEED;
-		this.viewPort.moveScene(dx, dy);
 
-		double amount = input.getScroll();
-		if (amount != 0)
-			this.viewPort.zoom((float) (amount * deltaZoom), mouse.x, mouse.y);
+		Dimension size = this.scene.getScreenSize();
+		int mx = 0, my = 0;
+		if (mouse.x < BORDER)
+			mx = 1;
+		if (mouse.y < BORDER)
+			my = 1;
+		if (mouse.x > size.width - BORDER)
+			mx = -1;
+		if (mouse.y > size.height - BORDER)
+			my = -1;
+		mx += dx;
+		my += dy;
+		mx *= MOVE_SPEED;
+		my *= MOVE_SPEED;
+		this.viewPort.moveScene(mx, my);
+
+		if (this.scrollAmount != 0) {
+			this.viewPort.zoom((float) (scrollAmount * deltaZoom), mouse.x, mouse.y);
+			this.scrollAmount = 0;
+		}
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isActionAndConsume(InputAction.PAN_LEFT)) {
+			dx = event.isPress() ? 1 : 0;
+		}
+		if (event.isActionAndConsume(InputAction.PAN_RIGHT)) {
+			dx = event.isPress() ? -1 : 0;
+		}
+		if (event.isActionAndConsume(InputAction.PAN_DOWN)) {
+			dy = event.isPress() ? -1 : 0;
+		}
+		if (event.isActionAndConsume(InputAction.PAN_UP)) {
+			dy = event.isPress() ? 1 : 0;
+		}
+		if (event.isChanged()) {
+			this.scrollAmount += event.getChangeValue();
+		}
 	}
 
 }

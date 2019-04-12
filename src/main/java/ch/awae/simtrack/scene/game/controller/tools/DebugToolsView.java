@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.CheckboxButton;
@@ -22,17 +24,28 @@ public class DebugToolsView extends GameTool {
 	private BasePanel renderer;
 	private DebugTools debugTools;
 	private TrainController trainController;
+	private InputController input;
 
-	public DebugToolsView(Editor editor, DebugTools debugTools, TrainController trainController) {
+	public DebugToolsView(Editor editor, DebugTools debugTools, TrainController trainController,
+			InputController input) {
 		super(editor, true);
 		this.debugTools = debugTools;
 		this.trainController = trainController;
+		this.input = input;
 
-		this.renderer = new BasePanel(input, false, this.scene.getWindow());
+		this.renderer = new BasePanel(false, this.scene.getWindow());
 		this.renderer.margin = 10;
 		addButtons(editor.getScene());
+	}
 
-		onPress(InputAction.DEBUG_TOOL, () -> editor.loadTool(FreeTool.class));
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.DEBUG_TOOL))
+			editor.loadTool(FreeTool.class);
+		if (!event.isConsumed)
+			this.renderer.handleInput(event);
+		if (!event.isConsumed)
+			super.handleInput(event);
 	}
 
 	private void addButtons(Game game) {

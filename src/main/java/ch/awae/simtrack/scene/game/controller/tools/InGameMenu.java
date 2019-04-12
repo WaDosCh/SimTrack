@@ -7,6 +7,8 @@ import java.io.ObjectInputStream;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
@@ -16,11 +18,13 @@ import ch.awae.simtrack.scene.menu.Menu;
 public class InGameMenu extends GameTool {
 
 	private BasePanel renderer;
+	private InputController input;
 
-	public InGameMenu(Editor editor) {
+	public InGameMenu(Editor editor, InputController input) {
 		super(editor, true);
+		this.input = input;
 
-		this.renderer = new BasePanel(input, true, this.editor.getScene().getWindow());
+		this.renderer = new BasePanel(true, this.editor.getScene().getWindow());
 		this.renderer.add(new Label("Ingame Menu", true));
 		this.renderer.add(new Button("Resume", input, this::resume));
 		this.renderer.add(new Button("Save", input, this::save));
@@ -30,7 +34,14 @@ public class InGameMenu extends GameTool {
 	}
 
 	@Override
-	public void loadTool(Object ... args) {
+	public void handleInput(InputEvent event) {
+		this.renderer.handleInput(event);
+		if (!event.isConsumed)
+			super.handleInput(event);
+	}
+
+	@Override
+	public void loadTool(Object... args) {
 		this.editor.getScene().getPaused().set(true);
 	}
 

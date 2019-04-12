@@ -44,6 +44,30 @@ public class InputEvent {
 		this.isConsumed = false;
 	}
 
+	public boolean isPressActionConsumeAndRun(InputAction action, Runnable run) {
+		if (isPressActionAndConsume(action)) {
+			run.run();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isPressActionAndConsume(InputAction action) {
+		if (isPressAction(action)) {
+			consume();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isActionAndConsume(InputAction action) {
+		if (isAction(action)) {
+			consume();
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean isPressAction(InputAction action) {
 		return isPress() && isAction(action);
 	}

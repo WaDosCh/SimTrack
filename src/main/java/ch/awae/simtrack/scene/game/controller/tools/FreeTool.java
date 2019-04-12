@@ -7,32 +7,40 @@ import java.awt.Stroke;
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 
 /**
  * "Free-Hand" tool. This tool will be used for in-situ tile manipulation
- * 
- * @author Andreas Wälchli
- * @version 1.4, 2015-01-26
- * @since SimTrack 0.2.2
  */
 public class FreeTool extends GameTool {
 
 	private final static Stroke borderStroke = new BasicStroke(3);
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
+	private InputController input;
 
 	/**
 	 * creates a new tool instance.
 	 * 
-	 * @param e
-	 *            the editor owning the tool
+	 * @param e the editor owning the tool
 	 */
-	public FreeTool(Editor editor) {
+	public FreeTool(Editor editor, InputController input) {
 		super(editor, false);
-		onPress(InputAction.DROP_TOOL, () -> editor.loadTool(InGameMenu.class));
+		this.input = input;
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.DROP_TOOL))
+			editor.loadTool(InGameMenu.class);
+		if (!event.isConsumed)
+			super.handleInput(event);
 	}
 
 	@Override
 	public void render(Graphics g) {
+		TileCoordinate mouseTile = this.getMouseSceneCoordinate(this.input.getMousePosition()).toTileCoordinate();
 		if (mouseTile != null) {
 			g.setStroke(borderStroke);
 			this.scene.getViewPort().focusHex(mouseTile, g);

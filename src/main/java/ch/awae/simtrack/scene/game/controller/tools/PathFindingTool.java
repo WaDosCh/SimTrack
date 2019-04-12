@@ -11,7 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -19,6 +20,9 @@ import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.view.ViewPort;
 
 public class PathFindingTool extends GameTool {
+
+	private final static Stroke borderStroke = new BasicStroke(6);
+	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private TileCoordinate start;
@@ -34,12 +38,21 @@ public class PathFindingTool extends GameTool {
 		this.pathFinder = scene.getPathfinder();
 		this.startEdge = Edge.RIGHT;
 		this.endEdge = Edge.RIGHT;
-
-		onPress(InputController.MOUSE_LEFT, this::updateOrigin);
-		onPress(InputController.MOUSE_RIGHT, this::updateTarget);
 	}
 
-	private void updateOrigin() {
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.SELECT)) {
+			TileCoordinate mouseTile = this.getMouseSceneCoordinate(event.getCurrentMousePosition()).toTileCoordinate();
+			updateOrigin(mouseTile);
+		} else if (event.isPressActionAndConsume(InputAction.SELECT2)) {
+			TileCoordinate mouseTile = this.getMouseSceneCoordinate(event.getCurrentMousePosition()).toTileCoordinate();
+			updateTarget(mouseTile);
+		} else
+			super.handleInput(event);
+	}
+
+	private void updateOrigin(TileCoordinate mouseTile) {
 		this.start = mouseTile;
 		this.startEdge = this.startEdge.getNeighbour(true);
 		if (this.start != null) {
@@ -48,7 +61,7 @@ public class PathFindingTool extends GameTool {
 		updatePath();
 	}
 
-	private void updateTarget() {
+	private void updateTarget(TileCoordinate mouseTile) {
 		this.end = mouseTile;
 		this.endEdge = this.endEdge.getNeighbour(true);
 		if (this.end != null)
@@ -62,9 +75,6 @@ public class PathFindingTool extends GameTool {
 					new TileEdgeCoordinate(this.end, this.endEdge));
 		}
 	}
-
-	private final static Stroke borderStroke = new BasicStroke(6);
-	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	@Override
 	public void render(Graphics g) {

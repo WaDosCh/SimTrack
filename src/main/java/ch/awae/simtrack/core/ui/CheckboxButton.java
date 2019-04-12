@@ -8,7 +8,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -59,14 +61,13 @@ public class CheckboxButton extends Label {
 		baseSize.width += 30;
 		return baseSize;
 	}
-
+	
 	@Override
-	public boolean tryConsume(Point mousePos, int mouseButton) {
-		if (mouseButton == 1 && test(mousePos)) {
+	public void handleInput(InputEvent event) {
+		if (event.isPressAction(InputAction.SELECT) && test(event.getCurrentMousePosition())) {
+			event.consume();
 			this.dataMapping.set(!this.dataMapping.get());
-			return true;
 		}
-		return false;
 	}
 
 	/**

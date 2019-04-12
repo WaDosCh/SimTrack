@@ -5,12 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Stroke;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
@@ -20,10 +21,6 @@ import ch.awae.utils.functional.T2;
 
 /**
  * Track tool-bar used for track selection while editing the board
- * 
- * @author Andreas Wälchli
- * @version 1.5, 2015-01-26
- * @since SimTrack 0.2.2 (0.2.1)
  */
 public class ToolBar extends GameTool {
 
@@ -39,14 +36,16 @@ public class ToolBar extends GameTool {
 
 	private ArrayList<T2<Runnable, Renderer>> bindings = new ArrayList<>();
 
+	private InputController input;
+
 	/**
 	 * creates a new track-bar instance
 	 * 
-	 * @param editor
-	 *            the editor owning the build tool
+	 * @param editor the editor owning the build tool
 	 */
-	public ToolBar(Editor editor) {
+	public ToolBar(Editor editor, InputController input) {
 		super(editor, false);
+		this.input = input;
 
 		// ######### BINDINGS ##########
 		// bind bulldoze
@@ -88,21 +87,35 @@ public class ToolBar extends GameTool {
 			g.setColor(Color.RED);
 			g.fillOval(-23, -23, 46, 46);
 		});
+	}
 
-		onPress(KeyEvent.VK_MINUS, () -> select(0));
-		onPress(KeyEvent.VK_1, () -> select(1));
-		onPress(KeyEvent.VK_2, () -> select(2));
-		onPress(KeyEvent.VK_3, () -> select(3));
-		onPress(KeyEvent.VK_4, () -> select(4));
-		onPress(KeyEvent.VK_5, () -> select(5));
-		onPress(KeyEvent.VK_6, () -> select(6));
-		onPress(KeyEvent.VK_7, () -> select(7));
-		onPress(KeyEvent.VK_8, () -> select(8));
-		onPress(KeyEvent.VK_9, () -> select(9));
-		onPress(KeyEvent.VK_0, () -> select(10));
-
-		onTick(this::updateByMouse);
-		ifMet(() -> index >= 0).onPress(InputController.MOUSE_LEFT, this::select);
+	@Override
+	public void handleInput(InputEvent event) {
+		if (this.index >= 0 && event.isPressActionConsumeAndRun(InputAction.SELECT, this::select))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_0, () -> select(0)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_1, () -> select(1)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_2, () -> select(2)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_3, () -> select(3)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_4, () -> select(4)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_5, () -> select(5)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_6, () -> select(6)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_7, () -> select(7)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_8, () -> select(8)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_9, () -> select(9)))
+			return;
+		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_10, () -> select(10)))
+			return;
+		super.handleInput(event);
 	}
 
 	int getIndex() {
@@ -125,9 +138,15 @@ public class ToolBar extends GameTool {
 		bindings.get(index)._1.run();
 	}
 
+	@Override
+	public void tick() {
+		updateByMouse();
+		super.tick();
+	}
+
 	public void updateByMouse() {
 		this.index = -1;
-		Point p = mousePosition;
+		Point p = this.input.getMousePosition();
 		if (p == null) {
 			p = new Point(0, 0);
 		}

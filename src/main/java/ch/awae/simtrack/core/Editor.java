@@ -7,7 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
-import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.input.InputHandler;
 import ch.awae.simtrack.scene.game.Game;
 import lombok.NonNull;
 
@@ -15,12 +16,8 @@ import lombok.NonNull;
  * top-level management of the active side of the user interface. It manages the
  * activation of the different editor tools. It thereby targets reduction of
  * complexity by delegating the user actions to well-defined tools.
- * 
- * @author Andreas Wälchli
- * @version 2.2, 2015-01-26
- * @since SimTrack 0.2.1
  */
-public class Editor implements BaseTicker, BaseRenderer {
+public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 
 	private Game scene;
 
@@ -39,10 +36,6 @@ public class Editor implements BaseTicker, BaseRenderer {
 	 */
 	public Editor(@NonNull Game scene) {
 		this.scene = scene;
-	}
-
-	public InputController getInput() {
-		return scene.getInput();
 	}
 
 	@Override
@@ -140,6 +133,12 @@ public class Editor implements BaseTicker, BaseRenderer {
 	public void tick() {
 		if (this.currentTool != null)
 			this.currentTool.tick();
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		if (this.currentTool != null)
+			this.currentTool.handleInput(event);
 	}
 
 }
