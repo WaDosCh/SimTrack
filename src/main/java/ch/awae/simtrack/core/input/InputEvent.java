@@ -1,7 +1,10 @@
 package ch.awae.simtrack.core.input;
 
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import lombok.Getter;
 
@@ -20,7 +23,7 @@ public class InputEvent {
 	private InputEventType type;
 	private Set<Integer> holdKeyCodes;
 	private double changeValue;
-	private @Getter Point currentMousePosition;
+	private @Nonnull @Getter Point currentMousePosition;
 
 	/**
 	 * @param keyCode
@@ -59,6 +62,12 @@ public class InputEvent {
 	 */
 	public double getChangeValue() {
 		return this.changeValue;
+	}
+
+	public String getTextChar() {
+		// if (this.holdKeyCodes.contains(KeyEvent.VK_SHIFT)) {
+		// }
+		return KeyEvent.getKeyText(this.keyCode);
 	}
 
 	/**

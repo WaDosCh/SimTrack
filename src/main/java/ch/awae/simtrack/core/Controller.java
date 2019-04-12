@@ -63,9 +63,7 @@ public class Controller implements SceneController {
 		startOfLastTick = newStart;
 		GameWindow window = this.window;
 
-		if (profiler != null) {
 			profiler.startFrame();
-		}
 
 		if (profilerToggle.isPressed() && profilerToggle.isEdge()) {
 			showProfiler = !showProfiler;
@@ -114,9 +112,9 @@ public class Controller implements SceneController {
 		}
 
 		if (showProfiler) {
-			renderProfiler(graphics);
+			this.profiler.render(graphics);
 			if (snapshotGraphics != null) {
-				renderProfiler(snapshotGraphics);
+				this.profiler.render(snapshotGraphics);
 			}
 		}
 
@@ -133,19 +131,6 @@ public class Controller implements SceneController {
 
 		profiler.endFrame();
 
-	}
-
-	private void renderProfiler(Graphics graphics) {
-		FontMetrics metrics = graphics.getFontMetrics();
-		int sh = metrics.getHeight();
-		String[] digest = profiler.getProfilerOutput().split("\n");
-
-		graphics.setColor(new Color(255, 255, 255, 200));
-		graphics.fillRect(0, 0, 200, sh * (digest.length + 2));
-		graphics.setColor(Color.BLACK);
-		for (int i = 0; i < digest.length; i++) {
-			graphics.drawString(digest[i], 5, (i + 1) * sh);
-		}
 	}
 
 	public void requestSnapshot(Consumer<Image> callback) {

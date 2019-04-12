@@ -1,8 +1,11 @@
 package ch.awae.simtrack.core.profiler;
 
+import java.awt.Color;
+import java.awt.FontMetrics;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.NamedComponent;
 import ch.awae.simtrack.util.Resource;
 
@@ -29,8 +32,7 @@ public final class Profiler implements ProfilerI {
 	private long currentFrameStart;
 
 	/**
-	 * count the frames till sampleCount where string output is updated and data
-	 * cleared
+	 * count the frames till sampleCount where string output is updated and data cleared
 	 */
 	private int frame;
 
@@ -99,8 +101,22 @@ public final class Profiler implements ProfilerI {
 	}
 
 	@Override
-	public String getProfilerOutput() {
-		return this.digest;
+	public String[] getProfilerOutput() {
+		return this.digest.split("\n");
+	}
+
+	@Override
+	public void render(Graphics graphics) {
+		FontMetrics metrics = graphics.getFontMetrics();
+		int sh = metrics.getHeight();
+		String[] digest = this.getProfilerOutput();
+
+		graphics.setColor(new Color(255, 255, 255, 200));
+		graphics.fillRect(0, 0, 200, sh * (digest.length + 2));
+		graphics.setColor(Color.BLACK);
+		for (int i = 0; i < digest.length; i++) {
+			graphics.drawString(digest[i], 5, (i + 1) * sh);
+		}
 	}
 
 }

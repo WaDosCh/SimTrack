@@ -1,8 +1,9 @@
 package ch.awae.simtrack.core.profiler;
 
+import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.NamedComponent;
 
-public interface ProfilerI {
+public interface ProfilerI extends BaseRenderer {
 
 	public void startSample(NamedComponent controller);
 	
@@ -15,5 +16,5 @@ public interface ProfilerI {
 	/**
 	 * @return return the data in string representation of the last sample period
 	 */
-	public String getProfilerOutput();
+	public String[] getProfilerOutput();
 }
