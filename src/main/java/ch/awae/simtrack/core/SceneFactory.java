@@ -31,7 +31,7 @@ public class SceneFactory {
 			}
 			return new Game(controller, model, window);
 		} else if (sceneClass == Menu.class) {
-			return new Menu(controller, window);
+			return new Menu(controller, window, controller.getInput());
 		} else {
 			logger.error("Can't create scene of type {}", sceneClass);
 			return null;

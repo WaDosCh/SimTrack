@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.NamedComponent;
+import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.util.Resource;
 
 public final class Profiler implements ProfilerI {
@@ -42,6 +44,8 @@ public final class Profiler implements ProfilerI {
 	private HashMap<NamedComponent, Long> activeTimeOfComponents;
 
 	private String digest = "no data yet";
+
+	private boolean show;
 
 	public Profiler() {
 		this.sampleCount = Resource.getConfigProperties("core.properties").getInt("profiler.sampleRate");
@@ -107,6 +111,8 @@ public final class Profiler implements ProfilerI {
 
 	@Override
 	public void render(Graphics graphics) {
+		if (!this.show)
+			return;
 		FontMetrics metrics = graphics.getFontMetrics();
 		int sh = metrics.getHeight();
 		String[] digest = this.getProfilerOutput();
@@ -116,6 +122,14 @@ public final class Profiler implements ProfilerI {
 		graphics.setColor(Color.BLACK);
 		for (int i = 0; i < digest.length; i++) {
 			graphics.drawString(digest[i], 5, (i + 1) * sh);
+		}
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressAction(InputAction.PROFILER)) {
+			event.consume();
+			this.show = !this.show;
 		}
 	}
 

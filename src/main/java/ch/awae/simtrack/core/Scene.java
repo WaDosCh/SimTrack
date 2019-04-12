@@ -9,12 +9,11 @@ import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputHandler;
 import lombok.Getter;
 
-public abstract class Scene {
+public abstract class Scene implements InputHandler {
 
-	protected @Getter InputController input;
 	protected @Getter Window window;
 	protected final Controller controller;
 	protected final Logger logger;
@@ -28,7 +27,6 @@ public abstract class Scene {
 		
 		tickers = new ArrayList<>();
 		renderers = new ArrayList<>();
-		this.input = this.controller.getInput();
 		this.logger = LogManager.getLogger();
 	}
 

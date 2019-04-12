@@ -10,15 +10,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ch.awae.simtrack.core.NamedComponent;
 import lombok.Getter;
 
-public class InputController {
+public class InputController implements NamedComponent {
 
 	protected final Logger logger = LogManager.getLogger();
 
@@ -34,10 +36,18 @@ public class InputController {
 	// CACHE
 	private HashSet<Integer> holdKeyCodes;
 	private Point currentMousePosition;
+	private @Getter InputHandler currentlyFocused;
 
 	public InputController() {
+		queuedInputEvents = new ArrayList<>();
 		this.holdKeyCodes = new HashSet<>();
 		this.currentMousePosition = new Point(-1, -1);
+	}
+
+	public List<InputEvent> popAllEvents() {
+		List<InputEvent> result = queuedInputEvents;
+		queuedInputEvents = new ArrayList<>();
+		return result;
 	}
 
 	// ADAPTERS
@@ -86,8 +96,7 @@ public class InputController {
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			System.out.println(e.getButton());
-			int code = btnToCode(e.getButton());
+			int code = MOUSE_SCROLL;
 			queuedInputEvents
 					.add(new InputEvent(code, CHANGE, e.getPreciseWheelRotation(), holdKeyCodes, currentMousePosition));
 		}
@@ -104,5 +113,23 @@ public class InputController {
 		}
 
 	};
+
+	public Point getMousePosition() {
+		return this.currentMousePosition;
+	}
+
+	public void setFocus(InputHandler handler) {
+		this.currentlyFocused = handler;
+	}
+
+	public void unfocus(InputHandler handler) {
+		if (this.currentlyFocused == handler)
+			this.currentlyFocused = null;
+	}
+
+	public void handleInput(InputEvent event) {
+		if (this.currentlyFocused != null)
+			this.currentlyFocused.handleInput(event);
+	}
 
 }

@@ -1,10 +1,10 @@
 package ch.awae.simtrack.core.ui;
 
-import java.awt.Point;
-
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,14 +34,13 @@ public class Button extends Label {
 		g.drawString(this.title, pos.x + Design.buttonTextMarginX,
 				pos.y + Design.buttonTextMarginY + this.size.height / 2);
 	}
-
+	
 	@Override
-	public boolean tryConsume(Point mousePos, int mouseButton) {
-		if (mouseButton == 1 && test(mousePos)) {
+	public void handleInput(InputEvent event) {
+		if (event.isPressAction(InputAction.SELECT) && test(event.getCurrentMousePosition())) {
+			event.consume();
 			this.action.run();
-			return true;
 		}
-		return false;
 	}
 
 }

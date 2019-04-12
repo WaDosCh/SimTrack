@@ -1,15 +1,15 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
-import java.awt.Point;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputHandler;
 
 /**
  * a component is supposed to initialize its base size as the prefered size
  */
-public interface Component {
+public interface Component extends InputHandler {
 
 	/**
 	 * called by the super component before drawing happens to decide on the
@@ -31,9 +31,4 @@ public interface Component {
 
 	void render(Graphics g, Window w);
 
-	/**
-	 * @param event
-	 * @return true if event is consumed
-	 */
-	public boolean tryConsume(Point mousePosition, int mouseButton);
 }

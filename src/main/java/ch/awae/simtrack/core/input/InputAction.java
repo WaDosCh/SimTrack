@@ -25,7 +25,11 @@ public enum InputAction implements InputActionI {
 
 	// SIGNAL TOOL
 	ST_BUILD_SIGNAL(MOUSE_LEFT),
-	ST_DELETE_SIGNAL(MOUSE_RIGHT);
+	ST_DELETE_SIGNAL(MOUSE_RIGHT),
+
+	// GENERAL
+	PROFILER(VK_F6),
+	SELECT(MOUSE_LEFT);
 
 	/**
 	 * possible keycodes to execute this action
@@ -40,7 +44,7 @@ public enum InputAction implements InputActionI {
 	public int[] getKeyCodes() {
 		return keycodes;
 	}
-	
+
 	public boolean isActivatedBy(int keyCode) {
 		for (int possibleKeyCode : this.keycodes) {
 			if (keyCode == possibleKeyCode)

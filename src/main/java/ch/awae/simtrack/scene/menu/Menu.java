@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
@@ -19,16 +21,15 @@ public class Menu extends Scene {
 
 	private BasePanel panel;
 
-	public Menu(Controller controller, Window window) {
+	public Menu(Controller controller, Window window, InputController input) {
 		super(controller, window);
-
-		initMenu();
+		initMenu(input);
 
 		addRenderer(panel);
 	}
 
-	private void initMenu() {
-		panel = new BasePanel(input, true, this.window);
+	private void initMenu(InputController input) {
+		panel = new BasePanel(true, this.window);
 		panel.add(new Label("Main Menu", true));
 		panel.add(new Button("Load Scenario", input, this::loadScenario));
 		panel.add(new Button("New Custom Game", input, this::newGame));
@@ -68,6 +69,11 @@ public class Menu extends Scene {
 	private void exitGame() {
 		logger.info("EXIT");
 		System.exit(0);
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		panel.handleInput(event);
 	}
 
 }

@@ -1,14 +1,15 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.judos.generic.data.StringUtils;
 
@@ -25,12 +26,23 @@ public class InputField extends Label {
 		this.input = input;
 		this.text = "";
 		this.expectedLength = expectedLength;
-
-		input.getBinding(KeyEvent.VK_A).ifPressed(() -> {
-			this.text += "A";
-			logger.info("text is now: {}", this.text);
-			//TODO: input doesn't work
-		});
+	}
+	
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressAction(InputAction.SELECT)) {
+			if (this.test(event.getCurrentMousePosition())) {
+				event.consume();
+				this.input.setFocus(this);
+			}
+			else {
+				this.input.unfocus(this);
+			}
+		}
+		if (event.isPress() && !event.getText().isEmpty()) {
+			this.text += event.getText();
+			event.consume();
+		}
 	}
 
 	@Override

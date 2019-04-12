@@ -18,6 +18,8 @@ public class InputEvent {
 		RELEASE,
 		CHANGE;
 	}
+	
+	public boolean isConsumed;
 
 	private int keyCode;
 	private InputEventType type;
@@ -39,6 +41,15 @@ public class InputEvent {
 		this.changeValue = changeValue;
 		this.holdKeyCodes = holdKeyCodes;
 		this.currentMousePosition = currentMousePos;
+		this.isConsumed = false;
+	}
+
+	public boolean isPressAction(InputAction action) {
+		return isPress() && isAction(action);
+	}
+
+	public boolean isReleaseAction(InputAction action) {
+		return isReleased() && isAction(action);
 	}
 
 	public boolean isAction(InputAction action) {
@@ -64,7 +75,7 @@ public class InputEvent {
 		return this.changeValue;
 	}
 
-	public String getTextChar() {
+	public String getText() {
 		// if (this.holdKeyCodes.contains(KeyEvent.VK_SHIFT)) {
 		// }
 		return KeyEvent.getKeyText(this.keyCode);
@@ -82,6 +93,10 @@ public class InputEvent {
 				return true;
 		}
 		return false;
+	}
+
+	public void consume() {
+		this.isConsumed = true;
 	}
 
 }

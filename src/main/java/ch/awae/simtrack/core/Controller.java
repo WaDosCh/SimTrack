@@ -1,9 +1,6 @@
 package ch.awae.simtrack.core;
 
-import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
-import ch.awae.simtrack.core.input.Binding;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.profiler.Profiler;
 import ch.awae.simtrack.core.profiler.ProfilerI;
 import lombok.Getter;
@@ -28,8 +25,6 @@ public class Controller implements SceneController {
 	protected final Logger logger = LogManager.getLogger();
 
 	private ProfilerI profiler;
-	private Binding profilerToggle;
-	private boolean showProfiler = false;
 	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
 
 	private long startOfLastTick = System.currentTimeMillis();
@@ -40,7 +35,6 @@ public class Controller implements SceneController {
 		this.input = window.getInput();
 		this.sceneFactory = new SceneFactory(this, window);
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
-		profilerToggle = input.getBinding(KeyEvent.VK_F6);
 
 		profiler = new Profiler();
 	}
@@ -63,12 +57,13 @@ public class Controller implements SceneController {
 		startOfLastTick = newStart;
 		GameWindow window = this.window;
 
-			profiler.startFrame();
+		profiler.startFrame();
 
-		if (profilerToggle.isPressed() && profilerToggle.isEdge()) {
-			showProfiler = !showProfiler;
-			profilerToggle.consume();
-		}
+		profiler.startSample(this.input);
+
+		handleAllInputEvents();
+
+		profiler.endSample(this.input);
 
 		// setup screenshot buffers if required
 		BufferedImage snapshot = null;
@@ -111,11 +106,9 @@ public class Controller implements SceneController {
 			profiler.endSample(ticker);
 		}
 
-		if (showProfiler) {
-			this.profiler.render(graphics);
-			if (snapshotGraphics != null) {
-				this.profiler.render(snapshotGraphics);
-			}
+		this.profiler.render(graphics);
+		if (snapshotGraphics != null) {
+			this.profiler.render(snapshotGraphics);
 		}
 
 		if (snapshot != null) {
@@ -131,6 +124,20 @@ public class Controller implements SceneController {
 
 		profiler.endFrame();
 
+	}
+
+	private void handleAllInputEvents() {
+		for (InputEvent event : this.input.popAllEvents()) {
+			this.input.handleInput(event);
+			if (event.isConsumed)
+				continue;
+			this.profiler.handleInput(event);
+			if (event.isConsumed)
+				continue;
+			this.currentScene.handleInput(event);
+			if (event.isConsumed)
+				continue;
+		}
 	}
 
 	public void requestSnapshot(Consumer<Image> callback) {

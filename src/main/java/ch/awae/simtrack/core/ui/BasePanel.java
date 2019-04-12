@@ -8,27 +8,23 @@ import java.util.ArrayList;
 import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
-import ch.awae.simtrack.core.input.Binding;
-import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.input.InputHandler;
 import ch.awae.simtrack.scene.game.view.Design;
 
-public class BasePanel implements Component, BaseRenderer {
+public class BasePanel implements Component, BaseRenderer, InputHandler {
 
 	private ArrayList<Component> components;
-	private InputController input;
 	private boolean needsLayout;
 	private Rectangle rect;
-	private Binding click;
 	private boolean centered;
 	public int margin = 0;
 	private Window window;
 
-	public BasePanel(InputController input, boolean centered, Window window) {
+	public BasePanel(boolean centered, Window window) {
 		this.centered = centered;
-		this.input = input;
 		this.window = window;
 		this.components = new ArrayList<>();
-		this.click = input.getBinding(InputController.MOUSE_LEFT);
 		this.needsLayout = true;
 	}
 
@@ -36,7 +32,6 @@ public class BasePanel implements Component, BaseRenderer {
 		this.components.add(component);
 		this.needsLayout = true;
 	}
-	
 
 	@Override
 	public void render(Graphics graphics) {
@@ -59,10 +54,6 @@ public class BasePanel implements Component, BaseRenderer {
 			b.render(g, this.window);
 		}
 
-		click.onPress(() -> {
-			Point pos = this.input.getMousePosition();
-			tryConsume(pos, 1);
-		});
 	}
 
 	@Override
@@ -114,6 +105,15 @@ public class BasePanel implements Component, BaseRenderer {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		for (Component b : this.components) {
+			b.handleInput(event);
+			if (event.isConsumed)
+				return;
+		}
 	}
 
 }
