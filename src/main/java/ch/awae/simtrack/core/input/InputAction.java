@@ -43,6 +43,7 @@ public enum InputAction implements InputActionI {
 	// GENERAL
 	PROFILER(VK_F6),
 	SELECT(MOUSE_LEFT),
+	DESELECT(VK_ESCAPE),
 	SELECT2(MOUSE_RIGHT),
 	INPUT_GUIDE(VK_F1),
 	QUIT_GAME(VK_F12);

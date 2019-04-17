@@ -7,7 +7,9 @@ import java.io.ObjectOutputStream;
 
 import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.InputField;
@@ -30,6 +32,15 @@ public class InGameSaveMenu extends GameTool {
 		this.panel.add(new InputField(32, this.input));
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
 		this.panel.add(new Button("Cancel", input, () -> this.editor.loadTool(InGameMenu.class)));
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		this.panel.handleInput(event);
+		if (!event.isConsumed && event.isPressActionAndConsume(InputAction.DROP_TOOL))
+			editor.loadTool(InGameMenu.class);
+		else if (!event.isConsumed)
+			super.handleInput(event);
 	}
 
 	private void quicksave() {
