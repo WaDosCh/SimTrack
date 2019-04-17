@@ -30,7 +30,7 @@ public class InGameSaveMenu extends GameTool {
 
 		this.panel = new BasePanel(true, this.scene.getWindow());
 		this.panel.add(new Label("Save game", true));
-		this.inputField = new InputField(64, this.input);
+		this.inputField = new InputField(32, this.input);
 		this.panel.add(this.inputField);
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
 		this.panel.add(new Button("Cancel", input, () -> this.editor.loadTool(InGameMenu.class)));

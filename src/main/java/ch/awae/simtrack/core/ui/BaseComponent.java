@@ -19,10 +19,7 @@ public abstract class BaseComponent implements Component {
 	public BaseComponent(Font font) {
 		super();
 		this.font = font;
-	}
-
-	protected void init() {
-		this.size = new Dimension(getPreferedWidth(), getPreferedHeight());
+		this.size = new Dimension(0,0);
 	}
 
 	public int getPreferedWidth() {

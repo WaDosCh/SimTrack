@@ -8,10 +8,9 @@ import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputEvent;
-import ch.awae.simtrack.core.input.InputHandler;
 import ch.awae.simtrack.scene.game.view.Design;
 
-public class BasePanel implements Component, BaseRenderer, InputHandler {
+public class BasePanel implements Component, BaseRenderer {
 
 	private ArrayList<Component> components;
 	private boolean needsLayout;
@@ -68,7 +67,7 @@ public class BasePanel implements Component, BaseRenderer, InputHandler {
 		}
 		int currentY = 0;
 		for (Component b : this.components) {
-			Dimension componentSize = b.getSize();
+			Dimension componentSize = new Dimension(b.getPreferedWidth(), b.getPreferedHeight());
 			b.layout(this.rect.x, currentY + this.rect.y, this.rect.width, componentSize.height);
 			currentY += componentSize.height;
 		}

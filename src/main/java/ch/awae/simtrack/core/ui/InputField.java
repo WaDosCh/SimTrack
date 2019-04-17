@@ -67,6 +67,7 @@ public class InputField extends Label {
 				pos.y + Design.buttonTextMarginY + this.size.height / 2);
 	}
 
+	@Override
 	protected String getTextForSizeCalculation() {
 		return StringUtils.repeat("W", this.expectedLength);
 	}

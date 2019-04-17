@@ -22,7 +22,6 @@ public class Label extends BaseComponent {
 	public Label(String title, boolean isTitle) {
 		super(isTitle ? Design.titleFont : Design.textFont);
 		this.title = title;
-		init();
 	}
 
 	public void render(Graphics g, Window w) {
