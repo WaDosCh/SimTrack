@@ -17,6 +17,7 @@ public class Design {
 	public static final Color textFieldBg;
 	public static final Color textFieldBorder;
 	public static final Color textFieldFocus;
+	public static final Color textFieldBorderFocus;
 
 	public static final Font textFont;
 	public static final Font titleFont;
@@ -45,6 +46,7 @@ public class Design {
 		textFieldBg = props.getColor("textFieldBackground");
 		textFieldBorder = props.getColor("textFieldBorder");
 		textFieldFocus = props.getColor("textFieldFocus");
+		textFieldBorderFocus = props.getColor("textFieldBorderFocus");
 
 		textFont = new Font(props.getString("textFont"), 0, props.getInt("textSize"));
 		titleFont = new Font(props.getString("titleFont"), 0, props.getInt("titleSize"));

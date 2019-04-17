@@ -46,7 +46,13 @@ public enum InputAction implements InputActionI {
 	DESELECT(VK_ESCAPE),
 	SELECT2(MOUSE_RIGHT),
 	INPUT_GUIDE(VK_F1),
-	QUIT_GAME(VK_F12);
+	QUIT_GAME(VK_F12),
+	BACKSPACE(VK_BACK_SPACE),
+	LEFT(VK_LEFT),
+	RIGHT(VK_RIGHT),
+	DELETE(VK_DELETE),
+	HOME(VK_HOME),
+	END(VK_END);
 
 	/**
 	 * possible keycodes to execute this action
