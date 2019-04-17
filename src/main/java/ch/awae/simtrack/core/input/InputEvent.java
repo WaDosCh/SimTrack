@@ -1,7 +1,6 @@
 package ch.awae.simtrack.core.input;
 
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -18,7 +17,7 @@ public class InputEvent {
 		RELEASE,
 		CHANGE;
 	}
-	
+
 	public boolean isConsumed;
 
 	private int keyCode;
@@ -26,6 +25,12 @@ public class InputEvent {
 	private Set<Integer> holdKeyCodes;
 	private double changeValue;
 	private @Nonnull @Getter Point currentMousePosition;
+	private Character text;
+
+	public InputEvent(int keyCode, InputEventType type, double changeValue, Set<Integer> holdKeyCodes,
+			Point currentMousePos) {
+		this(keyCode, type, changeValue, holdKeyCodes, currentMousePos, null);
+	}
 
 	/**
 	 * @param keyCode
@@ -33,10 +38,12 @@ public class InputEvent {
 	 * @param changeValue
 	 * @param holdKeyCodes general other keyCodes currently hold down
 	 * @param currentMousePos
+	 * @param c
 	 */
 	public InputEvent(int keyCode, InputEventType type, double changeValue, Set<Integer> holdKeyCodes,
-			Point currentMousePos) {
+			Point currentMousePos, Character c) {
 		this.keyCode = keyCode;
+		this.text = c;
 		this.type = type;
 		this.changeValue = changeValue;
 		this.holdKeyCodes = holdKeyCodes;
@@ -51,7 +58,7 @@ public class InputEvent {
 		}
 		return false;
 	}
-	
+
 	public boolean isPressActionAndConsume(InputAction action) {
 		if (isPressAction(action)) {
 			consume();
@@ -59,7 +66,7 @@ public class InputEvent {
 		}
 		return false;
 	}
-	
+
 	public boolean isActionAndConsume(InputAction action) {
 		if (isAction(action)) {
 			consume();
@@ -67,7 +74,7 @@ public class InputEvent {
 		}
 		return false;
 	}
-	
+
 	public boolean isPressAction(InputAction action) {
 		return isPress() && isAction(action);
 	}
@@ -102,7 +109,9 @@ public class InputEvent {
 	public String getText() {
 		// if (this.holdKeyCodes.contains(KeyEvent.VK_SHIFT)) {
 		// }
-		return KeyEvent.getKeyText(this.keyCode);
+		if (this.text == null)
+			return "";
+		return String.valueOf(this.text);
 	}
 
 	/**

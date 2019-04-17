@@ -26,7 +26,12 @@ public class InputField extends Label {
 		this.expectedLength = expectedLength;
 		this.focused = false;
 	}
-	
+
+	@Override
+	public void unfocus() {
+		this.focused = false;
+	}
+
 	@Override
 	public void handleInput(InputEvent event) {
 		if (event.isPressAction(InputAction.SELECT)) {

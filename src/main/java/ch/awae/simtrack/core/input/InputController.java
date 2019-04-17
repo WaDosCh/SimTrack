@@ -54,7 +54,9 @@ public class InputController implements NamedComponent {
 	private @Getter KeyAdapter keyboard = new KeyAdapter() {
 		@Override
 		public synchronized void keyPressed(KeyEvent e) {
-			queuedInputEvents.add(new InputEvent(e.getKeyCode(), PRESS, 0, holdKeyCodes, currentMousePosition));
+			char c = e.getKeyChar();
+			InputEvent event = new InputEvent(e.getKeyCode(), PRESS, 0, holdKeyCodes, currentMousePosition, c);
+			queuedInputEvents.add(event);
 			holdKeyCodes.add(e.getKeyCode());
 		}
 
