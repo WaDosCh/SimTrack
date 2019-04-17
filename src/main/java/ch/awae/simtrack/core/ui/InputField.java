@@ -17,12 +17,14 @@ public class InputField extends Label {
 	private int expectedLength;
 	private InputController input;
 	private String text;
+	private boolean focused;
 
 	public InputField(int expectedLength, InputController input) {
 		super(null);
 		this.input = input;
 		this.text = "";
 		this.expectedLength = expectedLength;
+		this.focused = false;
 	}
 	
 	@Override
@@ -31,12 +33,13 @@ public class InputField extends Label {
 			if (this.test(event.getCurrentMousePosition())) {
 				event.consume();
 				this.input.setFocus(this);
-			}
-			else {
+				this.focused = true;
+			} else {
 				this.input.unfocus(this);
+				this.focused = false;
 			}
 		}
-		if (event.isPress() && !event.getText().isEmpty()) {
+		if (this.focused && event.isPress() && !event.getText().isEmpty()) {
 			this.text += event.getText();
 			event.consume();
 		}
@@ -45,12 +48,14 @@ public class InputField extends Label {
 	@Override
 	public void render(Graphics g, Window w) {
 		g.setColor(Design.textFieldBg);
+		if (this.focused)
+			g.setColor(Design.textFieldFocus);
 		g.fillRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 		g.setColor(Design.textFieldBorder);
 		g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 		g.setFont(Design.textFont);
 		g.setColor(Design.textColor);
-		g.drawString(this.text, this.pos.x, this.pos.y);
+		g.drawString(this.text, this.pos.x, this.pos.y + this.size.height / 2);
 	}
 
 	protected String getTextForSizeCalculation() {

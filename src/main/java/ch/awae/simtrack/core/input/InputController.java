@@ -128,8 +128,15 @@ public class InputController implements NamedComponent {
 	}
 
 	public void handleInput(InputEvent event) {
-		if (this.currentlyFocused != null)
-			this.currentlyFocused.handleInput(event);
+		if (this.currentlyFocused != null) {
+			if (event.isPressActionAndConsume(InputAction.DESELECT)) {
+				this.currentlyFocused.unfocus();
+				this.currentlyFocused = null;
+			}
+			else {
+				this.currentlyFocused.handleInput(event);
+			}
+		}
 	}
 
 }
