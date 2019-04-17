@@ -71,4 +71,8 @@ public class InputField extends Label {
 		return StringUtils.repeat("W", this.expectedLength);
 	}
 
+	public void focus() {
+		this.focused = true;
+	}
+
 }

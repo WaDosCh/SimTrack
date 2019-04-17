@@ -21,6 +21,7 @@ public class InGameSaveMenu extends GameTool {
 	private BasePanel panel;
 	private Model model;
 	private InputController input;
+	private InputField inputField;
 
 	public InGameSaveMenu(Editor editor, Model model, InputController input) {
 		super(editor, true);
@@ -29,9 +30,22 @@ public class InGameSaveMenu extends GameTool {
 
 		this.panel = new BasePanel(true, this.scene.getWindow());
 		this.panel.add(new Label("Save game", true));
-		this.panel.add(new InputField(64, this.input));
+		this.inputField = new InputField(64, this.input);
+		this.panel.add(this.inputField);
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
 		this.panel.add(new Button("Cancel", input, () -> this.editor.loadTool(InGameMenu.class)));
+	}
+	
+	@Override
+	public void loadTool(Object... args) {
+		this.input.setFocus(this.inputField);
+		this.inputField.focus();
+	}
+	
+	@Override
+	public void unloadTool() {
+		this.inputField.unfocus();
+		this.input.setFocus(null);
 	}
 
 	@Override
