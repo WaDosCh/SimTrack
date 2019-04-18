@@ -52,7 +52,8 @@ public enum InputAction implements InputActionI {
 	RIGHT(VK_RIGHT),
 	DELETE(VK_DELETE),
 	HOME(VK_HOME),
-	END(VK_END);
+	END(VK_END),
+	CONFIRM(VK_ENTER);
 
 	/**
 	 * possible keycodes to execute this action

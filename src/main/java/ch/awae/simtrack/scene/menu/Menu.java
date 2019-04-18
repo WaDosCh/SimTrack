@@ -1,10 +1,5 @@
 package ch.awae.simtrack.scene.menu;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
@@ -39,6 +34,7 @@ public class Menu extends Scene {
 	}
 
 	private void loadScenario() {
+		//TODO: implement scenario selection and loading
 		logger.debug("LOAD SCENARIO");
 	}
 
@@ -50,16 +46,7 @@ public class Menu extends Scene {
 
 	private void loadGame() {
 		logger.debug("LOAD GAME");
-		ObjectInputStream in;
-		try {
-			in = new ObjectInputStream(new FileInputStream(new File("saves/map1.simtrack.save")));
-			Model model = (Model) in.readObject();
-			this.controller.loadScene(Game.class, model);
-		} catch (
-				IOException
-				| ClassNotFoundException e) {
-			logger.error("error loading save", e);
-		}
+		this.controller.loadScene(MenuLoadGame.class);
 	}
 
 	private void openOptions() {
