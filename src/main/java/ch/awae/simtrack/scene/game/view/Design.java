@@ -27,6 +27,7 @@ public class Design {
 	public static final int buttonTextMarginY;
 	public static final Color checkboxSelected;
 	public static final Color checkboxNotSelected;
+	public static final Color menuBlackOverlay;
 
 	static {
 		Properties props = Resource.getConfigProperties("design.properties");
@@ -47,6 +48,8 @@ public class Design {
 		textFieldBorder = props.getColor("textFieldBorder");
 		textFieldFocus = props.getColor("textFieldFocus");
 		textFieldBorderFocus = props.getColor("textFieldBorderFocus");
+		
+		menuBlackOverlay = props.getColor("menuBlackOverlay");
 
 		textFont = new Font(props.getString("textFont"), 0, props.getInt("textSize"));
 		titleFont = new Font(props.getString("titleFont"), 0, props.getInt("titleSize"));

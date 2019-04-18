@@ -1,5 +1,6 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.scene.menu.Menu;
 
 public class InGameMenu extends GameTool {
@@ -52,6 +54,9 @@ public class InGameMenu extends GameTool {
 
 	@Override
 	public void render(Graphics graphics) {
+		graphics.setColor(Design.menuBlackOverlay);
+		Dimension size = this.editor.getScene().getWindow().getScreenSize();
+		graphics.fillRect(0, 0, size.width, size.height);
 		this.renderer.render(graphics);
 	}
 
