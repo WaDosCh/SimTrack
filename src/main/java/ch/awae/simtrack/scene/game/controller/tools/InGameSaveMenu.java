@@ -31,7 +31,9 @@ public class InGameSaveMenu extends GameTool {
 		this.panel = new BasePanel(true, this.scene.getWindow());
 		this.panel.add(new Label("Save game", true));
 		this.inputField = new InputField(32, this.input);
+		this.inputField.setEnterAction(this::save);
 		this.panel.add(this.inputField);
+		this.panel.add(new Button("Save with Name", input, this::save));
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
 		this.panel.add(new Button("Cancel", input, () -> this.editor.loadTool(InGameMenu.class)));
 	}
@@ -56,12 +58,20 @@ public class InGameSaveMenu extends GameTool {
 		else if (!event.isConsumed)
 			super.handleInput(event);
 	}
+	
+	private void save() {
+		saveWithName(this.inputField.getText());
+	}
 
 	private void quicksave() {
+		saveWithName("quicksave");
+	}
+	
+	private void saveWithName(String name) {
 		try {
 			new File("saves/").mkdir();
 			ObjectOutputStream out = new ObjectOutputStream(
-					new FileOutputStream(new File("saves/quicksave.simtrack.save")));
+					new FileOutputStream(new File("saves/"+name+".simtrack.save")));
 			out.writeObject(this.model);
 			out.close();
 			this.editor.loadTool(FreeTool.class);

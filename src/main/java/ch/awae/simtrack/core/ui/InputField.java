@@ -11,6 +11,8 @@ import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.util.TextEditing;
 import ch.judos.generic.data.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 public class InputField extends Label {
 
@@ -19,6 +21,8 @@ public class InputField extends Label {
 	private InputController input;
 	private TextEditing text;
 	private boolean focused;
+	
+	private @Getter @Setter Runnable enterAction;
 
 	public InputField(int expectedLength, InputController input) {
 		super(null);
@@ -46,6 +50,10 @@ public class InputField extends Label {
 			}
 		} else if (this.focused) {
 			this.text.handleInput(event);
+			if (!event.isConsumed && event.isPressActionAndConsume(InputAction.CONFIRM)) {
+				if (this.enterAction != null)
+					this.enterAction.run();
+			}
 		}
 	}
 
@@ -74,6 +82,10 @@ public class InputField extends Label {
 
 	public void focus() {
 		this.focused = true;
+	}
+
+	public String getText() {
+		return this.text.getText();
 	}
 
 }

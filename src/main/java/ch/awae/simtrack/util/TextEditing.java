@@ -43,7 +43,7 @@ public class TextEditing implements InputHandler {
 			this.cursor = 0;
 		} else if (event.isPressActionAndConsume(InputAction.END)) {
 			this.cursor = this.text.length();
-		} else if (!event.getText().isEmpty()) {
+		} else if (event.getText().matches("[a-zA-Z0-9-_]")) {
 			this.text += event.getText();
 			this.cursor++;
 			event.consume();
