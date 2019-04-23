@@ -14,27 +14,11 @@ public abstract class BaseComponent implements Component {
 	protected Point pos;
 	protected Font font;
 
-	protected Dimension preferedSize;
-
 	public BaseComponent(Font font) {
 		super();
 		this.font = font;
 		this.size = new Dimension(0,0);
 	}
-
-	public int getPreferedWidth() {
-		if (preferedSize == null)
-			this.preferedSize = getPreferedDimension();
-		return preferedSize.width;
-	}
-
-	public int getPreferedHeight() {
-		if (preferedSize == null)
-			this.preferedSize = getPreferedDimension();
-		return preferedSize.height;
-	}
-
-	protected abstract Dimension getPreferedDimension();
 
 	@Override
 	public void layout(int x, int y, int w, int h) {

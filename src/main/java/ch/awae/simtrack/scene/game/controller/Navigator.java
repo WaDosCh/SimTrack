@@ -13,10 +13,6 @@ import ch.awae.simtrack.scene.game.view.ViewPort;
 
 /**
  * Navigation Tool. Used for Scene movement & zoom
- * 
- * @author Andreas Wälchli
- * @version 1.4, 2015-01-26
- * @since SimTrack 0.2.2
  */
 public class Navigator implements BaseTicker, InputHandler {
 
@@ -31,36 +27,20 @@ public class Navigator implements BaseTicker, InputHandler {
 	private int dx = 0, dy = 0;
 	private double scrollAmount = 0;
 
-	/**
-	 * instantiates a new navigator
-	 */
 	public Navigator(Scene scene, ViewPort viewPort, InputController input) {
 		this.scene = scene;
 		this.viewPort = viewPort;
 		this.input = input;
 	}
 
-	/**
-	 * indicates whether or not the navigator is active
-	 * 
-	 * @return {@code true} if and only if the navigator is active
-	 */
 	public boolean isEnabled() {
 		return this.isActive;
 	}
 
-	/**
-	 * set the activity state of the navigator
-	 * 
-	 * @param isEnabled
-	 */
 	public void setEnabled(boolean isEnabled) {
 		this.isActive = isEnabled;
 	}
 
-	/**
-	 * performs an update tick on the navigator
-	 */
 	@Override
 	public void tick() {
 		if (!this.isActive)

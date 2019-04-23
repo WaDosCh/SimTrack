@@ -20,12 +20,10 @@ public interface Component extends InputHandler {
 	 */
 	public void layout(int x, int y, int w, int h);
 
-	public int getPreferedWidth();
-
-	public int getPreferedHeight();
-
+	public Dimension getPreferedDimension();
+	
 	/**
-	 * @return
+	 * @return actual current size this component may use (set by layout method)
 	 */
 	public Dimension getSize();
 

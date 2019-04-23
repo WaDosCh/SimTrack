@@ -32,7 +32,7 @@ public class Label extends BaseComponent {
 	}
 
 	@Override
-	protected Dimension getPreferedDimension() {
+	public Dimension getPreferedDimension() {
 		Font f = this.font;
 		FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
 		Rectangle2D bounds = f.getStringBounds(getTextForSizeCalculation(), frc);

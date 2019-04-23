@@ -59,7 +59,7 @@ public class BasePanel implements Component, BaseRenderer {
 		// Note: Just centers content inside w/h, if w/h is smaller than
 		// required, this does not scale down components
 		this.needsLayout = false;
-		Dimension size = new Dimension(getPreferedWidth(), getPreferedHeight());
+		Dimension size = getPreferedDimension();
 		if (this.centered) {
 			this.rect = new Rectangle(x + w / 2 - size.width / 2, y + h / 2 - size.height / 2, size.width, size.height);
 		} else {
@@ -67,28 +67,22 @@ public class BasePanel implements Component, BaseRenderer {
 		}
 		int currentY = 0;
 		for (Component b : this.components) {
-			Dimension componentSize = new Dimension(b.getPreferedWidth(), b.getPreferedHeight());
+			Dimension componentSize = b.getPreferedDimension();
 			b.layout(this.rect.x, currentY + this.rect.y, this.rect.width, componentSize.height);
 			currentY += componentSize.height;
 		}
 	}
 
 	@Override
-	public int getPreferedWidth() {
+	public Dimension getPreferedDimension() {
 		int minWidth = 0;
-		for (Component b : this.components) {
-			minWidth = Math.max(minWidth, b.getPreferedWidth());
-		}
-		return minWidth;
-	}
-
-	@Override
-	public int getPreferedHeight() {
 		int totalHeight = 0;
 		for (Component b : this.components) {
-			totalHeight += b.getPreferedHeight();
+			Dimension d = b.getPreferedDimension();
+			minWidth = Math.max(minWidth, d.width);
+			totalHeight += d.height;
 		}
-		return totalHeight;
+		return new Dimension(minWidth, totalHeight);
 	}
 
 	@Override

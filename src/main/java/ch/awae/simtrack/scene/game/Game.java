@@ -29,9 +29,6 @@ import ch.awae.simtrack.scene.game.view.renderer.SignalRenderer;
 import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
 import lombok.Getter;
 
-/**
- * the game view implementation
- */
 public class Game extends Scene {
 
 	private @Getter PathFinding pathfinder;
@@ -48,13 +45,6 @@ public class Game extends Scene {
 	private @Getter AtomicBoolean paused = new AtomicBoolean(false);
 	private Navigator navigator;
 
-	/**
-	 * instantiates a new game view
-	 * 
-	 * @param model
-	 * @param screenX
-	 * @param screenY
-	 */
 	public Game(Controller controller, Model model, Window window) {
 		super(controller, window);
 		this.model = model;
@@ -85,11 +75,11 @@ public class Game extends Scene {
 		addRenderer(this.trackbar);
 		addRenderer(this.debugTools.getRenderer());
 
-		addTicker(this.navigator);
+		addTicker(this.navigator); // moving / zooming on map
 		addTicker(this.trackbar);
 		addTicker(this.editor);
 		addTicker(this.debugTools);
-		addTicker(this.viewPort);
+		addTicker(this.viewPort); // TODO: move zooming functionality to navigator
 		addTicker(this.model);
 		addTicker(this.pathfinder);
 		addTicker(this.trainController);

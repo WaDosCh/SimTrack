@@ -56,7 +56,7 @@ public class CheckboxButton extends Label {
 	}
 
 	@Override
-	protected Dimension getPreferedDimension() {
+	public Dimension getPreferedDimension() {
 		Dimension baseSize = super.getPreferedDimension();
 		baseSize.width += 30;
 		return baseSize;
