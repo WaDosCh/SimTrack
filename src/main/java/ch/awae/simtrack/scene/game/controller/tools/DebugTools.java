@@ -44,8 +44,6 @@ public class DebugTools extends GameTool {
 		else if (event.isPressActionAndConsume(InputAction.DEBUG_TOOL)) {
 			editor.loadTool(DebugToolsView.class);
 		}
-		else if (event.isPressActionAndConsume(InputAction.QUIT_GAME))
-			System.exit(0);
 		else
 			super.handleInput(event);
 	}

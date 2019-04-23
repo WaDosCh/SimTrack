@@ -131,6 +131,8 @@ public class Controller implements SceneController {
 
 	private void handleAllInputEvents() {
 		for (InputEvent event : this.input.popAllEvents()) {
+			if (event.isPressActionAndConsume(InputAction.QUIT_GAME))
+				System.exit(0);
 			this.input.handleInput(event);
 			if (event.isConsumed)
 				continue;
