@@ -37,7 +37,7 @@ public class UITestingMenu extends Scene {
 		}));
 		panel.add(new InputField(20, input));
 
-		WindowComponent window = new WindowComponent(panel, Design.textFont, "TestWindow " + this.windowNumber++,
+		WindowComponent window = new WindowComponent(panel, Design.textFont, "Move me around " + this.windowNumber++,
 				input);
 		this.ui.addWindow(window);
 	}

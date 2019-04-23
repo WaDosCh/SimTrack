@@ -86,7 +86,7 @@ public class DebugToolsRenderer implements Renderer {
 			screenPos.y -= 150;
 		if (screenPos.x > viewPort.getScreenDimensions().x - 400)
 			screenPos.x -= 400;
-		g.setColor(Design.almostOpaque);
+		g.setColor(Design.panelBackground);
 		int y = screenPos.y + 10;
 		g.fillRect(screenPos.x + 10, y, 400, 130);
 		g.setColor(Design.grayBorder);

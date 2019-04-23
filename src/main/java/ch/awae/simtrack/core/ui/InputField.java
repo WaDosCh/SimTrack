@@ -20,7 +20,7 @@ public class InputField extends Label {
 	private InputController input;
 	private TextEditing text;
 	private boolean focused;
-	
+
 	private @Getter @Setter Runnable enterAction;
 
 	public InputField(int expectedLength, InputController input) {
@@ -69,9 +69,15 @@ public class InputField extends Label {
 			g.drawRect(this.pos.x + 1, this.pos.y + 1, this.size.width - 2, this.size.height - 2);
 		}
 		g.setFont(Design.textFont);
-		g.setColor(Design.textColor);
-		g.drawString(this.text.getTextWithCursor(this.focused), pos.x + Design.buttonTextMarginX,
-				pos.y + Design.buttonTextMarginY + this.size.height / 2);
+		if (!this.focused && this.text.getText().isEmpty()) {
+			g.setColor(Design.textColorDisabled);
+			g.drawString(".......", pos.x + Design.buttonTextMarginX,
+					pos.y + Design.buttonTextMarginY + this.size.height / 2);
+		} else {
+			g.setColor(Design.textColor);
+			g.drawString(this.text.getTextWithCursor(this.focused), pos.x + Design.buttonTextMarginX,
+					pos.y + Design.buttonTextMarginY + this.size.height / 2);
+		}
 	}
 
 	@Override

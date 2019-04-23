@@ -36,7 +36,7 @@ public class BasePanel extends BaseComponent {
 			layout(margin, margin, size.width - 2 * margin, size.height - Design.toolbarHeight - 2 * margin);
 		}
 
-		g.setColor(Design.almostOpaque);
+		g.setColor(Design.panelBackground);
 		g.fillRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 		g.setColor(Design.grayBorder);
 		g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);

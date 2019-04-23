@@ -8,7 +8,7 @@ import ch.awae.simtrack.util.Resource;
 
 public class Design {
 
-	public static final Color almostOpaque = new Color(255, 255, 255, 235);
+	public static final Color panelBackground;
 	public static final Color grayBorder;
 	public static final Color textColor;
 	public static final Color buttonBackground;
@@ -28,16 +28,19 @@ public class Design {
 	public static final Color checkboxSelected;
 	public static final Color checkboxNotSelected;
 	public static final Color menuBlackOverlay;
+	public static final Color textColorDisabled;
 
 	static {
 		Properties props = Resource.getConfigProperties("design.properties");
 
+		panelBackground = props.getColor("panelBackground");
 		toolbarHeight = props.getInt("toolbarHeight");
 		buttonTextMarginX = props.getInt("buttonMarginX");
 		buttonTextMarginY = props.getInt("buttonMarginY");
 
 		grayBorder = props.getColor("border");
 		textColor = props.getColor("textColor");
+		textColorDisabled = props.getColor("textColorDisabled");
 		buttonBackground = props.getColor("buttonBackground");
 		buttonHover = props.getColor("buttonHover");
 		buttonBorder = props.getColor("buttonBorder");
@@ -48,7 +51,7 @@ public class Design {
 		textFieldBorder = props.getColor("textFieldBorder");
 		textFieldFocus = props.getColor("textFieldFocus");
 		textFieldBorderFocus = props.getColor("textFieldBorderFocus");
-		
+
 		menuBlackOverlay = props.getColor("menuBlackOverlay");
 
 		textFont = new Font(props.getString("textFont"), 0, props.getInt("textSize"));
