@@ -30,7 +30,7 @@ public class CheckboxButton extends Label {
 	public void render(Graphics g) {
 		g.push();
 		Color color = Design.buttonBackground;
-		if (test(this.input.getMousePosition()))
+		if (isPointInside(this.input.getMousePosition()))
 			color = Design.buttonHover;
 		g.setColor(color);
 		g.fillRect(pos.x, pos.y, size.width, size.height);
@@ -63,7 +63,7 @@ public class CheckboxButton extends Label {
 	
 	@Override
 	public void handleInput(InputEvent event) {
-		if (event.isPressAction(InputAction.SELECT) && test(event.getCurrentMousePosition())) {
+		if (event.isPressAction(InputAction.SELECT) && isPointInside(event.getCurrentMousePosition())) {
 			event.consume();
 			this.dataMapping.set(!this.dataMapping.get());
 		}
@@ -73,7 +73,7 @@ public class CheckboxButton extends Label {
 	 * @param pos
 	 * @return true if the position is inside the rectangle of the button
 	 */
-	public boolean test(Point pos) {
+	public boolean isPointInside(Point pos) {
 		return pos.x >= this.pos.x && pos.y >= this.pos.y && pos.x <= this.pos.x + this.size.getWidth()
 				&& pos.y <= this.pos.y + this.size.getHeight();
 	}

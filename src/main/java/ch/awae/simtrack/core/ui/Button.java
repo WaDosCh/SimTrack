@@ -23,7 +23,7 @@ public class Button extends Label {
 
 	public void render(Graphics g) {
 		g.setColor(Design.buttonBackground);
-		if (test(this.input.getMousePosition())) {
+		if (isPointInside(this.input.getMousePosition())) {
 			g.setColor(Design.buttonHover);
 		}
 		g.fillRect(pos.x, pos.y, size.width, size.height);
@@ -37,7 +37,7 @@ public class Button extends Label {
 	
 	@Override
 	public void handleInput(InputEvent event) {
-		if (event.isPressAction(InputAction.SELECT) && test(event.getCurrentMousePosition())) {
+		if (event.isPressAction(InputAction.SELECT) && isPointInside(event.getCurrentMousePosition())) {
 			event.consume();
 			this.action.run();
 		}

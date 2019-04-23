@@ -20,10 +20,5 @@ public interface Component extends InputHandler, BaseRenderer {
 	public void layout(int x, int y, int w, int h);
 
 	public Dimension getPreferedDimension();
-	
-	/**
-	 * @return actual current size this component may use (set by layout method)
-	 */
-	public Dimension getSize();
 
 }

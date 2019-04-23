@@ -39,7 +39,7 @@ public class InputField extends Label {
 	@Override
 	public void handleInput(InputEvent event) {
 		if (event.isPressAction(InputAction.SELECT)) {
-			if (this.test(event.getCurrentMousePosition())) {
+			if (this.isPointInside(event.getCurrentMousePosition())) {
 				event.consume();
 				this.input.setFocus(this);
 				this.focused = true;
