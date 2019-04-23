@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -58,7 +57,7 @@ public class InputField extends Label {
 	}
 
 	@Override
-	public void render(Graphics g, Window w) {
+	public void render(Graphics g) {
 		g.setColor(Design.textFieldBg);
 		if (this.focused)
 			g.setColor(Design.textFieldFocus);

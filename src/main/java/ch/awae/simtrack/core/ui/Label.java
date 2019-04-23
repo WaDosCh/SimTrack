@@ -7,7 +7,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 
@@ -24,7 +23,7 @@ public class Label extends BaseComponent {
 		this.title = title;
 	}
 
-	public void render(Graphics g, Window w) {
+	public void render(Graphics g) {
 		g.setFont(this.font);
 		g.setColor(Design.textColor);
 		g.drawString(this.title, pos.x + Design.buttonTextMarginX,

@@ -80,7 +80,7 @@ public class DebugToolsView extends GameTool {
 
 	@Override
 	public void render(Graphics graphics) {
-		this.renderer.render(graphics, this.scene.getWindow());
+		this.renderer.render(graphics);
 	}
 
 }

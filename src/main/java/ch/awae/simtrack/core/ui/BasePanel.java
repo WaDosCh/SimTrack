@@ -32,12 +32,7 @@ public class BasePanel implements Component, BaseRenderer {
 	}
 
 	@Override
-	public void render(Graphics graphics) {
-		render(graphics, this.window);
-	}
-
-	public void render(Graphics g, Window w) {
-
+	public void render(Graphics g) {
 		if (this.needsLayout) {
 			Dimension size = this.window.getScreenSize();
 			layout(margin, margin, size.width - 2 * margin, size.height - Design.toolbarHeight - 2 * margin);
@@ -49,9 +44,8 @@ public class BasePanel implements Component, BaseRenderer {
 		g.draw(this.rect);
 
 		for (Component b : this.components) {
-			b.render(g, this.window);
+			b.render(g);
 		}
-
 	}
 
 	@Override
