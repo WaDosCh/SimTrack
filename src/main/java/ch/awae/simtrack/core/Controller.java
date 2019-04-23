@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.profiler.Profiler;
@@ -76,6 +77,8 @@ public class Controller implements SceneController {
 
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
+		// clip makes everyone aware of the available screen size
+		graphics.clipRect(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 		if (this.currentScene == null)
 			return;
 

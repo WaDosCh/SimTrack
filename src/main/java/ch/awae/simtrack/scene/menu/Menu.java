@@ -30,11 +30,16 @@ public class Menu extends Scene {
 		panel.add(new Button("New Custom Game", input, this::newGame));
 		panel.add(new Button("Load Saved Game", input, this::loadGame));
 		panel.add(new Button("Options", input, this::openOptions));
+		panel.add(new Button("UI Test Menu", input, this::openTestMenu));
 		panel.add(new Button("Exit", input, this::exitGame));
 	}
 
+	private void openTestMenu() {
+		this.controller.loadScene(UITestingMenu.class);
+	}
+
 	private void loadScenario() {
-		//TODO: implement scenario selection and loading
+		// TODO: implement scenario selection and loading
 		logger.debug("LOAD SCENARIO");
 	}
 

@@ -10,6 +10,7 @@ import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.ModelFactory;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.scene.menu.MenuLoadGame;
+import ch.awae.simtrack.scene.menu.UITestingMenu;
 
 public class SceneFactory {
 	protected final Logger logger = LogManager.getLogger();
@@ -35,6 +36,8 @@ public class SceneFactory {
 			return new Menu(controller, window, controller.getInput());
 		} else if (sceneClass == MenuLoadGame.class) {
 			return new MenuLoadGame(controller, window, controller.getInput());
+		} else if (sceneClass == UITestingMenu.class) {
+			return new UITestingMenu(controller, window, controller.getInput());
 		} else {
 			logger.error("Can't create scene of type {}", sceneClass);
 			return null;

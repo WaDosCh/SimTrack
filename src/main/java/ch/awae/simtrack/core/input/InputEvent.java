@@ -25,7 +25,7 @@ public class InputEvent {
 	private Set<Integer> holdKeyCodes;
 	private double changeValue;
 	private @Nonnull @Getter Point currentMousePosition;
-	private Character text;
+	private Character text; // object instead of primitive because it can be null
 
 	public InputEvent(int keyCode, InputEventType type, double changeValue, Set<Integer> holdKeyCodes,
 			Point currentMousePos) {
@@ -107,8 +107,6 @@ public class InputEvent {
 	}
 
 	public String getText() {
-		// if (this.holdKeyCodes.contains(KeyEvent.VK_SHIFT)) {
-		// }
 		if (this.text == null)
 			return "";
 		return String.valueOf(this.text);

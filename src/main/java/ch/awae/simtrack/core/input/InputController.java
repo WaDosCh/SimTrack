@@ -42,6 +42,7 @@ public class InputController implements NamedComponent {
 		queuedInputEvents = new ArrayList<>();
 		this.holdKeyCodes = new HashSet<>();
 		this.currentMousePosition = new Point(-1, -1);
+		this.hoveringEnabled = true;
 	}
 
 	public List<InputEvent> popAllEvents() {
@@ -116,7 +117,12 @@ public class InputController implements NamedComponent {
 
 	};
 
+	private boolean hoveringEnabled;
+
 	public Point getMousePosition() {
+		if (!this.hoveringEnabled) {
+			return new Point(-2, -2);
+		}
 		return this.currentMousePosition;
 	}
 
@@ -134,11 +140,14 @@ public class InputController implements NamedComponent {
 			if (event.isPressActionAndConsume(InputAction.DESELECT)) {
 				this.currentlyFocused.unfocus();
 				this.currentlyFocused = null;
-			}
-			else {
+			} else {
 				this.currentlyFocused.handleInput(event);
 			}
 		}
+	}
+
+	public void setHoverEnabled(boolean b) {
+		this.hoveringEnabled = b;
 	}
 
 }
