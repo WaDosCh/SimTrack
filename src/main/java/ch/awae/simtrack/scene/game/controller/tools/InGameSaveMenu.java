@@ -44,12 +44,14 @@ public class InGameSaveMenu extends GameTool {
 	public void loadTool(Object... args) {
 		this.input.setFocus(this.inputField);
 		this.inputField.focus();
+		this.editor.getScene().getPaused().set(true);
 	}
 	
 	@Override
 	public void unloadTool() {
 		this.inputField.unfocus();
 		this.input.setFocus(null);
+		this.editor.getScene().getPaused().set(false);
 	}
 
 	@Override
