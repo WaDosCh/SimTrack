@@ -7,7 +7,6 @@ import java.awt.Point;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -28,7 +27,7 @@ public class CheckboxButton extends Label {
 		this.dataMapping = mapper;
 	}
 
-	public void render(Graphics g, Window view) {
+	public void render(Graphics g) {
 		g.push();
 		Color color = Design.buttonBackground;
 		if (test(this.input.getMousePosition()))

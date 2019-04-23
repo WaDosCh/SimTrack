@@ -1,7 +1,6 @@
 package ch.awae.simtrack.core.ui;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -22,10 +21,11 @@ public class Button extends Label {
 		this.action = action;
 	}
 
-	public void render(Graphics g, Window view) {
+	public void render(Graphics g) {
 		g.setColor(Design.buttonBackground);
-		if (test(this.input.getMousePosition()))
+		if (test(this.input.getMousePosition())) {
 			g.setColor(Design.buttonHover);
+		}
 		g.fillRect(pos.x, pos.y, size.width, size.height);
 		g.setColor(Design.buttonBorder);
 		g.drawRect(pos.x, pos.y, size.width, size.height);
