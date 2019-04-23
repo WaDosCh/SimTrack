@@ -23,7 +23,8 @@ public class TrainRenderUtils {
 	public static void renderTrain(Train train, Graphics g, ViewPort viewPort) {
 		g.push();
 		viewPort.transformToScene(g);
-		drawExactCircle(g, train);
+		// drawExactCircle(g, train);
+		drawImage(g, train);
 		g.pop();
 	}
 
@@ -31,7 +32,6 @@ public class TrainRenderUtils {
 		g2.setColor(Color.red);
 		SceneCoordinate p = train.getNicePosition();
 		g2.fillOval((int) p.s - 10, (int) p.t - 10, 20, 20);
-		drawImage(g2, train);
 	}
 
 	private static void drawImage(Graphics g2, Train train) {
