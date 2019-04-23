@@ -29,7 +29,7 @@ public class Menu extends Scene {
 		panel.add(new Button("Load Scenario", input, this::loadScenario));
 		panel.add(new Button("New Custom Game", input, this::newGame));
 		panel.add(new Button("Load Saved Game", input, this::loadGame));
-		panel.add(new Button("Options", input, this::openOptions));
+		panel.add(new Button("Options", input, this::openOptions).setEnabled(false));
 		panel.add(new Button("UI Test Menu", input, this::openTestMenu));
 		panel.add(new Button("Exit", input, this::exitGame));
 	}

@@ -29,6 +29,7 @@ public class Design {
 	public static final Color checkboxNotSelected;
 	public static final Color menuBlackOverlay;
 	public static final Color textColorDisabled;
+	public static final Color buttonDisabled;
 
 	static {
 		Properties props = Resource.getConfigProperties("design.properties");
@@ -43,6 +44,7 @@ public class Design {
 		textColorDisabled = props.getColor("textColorDisabled");
 		buttonBackground = props.getColor("buttonBackground");
 		buttonHover = props.getColor("buttonHover");
+		buttonDisabled = props.getColor("buttonDisabled");
 		buttonBorder = props.getColor("buttonBorder");
 		checkboxSelected = props.getColor("checkboxSelected");
 		checkboxNotSelected = props.getColor("checkboxNotSelected");
