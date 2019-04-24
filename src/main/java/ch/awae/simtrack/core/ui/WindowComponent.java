@@ -1,7 +1,6 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -23,7 +22,7 @@ public class WindowComponent extends BaseComponent {
 	/**
 	 * may be used& changed externally to manage rendering and input handling order
 	 */
-	public int zIndex = Integer.MAX_VALUE;
+	public int zIndex = Integer.MAX_VALUE / 2;
 
 	protected @Getter BasePanel content = new BasePanel();
 
@@ -57,9 +56,10 @@ public class WindowComponent extends BaseComponent {
 		}
 		this.content.render(g);
 		if (!this.isHeadless) {
-			g.setColor(Color.gray);
-			g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
+			g.setColor(Design.windowBannerBg);
 			g.fillRect(this.pos.x, this.pos.y, this.size.width, this.bannerHeight);
+			g.setColor(Design.windowBorder);
+			g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 			g.setFont(this.font);
 			g.setColor(Design.textColor);
 			g.drawString(this.title, this.pos.x + Design.buttonTextMarginX, this.pos.y + this.baselineDelta);

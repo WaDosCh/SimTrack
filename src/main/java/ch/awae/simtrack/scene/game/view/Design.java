@@ -30,22 +30,28 @@ public class Design {
 	public static final Color menuBlackOverlay;
 	public static final Color textColorDisabled;
 	public static final Color buttonDisabled;
+	public static final Color windowBorder;
+	public static final Color windowBannerBg;
 
 	static {
 		Properties props = Resource.getConfigProperties("design.properties");
-
-		panelBackground = props.getColor("panelBackground");
 		toolbarHeight = props.getInt("toolbarHeight");
-		buttonTextMarginX = props.getInt("buttonMarginX");
-		buttonTextMarginY = props.getInt("buttonMarginY");
 
 		grayBorder = props.getColor("border");
 		textColor = props.getColor("textColor");
 		textColorDisabled = props.getColor("textColorDisabled");
+
+		panelBackground = props.getColor("panelBackground");
+		windowBorder = props.getColor("windowBorder");
+		windowBannerBg = props.getColor("windowBannerBg");
+		
+		buttonTextMarginX = props.getInt("buttonMarginX");
+		buttonTextMarginY = props.getInt("buttonMarginY");
 		buttonBackground = props.getColor("buttonBackground");
 		buttonHover = props.getColor("buttonHover");
 		buttonDisabled = props.getColor("buttonDisabled");
 		buttonBorder = props.getColor("buttonBorder");
+		
 		checkboxSelected = props.getColor("checkboxSelected");
 		checkboxNotSelected = props.getColor("checkboxNotSelected");
 

@@ -20,7 +20,6 @@ import ch.judos.generic.data.RandomJS;
 public class UITestingMenu extends Scene {
 
 	private DesktopComponent ui;
-	private int windowNumber = 1;
 
 	public UITestingMenu(Controller controller, Window window, InputController input) {
 		super(controller, window);
@@ -28,28 +27,31 @@ public class UITestingMenu extends Scene {
 		this.ui = new DesktopComponent(input);
 		this.ui.layout(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 
-		for (int i = 0; i < 10; i++)
-			addWindowTest(input);
+		for (int nr = 0; nr < 6; nr++)
+			addWindowTest(input, nr);
 
 		addRenderer(this.ui);
 	}
 
-	private void addWindowTest(InputController input) {
+	private void addWindowTest(InputController input, int nr) {
 		WindowComponent window = new WindowComponent(Design.textFont, input);
-		window.title = "Move me around " + this.windowNumber++;
+		window.title = nr != 0 ? "Move me around " + nr : "fixed window";
+		window.isMovable = nr > 0;
 		window.isHeadless = RandomJS.getTrueWithProb(10);
+		if (nr == 0)window.zIndex = Integer.MAX_VALUE;
 
 		BasePanel panel = window.getContent();
 		panel.setVertical(RandomJS.getTrueWithProb(50));
-		window.isMovable = RandomJS.getTrueWithProb(90);
 		panel.add(new Label("IsMovable: " + window.isMovable, true));
-		int nr = this.windowNumber;
 		panel.add(new Button("Test Button " + nr, input, () -> {
 			System.out.println("Button " + nr + " pressed");
 		}));
 		panel.add(new InputField(20, input));
+		panel.add(new Button("Go back", input, () -> {
+			this.controller.loadScene(Menu.class);
+		}));
 
-		this.ui.addWindow(window,RandomJSExt.getEnum(PositionH.class), RandomJSExt.getEnum(PositionV.class));
+		this.ui.addWindow(window, RandomJSExt.getEnum(PositionH.class), RandomJSExt.getEnum(PositionV.class));
 	}
 
 	@Override
