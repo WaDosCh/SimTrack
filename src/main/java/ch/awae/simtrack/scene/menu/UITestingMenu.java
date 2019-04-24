@@ -24,16 +24,19 @@ public class UITestingMenu extends Scene {
 		this.ui = new DesktopComponent(input);
 		this.ui.layout(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 
-		addWindowTest(input);
-		addWindowTest(input);
+		for (int i = 0; i < 1; i++)
+			addWindowTest(input);
 
 		addRenderer(this.ui);
 	}
 
 	private void addWindowTest(InputController input) {
 		BasePanel panel = new BasePanel();
+		panel.setVertical(false); //RandomJS.getTrueWithProb(50));
 		panel.add(new Label("Test Content Title", true));
-		panel.add(new Button("Test Button", input, () -> {
+		int nr = this.windowNumber;
+		panel.add(new Button("Test Button "+nr, input, () -> {
+			System.out.println("Button "+nr+" pressed");
 		}));
 		panel.add(new InputField(20, input));
 

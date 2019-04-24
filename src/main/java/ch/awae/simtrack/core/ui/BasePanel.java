@@ -8,6 +8,7 @@ import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
+import lombok.Setter;
 
 public class BasePanel extends BaseComponent {
 
@@ -29,14 +30,16 @@ public class BasePanel extends BaseComponent {
 	private PositionV positionV;
 	public int margin = 0;
 	private Window window;
+	private @Setter boolean isVertical;
 
 	public BasePanel() {
-		this(PositionH.CENTER, PositionV.CENTER);
+		this(PositionH.CENTER, PositionV.CENTER, true);
 	}
 
-	public BasePanel(PositionH positionH, PositionV positionV) {
+	public BasePanel(PositionH positionH, PositionV positionV, boolean isVertical) {
 		this.positionH = positionH;
 		this.positionV = positionV;
+		this.isVertical = isVertical;
 		this.components = new ArrayList<>();
 		this.needsLayout = true;
 	}
@@ -70,11 +73,16 @@ public class BasePanel extends BaseComponent {
 		this.needsLayout = false;
 		this.size = getPreferedDimension();
 		this.pos = getPixelPositionBasedOnEnums(x, y, w, h);
-		int currentY = 0;
+		int currentOffset = 0;
 		for (Component b : this.components) {
 			Dimension componentSize = b.getPreferedDimension();
-			b.layout(this.pos.x, currentY + this.pos.y, this.size.width, componentSize.height);
-			currentY += componentSize.height;
+			if (this.isVertical) {
+				b.layout(this.pos.x, this.pos.y + currentOffset, this.size.width, componentSize.height);
+				currentOffset += componentSize.height;
+			} else {
+				b.layout(this.pos.x + currentOffset, this.pos.y, componentSize.width, this.size.height);
+				currentOffset += componentSize.width;
+			}
 		}
 	}
 
@@ -97,14 +105,19 @@ public class BasePanel extends BaseComponent {
 
 	@Override
 	public Dimension getPreferedDimension() {
-		int minWidth = 0;
-		int totalHeight = 0;
+		int width = 0;
+		int height = 0;
 		for (Component b : this.components) {
 			Dimension d = b.getPreferedDimension();
-			minWidth = Math.max(minWidth, d.width);
-			totalHeight += d.height;
+			if (this.isVertical) {
+				width = Math.max(width, d.width);
+				height += d.height;
+			} else {
+				width += d.width;
+				height = Math.max(height, d.height);
+			}
 		}
-		return new Dimension(minWidth, totalHeight);
+		return new Dimension(width, height);
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class DebugToolsView extends GameTool {
 		this.trainController = trainController;
 		this.input = input;
 
-		this.renderer = new BasePanel(PositionH.LEFT, PositionV.TOP);
+		this.renderer = new BasePanel(PositionH.LEFT, PositionV.TOP, true);
 		this.renderer.margin = 10;
 		addButtons(editor.getScene());
 	}

@@ -14,6 +14,7 @@ import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Getter;
+import lombok.Setter;
 
 public class WindowComponent extends BaseComponent {
 
@@ -23,6 +24,8 @@ public class WindowComponent extends BaseComponent {
 	 * may be used& changed externally to manage rendering and input handling order
 	 */
 	public int zIndex;
+	
+	protected @Setter boolean isMovable = true;
 
 	protected int bannerHeight;
 	protected int baselineDelta;
@@ -38,6 +41,7 @@ public class WindowComponent extends BaseComponent {
 		this.title = title;
 		this.font = font;
 		this.input = input;
+		
 		this.zIndex = Integer.MAX_VALUE;
 		Canvas c = new Canvas();
 		FontMetrics fm = c.getFontMetrics(font);
@@ -97,7 +101,7 @@ public class WindowComponent extends BaseComponent {
 
 	@Override
 	public void handleInput(InputEvent event) {
-		if (event.isAction(InputAction.SELECT)) {
+		if (event.isAction(InputAction.SELECT) && this.isMovable) {
 			if (event.isPress() && isPointInside(event.getCurrentMousePosition())) {
 				this.zIndex = Integer.MAX_VALUE;
 			}
