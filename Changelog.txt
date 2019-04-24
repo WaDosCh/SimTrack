@@ -2,7 +2,8 @@ In development:
 	- See: https://github.com/WaDosCh/SimTrack/issues
 
 v0.3.2
-	
+	- added isHeadless/ isMovable properties to WindowComponent
+	  
 
 
 v0.3.1

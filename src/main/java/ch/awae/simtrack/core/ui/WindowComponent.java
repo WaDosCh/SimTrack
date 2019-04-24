@@ -14,19 +14,18 @@ import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Getter;
-import lombok.Setter;
 
 public class WindowComponent extends BaseComponent {
 
-	public String title;
-	protected @Getter BasePanel content;
+	public String title = "";
+	public boolean isMovable = true;
+	public boolean isHeadless = false;
 	/**
 	 * may be used& changed externally to manage rendering and input handling order
 	 */
-	public int zIndex;
+	public int zIndex = Integer.MAX_VALUE;
 
-	protected @Setter boolean isMovable = true;
-	protected @Setter boolean isHeadless = false;
+	protected @Getter BasePanel content = new BasePanel();
 
 	protected int bannerHeight;
 	protected int baselineDelta;
@@ -36,22 +35,15 @@ public class WindowComponent extends BaseComponent {
 	protected Font font;
 	protected Point movingWindowInitialPos;
 
-	public WindowComponent(BasePanel panel, Font font, String title, InputController input) {
+	public WindowComponent(Font font, InputController input) {
 		super();
-		this.content = panel;
-		this.title = title;
 		this.font = font;
 		this.input = input;
 
-		this.zIndex = Integer.MAX_VALUE;
 		Canvas c = new Canvas();
 		FontMetrics fm = c.getFontMetrics(font);
 		this.bannerHeight = 4 + fm.getAscent() + fm.getDescent();
 		this.baselineDelta = 2 + fm.getAscent();
-	}
-
-	public WindowComponent(Font font, String title, InputController input) {
-		this(new BasePanel(), font, title, input);
 	}
 
 	public void addComponent(Component c) {

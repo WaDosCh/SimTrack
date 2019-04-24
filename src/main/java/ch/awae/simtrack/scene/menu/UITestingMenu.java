@@ -12,6 +12,7 @@ import ch.awae.simtrack.core.ui.InputField;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.judos.generic.data.RandomJS;
 
 public class UITestingMenu extends Scene {
 
@@ -24,26 +25,27 @@ public class UITestingMenu extends Scene {
 		this.ui = new DesktopComponent(input);
 		this.ui.layout(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 10; i++)
 			addWindowTest(input);
 
 		addRenderer(this.ui);
 	}
 
 	private void addWindowTest(InputController input) {
-		BasePanel panel = new BasePanel();
-		panel.setVertical(false); //RandomJS.getTrueWithProb(50));
-		panel.add(new Label("Test Content Title", true));
+		WindowComponent window = new WindowComponent(Design.textFont, input);
+		window.title = "Move me around " + this.windowNumber++;
+		window.isHeadless = RandomJS.getTrueWithProb(10);
+
+		BasePanel panel = window.getContent();
+		panel.setVertical(RandomJS.getTrueWithProb(50));
+		window.isMovable = RandomJS.getTrueWithProb(90);
+		panel.add(new Label("IsMovable: " + window.isMovable, true));
 		int nr = this.windowNumber;
-		panel.add(new Button("Test Button "+nr, input, () -> {
-			System.out.println("Button "+nr+" pressed");
+		panel.add(new Button("Test Button " + nr, input, () -> {
+			System.out.println("Button " + nr + " pressed");
 		}));
 		panel.add(new InputField(20, input));
 
-		WindowComponent window = new WindowComponent(panel, Design.textFont, "Move me around " + this.windowNumber++,
-				input);
-		window.setMovable(false);
-		window.setHeadless(true);
 		this.ui.addWindow(window);
 	}
 
