@@ -1,0 +1,24 @@
+In development:
+	- See: https://github.com/WaDosCh/SimTrack/issues
+
+v0.3.2
+	
+
+
+v0.3.1
+	- new input system
+	- added desktop-/ windowComponent for organizing dialogs
+	- save-/ loadgame added
+	- buttons can be disabled
+	- inputfield implemented (thanks to new input system)
+	- f12 kills game in any scene
+	- ingame menus render dark overlay over rest/map
+	- can now load color with alpha values from property files
+	- screenshots tagged with version name
+	- scene load/unload with default methods instead of reflectionUtilHelpers
+	- updated Profiler with object based interface instead of working with indices
+	- render method without scene parameter
+	- tick without scene parameter (simpler interface, controller must already have dependencies)
+	- removed scene management (can only load one scene, no push/pop etc.)
+	- added package for inputController / inputEvents
+	- fix security alert about vulnerable jackson-databind
