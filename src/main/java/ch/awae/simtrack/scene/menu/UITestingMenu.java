@@ -42,6 +42,8 @@ public class UITestingMenu extends Scene {
 
 		WindowComponent window = new WindowComponent(panel, Design.textFont, "Move me around " + this.windowNumber++,
 				input);
+		window.setMovable(false);
+		window.setHeadless(true);
 		this.ui.addWindow(window);
 	}
 

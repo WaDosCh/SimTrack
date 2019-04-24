@@ -24,8 +24,9 @@ public class WindowComponent extends BaseComponent {
 	 * may be used& changed externally to manage rendering and input handling order
 	 */
 	public int zIndex;
-	
+
 	protected @Setter boolean isMovable = true;
+	protected @Setter boolean isHeadless = false;
 
 	protected int bannerHeight;
 	protected int baselineDelta;
@@ -41,7 +42,7 @@ public class WindowComponent extends BaseComponent {
 		this.title = title;
 		this.font = font;
 		this.input = input;
-		
+
 		this.zIndex = Integer.MAX_VALUE;
 		Canvas c = new Canvas();
 		FontMetrics fm = c.getFontMetrics(font);
@@ -60,21 +61,26 @@ public class WindowComponent extends BaseComponent {
 	@Override
 	public void render(Graphics g) {
 		if (this.moving) {
-			Point mousepos = this.input.getMousePosition();
-			Point delta = new Point(mousepos.x - movingMouseInitialPos.x, mousepos.y - movingMouseInitialPos.y);
-			this.pos = new Point(this.movingWindowInitialPos);
-			this.pos.translate(delta.x, delta.y);
-			stayInsideClip(g);
-			this.content.layout(this.pos.x, this.pos.y + bannerHeight, this.size.width,
-					this.size.height - bannerHeight);
+			updateLayoutWhileMoving(g);
 		}
 		this.content.render(g);
-		g.setColor(Color.gray);
-		g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
-		g.fillRect(this.pos.x, this.pos.y, this.size.width, this.bannerHeight);
-		g.setFont(this.font);
-		g.setColor(Design.textColor);
-		g.drawString(this.title, this.pos.x + Design.buttonTextMarginX, this.pos.y + this.baselineDelta);
+		if (!this.isHeadless) {
+			g.setColor(Color.gray);
+			g.drawRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
+			g.fillRect(this.pos.x, this.pos.y, this.size.width, this.bannerHeight);
+			g.setFont(this.font);
+			g.setColor(Design.textColor);
+			g.drawString(this.title, this.pos.x + Design.buttonTextMarginX, this.pos.y + this.baselineDelta);
+		}
+	}
+
+	private void updateLayoutWhileMoving(Graphics g) {
+		Point mousepos = this.input.getMousePosition();
+		Point delta = new Point(mousepos.x - movingMouseInitialPos.x, mousepos.y - movingMouseInitialPos.y);
+		this.pos = new Point(this.movingWindowInitialPos);
+		this.pos.translate(delta.x, delta.y);
+		stayInsideClip(g);
+		this.content.layout(this.pos.x, this.pos.y + bannerHeight, this.size.width, this.size.height - bannerHeight);
 	}
 
 	private void stayInsideClip(Graphics g) {
@@ -96,16 +102,22 @@ public class WindowComponent extends BaseComponent {
 	@Override
 	public void layout(int x, int y, int w, int h) {
 		super.layout(x, y, w, h);
-		this.content.layout(x, y + bannerHeight, w, h - bannerHeight);
+		if (this.isHeadless) {
+			this.content.layout(x, y, w, h);
+		} else {
+			this.content.layout(x, y + bannerHeight, w, h - bannerHeight);
+		}
 	}
 
 	@Override
 	public void handleInput(InputEvent event) {
-		if (event.isAction(InputAction.SELECT) && this.isMovable) {
+		if (event.isAction(InputAction.SELECT)) {
 			if (event.isPress() && isPointInside(event.getCurrentMousePosition())) {
+				// pull on top, zIndex is later adjusted by DesktopComponent
 				this.zIndex = Integer.MAX_VALUE;
 			}
-			if (isInsideBanner(event.getCurrentMousePosition()) && event.isPress()) {
+			if (isInsideBanner(event.getCurrentMousePosition()) && event.isPress() && this.isMovable
+					&& !this.isHeadless) {
 				this.moving = true;
 				this.movingMouseInitialPos = event.getCurrentMousePosition();
 				this.movingWindowInitialPos = new Point(this.pos);
@@ -129,12 +141,17 @@ public class WindowComponent extends BaseComponent {
 	}
 
 	public boolean isInsideBanner(Point pos) {
+		if (this.isHeadless)
+			return false;
 		return pos.x >= this.pos.x && pos.y >= this.pos.y && pos.x <= this.pos.x + this.size.getWidth()
 				&& pos.y <= this.pos.y + this.bannerHeight;
 	}
 
 	@Override
 	public Dimension getPreferedDimension() {
+		if (this.isHeadless) {
+			return this.content.getPreferedDimension();
+		}
 		Dimension size = this.content.getPreferedDimension();
 		size.height += bannerHeight; // top nav and border bottom
 		return size;
