@@ -49,16 +49,14 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
 	private Set<Entity> entities = new HashSet<>();
-	@Getter
-	private LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
 	private GameClock clock;
-	
-	@Getter
-	private transient ObservableHandler observableHandler;
-	private transient AtomicBoolean isPaused;
 
+	private @Getter LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
+	private @Getter AtomicBoolean isPaused = new AtomicBoolean(false);
+
+	private @Getter transient ObservableHandler observableHandler;
 
 	Model(int sizeX, int sizeY) {
 		this.sizeX = sizeX;
@@ -101,9 +99,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 		this.tiles.remove(position);
 		// remove any signals
 		for (Edge e : Edge.values()) {
-			TileEdgeCoordinate tec = new TileEdgeCoordinate(position, e);
-			if (signals.containsKey(tec))
-				signals.remove(tec);
+			signals.remove(position.getEdge(e));
 		}
 		notifyChanged();
 	}
@@ -139,26 +135,12 @@ public class Model implements Serializable, Observable, BaseTicker {
 		return signals.get(position);
 	}
 
-	public void setSignalAt(TileEdgeCoordinate position, Signal signal) {
-		if (signals.containsKey(position))
-			throw new IllegalArgumentException("signal position already occupied");
-		// check if signal position is valid
-		Tile tile = tiles.get(position.tile);
-		if (tile == null || (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
-				|| !(tile instanceof TrackTile))
-			throw new IllegalArgumentException("invalid tile");
-		Signal opponent = getSignalAt(position.getOppositeDirection());
-		if (opponent != null) {
-			if (opponent.getType() == Type.ONE_WAY || signal.getType() == Type.ONE_WAY)
-				throw new IllegalArgumentException("signal conflict");
-		}
-
-		TrackTile track = (TrackTile) tile;
-		if (!track.connectsAt(position.edge)) {
-			throw new IllegalArgumentException("invalid edge - no connections");
-		}
+	public boolean setSignalAt(TileEdgeCoordinate position, Signal signal) {
+		if (!canPlaceSignal(position, signal.getType()))
+			return false;
 		signals.put(position, signal);
 		notifyChanged();
+		return true;
 	}
 
 	public boolean canPlaceSignal(TileEdgeCoordinate position, Type type) {
@@ -174,8 +156,6 @@ public class Model implements Serializable, Observable, BaseTicker {
 			if (opponent.getType() == Type.ONE_WAY || type == Type.ONE_WAY)
 				return false;
 		}
-		// CHECK POSITION
-
 		TrackTile track = (TrackTile) tile;
 		return track.connectsAt(position.edge);
 	}
@@ -203,9 +183,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 		return !(current == null || tile instanceof DestinationTrackTile);
 	}
 
-	public void load(AtomicBoolean isPaused) {
+	public void load() {
 		observableHandler = new ObservableHandler();
-		this.isPaused = isPaused;
 	}
 
 	@Override
@@ -234,12 +213,9 @@ public class Model implements Serializable, Observable, BaseTicker {
 	/**
 	 * Releases a tile currently owned by a given train
 	 * 
-	 * @param train
-	 *            the train that currently owns the tile
-	 * @param coordinate
-	 *            the tile to be released
-	 * @throws IllegalArgumentException
-	 *             the tile is owned by another train
+	 * @param train the train that currently owns the tile
+	 * @param coordinate the tile to be released
+	 * @throws IllegalArgumentException the tile is owned by another train
 	 */
 	public void releaseTile(@NonNull Train train, @NonNull TileCoordinate coordinate) {
 		synchronized (tileReservations) {
@@ -262,13 +238,10 @@ public class Model implements Serializable, Observable, BaseTicker {
 	/**
 	 * Request ownership over a sequence of tiles
 	 * 
-	 * @param train
-	 *            the train that wishes to reserve a bunch of tiles
-	 * @param path
-	 *            a sequence of tiles to be reserved
+	 * @param train the train that wishes to reserve a bunch of tiles
+	 * @param path a sequence of tiles to be reserved
 	 * @return the number of tiles that have been reserved (may be 0)
-	 * @throws IllegalArgumentException
-	 *             a tile in the path is no track tile
+	 * @throws IllegalArgumentException a tile in the path is no track tile
 	 */
 	public int reserveTiles(@NonNull Train train, @NonNull List<TileEdgeCoordinate> path) {
 		synchronized (tileReservations) {

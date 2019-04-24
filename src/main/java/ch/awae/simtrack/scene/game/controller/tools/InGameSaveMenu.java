@@ -39,19 +39,19 @@ public class InGameSaveMenu extends GameTool {
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
 		this.panel.add(new Button("Cancel", input, () -> this.editor.loadTool(InGameMenu.class)));
 	}
-	
+
 	@Override
 	public void loadTool(Object... args) {
 		this.input.setFocus(this.inputField);
 		this.inputField.focus();
-		this.editor.getScene().getPaused().set(true);
+		this.editor.getScene().getModel().getIsPaused().set(true);
 	}
-	
+
 	@Override
 	public void unloadTool() {
 		this.inputField.unfocus();
 		this.input.setFocus(null);
-		this.editor.getScene().getPaused().set(false);
+		this.editor.getScene().getModel().getIsPaused().set(false);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class InGameSaveMenu extends GameTool {
 		else if (!event.isConsumed)
 			super.handleInput(event);
 	}
-	
+
 	private void save() {
 		saveWithName(this.inputField.getText());
 	}
@@ -70,12 +70,12 @@ public class InGameSaveMenu extends GameTool {
 	private void quicksave() {
 		saveWithName("quicksave");
 	}
-	
+
 	private void saveWithName(String name) {
 		try {
 			new File("saves/").mkdir();
 			ObjectOutputStream out = new ObjectOutputStream(
-					new FileOutputStream(new File("saves/"+name+".simtrack.save")));
+					new FileOutputStream(new File("saves/" + name + ".simtrack.save")));
 			out.writeObject(this.model);
 			out.close();
 			this.editor.loadTool(FreeTool.class);

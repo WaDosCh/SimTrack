@@ -42,13 +42,12 @@ public class Game extends Scene {
 	private DebugTools debugTools;
 	private TrainController trainController;
 
-	private @Getter AtomicBoolean paused = new AtomicBoolean(false);
 	private Navigator navigator;
 
 	public Game(Controller controller, Model model, Window window) {
 		super(controller, window);
 		this.model = model;
-		this.model.load(this.getPaused());
+		this.model.load();
 		InputController input = this.controller.getInput();
 		this.editor = new Editor(this); // TODO: don't pass game if possible
 		this.trackbar = new ToolBar(this.editor, input);

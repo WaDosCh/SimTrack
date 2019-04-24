@@ -58,7 +58,7 @@ public class DebugToolsView extends GameTool {
 		this.renderer.add(new Button("New map", input, () -> {
 			editor.getScene().getSceneController().loadScene(Game.class);
 		}));
-		this.renderer.add(new CheckboxButton("Pause", input, game.getPaused()));
+		this.renderer.add(new CheckboxButton("Pause", input, game.getModel().getIsPaused()));
 		this.renderer.add(new Button("Screenshot", input, () -> {
 			this.scene.requestSnapshot(image -> {
 				try {

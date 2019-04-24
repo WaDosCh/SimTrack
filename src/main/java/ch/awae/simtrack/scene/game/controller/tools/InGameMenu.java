@@ -40,12 +40,12 @@ public class InGameMenu extends GameTool {
 
 	@Override
 	public void loadTool(Object... args) {
-		this.editor.getScene().getPaused().set(true);
+		this.editor.getScene().getModel().getIsPaused().set(true);
 	}
 
 	@Override
 	public void unloadTool() {
-		this.editor.getScene().getPaused().set(false);
+		this.editor.getScene().getModel().getIsPaused().set(false);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class InGameMenu extends GameTool {
 	}
 
 	private void load() {
-		//TODO: check whether current game was saved and confirm dialog to quit?
+		// TODO: check whether current game was saved and confirm dialog to quit?
 		this.editor.getScene().getSceneController().loadScene(MenuLoadGame.class);
 	}
 
