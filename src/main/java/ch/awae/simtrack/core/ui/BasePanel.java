@@ -1,28 +1,17 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
+import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
 import ch.awae.simtrack.scene.game.view.Design;
 import lombok.Setter;
 
 public class BasePanel extends BaseComponent {
-
-	public static enum PositionH {
-		LEFT,
-		CENTER,
-		RIGHT;
-	}
-
-	public static enum PositionV {
-		TOP,
-		CENTER,
-		BOTTOM;
-	}
 
 	private ArrayList<Component> components;
 	private boolean needsLayout;
@@ -72,7 +61,8 @@ public class BasePanel extends BaseComponent {
 		// required, this does not scale down components
 		this.needsLayout = false;
 		this.size = getPreferedDimension();
-		this.pos = getPixelPositionBasedOnEnums(x, y, w, h);
+		LayoutPositioning layout = new LayoutPositioning(this.positionH, this.positionV, this.size);
+		this.pos = layout.getPixelPositionBasedOnEnums(x, y, w, h);
 		int currentOffset = 0;
 		for (Component b : this.components) {
 			Dimension componentSize = b.getPreferedDimension();
@@ -84,23 +74,6 @@ public class BasePanel extends BaseComponent {
 				currentOffset += componentSize.width;
 			}
 		}
-	}
-
-	private Point getPixelPositionBasedOnEnums(int x, int y, int w, int h) {
-		int px, py;
-		if (this.positionH == PositionH.LEFT)
-			px = x;
-		else if (this.positionH == PositionH.CENTER)
-			px = x + w / 2 - this.size.width / 2;
-		else
-			px = x + w - this.size.width;
-		if (this.positionV == PositionV.TOP)
-			py = y;
-		else if (this.positionV == PositionV.CENTER)
-			py = y + h / 2 - this.size.height / 2;
-		else
-			py = y + h - this.size.height;
-		return new Point(px, py);
 	}
 
 	@Override

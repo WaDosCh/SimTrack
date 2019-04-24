@@ -11,7 +11,10 @@ import ch.awae.simtrack.core.ui.DesktopComponent;
 import ch.awae.simtrack.core.ui.InputField;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.core.ui.WindowComponent;
+import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
+import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.util.RandomJSExt;
 import ch.judos.generic.data.RandomJS;
 
 public class UITestingMenu extends Scene {
@@ -46,7 +49,7 @@ public class UITestingMenu extends Scene {
 		}));
 		panel.add(new InputField(20, input));
 
-		this.ui.addWindow(window);
+		this.ui.addWindow(window,RandomJSExt.getEnum(PositionH.class), RandomJSExt.getEnum(PositionV.class));
 	}
 
 	@Override

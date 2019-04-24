@@ -3,7 +3,7 @@ In development:
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent
-	  
+	- positioning for Windows on DesktopComponent  
 
 
 v0.3.1

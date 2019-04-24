@@ -1,12 +1,15 @@
 package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
+import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
 
 /**
  * organize multiple WindowComponents, handling correct draw & input order, also responsible for moving and alwaysOnTop
@@ -27,12 +30,17 @@ public class DesktopComponent extends BaseComponent {
 	}
 
 	public void addWindow(WindowComponent window) {
+		addWindow(window, PositionH.CENTER, PositionV.CENTER);
+	}
+	
+	public void addWindow(WindowComponent window, PositionH posH, PositionV posV) {
 		this.windows.add(window);
-
-		// center window on this desktop
+		
 		Dimension windowSize = window.getPreferedDimension();
-		window.layout(this.pos.x + this.size.width / 2 - windowSize.width / 2,
-				this.pos.y + this.size.height / 2 - windowSize.height / 2, windowSize.width, windowSize.height);
+		LayoutPositioning layout = new LayoutPositioning(posH,posV, windowSize);
+		Point pos = layout.getPixelPositionBasedOnEnums(this.pos.x, this.pos.y, this.size.width, this.size.height);
+		
+		window.layout(pos.x, pos.y, windowSize.width, windowSize.height);
 	}
 
 	@Override
