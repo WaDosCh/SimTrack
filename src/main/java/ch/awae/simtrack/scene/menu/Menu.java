@@ -24,7 +24,7 @@ public class Menu extends Scene {
 	}
 
 	private void initMenu(InputController input) {
-		panel = new BasePanel(true, this.window);
+		panel = new BasePanel();
 		panel.add(new Label("Main Menu", true));
 		panel.add(new Button("Load Scenario", input, this::loadScenario));
 		panel.add(new Button("New Custom Game", input, this::newGame));

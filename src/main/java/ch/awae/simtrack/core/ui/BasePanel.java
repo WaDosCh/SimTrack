@@ -11,15 +11,32 @@ import ch.awae.simtrack.scene.game.view.Design;
 
 public class BasePanel extends BaseComponent {
 
+	public static enum PositionH {
+		LEFT,
+		CENTER,
+		RIGHT;
+	}
+
+	public static enum PositionV {
+		TOP,
+		CENTER,
+		BOTTOM;
+	}
+
 	private ArrayList<Component> components;
 	private boolean needsLayout;
-	private boolean centered;
+	private PositionH positionH;
+	private PositionV positionV;
 	public int margin = 0;
 	private Window window;
 
-	public BasePanel(boolean centered, Window window) {
-		this.centered = centered;
-		this.window = window;
+	public BasePanel() {
+		this(PositionH.CENTER, PositionV.CENTER);
+	}
+
+	public BasePanel(PositionH positionH, PositionV positionV) {
+		this.positionH = positionH;
+		this.positionV = positionV;
 		this.components = new ArrayList<>();
 		this.needsLayout = true;
 	}
@@ -32,7 +49,7 @@ public class BasePanel extends BaseComponent {
 	@Override
 	public void render(Graphics g) {
 		if (this.needsLayout) {
-			Dimension size = this.window.getScreenSize();
+			Dimension size = g.getClipBounds().getSize();
 			layout(margin, margin, size.width - 2 * margin, size.height - Design.toolbarHeight - 2 * margin);
 		}
 
@@ -51,20 +68,31 @@ public class BasePanel extends BaseComponent {
 		// Note: Just centers content inside w/h, if w/h is smaller than
 		// required, this does not scale down components
 		this.needsLayout = false;
-		Dimension size = getPreferedDimension();
-		if (this.centered) {
-			this.pos = new Point(x + w / 2 - size.width / 2, y + h / 2 - size.height / 2);
-			this.size = new Dimension(size.width, size.height);
-		} else {
-			this.pos = new Point(x,y);
-			this.size = new Dimension(size.width, size.height);
-		}
+		this.size = getPreferedDimension();
+		this.pos = getPixelPositionBasedOnEnums(x, y, w, h);
 		int currentY = 0;
 		for (Component b : this.components) {
 			Dimension componentSize = b.getPreferedDimension();
 			b.layout(this.pos.x, currentY + this.pos.y, this.size.width, componentSize.height);
 			currentY += componentSize.height;
 		}
+	}
+
+	private Point getPixelPositionBasedOnEnums(int x, int y, int w, int h) {
+		int px, py;
+		if (this.positionH == PositionH.LEFT)
+			px = x;
+		else if (this.positionH == PositionH.CENTER)
+			px = x + w / 2 - this.size.width / 2;
+		else
+			px = x + w - this.size.width;
+		if (this.positionV == PositionV.TOP)
+			py = y;
+		else if (this.positionV == PositionV.CENTER)
+			py = y + h / 2 - this.size.height / 2;
+		else
+			py = y + h - this.size.height;
+		return new Point(px, py);
 	}
 
 	@Override

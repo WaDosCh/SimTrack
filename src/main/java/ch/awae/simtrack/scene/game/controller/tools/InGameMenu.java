@@ -22,7 +22,7 @@ public class InGameMenu extends GameTool {
 		super(editor, true);
 		this.input = input;
 
-		this.renderer = new BasePanel(true, this.editor.getScene().getWindow());
+		this.renderer = new BasePanel();
 		this.renderer.add(new Label("Ingame Menu", true));
 		this.renderer.add(new Button("Resume", input, this::resume));
 		this.renderer.add(new Button("Save", input, this::save));

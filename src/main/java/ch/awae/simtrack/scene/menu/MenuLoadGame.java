@@ -28,7 +28,7 @@ public class MenuLoadGame extends Scene {
 	}
 
 	private void initMenu(InputController input) {
-		panel = new BasePanel(true, this.window);
+		panel = new BasePanel();
 		panel.add(new Label("Load Game", true));
 		addSaveButtons(input);
 		panel.add(new Button("Cancel", input, this::cancel));

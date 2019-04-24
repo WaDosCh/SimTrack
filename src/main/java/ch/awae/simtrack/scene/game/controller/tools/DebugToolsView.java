@@ -11,6 +11,8 @@ import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
+import ch.awae.simtrack.core.ui.BasePanel.PositionH;
+import ch.awae.simtrack.core.ui.BasePanel.PositionV;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.CheckboxButton;
 import ch.awae.simtrack.core.ui.Label;
@@ -33,7 +35,7 @@ public class DebugToolsView extends GameTool {
 		this.trainController = trainController;
 		this.input = input;
 
-		this.renderer = new BasePanel(false, this.scene.getWindow());
+		this.renderer = new BasePanel(PositionH.LEFT, PositionV.TOP);
 		this.renderer.margin = 10;
 		addButtons(editor.getScene());
 	}

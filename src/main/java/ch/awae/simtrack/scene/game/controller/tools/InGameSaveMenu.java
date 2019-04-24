@@ -30,7 +30,7 @@ public class InGameSaveMenu extends GameTool {
 		this.model = model;
 		this.input = input;
 
-		this.panel = new BasePanel(true, this.scene.getWindow());
+		this.panel = new BasePanel();
 		this.panel.add(new Label("Save game", true));
 		this.inputField = new InputField(32, this.input);
 		this.inputField.setEnterAction(this::save);

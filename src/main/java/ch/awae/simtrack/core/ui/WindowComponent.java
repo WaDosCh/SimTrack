@@ -45,6 +45,14 @@ public class WindowComponent extends BaseComponent {
 		this.baselineDelta = 2 + fm.getAscent();
 	}
 
+	public WindowComponent(Font font, String title, InputController input) {
+		this(new BasePanel(), font, title, input);
+	}
+
+	public void addComponent(Component c) {
+		this.content.add(c);
+	}
+
 	@Override
 	public void render(Graphics g) {
 		if (this.moving) {

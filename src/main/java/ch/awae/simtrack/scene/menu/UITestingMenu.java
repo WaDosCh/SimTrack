@@ -31,7 +31,7 @@ public class UITestingMenu extends Scene {
 	}
 
 	private void addWindowTest(InputController input) {
-		BasePanel panel = new BasePanel(true, window);
+		BasePanel panel = new BasePanel();
 		panel.add(new Label("Test Content Title", true));
 		panel.add(new Button("Test Button", input, () -> {
 		}));
