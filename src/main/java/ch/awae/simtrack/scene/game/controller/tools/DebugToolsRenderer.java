@@ -82,9 +82,9 @@ public class DebugToolsRenderer implements Renderer {
 		SceneCoordinate scenePos = tools.getMouseSceneCoordinate(screenPos);
 		TileCoordinate tilePos = scenePos.toTileCoordinate();
 
-		if (screenPos.y > viewPort.getScreenDimensions().y - Design.toolbarHeight)
+		if (screenPos.y > viewPort.getScreenSize().height - Design.toolbarHeight)
 			screenPos.y -= 150;
-		if (screenPos.x > viewPort.getScreenDimensions().x - 400)
+		if (screenPos.x > viewPort.getScreenSize().width - 400)
 			screenPos.x -= 400;
 		g.setColor(Design.panelBackground);
 		int y = screenPos.y + 10;
@@ -120,8 +120,8 @@ public class DebugToolsRenderer implements Renderer {
 	}
 
 	public String screenSizeToString() {
-		Point pos = this.viewPort.getScreenDimensions();
-		return "ScreenSize: [w=" + pos.x + ", h=" + pos.y + "]";
+		Dimension pos = this.viewPort.getScreenSize();
+		return "ScreenSize: [w=" + pos.width + ", h=" + pos.height + "]";
 	}
 
 	private void renderUserGuide(Graphics2D g) {

@@ -1,16 +1,23 @@
 package ch.awae.simtrack.scene.game.model;
 
+import java.awt.Dimension;
+
 public class ModelFactory {
 
-	public static Model getModel(int sizeX, int sizeY, int connectionCount) {
-		Model model = new Model(sizeX, sizeY);
-		ConnectionSpawner.spawnConnections(model, connectionCount);
-		ObstacleSpawner.spawnObstacles(model, sizeX * sizeY / 10);
+	public static Model getModel(ModelCreationOptions options) {
+		Model model = new Model(options.size, options.startingMoney);
+		ConnectionSpawner.spawnConnections(model, options.connectionCount);
+		int obstacleCount = options.size.width * options.size.height / 10;
+		ObstacleSpawner.spawnObstacles(model, obstacleCount);
 		return model;
 	}
 
 	public static Model getDefaultModel() {
-		return getModel(23, 15, 15);
+		ModelCreationOptions defaults = new ModelCreationOptions();
+		defaults.size = new Dimension(23, 15);
+		defaults.connectionCount = 15;
+		defaults.startingMoney = 1000;
+		return getModel(defaults);
 	}
 
 }

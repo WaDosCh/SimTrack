@@ -1,5 +1,6 @@
 package ch.awae.simtrack.scene.game.model;
 
+import java.awt.Dimension;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,14 +53,16 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private Set<Entity> toBeRemoved = new HashSet<>();
 	private GameClock clock;
 
+	public int playerMoney;
 	private @Getter LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	private @Getter AtomicBoolean isPaused = new AtomicBoolean(false);
 
 	private @Getter transient ObservableHandler observableHandler;
 
-	Model(int sizeX, int sizeY) {
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
+	Model(Dimension size, int startingMoney) {
+		this.sizeX = size.width;
+		this.sizeY = size.height;
+		this.playerMoney = startingMoney;
 		maxS = (int) (sizeX * new TileCoordinate(1, 0).toSceneCoordinate().s);
 		maxT = (int) (sizeY * new TileCoordinate(0, 1).toSceneCoordinate().t);
 	}

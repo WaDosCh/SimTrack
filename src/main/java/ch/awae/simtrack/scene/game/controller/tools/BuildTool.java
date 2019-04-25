@@ -176,7 +176,7 @@ public class BuildTool extends GameTool {
 
 	private void bulldoze() {
 		if (canDelete()) {
-			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenDimensions().y) {
+			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenSize().height) {
 				model.removeTileAt(mouseTile);
 			}
 		}
@@ -187,7 +187,7 @@ public class BuildTool extends GameTool {
 	 */
 	private void place() {
 		if (canPlace() && makesPlaceSense()) {
-			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenDimensions().y) {
+			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenSize().height) {
 				if (model.getTileAt(mouseTile) == null)
 					model.setTileAt(mouseTile, TrackValidator.intern(track));
 				else {

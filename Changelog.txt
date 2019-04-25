@@ -3,7 +3,8 @@ In development:
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent
-	- positioning for Windows on DesktopComponent  
+	- positioning for Windows on DesktopComponent
+	- add money to the game  
 
 
 v0.3.1

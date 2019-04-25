@@ -85,7 +85,7 @@ public class Controller implements SceneController {
 		Scene scene = this.currentScene;
 
 		if (window.resized()) {
-			scene.screenResized(window.getScreenSize().width, window.getScreenSize().height);
+			scene.screenResized(window.getScreenSize());
 		}
 
 		for (BaseRenderer renderer : scene.getRenderers()) {

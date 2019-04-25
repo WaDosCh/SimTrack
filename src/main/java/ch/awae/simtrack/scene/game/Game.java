@@ -1,5 +1,6 @@
 package ch.awae.simtrack.scene.game;
 
+import java.awt.Dimension;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Controller;
@@ -51,7 +52,7 @@ public class Game extends Scene {
 		InputController input = this.controller.getInput();
 		this.editor = new Editor(this); // TODO: don't pass game if possible
 		this.trackbar = new ToolBar(this.editor, input);
-		this.viewPort = new ViewPort(this); // TODO: don't pass game if possible
+		this.viewPort = new ViewPort(this.model, this.window.getScreenSize());
 		this.debugTools = new DebugTools(this.editor, this.viewPort, this.window, this.model, input);
 		this.pathfinder = new PathFinding(this.model);
 		this.trainController = new TrainController(this.model);
@@ -94,12 +95,12 @@ public class Game extends Scene {
 
 	@Override
 	public void preTick(long millis) {
-		model.getClock().tick(millis);
+		this.model.getClock().tick(millis);
 	}
 
 	@Override
-	public void screenResized(int width, int height) {
-		viewPort.update();
+	public void screenResized(Dimension screenSize) {
+		this.viewPort.setScreenSize(screenSize);
 	}
 
 	@Override

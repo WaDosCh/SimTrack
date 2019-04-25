@@ -75,13 +75,8 @@ public abstract class Scene implements InputHandler {
 
 	/**
 	 * Notifies the scene that screen has been resized
-	 * 
-	 * @param width
-	 *            the new width
-	 * @param height
-	 *            the new height
 	 */
-	public void screenResized(int width, int height) {
+	public void screenResized(Dimension size) {
 	}
 	
 	public Dimension getScreenSize() {

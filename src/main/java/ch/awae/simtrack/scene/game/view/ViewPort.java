@@ -5,20 +5,14 @@ import java.awt.Point;
 
 import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.judos.generic.data.geometry.PointD;
-import ch.judos.generic.data.geometry.PointI;
 import lombok.Getter;
 
 /**
- * manages the translation between hex coordinates and screen coordinates, as
- * well as the hex scaling.
- * 
- * @author Andreas Wälchli
- * @version 2.2, 2015-01-26
- * @since SimTrack 0.2.1
+ * manages the translation between hex coordinates and screen coordinates, as well as the hex scaling.
  */
 public class ViewPort implements BaseTicker {
 
@@ -32,19 +26,16 @@ public class ViewPort implements BaseTicker {
 
 	private PointD sceneCorner;
 
-	private PointI screenDimensions;
+	private @Getter Dimension screenSize;
 	private SceneCoordinate sceneDimensions;
-	private Game owner;
 
-	private PointI focusedPointForZoom;
+	private Point focusedPointForZoom;
 
-	/**
-	 * instantiates a new view-port
-	 * 
-	 * @param owner
-	 */
-	public ViewPort(Game owner) {
-		this.owner = owner;
+	private Model model;
+
+	public ViewPort(Model model, Dimension screenSize) {
+		this.model = model;
+		this.screenSize = screenSize;
 		this.resetZoomAndScrolling();
 	}
 
@@ -58,32 +49,24 @@ public class ViewPort implements BaseTicker {
 		update();
 	}
 
-	public void update() {
-		Dimension size = this.owner.getScreenSize();
-		this.screenDimensions = new PointI(size.width, size.height);
-		double minH = size.width / (this.owner.getModel().getHorizontalSize() - 1.0);
-		if (minH > this.minZoom)
-			this.minZoom = minH * 0.01;
-		this.sceneDimensions = new SceneCoordinate((this.owner.getModel().getHorizontalSize() - 1) * 100,
-				((this.owner.getModel().getVerticalSize() - 1) * Math.sqrt(3) * 50));
-		updateCorner();
+	public void setScreenSize(Dimension screenSize) {
+		this.screenSize = screenSize;
+		update();
 	}
 
-	/**
-	 * returns the dimension of the section of the drawing surface reserved for
-	 * the scene rendering.
-	 * 
-	 * @return the scene surface dimensions
-	 */
-	public Point getScreenDimensions() {
-		return this.screenDimensions;
+	public void update() {
+		double minH = this.screenSize.width / (this.model.getHorizontalSize() - 1.0);
+		if (minH > this.minZoom)
+			this.minZoom = minH * 0.01;
+		this.sceneDimensions = new SceneCoordinate((this.model.getHorizontalSize() - 1) * 100,
+				((this.model.getVerticalSize() - 1) * Math.sqrt(3) * 50));
+		updateCorner();
 	}
 
 	/**
 	 * returns the scene coordinate for a given screen coordinate
 	 * 
-	 * @param p
-	 *            the screen coordinate
+	 * @param p the screen coordinate
 	 * @return the scene coordinate
 	 */
 	public SceneCoordinate toSceneCoordinate(Point p) {
@@ -97,8 +80,7 @@ public class ViewPort implements BaseTicker {
 	/**
 	 * returns the screen coordinate for a given scene coordinate
 	 * 
-	 * @param p
-	 *            the scene coordinate
+	 * @param p the scene coordinate
 	 * @return the screen coordinate
 	 */
 	public Point toScreenCoordinate(SceneCoordinate p) {
@@ -124,8 +106,8 @@ public class ViewPort implements BaseTicker {
 	}
 
 	private void updateCorner() {
-		double minX = this.screenDimensions.x - (this.zoom * this.sceneDimensions.s);
-		double minY = this.screenDimensions.y - Design.toolbarHeight - (this.zoom * this.sceneDimensions.t);
+		double minX = this.screenSize.width - (this.zoom * this.sceneDimensions.s);
+		double minY = this.screenSize.height - Design.toolbarHeight - (this.zoom * this.sceneDimensions.t);
 		double x = this.sceneCorner.x;
 		double y = this.sceneCorner.y;
 		if (x > outsideBounds)
@@ -142,26 +124,21 @@ public class ViewPort implements BaseTicker {
 	}
 
 	/**
-	 * sets the zoom level. the given point
-	 * remains stationary while zooming.
+	 * sets the zoom level. the given point remains stationary while zooming.
 	 * 
-	 * @param delta
-	 *            difference between new zoom and current
-	 * @param fixX
-	 *            x-coordinate of the fixed point
-	 * @param fixY
-	 *            y-coordinate of the fixed point
+	 * @param delta difference between new zoom and current
+	 * @param fixed fixed point
 	 */
-	public void zoom(float dzoom, int fixX, int fixY) {
-		
+	public void zoom(float dzoom, Point fixed) {
+
 		int delta = (int) (100 * dzoom);
-		
-		this.focusedPointForZoom = new PointI(fixX, fixY);
+
+		this.focusedPointForZoom = fixed;
 		if (delta > 0)
 			this.targetZoom *= 1.2;
 		if (delta < 0)
 			this.targetZoom /= 1.2;
-		
+
 		if (this.targetZoom < this.minZoom)
 			this.targetZoom = this.minZoom;
 		if (this.targetZoom > this.maxZoom)
@@ -191,12 +168,9 @@ public class ViewPort implements BaseTicker {
 	/**
 	 * focuses the given hex
 	 * 
-	 * @param hex
-	 *            the hex to be focused
-	 * @param g
-	 *            the graphics
-	 * @return a new graphics instance that has the centre of the given tile in
-	 *         its origin and a total tile width of 100
+	 * @param hex the hex to be focused
+	 * @param g the graphics
+	 * @return a new graphics instance that has the centre of the given tile in its origin and a total tile width of 100
 	 */
 	public void focusHex(TileCoordinate hex, Graphics g) {
 		Point p = toScreenCoordinate(hex.toSceneCoordinate());
@@ -205,8 +179,7 @@ public class ViewPort implements BaseTicker {
 	}
 
 	/**
-	 * transforms the screen coordinate system into the the scene coordinate
-	 * system
+	 * transforms the screen coordinate system into the the scene coordinate system
 	 * 
 	 * @param g
 	 */
@@ -221,20 +194,14 @@ public class ViewPort implements BaseTicker {
 	}
 
 	/**
-	 * checks if a given area around a given scene coordinate is at least
-	 * partially visible on the screen. The check can be performed as
-	 * efficiently as possible and therefore may not be perfect. The
-	 * implementation must avoid any false negatives, but may introduce false
-	 * positives (i.e. a return value of {@code false} implies that the area is
-	 * certainly invisible, but a return value of {@code true} does not imply
-	 * any visibility)
+	 * checks if a given area around a given scene coordinate is at least partially visible on the screen. The check can
+	 * be performed as efficiently as possible and therefore may not be perfect. The implementation must avoid any false
+	 * negatives, but may introduce false positives (i.e. a return value of {@code false} implies that the area is
+	 * certainly invisible, but a return value of {@code true} does not imply any visibility)
 	 * 
-	 * @param point
-	 *            the scene coordinate
-	 * @param radius
-	 *            the radius of the rectangle area to be checked
-	 * @return false if it can be proven that the area is invisible, true
-	 *         otherwise
+	 * @param point the scene coordinate
+	 * @param radius the radius of the rectangle area to be checked
+	 * @return false if it can be proven that the area is invisible, true otherwise
 	 */
 	public boolean isVisible(SceneCoordinate point, int radius) {
 		Point screenPos = toScreenCoordinate(point);
@@ -243,7 +210,7 @@ public class ViewPort implements BaseTicker {
 		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
 			return false;
 		// below or to the right is outside
-		if (screenPos.x > screenDimensions.x + screenRad || screenPos.y > screenDimensions.y + screenRad)
+		if (screenPos.x > screenSize.width + screenRad || screenPos.y > screenSize.height + screenRad)
 			return false;
 		// anything else is (potentially) inside
 		return true;
@@ -252,10 +219,8 @@ public class ViewPort implements BaseTicker {
 	/**
 	 * checks if a given tile is (potentially visible)
 	 * 
-	 * @param hex
-	 *            the hex to check
-	 * @return false if it can be proven that the tile is invisible, true
-	 *         otherwise
+	 * @param hex the hex to check
+	 * @return false if it can be proven that the tile is invisible, true otherwise
 	 * @see #isVisible(Point, int)
 	 */
 	public boolean isVisible(TileCoordinate tileCoordinate) {

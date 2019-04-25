@@ -45,19 +45,19 @@ public class Navigator implements BaseTicker, InputHandler {
 	public void tick() {
 		if (!this.isActive)
 			return;
-		Point mouse = input.getMousePosition();
-		if (mouse == null)
+		Point mousePos = input.getMousePosition();
+		if (mousePos == null)
 			return;
 
 		Dimension size = this.scene.getScreenSize();
 		int mx = 0, my = 0;
-		if (mouse.x < BORDER)
+		if (mousePos.x < BORDER)
 			mx = 1;
-		if (mouse.y < BORDER)
+		if (mousePos.y < BORDER)
 			my = 1;
-		if (mouse.x > size.width - BORDER)
+		if (mousePos.x > size.width - BORDER)
 			mx = -1;
-		if (mouse.y > size.height - BORDER)
+		if (mousePos.y > size.height - BORDER)
 			my = -1;
 		mx += dx;
 		my += dy;
@@ -66,7 +66,7 @@ public class Navigator implements BaseTicker, InputHandler {
 		this.viewPort.moveScene(mx, my);
 
 		if (this.scrollAmount != 0) {
-			this.viewPort.zoom((float) (scrollAmount * deltaZoom), mouse.x, mouse.y);
+			this.viewPort.zoom((float) (scrollAmount * deltaZoom), mousePos);
 			this.scrollAmount = 0;
 		}
 	}
