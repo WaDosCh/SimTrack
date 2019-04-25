@@ -41,10 +41,9 @@ import lombok.NonNull;
 public class Model implements Serializable, Observable, BaseTicker {
 
 	private static final long serialVersionUID = -2351561961256044096L;
+	private Logger logger = LogManager.getLogger();
 	private int sizeX, sizeY;
 	private int maxS, maxT;
-
-	private Logger logger = LogManager.getLogger();
 
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();

@@ -24,7 +24,7 @@ public abstract class GameTool extends EventDrivenTool {
 	@Override
 	public void handleInput(InputEvent event) {
 		if (autoUnload && event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
-			editor.loadTool(null);
+			editor.loadTool(FreeTool.class);
 			logger.debug("auto-unloading tool");
 		}
 	}

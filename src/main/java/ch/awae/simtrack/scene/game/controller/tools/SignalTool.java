@@ -73,25 +73,25 @@ public class SignalTool extends GameTool {
 		Angle angle = center.getAAngleTo(mouse);
 		int sector = (int) angle.getDegree() / 60;
 		Edge edge = Edge.byIndex(sector);
-		position = mouseTile.getEdge(edge);
+		this.position = mouseTile.getEdge(edge);
 	}
 
 	private void checkPlace() {
-		valid = model.canPlaceSignal(position, type);
+		valid = model.canPlaceSignal(this.position, type);
 	}
 
 	private void checkDelete() {
-		valid = model.canRemoveSignalAt(position);
+		valid = model.canRemoveSignalAt(this.position);
 	}
 
 	private void buildSignal() {
 		if (valid)
-			model.setSignalAt(position, new Signal(position, type));
+			model.setSignalAt(this.position, new Signal(this.position, type));
 	}
 
 	private void deleteSignal() {
 		if (valid)
-			model.removeSignalAt(position);
+			model.removeSignalAt(this.position);
 	}
 
 	@Override
@@ -108,9 +108,10 @@ public class SignalTool extends GameTool {
 
 	@Override
 	public void render(Graphics g) {
-		this.scene.getViewPort().focusHex(position.getTile(), g);
+		updatePosition();
+		this.scene.getViewPort().focusHex(this.position.getTile(), g);
 		g.setStroke(borderStroke);
-		double angle = position.getEdge().getAngleOut();
+		double angle = this.position.getEdge().getAngleOut();
 		g.rotate(angle);
 
 		if (bulldoze) {
