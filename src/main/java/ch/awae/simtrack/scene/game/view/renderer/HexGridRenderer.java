@@ -1,7 +1,6 @@
 package ch.awae.simtrack.scene.game.view.renderer;
 
 import java.awt.Color;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
@@ -19,12 +18,10 @@ import ch.awae.simtrack.util.Resource;
 public class HexGridRenderer implements Renderer {
 
 	private final static Color gridColor = Resource.getConfigProperties("renderer.properties").getColor("gridColor");
-	private AtomicBoolean drawGrid;
 	private Model model;
 	private ViewPortNavigator viewPort;
 
-	public HexGridRenderer(AtomicBoolean drawGrid, ViewPortNavigator viewPort, Model model) {
-		this.drawGrid = drawGrid;
+	public HexGridRenderer(ViewPortNavigator viewPort, Model model) {
 		this.viewPort = viewPort;
 		this.model = model;
 	}
@@ -32,7 +29,7 @@ public class HexGridRenderer implements Renderer {
 	
 	@Override
 	public void render(Graphics g) {
-		if (!this.drawGrid.get())
+		if (!this.model.getDrawGrid().get())
 			return;
 		g.setColor(gridColor);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));

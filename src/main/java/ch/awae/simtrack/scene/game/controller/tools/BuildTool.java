@@ -5,11 +5,11 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -24,8 +24,6 @@ import lombok.Getter;
 
 /**
  * Build Tool. Used for placing and deleting track tiles
- * 
- * @author Andreas Wälchli
  */
 public class BuildTool extends GameTool {
 
@@ -46,8 +44,8 @@ public class BuildTool extends GameTool {
 	 * 
 	 * @param editor the editor the build tool will operate under
 	 */
-	public BuildTool(Editor editor, Model model, InputController input) {
-		super(editor, true);
+	public BuildTool(Editor editor, Model model, InputController input, ViewPortNavigator viewPort) {
+		super(editor, viewPort, true);
 		this.model = model;
 		this.input = input;
 	}
@@ -176,7 +174,7 @@ public class BuildTool extends GameTool {
 
 	private void bulldoze() {
 		if (canDelete()) {
-			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenSize().height) {
+			if (input.getMousePosition().y < this.viewPort.getScreenSize().height) {
 				model.removeTileAt(mouseTile);
 			}
 		}
@@ -187,7 +185,7 @@ public class BuildTool extends GameTool {
 	 */
 	private void place() {
 		if (canPlace() && makesPlaceSense()) {
-			if (input.getMousePosition().y < editor.getScene().getViewPort().getScreenSize().height) {
+			if (input.getMousePosition().y < this.viewPort.getScreenSize().height) {
 				if (model.getTileAt(mouseTile) == null)
 					model.setTileAt(mouseTile, TrackValidator.intern(track));
 				else {
@@ -220,9 +218,8 @@ public class BuildTool extends GameTool {
 		TileCoordinate c = mouseTile;
 		if (c == null)
 			return;
-		ViewPortNavigator viewPort = this.scene.getViewPort();
 		if (isBulldozeTool) {
-			viewPort.focusHex(c, g);
+			this.viewPort.focusHex(c, g);
 			g.setColor(valid ? Color.RED : darkRed);
 			g.setStroke(bullCursorStroke);
 			double angle = Math.PI / 3;
@@ -231,7 +228,7 @@ public class BuildTool extends GameTool {
 				g.rotate(angle);
 			}
 		} else {
-			viewPort.focusHex(c, g);
+			this.viewPort.focusHex(c, g);
 			TrackRenderUtil.renderRails(g, valid ? placeGood ? Color.LIGHT_GRAY : Color.GRAY : Color.RED,
 					valid ? placeGood ? Color.GRAY : Color.DARK_GRAY : Color.RED, track.getRailPaths());
 		}

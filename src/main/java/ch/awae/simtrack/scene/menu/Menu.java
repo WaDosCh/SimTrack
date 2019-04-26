@@ -2,7 +2,6 @@ package ch.awae.simtrack.scene.menu;
 
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
-import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
@@ -16,10 +15,9 @@ public class Menu extends Scene {
 
 	private BasePanel panel;
 
-	public Menu(Controller controller, Window window, InputController input) {
-		super(controller, window);
+	public Menu(Controller controller, InputController input) {
+		super(controller);
 		initMenu(input);
-
 		addRenderer(panel);
 	}
 
@@ -35,7 +33,7 @@ public class Menu extends Scene {
 	}
 
 	private void openTestMenu() {
-		this.controller.loadScene(UITestingMenu.class);
+		this.sceneController.loadScene(UITestingMenu.class);
 	}
 
 	private void loadScenario() {
@@ -46,12 +44,12 @@ public class Menu extends Scene {
 	private void newGame() {
 		logger.debug("NEW GAME");
 		Model model = ModelFactory.getDefaultModel();
-		this.controller.loadScene(Game.class, model);
+		this.sceneController.loadScene(Game.class, model);
 	}
 
 	private void loadGame() {
 		logger.debug("LOAD GAME");
-		this.controller.loadScene(MenuLoadGame.class);
+		this.sceneController.loadScene(MenuLoadGame.class);
 	}
 
 	private void openOptions() {

@@ -56,6 +56,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 	public int playerMoney;
 	private @Getter LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	private @Getter AtomicBoolean isPaused = new AtomicBoolean(false);
+	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
 
 	private @Getter transient ObservableHandler observableHandler;
 

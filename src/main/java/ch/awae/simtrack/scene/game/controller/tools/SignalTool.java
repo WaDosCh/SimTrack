@@ -5,11 +5,12 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.Editor;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
@@ -32,8 +33,8 @@ public class SignalTool extends GameTool {
 	private Model model;
 	private InputController input;
 
-	public SignalTool(Editor editor, Model model, InputController input) {
-		super(editor, true);
+	public SignalTool(Editor editor, Model model, InputController input, ViewPortNavigator viewPort) {
+		super(editor, viewPort, true);
 		this.model = model;
 		this.input = input;
 	}
@@ -109,7 +110,7 @@ public class SignalTool extends GameTool {
 	@Override
 	public void render(Graphics g) {
 		updatePosition();
-		this.scene.getViewPort().focusHex(this.position.getTile(), g);
+		this.viewPort.focusHex(this.position.getTile(), g);
 		g.setStroke(borderStroke);
 		double angle = this.position.getEdge().getAngleOut();
 		g.rotate(angle);

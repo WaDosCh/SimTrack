@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
@@ -15,6 +14,8 @@ import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.InputField;
 import ch.awae.simtrack.core.ui.Label;
+import ch.awae.simtrack.scene.game.controller.Editor;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.Design;
 
@@ -25,8 +26,8 @@ public class InGameSaveMenu extends GameTool {
 	private InputController input;
 	private InputField inputField;
 
-	public InGameSaveMenu(Editor editor, Model model, InputController input) {
-		super(editor, true);
+	public InGameSaveMenu(Editor editor, Model model, InputController input, ViewPortNavigator viewPort) {
+		super(editor, viewPort, true);
 		this.model = model;
 		this.input = input;
 
@@ -44,14 +45,14 @@ public class InGameSaveMenu extends GameTool {
 	public void loadTool(Object... args) {
 		this.input.setFocus(this.inputField);
 		this.inputField.focus();
-		this.editor.getScene().getModel().getIsPaused().set(true);
+		this.model.getIsPaused().set(true);
 	}
 
 	@Override
 	public void unloadTool() {
 		this.inputField.unfocus();
 		this.input.setFocus(null);
-		this.editor.getScene().getModel().getIsPaused().set(false);
+		this.model.getIsPaused().set(false);
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class InGameSaveMenu extends GameTool {
 	@Override
 	public void render(Graphics graphics) {
 		graphics.setColor(Design.menuBlackOverlay);
-		Dimension size = this.editor.getScene().getWindow().getScreenSize();
+		Dimension size = this.viewPort.getScreenSize();
 		graphics.fillRect(0, 0, size.width, size.height);
 		this.panel.render(graphics);
 	}

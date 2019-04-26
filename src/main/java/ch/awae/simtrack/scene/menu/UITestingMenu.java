@@ -1,5 +1,7 @@
 package ch.awae.simtrack.scene.menu;
 
+import java.awt.Dimension;
+
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
@@ -22,7 +24,7 @@ public class UITestingMenu extends Scene {
 	private DesktopComponent ui;
 
 	public UITestingMenu(Controller controller, Window window, InputController input) {
-		super(controller, window);
+		super(controller);
 
 		this.ui = new DesktopComponent(input);
 		this.ui.layout(0, 0, window.getScreenSize().width, window.getScreenSize().height);
@@ -32,13 +34,19 @@ public class UITestingMenu extends Scene {
 
 		addRenderer(this.ui);
 	}
+	
+	@Override
+	public void screenResized(Dimension size) {
+		this.ui.layout(0, 0, size.width, size.height);
+	}
 
 	private void addWindowTest(InputController input, int nr) {
 		WindowComponent window = new WindowComponent(Design.textFont, input);
 		window.title = nr != 0 ? "Move me around " + nr : "fixed window";
 		window.isMovable = nr > 0;
 		window.isHeadless = RandomJS.getTrueWithProb(10);
-		if (nr == 0)window.zIndex = Integer.MAX_VALUE;
+		if (nr == 0)
+			window.zIndex = Integer.MAX_VALUE;
 
 		BasePanel panel = window.getContent();
 		panel.setVertical(RandomJS.getTrueWithProb(50));
@@ -48,7 +56,7 @@ public class UITestingMenu extends Scene {
 		}));
 		panel.add(new InputField(20, input));
 		panel.add(new Button("Go back", input, () -> {
-			this.controller.loadScene(Menu.class);
+			this.sceneController.loadScene(Menu.class);
 		}));
 
 		this.ui.addWindow(window, RandomJSExt.getEnum(PositionH.class), RandomJSExt.getEnum(PositionV.class));

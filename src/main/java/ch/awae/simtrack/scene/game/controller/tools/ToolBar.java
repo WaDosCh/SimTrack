@@ -7,11 +7,12 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.Editor;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
@@ -43,8 +44,8 @@ public class ToolBar extends GameTool {
 	 * 
 	 * @param editor the editor owning the build tool
 	 */
-	public ToolBar(Editor editor, InputController input) {
-		super(editor, false);
+	public ToolBar(Editor editor, InputController input, ViewPortNavigator viewPort) {
+		super(editor, viewPort, false);
 		this.input = input;
 
 		// ######### BINDINGS ##########
@@ -151,9 +152,9 @@ public class ToolBar extends GameTool {
 			p = new Point(0, 0);
 		}
 		p = p.getLocation();
-		p.x -= scene.getScreenSize().width / 2;
+		p.x -= this.viewPort.getScreenSize().width / 2;
 		p.x += 550;
-		p.y -= scene.getScreenSize().height;
+		p.y -= this.viewPort.getScreenSize().height;
 		p.y += 100;
 		if (p.x < 0 || p.y < 0)
 			return;
@@ -165,7 +166,7 @@ public class ToolBar extends GameTool {
 
 	@Override
 	public void render(Graphics g) {
-		Dimension screenSize = this.scene.getScreenSize();
+		Dimension screenSize = this.viewPort.getScreenSize();
 		g.translate(screenSize.width / 2 - 500, screenSize.height - 50);
 		g.setStroke(new BasicStroke(4));
 		for (int i = 0; i < 11; i++) {

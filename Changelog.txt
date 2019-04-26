@@ -6,7 +6,9 @@ v0.3.2
 	- positioning for Windows on DesktopComponent
 	- add money to the game
 	- merge Navigator and ViewPort since they are both responsible for scrolling/zooming -> ViewPortNavigator
-
+	- clean dependencies between classes. remove multiple getter methods where controller objects are passed around
+	  Game now injects required dependencies into classes in constructor.
+	
 
 v0.3.1
 	- new input system

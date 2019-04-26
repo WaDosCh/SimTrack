@@ -9,10 +9,10 @@ import java.util.Stack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.position.Edge;
@@ -32,10 +32,10 @@ public class PathFindingTool extends GameTool {
 	private PathFinding pathFinder;
 	private Stack<TileEdgeCoordinate> path;
 
-	public PathFindingTool(Editor editor) {
-		super(editor, true);
+	public PathFindingTool(Editor editor, ViewPortNavigator viewPort, PathFinding pathFinder) {
+		super(editor, viewPort, true);
 
-		this.pathFinder = scene.getPathfinder();
+		this.pathFinder = pathFinder;
 		this.startEdge = Edge.RIGHT;
 		this.endEdge = Edge.RIGHT;
 	}
@@ -78,15 +78,14 @@ public class PathFindingTool extends GameTool {
 
 	@Override
 	public void render(Graphics g) {
-		ViewPortNavigator viewPort = this.scene.getViewPort();
 		if (this.path != null) {
 			g.setColor(Color.red);
 			g.setStroke(new BasicStroke(12));
 			for (int i = 0; i < this.path.size() - 1; i++) {
 				TileCoordinate tile1 = this.path.get(i).tile;
 				TileCoordinate tile2 = this.path.get(i + 1).tile;
-				Point p1 = viewPort.toScreenCoordinate(tile1.toSceneCoordinate());
-				Point p2 = viewPort.toScreenCoordinate(tile2.toSceneCoordinate());
+				Point p1 = this.viewPort.toScreenCoordinate(tile1.toSceneCoordinate());
+				Point p2 = this.viewPort.toScreenCoordinate(tile2.toSceneCoordinate());
 
 				g.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}
@@ -95,7 +94,7 @@ public class PathFindingTool extends GameTool {
 		if (start != null) {
 			g.push();
 			g.setStroke(borderStroke);
-			viewPort.focusHex(start, g);
+			this.viewPort.focusHex(start, g);
 			g.setColor(Color.GREEN);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {
@@ -112,7 +111,7 @@ public class PathFindingTool extends GameTool {
 		if (end != null) {
 			g.push();
 			g.setStroke(borderStroke);
-			viewPort.focusHex(end, g);
+			this.viewPort.focusHex(end, g);
 			g.setColor(Color.ORANGE);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {

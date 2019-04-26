@@ -4,11 +4,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.Editor;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 
 /**
@@ -25,8 +26,8 @@ public class FreeTool extends GameTool {
 	 * 
 	 * @param e the editor owning the tool
 	 */
-	public FreeTool(Editor editor, InputController input) {
-		super(editor, false);
+	public FreeTool(Editor editor, InputController input, ViewPortNavigator viewPort) {
+		super(editor, viewPort, false);
 		this.input = input;
 	}
 
@@ -43,7 +44,7 @@ public class FreeTool extends GameTool {
 		TileCoordinate mouseTile = this.getMouseSceneCoordinate(this.input.getMousePosition()).toTileCoordinate();
 		if (mouseTile != null) {
 			g.setStroke(borderStroke);
-			this.scene.getViewPort().focusHex(mouseTile, g);
+			this.viewPort.focusHex(mouseTile, g);
 			g.setColor(Color.ORANGE);
 			double angle = Math.PI / 3;
 			for (int i = 0; i < 6; i++) {

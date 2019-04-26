@@ -2,13 +2,16 @@ package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.Dimension;
 
-import ch.awae.simtrack.core.Editor;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.Label;
+import ch.awae.simtrack.scene.game.controller.Editor;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.scene.menu.MenuLoadGame;
@@ -17,10 +20,15 @@ public class InGameMenu extends GameTool {
 
 	private BasePanel renderer;
 	private InputController input;
+	private Model model;
+	private SceneController sceneController;
 
-	public InGameMenu(Editor editor, InputController input) {
-		super(editor, true);
+	public InGameMenu(Editor editor, InputController input, ViewPortNavigator viewPort, Model model,
+			SceneController sceneController) {
+		super(editor, viewPort, true);
 		this.input = input;
+		this.model = model;
+		this.sceneController = sceneController;
 
 		this.renderer = new BasePanel();
 		this.renderer.add(new Label("Ingame Menu", true));
@@ -40,18 +48,18 @@ public class InGameMenu extends GameTool {
 
 	@Override
 	public void loadTool(Object... args) {
-		this.editor.getScene().getModel().getIsPaused().set(true);
+		this.model.getIsPaused().set(true);
 	}
 
 	@Override
 	public void unloadTool() {
-		this.editor.getScene().getModel().getIsPaused().set(false);
+		this.model.getIsPaused().set(false);
 	}
 
 	@Override
 	public void render(Graphics graphics) {
 		graphics.setColor(Design.menuBlackOverlay);
-		Dimension size = this.editor.getScene().getWindow().getScreenSize();
+		Dimension size = this.viewPort.getScreenSize();
 		graphics.fillRect(0, 0, size.width, size.height);
 		this.renderer.render(graphics);
 	}
@@ -61,12 +69,12 @@ public class InGameMenu extends GameTool {
 	}
 
 	private void quitToMenu() {
-		this.editor.getScene().getSceneController().loadScene(Menu.class);
+		this.sceneController.loadScene(Menu.class);
 	}
 
 	private void load() {
 		// TODO: check whether current game was saved and confirm dialog to quit?
-		this.editor.getScene().getSceneController().loadScene(MenuLoadGame.class);
+		this.sceneController.loadScene(MenuLoadGame.class);
 	}
 
 	private void resume() {

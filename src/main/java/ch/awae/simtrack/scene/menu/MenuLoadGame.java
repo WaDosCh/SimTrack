@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
-import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
@@ -20,8 +19,8 @@ public class MenuLoadGame extends Scene {
 
 	private BasePanel panel;
 
-	public MenuLoadGame(Controller controller, Window window, InputController input) {
-		super(controller, window);
+	public MenuLoadGame(Controller controller, InputController input) {
+		super(controller);
 		initMenu(input);
 
 		addRenderer(panel);
@@ -33,31 +32,31 @@ public class MenuLoadGame extends Scene {
 		addSaveButtons(input);
 		panel.add(new Button("Cancel", input, this::cancel));
 	}
-	
+
 	private void addSaveButtons(InputController input) {
 		for (String savedGame : getAvailableSaves()) {
-			panel.add(new Button(savedGame, input, ()-> {
+			panel.add(new Button(savedGame, input, () -> {
 				loadGame(savedGame);
 			}));
 		}
 	}
 
 	private void cancel() {
-		this.controller.loadScene(Menu.class);
+		this.sceneController.loadScene(Menu.class);
 	}
-	
+
 	private String[] getAvailableSaves() {
 		File saveFolder = new File("saves/");
-		return saveFolder.list((folder, name) -> name.endsWith(".simtrack.save") );
+		return saveFolder.list((folder, name) -> name.endsWith(".simtrack.save"));
 	}
 
 	private void loadGame(String name) {
 		logger.debug("LOAD GAME");
 		ObjectInputStream in;
 		try {
-			in = new ObjectInputStream(new FileInputStream(new File("saves/"+name)));
+			in = new ObjectInputStream(new FileInputStream(new File("saves/" + name)));
 			Model model = (Model) in.readObject();
-			this.controller.loadScene(Game.class, model);
+			this.sceneController.loadScene(Game.class, model);
 		} catch (
 				IOException
 				| ClassNotFoundException e) {

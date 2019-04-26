@@ -1,4 +1,4 @@
-package ch.awae.simtrack.core;
+package ch.awae.simtrack.scene.game.controller;
 
 import java.util.HashMap;
 
@@ -6,10 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ch.awae.simtrack.core.BaseRenderer;
+import ch.awae.simtrack.core.BaseTicker;
+import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.input.InputHandler;
-import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.scene.game.controller.tools.Tool;
 import lombok.NonNull;
 
 /**
@@ -17,8 +20,6 @@ import lombok.NonNull;
  * tools. It thereby targets reduction of complexity by delegating the user actions to well-defined tools.
  */
 public class Editor implements BaseTicker, BaseRenderer, InputHandler {
-
-	private Game scene;
 
 	private Logger logger = LogManager.getLogger(getClass());
 
@@ -32,8 +33,7 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	 * 
 	 * @param scene the scene
 	 */
-	public Editor(@NonNull Game scene) {
-		this.scene = scene;
+	public Editor() {
 	}
 
 	@Override
@@ -56,15 +56,6 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 			loadTool(tool.getClass());
 			baseToolClass = tool.getClass();
 		}
-	}
-
-	/**
-	 * retrieves the controller instance owning this editor
-	 * 
-	 * @return the owning controller instance
-	 */
-	public Game getScene() {
-		return this.scene;
 	}
 
 	/**

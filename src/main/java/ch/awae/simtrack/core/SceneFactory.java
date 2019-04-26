@@ -31,11 +31,11 @@ public class SceneFactory {
 				logger.info("Creating new model as none was passed to create game scene.");
 				model = ModelFactory.getDefaultModel();
 			}
-			return new Game(controller, model, window);
+			return new Game(controller, model, window, controller.input);
 		} else if (sceneClass == Menu.class) {
-			return new Menu(controller, window, controller.getInput());
+			return new Menu(controller, controller.getInput());
 		} else if (sceneClass == MenuLoadGame.class) {
-			return new MenuLoadGame(controller, window, controller.getInput());
+			return new MenuLoadGame(controller, controller.getInput());
 		} else if (sceneClass == UITestingMenu.class) {
 			return new UITestingMenu(controller, window, controller.getInput());
 		} else {

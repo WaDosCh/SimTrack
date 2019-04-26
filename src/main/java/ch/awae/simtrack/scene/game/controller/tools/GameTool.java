@@ -2,23 +2,33 @@ package ch.awae.simtrack.scene.game.controller.tools;
 
 import java.awt.Point;
 
-import ch.awae.simtrack.core.Editor;
-import ch.awae.simtrack.core.EventDrivenTool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.Editor;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 
-public abstract class GameTool extends EventDrivenTool {
+public abstract class GameTool implements Tool, BaseRenderer {
+
+	protected final Logger logger = LogManager.getLogger(getClass());
+
+	protected final Editor editor;
+	protected ViewPortNavigator viewPort;
 
 	private final boolean autoUnload;
 
-	public GameTool(Editor editor, boolean autoUnloadTool) {
-		super(editor);
-		autoUnload = autoUnloadTool;
+	public GameTool(Editor editor, ViewPortNavigator viewPort, boolean autoUnloadTool) {
+		this.editor = editor;
+		this.viewPort = viewPort;
+		this.autoUnload = autoUnloadTool;
 	}
 
 	protected SceneCoordinate getMouseSceneCoordinate(Point mousePosition) {
-		return this.scene.getViewPort().toSceneCoordinate(mousePosition);
+		return this.viewPort.toSceneCoordinate(mousePosition);
 	}
 
 	@Override
@@ -27,6 +37,11 @@ public abstract class GameTool extends EventDrivenTool {
 			editor.loadTool(FreeTool.class);
 			logger.debug("auto-unloading tool");
 		}
+	}
+
+	@Override
+	public BaseRenderer getRenderer() {
+		return this;
 	}
 
 }
