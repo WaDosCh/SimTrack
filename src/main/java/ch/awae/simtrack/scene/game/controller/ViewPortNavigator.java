@@ -1,41 +1,52 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game.controller;
 
 import java.awt.Dimension;
 import java.awt.Point;
 
 import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.input.InputHandler;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
+import ch.awae.simtrack.scene.game.view.Design;
 import ch.judos.generic.data.geometry.PointD;
 import lombok.Getter;
 
 /**
  * manages the translation between hex coordinates and screen coordinates, as well as the hex scaling.
  */
-public class ViewPort implements BaseTicker {
+public class ViewPortNavigator implements BaseTicker, InputHandler {
 
 	public static int outsideBounds = 0;
+	private static double ZOOM_MIN = 0.1;
+	private static final double ZOOM_MAX = 10;
+	private static final double ZOOM_DEFAULT = 1;
 
-	private double minZoom = 0.1;
-	private double maxZoom = 10;
-	private double defaultZoom = 1;
+	private final static int BORDER = 40;
+	private final static float DELTA_ZOOM = -.05f;
+	private final static int MOVE_SPEED = 8;
+	private int dx = 0, dy = 0;
+
 	private @Getter double zoom;
 	private @Getter double targetZoom;
 
 	private PointD sceneCorner;
-
-	private @Getter Dimension screenSize;
 	private SceneCoordinate sceneDimensions;
-
 	private Point focusedPointForZoom;
 
-	private Model model;
+	private @Getter Dimension screenSize;
 
-	public ViewPort(Model model, Dimension screenSize) {
+	private Model model;
+	private InputController input;
+
+	public ViewPortNavigator(Model model, Dimension screenSize, InputController input) {
 		this.model = model;
 		this.screenSize = screenSize;
+		this.input = input;
 		this.resetZoomAndScrolling();
 	}
 
@@ -43,7 +54,7 @@ public class ViewPort implements BaseTicker {
 	 * initialises the viewport
 	 */
 	public void resetZoomAndScrolling() {
-		this.zoom = this.defaultZoom;
+		this.zoom = ZOOM_DEFAULT;
 		this.targetZoom = this.zoom;
 		this.sceneCorner = new PointD(0, 0);
 		update();
@@ -56,11 +67,11 @@ public class ViewPort implements BaseTicker {
 
 	public void update() {
 		double minH = this.screenSize.width / (this.model.getHorizontalSize() - 1.0);
-		if (minH > this.minZoom)
-			this.minZoom = minH * 0.01;
+		if (minH > ZOOM_MIN)
+			ZOOM_MIN = minH * 0.01;
 		this.sceneDimensions = new SceneCoordinate((this.model.getHorizontalSize() - 1) * 100,
 				((this.model.getVerticalSize() - 1) * Math.sqrt(3) * 50));
-		updateCorner();
+		updateCornerViewPortInsideMap();
 	}
 
 	/**
@@ -102,10 +113,10 @@ public class ViewPort implements BaseTicker {
 	public void moveScene(int dx, int dy) {
 		this.sceneCorner.x += (float) dx;
 		this.sceneCorner.y += (float) dy;
-		updateCorner();
+		updateCornerViewPortInsideMap();
 	}
 
-	private void updateCorner() {
+	private void updateCornerViewPortInsideMap() {
 		double minX = this.screenSize.width - (this.zoom * this.sceneDimensions.s);
 		double minY = this.screenSize.height - Design.toolbarHeight - (this.zoom * this.sceneDimensions.t);
 		double x = this.sceneCorner.x;
@@ -139,10 +150,10 @@ public class ViewPort implements BaseTicker {
 		if (delta < 0)
 			this.targetZoom /= 1.2;
 
-		if (this.targetZoom < this.minZoom)
-			this.targetZoom = this.minZoom;
-		if (this.targetZoom > this.maxZoom)
-			this.targetZoom = this.maxZoom;
+		if (this.targetZoom < ZOOM_MIN)
+			this.targetZoom = ZOOM_MIN;
+		if (this.targetZoom > ZOOM_MAX)
+			this.targetZoom = ZOOM_MAX;
 	}
 
 	protected void updateZoomFactor() {
@@ -162,7 +173,7 @@ public class ViewPort implements BaseTicker {
 		this.sceneCorner = scroll.add(this.focusedPointForZoom);
 
 		this.zoom = newZoom;
-		updateCorner();
+		updateCornerViewPortInsideMap();
 	}
 
 	/**
@@ -230,11 +241,53 @@ public class ViewPort implements BaseTicker {
 
 	@Override
 	public void tick() {
+		updateMovingMap();
 		updateZoomFactor();
 	}
 
 	public Point getSceneCorner() {
 		return this.sceneCorner.getPoint();
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isActionAndConsume(InputAction.PAN_LEFT)) {
+			dx = event.isPress() ? 1 : 0;
+		}
+		if (event.isActionAndConsume(InputAction.PAN_RIGHT)) {
+			dx = event.isPress() ? -1 : 0;
+		}
+		if (event.isActionAndConsume(InputAction.PAN_DOWN)) {
+			dy = event.isPress() ? -1 : 0;
+		}
+		if (event.isActionAndConsume(InputAction.PAN_UP)) {
+			dy = event.isPress() ? 1 : 0;
+		}
+		if (event.isChanged()) {
+			double scrollAmount = event.getChangeValue();
+			zoom((float) (scrollAmount * DELTA_ZOOM), event.getCurrentMousePosition());
+		}
+	}
+
+	private void updateMovingMap() {
+		Point mousePos = input.getMousePosition();
+		if (mousePos == null)
+			return;
+
+		int mx = 0, my = 0;
+		if (mousePos.x < BORDER)
+			mx = 1;
+		if (mousePos.y < BORDER)
+			my = 1;
+		if (mousePos.x > this.screenSize.width - BORDER)
+			mx = -1;
+		if (mousePos.y > this.screenSize.height - BORDER)
+			my = -1;
+		mx += dx;
+		my += dy;
+		mx *= MOVE_SPEED;
+		my *= MOVE_SPEED;
+		moveScene(mx, my);
 	}
 
 }

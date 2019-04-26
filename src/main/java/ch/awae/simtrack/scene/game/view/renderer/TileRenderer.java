@@ -7,6 +7,7 @@ import java.awt.Stroke;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -14,7 +15,6 @@ import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.TileType;
 import ch.awae.simtrack.scene.game.model.tile.TrackTile;
-import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 
@@ -46,9 +46,9 @@ public class TileRenderer implements Renderer {
 	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 	private Model model;
-	private ViewPort viewPort;
+	private ViewPortNavigator viewPort;
 
-	public TileRenderer(ViewPort viewPort, Model model) {
+	public TileRenderer(ViewPortNavigator viewPort, Model model) {
 		this.viewPort = viewPort;
 		this.model = model;
 	}

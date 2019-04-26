@@ -10,6 +10,7 @@ import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
@@ -18,7 +19,6 @@ import ch.awae.simtrack.scene.game.model.tile.TrackTile;
 import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.FusedTrackFactory;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackValidator;
-import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
 import lombok.Getter;
 
@@ -220,7 +220,7 @@ public class BuildTool extends GameTool {
 		TileCoordinate c = mouseTile;
 		if (c == null)
 			return;
-		ViewPort viewPort = this.scene.getViewPort();
+		ViewPortNavigator viewPort = this.scene.getViewPort();
 		if (isBulldozeTool) {
 			viewPort.focusHex(c, g);
 			g.setColor(valid ? Color.RED : darkRed);

@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.util.Resource;
 
 /**
@@ -21,9 +21,9 @@ public class HexGridRenderer implements Renderer {
 	private final static Color gridColor = Resource.getConfigProperties("renderer.properties").getColor("gridColor");
 	private AtomicBoolean drawGrid;
 	private Model model;
-	private ViewPort viewPort;
+	private ViewPortNavigator viewPort;
 
-	public HexGridRenderer(AtomicBoolean drawGrid, ViewPort viewPort, Model model) {
+	public HexGridRenderer(AtomicBoolean drawGrid, ViewPortNavigator viewPort, Model model) {
 		this.drawGrid = drawGrid;
 		this.viewPort = viewPort;
 		this.model = model;

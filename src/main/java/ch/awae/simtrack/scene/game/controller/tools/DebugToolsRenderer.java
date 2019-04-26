@@ -13,13 +13,13 @@ import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.controller.tools.DebugTools.Option;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.view.Design;
-import ch.awae.simtrack.scene.game.view.ViewPort;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.utils.functional.T2;
@@ -29,12 +29,12 @@ public class DebugToolsRenderer implements Renderer {
 	private HashMap<Option, AtomicBoolean> showing;
 	private String[] inputGuideText;
 	private DebugTools tools;
-	private ViewPort viewPort;
+	private ViewPortNavigator viewPort;
 	private Model model;
 	private Window window;
 	private InputController input;
 
-	public DebugToolsRenderer(HashMap<Option, AtomicBoolean> showing, DebugTools tools, ViewPort viewPort,
+	public DebugToolsRenderer(HashMap<Option, AtomicBoolean> showing, DebugTools tools, ViewPortNavigator viewPort,
 			Window window, InputController input) {
 		this.showing = showing;
 		this.tools = tools;

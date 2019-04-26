@@ -14,10 +14,10 @@ import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.view.ViewPort;
 
 public class PathFindingTool extends GameTool {
 
@@ -78,7 +78,7 @@ public class PathFindingTool extends GameTool {
 
 	@Override
 	public void render(Graphics g) {
-		ViewPort viewPort = this.scene.getViewPort();
+		ViewPortNavigator viewPort = this.scene.getViewPort();
 		if (this.path != null) {
 			g.setColor(Color.red);
 			g.setStroke(new BasicStroke(12));

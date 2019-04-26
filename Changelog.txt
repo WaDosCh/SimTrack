@@ -4,7 +4,8 @@ In development:
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent
 	- positioning for Windows on DesktopComponent
-	- add money to the game  
+	- add money to the game
+	- merge Navigator and ViewPort since they are both responsible for scrolling/zooming -> ViewPortNavigator
 
 
 v0.3.1

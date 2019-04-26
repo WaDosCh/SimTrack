@@ -9,8 +9,8 @@ import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
-import ch.awae.simtrack.scene.game.view.ViewPort;
 
 public class DebugTools extends GameTool {
 
@@ -26,7 +26,7 @@ public class DebugTools extends GameTool {
 
 	protected Model model;
 
-	public DebugTools(Editor editor, ViewPort viewPort, Window window, Model model, InputController input) {
+	public DebugTools(Editor editor, ViewPortNavigator viewPort, Window window, Model model, InputController input) {
 		super(editor, false);
 		this.model = model;
 
