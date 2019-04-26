@@ -9,6 +9,7 @@ v0.3.2
 	- clean dependencies between classes. remove multiple getter methods where controller objects are passed around
 	  Game now injects required dependencies into classes in constructor.
 	- delete save from loadgame menu
+	- add visibility flag to WindowComponents
 	
 
 v0.3.1

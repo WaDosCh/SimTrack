@@ -19,6 +19,7 @@ public class WindowComponent extends BaseComponent {
 	public String title = "";
 	public boolean isMovable = true;
 	public boolean isHeadless = false;
+	public boolean isVisible = true;
 	/**
 	 * may be used& changed externally to manage rendering and input handling order
 	 */
@@ -51,6 +52,9 @@ public class WindowComponent extends BaseComponent {
 
 	@Override
 	public void render(Graphics g) {
+		if (!this.isVisible) {
+			return;
+		}
 		if (this.moving) {
 			updateLayoutWhileMoving(g);
 		}
@@ -103,6 +107,9 @@ public class WindowComponent extends BaseComponent {
 
 	@Override
 	public void handleInput(InputEvent event) {
+		if (!this.isVisible) {
+			return;
+		}
 		if (event.isAction(InputAction.SELECT)) {
 			if (event.isPress() && isPointInside(event.getCurrentMousePosition())) {
 				// pull on top, zIndex is later adjusted by DesktopComponent
@@ -133,10 +140,17 @@ public class WindowComponent extends BaseComponent {
 	}
 
 	public boolean isInsideBanner(Point pos) {
-		if (this.isHeadless)
+		if (this.isHeadless || !this.isVisible)
 			return false;
 		return pos.x >= this.pos.x && pos.y >= this.pos.y && pos.x <= this.pos.x + this.size.getWidth()
 				&& pos.y <= this.pos.y + this.bannerHeight;
+	}
+	
+	@Override
+	public boolean isPointInside(Point pos) {
+		if (!this.isVisible)
+			return false;
+		return super.isPointInside(pos);
 	}
 
 	@Override
