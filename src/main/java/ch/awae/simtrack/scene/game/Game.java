@@ -45,8 +45,8 @@ public class Game extends Scene {
 		this.model = modelToLoad;
 		this.model.load();
 		this.editor = new Editor();
-		this.trackbar = new ToolBar(this.editor, input, viewPortNavigator);
 		this.viewPortNavigator = new ViewPortNavigator(this.model, this.window.getScreenSize(), input);
+		this.trackbar = new ToolBar(this.editor, input, this.viewPortNavigator);
 		this.debugTools = new DebugTools(this.editor, this.viewPortNavigator, this.window, this.model, input);
 		this.pathfinder = new PathFinding(this.model);
 		this.trainController = new TrainController(this.model);
