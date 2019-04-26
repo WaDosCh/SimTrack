@@ -21,11 +21,7 @@ import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
 import ch.awae.simtrack.scene.game.controller.tools.SignalTool;
 import ch.awae.simtrack.scene.game.controller.tools.ToolBar;
 import ch.awae.simtrack.scene.game.model.Model;
-import ch.awae.simtrack.scene.game.view.renderer.BackgroundRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.EntityRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.HexGridRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.SignalRenderer;
-import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
+import ch.awae.simtrack.scene.game.view.renderer.MapRenderer;
 
 public class Game extends Scene {
 
@@ -60,11 +56,7 @@ public class Game extends Scene {
 				this.sceneController, this.model));
 		editor.addTool(new SignalTool(this.editor, this.model, input, viewPortNavigator));
 
-		addRenderer(new BackgroundRenderer(this.window));
-		addRenderer(new TileRenderer(this.viewPortNavigator, this.model));
-		addRenderer(new HexGridRenderer(this.viewPortNavigator, this.model));
-		addRenderer(new SignalRenderer(this.viewPortNavigator, this.model));
-		addRenderer(new EntityRenderer(this.model, this.viewPortNavigator));
+		addRenderer(new MapRenderer(this.model, this.viewPortNavigator));
 		addRenderer(this.editor);
 		addRenderer(this.trackbar);
 		addRenderer(this.debugTools.getRenderer());
