@@ -18,26 +18,36 @@ import ch.awae.simtrack.scene.game.model.Model;
 public class MenuLoadGame extends Scene {
 
 	private BasePanel panel;
+	private InputController input;
 
 	public MenuLoadGame(Controller controller, InputController input) {
 		super(controller);
-		initMenu(input);
-
-		addRenderer(panel);
+		this.input = input;
+		initMenu();
 	}
 
-	private void initMenu(InputController input) {
-		panel = new BasePanel();
-		panel.add(new Label("Load Game", true));
-		addSaveButtons(input);
-		panel.add(new Button("Cancel", input, this::cancel));
+	private void initMenu() {
+		this.panel = new BasePanel();
+		this.panel.add(new Label("Load Game", true));
+		addSaveButtons();
+		this.panel.add(new Button("Cancel", this.input, this::cancel));
+		
+		getRenderers().clear();
+		addRenderer(this.panel);
 	}
 
-	private void addSaveButtons(InputController input) {
-		for (String savedGame : getAvailableSaves()) {
-			panel.add(new Button(savedGame, input, () -> {
+	private void addSaveButtons() {
+		for (File savedGame : getAvailableSaves()) {
+			BasePanel savePanel = new BasePanel();
+			savePanel.setVertical(false);
+			savePanel.add(new Button(savedGame.getName(), this.input, () -> {
 				loadGame(savedGame);
 			}));
+			savePanel.add(new Button("X", this.input, () -> {
+				savedGame.delete();
+				initMenu();
+			}));
+			this.panel.add(savePanel);
 		}
 	}
 
@@ -45,16 +55,16 @@ public class MenuLoadGame extends Scene {
 		this.sceneController.loadScene(Menu.class);
 	}
 
-	private String[] getAvailableSaves() {
+	private File[] getAvailableSaves() {
 		File saveFolder = new File("saves/");
-		return saveFolder.list((folder, name) -> name.endsWith(".simtrack.save"));
+		return saveFolder.listFiles((folder, name) -> name.endsWith(".simtrack.save"));
 	}
 
-	private void loadGame(String name) {
+	private void loadGame(File savedGame) {
 		logger.debug("LOAD GAME");
 		ObjectInputStream in;
 		try {
-			in = new ObjectInputStream(new FileInputStream(new File("saves/" + name)));
+			in = new ObjectInputStream(new FileInputStream(new File("saves/" + savedGame.getName())));
 			Model model = (Model) in.readObject();
 			this.sceneController.loadScene(Game.class, model);
 		} catch (
