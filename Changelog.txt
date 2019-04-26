@@ -8,6 +8,7 @@ v0.3.2
 	- merge Navigator and ViewPort since they are both responsible for scrolling/zooming -> ViewPortNavigator
 	- clean dependencies between classes. remove multiple getter methods where controller objects are passed around
 	  Game now injects required dependencies into classes in constructor.
+	- delete save from loadgame menu
 	
 
 v0.3.1
