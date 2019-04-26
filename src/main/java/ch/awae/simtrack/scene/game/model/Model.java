@@ -51,9 +51,9 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private Set<Entity> entities = new HashSet<>();
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
-	private GameClock clock;
 
 	public int playerMoney;
+	private @Getter GameClock clock = new GameClock();
 	private @Getter LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	private @Getter AtomicBoolean isPaused = new AtomicBoolean(false);
 	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
@@ -332,12 +332,6 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private boolean spawnFilter(Entry<TileCoordinate, Tile> entry) {
 		return entry.getValue() instanceof DestinationTrackTile
 				&& ((DestinationTrackTile) entry.getValue()).isTrainSpawner() && !isTileReserved(entry.getKey());
-	}
-
-	public GameClock getClock() {
-		if (clock == null)
-			clock = new GameClock();
-		return clock;
 	}
 
 }

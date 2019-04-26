@@ -10,9 +10,15 @@ import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.BaseTicker;
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Graphics.GraphicsStack;
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.input.InputHandler;
+import ch.awae.simtrack.scene.game.controller.tools.BuildTool;
+import ch.awae.simtrack.scene.game.controller.tools.FreeTool;
+import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
+import ch.awae.simtrack.scene.game.controller.tools.SignalTool;
 import ch.awae.simtrack.scene.game.controller.tools.Tool;
+import ch.awae.simtrack.scene.game.model.Model;
 import lombok.NonNull;
 
 /**
@@ -23,17 +29,33 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 
 	private Logger logger = LogManager.getLogger(getClass());
 
+	private Model model;
+	private ViewPortNavigator viewPort;
+	private InputController input;
+	private PathFinding pathfinder;
+
 	private Tool currentTool;
 	private BaseRenderer renderer;
 	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
-	private Class<? extends Tool> baseToolClass = null;
+
 
 	/**
 	 * instantiates a new editor for the given scene.
-	 * 
-	 * @param scene the scene
 	 */
-	public Editor() {
+	public Editor(Model model, ViewPortNavigator viewPortNavigator, InputController input, PathFinding pathfinder) {
+		this.model = model;
+		this.viewPort = viewPortNavigator;
+		this.input = input;
+		this.pathfinder = pathfinder;
+		
+		createTools();
+	}
+
+	private void createTools() {
+		addTool(new FreeTool(this, input, this.viewPort));
+		addTool(new BuildTool(this, this.model, this.input, this.viewPort));
+		addTool(new PathFindingTool(this, this.viewPort, this.pathfinder));
+		addTool(new SignalTool(this, this.model, this.input, this.viewPort));
 	}
 
 	@Override
@@ -54,7 +76,6 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 		this.tools.put(tool.getClass(), tool);
 		if (this.currentTool == null) {
 			loadTool(tool.getClass());
-			baseToolClass = tool.getClass();
 		}
 	}
 
