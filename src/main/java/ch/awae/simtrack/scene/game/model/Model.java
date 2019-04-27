@@ -187,7 +187,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public void load() {
-		observableHandler = new ObservableHandler();
+		this. observableHandler = new ObservableHandler();
+		this.isPaused.set(false);
 	}
 
 	@Override
