@@ -142,8 +142,7 @@ public class WindowComponent extends BaseComponent {
 			this.content.handleInput(event);
 		}
 		// consume any select events inside this window and don't pass them to windows behind
-		if (event.isAction(InputAction.SELECT) || event.isAction(InputAction.SELECT2)
-				|| event.isAction(InputAction.DESELECT)) {
+		if (event.isAction(InputAction.SELECT) || event.isAction(InputAction.SELECT2)) {
 			if (isPointInside(event.getCurrentMousePosition())) {
 				event.consume();
 			}
