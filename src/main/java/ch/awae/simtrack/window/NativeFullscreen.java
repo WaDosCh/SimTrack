@@ -56,6 +56,7 @@ public class NativeFullscreen implements GameWindow {
 		canvas.addMouseMotionListener(input.getMouse());
 		canvas.addMouseWheelListener(input.getMouse());
 		window.addKeyListener(input.getKeyboard());
+		window.setFocusTraversalKeysEnabled(false);
 	}
 
 	@Override

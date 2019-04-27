@@ -10,6 +10,7 @@ v0.3.2
 	  Game now injects required dependencies into classes in constructor.
 	- delete save from loadgame menu
 	- add visibility flag to WindowComponents
+	- fix mirror not working when building tracks (tab focus traversal keys disabled)
 	
 
 v0.3.1

@@ -67,6 +67,7 @@ public class ResizableWindow implements GameWindow {
 		canvas.addMouseWheelListener(input.getMouse());
 		window.addKeyListener(input.getKeyboard());
 		window.addComponentListener(compListener);
+		window.setFocusTraversalKeysEnabled(false);
 	}
 
 	@Override
