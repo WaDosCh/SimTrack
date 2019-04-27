@@ -83,10 +83,15 @@ public class MenuLoadGame extends Scene {
 			in = new ObjectInputStream(new FileInputStream(new File("saves/" + savedGame.getName())));
 			Model model = (Model) in.readObject();
 			this.sceneController.loadScene(Game.class, model);
-		} catch (
-				IOException
-				| ClassNotFoundException e) {
+		} catch (Exception e) {
 			logger.error("error loading save", e);
+			WindowComponent error = new WindowComponent(Design.titleFont, this.input);
+			error.title = "Failed to load savegame";
+			error.addComponent(new Label("There was an error loading this savegame."));
+			error.addComponent(new Button("Aww Men! :/",this.input,()-> {
+				error.dispose();
+			}));
+			this.ui.addWindow(error);
 		}
 	}
 
