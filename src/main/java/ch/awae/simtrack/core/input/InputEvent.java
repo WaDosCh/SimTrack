@@ -1,6 +1,7 @@
 package ch.awae.simtrack.core.input;
 
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -50,6 +51,8 @@ public class InputEvent {
 		this.currentMousePosition = currentMousePos;
 		this.isConsumed = false;
 	}
+	
+	
 
 	public boolean isPressActionConsumeAndRun(InputAction action, Runnable run) {
 		if (isPressActionAndConsume(action)) {
@@ -128,6 +131,13 @@ public class InputEvent {
 
 	public void consume() {
 		this.isConsumed = true;
+	}
+
+	@Override
+	public String toString() {
+		return "InputEvent [" + type + ", "+ KeyEvent.getKeyText(this.keyCode)+", holdKeyCodes="
+				+ holdKeyCodes + ", changeValue=" + changeValue + ", currentMousePosition=" + currentMousePosition
+				+ ", text=" + text + "]";
 	}
 
 }

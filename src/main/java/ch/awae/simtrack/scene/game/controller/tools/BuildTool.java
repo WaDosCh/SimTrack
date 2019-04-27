@@ -39,6 +39,14 @@ public class BuildTool extends GameTool {
 	private InputController input;
 	private TileCoordinate mouseTile;
 
+	private enum Action {
+		NOTHING,
+		PLACE,
+		DESTROY;
+	}
+
+	private Action currentAction = Action.NOTHING;
+
 	/**
 	 * instantiates a new build tool
 	 * 
@@ -65,14 +73,17 @@ public class BuildTool extends GameTool {
 			return;
 		}
 		if (event.isPressActionAndConsume(InputAction.BT_DELETE_TILE)) {
-			bulldoze();
+			this.currentAction = Action.DESTROY;
 			return;
 		}
 		if (event.isPressActionAndConsume(InputAction.BT_BUILD_TILE)) {
-			if (this.isBulldozeTool)
-				bulldoze();
-			else
-				place();
+			this.currentAction = this.isBulldozeTool ? Action.DESTROY : Action.PLACE;
+			return;
+		}
+		if (event.isReleaseAction(InputAction.BT_DELETE_TILE) || event.isReleaseAction(InputAction.BT_BUILD_TILE)) {
+			this.currentAction = Action.NOTHING;
+			event.consume();
+			return;
 		}
 		super.handleInput(event);
 	}
@@ -81,8 +92,13 @@ public class BuildTool extends GameTool {
 	public void tick() {
 		Point mousePos = this.input.getMousePosition();
 		this.mouseTile = this.getMouseSceneCoordinate(mousePos).toTileCoordinate();
-		super.tick();
 		checkValid();
+		if (this.currentAction == Action.PLACE) {
+			place();
+		}
+		else if (this.currentAction == Action.DESTROY) {
+			bulldoze();
+		}
 	}
 
 	@Override
