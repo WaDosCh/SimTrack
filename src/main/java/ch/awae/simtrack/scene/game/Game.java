@@ -37,11 +37,11 @@ public class Game extends Scene {
 		this.model = modelToLoad;
 		this.model.load();
 		this.viewPortNavigator = new ViewPortNavigator(this.model, this.window.getScreenSize(), input);
-		this.toolbar = new ToolBar(this.editor, input, this.viewPortNavigator);
-		this.debugTools = new DebugTools(this.editor, this.viewPortNavigator, this.window, this.model, input);
 		this.pathfinder = new PathFinding(this.model);
 		this.trainController = new TrainController(this.model);
 		this.editor = new Editor(this.model, this.viewPortNavigator, input, this.pathfinder);
+		this.debugTools = new DebugTools(this.editor, this.viewPortNavigator, this.window, this.model, input);
+		this.toolbar = new ToolBar(this.editor, input, this.viewPortNavigator);
 
 		//TODO: remove the following tools, these are UI elements, not tools
 		editor.addTool(new InGameMenu(this.editor, input, this.viewPortNavigator, this.model, this.sceneController));
