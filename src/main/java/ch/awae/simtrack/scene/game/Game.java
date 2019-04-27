@@ -27,7 +27,7 @@ public class Game extends Scene {
 	private ViewPortNavigator viewPortNavigator;
 	private Editor editor;
 
-	private ToolBar trackbar;
+	private ToolBar toolbar;
 	private DebugTools debugTools;
 	private TrainController trainController;
 
@@ -37,7 +37,7 @@ public class Game extends Scene {
 		this.model = modelToLoad;
 		this.model.load();
 		this.viewPortNavigator = new ViewPortNavigator(this.model, this.window.getScreenSize(), input);
-		this.trackbar = new ToolBar(this.editor, input, this.viewPortNavigator);
+		this.toolbar = new ToolBar(this.editor, input, this.viewPortNavigator);
 		this.debugTools = new DebugTools(this.editor, this.viewPortNavigator, this.window, this.model, input);
 		this.pathfinder = new PathFinding(this.model);
 		this.trainController = new TrainController(this.model);
@@ -51,10 +51,10 @@ public class Game extends Scene {
 
 		addRenderer(new MapRenderer(this.model, this.viewPortNavigator));
 		addRenderer(this.editor);
-		addRenderer(this.trackbar);
+		addRenderer(this.toolbar);
 		addRenderer(this.debugTools);
 
-		addTicker(this.trackbar);
+		addTicker(this.toolbar);
 		addTicker(this.editor);
 		addTicker(this.debugTools);
 		addTicker(this.viewPortNavigator);
@@ -78,7 +78,7 @@ public class Game extends Scene {
 		this.viewPortNavigator.handleInput(event);
 		if (event.isConsumed)
 			return;
-		this.trackbar.handleInput(event);
+		this.toolbar.handleInput(event);
 		if (event.isConsumed)
 			return;
 		this.editor.handleInput(event);

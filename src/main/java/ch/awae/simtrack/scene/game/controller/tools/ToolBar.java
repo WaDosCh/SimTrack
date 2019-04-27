@@ -25,7 +25,7 @@ import ch.awae.utils.functional.T2;
  */
 public class ToolBar extends GameTool {
 
-	private int index;
+	private int hoveredToolIndex;
 
 	private Color bdcol = new Color(0.0f, 0.0f, 0.0f);
 	private Stroke bdst = new BasicStroke(2);
@@ -92,7 +92,7 @@ public class ToolBar extends GameTool {
 
 	@Override
 	public void handleInput(InputEvent event) {
-		if (this.index >= 0 && event.isPressActionConsumeAndRun(InputAction.SELECT, this::select))
+		if (this.hoveredToolIndex >= 0 && event.isPressActionConsumeAndRun(InputAction.SELECT, this::select))
 			return;
 		if (event.isPressActionConsumeAndRun(InputAction.TOOLBAR_0, () -> select(0)))
 			return;
@@ -119,34 +119,29 @@ public class ToolBar extends GameTool {
 		super.handleInput(event);
 	}
 
-	int getIndex() {
-		return this.index;
-	}
-
 	private void bind(Runnable ru, Renderer re) {
-		bindings.add(new T2<>(ru, re));
+		this.bindings.add(new T2<>(ru, re));
 	}
 
 	private void select(int index) {
-		this.index = index;
+		this.hoveredToolIndex = index;
 		select();
 	}
 
 	private void select() {
-		if (index < 0 || index >= bindings.size())
+		if (this.hoveredToolIndex < 0 || this.hoveredToolIndex >= this.bindings.size())
 			return;
 
-		bindings.get(index)._1.run();
+		this.bindings.get(this.hoveredToolIndex)._1.run();
 	}
 
 	@Override
 	public void tick() {
-		updateByMouse();
-		super.tick();
+		updateHoveredIndexByMouse();
 	}
 
-	public void updateByMouse() {
-		this.index = -1;
+	public void updateHoveredIndexByMouse() {
+		this.hoveredToolIndex = -1;
 		Point p = this.input.getMousePosition();
 		if (p == null) {
 			p = new Point(0, 0);
@@ -161,7 +156,7 @@ public class ToolBar extends GameTool {
 		int index = p.x / 100;
 		if (index > 10)
 			return;
-		this.index = index;
+		this.hoveredToolIndex = index;
 	}
 
 	@Override
@@ -172,7 +167,7 @@ public class ToolBar extends GameTool {
 		for (int i = 0; i < 11; i++) {
 			// box
 			g.setStroke(this.bdst);
-			g.setColor(i == index ? this.hover : this.bgcol);
+			g.setColor(i == hoveredToolIndex ? this.hover : this.bgcol);
 			g.fillRect(-50, -50, 100, 100);
 			g.setColor(this.bdcol);
 			g.drawRect(-50, -50, 100, 100);
