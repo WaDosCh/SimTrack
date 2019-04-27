@@ -11,6 +11,7 @@ v0.3.2
 	- delete save from loadgame menu
 	- add visibility flag to WindowComponents
 	- fix mirror not working when building tracks (tab focus traversal keys disabled)
+	- treat DebugTools and InputGuide as UI Windows not as GameTools as before
 	
 
 v0.3.1
