@@ -50,6 +50,7 @@ public class SignalRenderer implements Renderer {
 
 			g.fillOval(37, 16, 8, 8);
 		}
+		g.pop();
 	}
 
 }
