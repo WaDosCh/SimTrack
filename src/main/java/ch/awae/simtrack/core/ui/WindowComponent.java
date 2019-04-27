@@ -62,6 +62,10 @@ public class WindowComponent extends BaseComponent {
 		if (!this.isVisible) {
 			return;
 		}
+		if (this.moving) {
+			updateChildPositionsWhileMoving(g);
+		}
+		
 		this.content.render(g);
 		if (!this.isHeadless) {
 			g.setColor(Design.windowBannerBg);
@@ -73,12 +77,10 @@ public class WindowComponent extends BaseComponent {
 			g.drawString(this.title, this.pos.x + Design.buttonTextMarginX, this.pos.y + this.baselineDelta);
 		}
 		
-		if (this.moving) {
-			updateLayoutWhileMoving(g);
-		}
+		
 	}
 
-	private void updateLayoutWhileMoving(Graphics g) {
+	private void updateChildPositionsWhileMoving(Graphics g) {
 		Point mousepos = this.input.getMousePosition();
 		Point delta = new Point(mousepos.x - movingMouseInitialPos.x, mousepos.y - movingMouseInitialPos.y);
 		this.pos = new Point(this.movingWindowInitialPos);

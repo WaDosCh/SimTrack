@@ -45,15 +45,13 @@ public class InputGuideView extends WindowComponent {
 	public void render(Graphics g) {
 		if (!this.isVisible)
 			return;
-		renderUserGuide(g);
 		super.render(g);
+		renderUserGuide(g);
 	}
 
 	private void renderUserGuide(Graphics g) {
 		g.push();
 		g.translate(this.pos.x, this.pos.y);
-		g.setColor(Color.white);
-		g.fillRect(0, 0, this.size.width, this.size.height);
 		int y = 80;
 		g.setColor(Color.black);
 		g.setFont(Design.textFont);

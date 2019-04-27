@@ -54,11 +54,7 @@ public class BasePanel extends BaseComponent {
 	public void layout(int x, int y, int w, int h) {
 		// Note: Just centers content inside w/h, if w/h is smaller than
 		// required, this does not scale down components
-		this.size = getPreferedDimension();
-		if (this.isVertical)
-			this.size.width = w;
-		else
-			this.size.height = h;
+		this.size = new Dimension(w, h);
 		LayoutPositioning layout = new LayoutPositioning(this.positionH, this.positionV, this.size);
 		this.pos = layout.getPixelPositionBasedOnEnums(x, y, w, h);
 		int currentOffset = 0;
