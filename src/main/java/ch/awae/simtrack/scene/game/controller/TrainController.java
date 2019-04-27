@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.BaseTicker;
-import ch.awae.simtrack.scene.game.controller.tools.DebugTools;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
@@ -26,7 +25,7 @@ public class TrainController implements BaseTicker {
 	public static final int firstCheckAfterXSec = 5;
 	public static final int checkEveryXSec = 3;
 
-	private Logger logger = LogManager.getLogger(DebugTools.class);
+	private Logger logger = LogManager.getLogger(getClass());
 	private int spawnTrains;
 	private long checkForSpawnTimeMS;
 	private @Getter AtomicBoolean active = new AtomicBoolean(false);

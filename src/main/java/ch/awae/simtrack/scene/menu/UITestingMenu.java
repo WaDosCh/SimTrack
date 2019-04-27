@@ -50,7 +50,8 @@ public class UITestingMenu extends Scene {
 
 		BasePanel panel = window.getContent();
 		panel.setVertical(RandomJS.getTrueWithProb(50));
-		panel.add(new Label("IsMovable: " + window.isMovable, true));
+		panel.add(new Label("IsMovable: " + window.isMovable, false));
+		panel.add(new Label("some blabla text", false));
 		panel.add(new Button("Test Button " + nr, input, () -> {
 			System.out.println("Button " + nr + " pressed");
 		}));

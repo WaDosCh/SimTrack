@@ -58,14 +58,16 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private @Getter AtomicBoolean isPaused = new AtomicBoolean(false);
 	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
 
+	private @Getter DebugOptions debugOptions = new DebugOptions();
+
 	private @Getter transient ObservableHandler observableHandler;
 
 	Model(Dimension size, int startingMoney) {
 		this.sizeX = size.width;
 		this.sizeY = size.height;
 		this.playerMoney = startingMoney;
-		maxS = (int) (sizeX * new TileCoordinate(1, 0).toSceneCoordinate().s);
-		maxT = (int) (sizeY * new TileCoordinate(0, 1).toSceneCoordinate().t);
+		this.maxS = (int) (this.sizeX * new TileCoordinate(1, 0).toSceneCoordinate().s);
+		this.maxT = (int) (this.sizeY * new TileCoordinate(0, 1).toSceneCoordinate().t);
 	}
 
 	public int getHorizontalSize() {
@@ -187,7 +189,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public void load() {
-		this. observableHandler = new ObservableHandler();
+		this.observableHandler = new ObservableHandler();
 		this.isPaused.set(false);
 	}
 
@@ -208,10 +210,10 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public boolean isOnMap(TileCoordinate tile) {
-		SceneCoordinate P = tile.toSceneCoordinate();
-		if (P.s < 0 || P.t < 0)
+		SceneCoordinate sceneCoord = tile.toSceneCoordinate();
+		if (sceneCoord.s < 0 || sceneCoord.t < 0)
 			return false;
-		return P.s <= maxS && P.t <= maxT;
+		return sceneCoord.s <= maxS && sceneCoord.t <= maxT;
 	}
 
 	/**

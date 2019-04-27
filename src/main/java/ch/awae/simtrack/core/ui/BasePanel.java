@@ -9,7 +9,7 @@ import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
 import ch.awae.simtrack.scene.game.view.Design;
-import lombok.Setter;
+import lombok.Getter;
 
 public class BasePanel extends BaseComponent {
 
@@ -17,9 +17,8 @@ public class BasePanel extends BaseComponent {
 	private boolean needsLayout;
 	private PositionH positionH;
 	private PositionV positionV;
-	public int margin = 0;
 	private Window window;
-	private @Setter boolean isVertical;
+	private @Getter boolean isVertical;
 
 	public BasePanel() {
 		this(PositionH.CENTER, PositionV.CENTER, true);
@@ -32,7 +31,12 @@ public class BasePanel extends BaseComponent {
 		this.components = new ArrayList<>();
 		this.needsLayout = true;
 	}
-
+	
+	public void setVertical(boolean isVertical) {
+		this.isVertical = isVertical;
+		this.needsLayout = true;
+	}
+	
 	public void add(Component component) {
 		this.components.add(component);
 		this.needsLayout = true;
@@ -42,7 +46,7 @@ public class BasePanel extends BaseComponent {
 	public void render(Graphics g) {
 		if (this.needsLayout) {
 			Dimension size = g.getClipBounds().getSize();
-			layout(margin, margin, size.width - 2 * margin, size.height - Design.toolbarHeight - 2 * margin);
+			layout(0, 0, size.width, size.height - Design.toolbarHeight);
 		}
 
 		g.setColor(Design.panelBackground);

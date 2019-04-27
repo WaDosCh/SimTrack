@@ -55,9 +55,6 @@ public class WindowComponent extends BaseComponent {
 		if (!this.isVisible) {
 			return;
 		}
-		if (this.moving) {
-			updateLayoutWhileMoving(g);
-		}
 		this.content.render(g);
 		if (!this.isHeadless) {
 			g.setColor(Design.windowBannerBg);
@@ -67,6 +64,10 @@ public class WindowComponent extends BaseComponent {
 			g.setFont(this.font);
 			g.setColor(Design.textColor);
 			g.drawString(this.title, this.pos.x + Design.buttonTextMarginX, this.pos.y + this.baselineDelta);
+		}
+		
+		if (this.moving) {
+			updateLayoutWhileMoving(g);
 		}
 	}
 
@@ -133,9 +134,12 @@ public class WindowComponent extends BaseComponent {
 		if (this.content.isPointInside(event.getCurrentMousePosition())) {
 			this.content.handleInput(event);
 		}
-		// consume any events inside this window and don't pass them to windows behind
-		if (isPointInside(event.getCurrentMousePosition())) {
-			event.consume();
+		// consume any select events inside this window and don't pass them to windows behind
+		if (event.isAction(InputAction.SELECT) || event.isAction(InputAction.SELECT2)
+				|| event.isAction(InputAction.DESELECT)) {
+			if (isPointInside(event.getCurrentMousePosition())) {
+				event.consume();
+			}
 		}
 	}
 
@@ -145,7 +149,7 @@ public class WindowComponent extends BaseComponent {
 		return pos.x >= this.pos.x && pos.y >= this.pos.y && pos.x <= this.pos.x + this.size.getWidth()
 				&& pos.y <= this.pos.y + this.bannerHeight;
 	}
-	
+
 	@Override
 	public boolean isPointInside(Point pos) {
 		if (!this.isVisible)

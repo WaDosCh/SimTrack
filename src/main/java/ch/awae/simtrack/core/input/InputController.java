@@ -119,6 +119,9 @@ public class InputController implements NamedComponent {
 
 	private boolean hoveringEnabled;
 
+	/**
+	 * @return mouse coordinate, DO NOT MODIFY THIS OBJECT!
+	 */
 	public Point getMousePosition() {
 		if (!this.hoveringEnabled) {
 			return new Point(-2, -2);

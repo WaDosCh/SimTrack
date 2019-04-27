@@ -7,11 +7,11 @@ import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 
 public class EntityRenderer implements Renderer {
-	
+
 	private Model model;
 	private ViewPortNavigator viewPort;
 
-	public EntityRenderer(Model model, ViewPortNavigator viewPort) {
+	public EntityRenderer(ViewPortNavigator viewPort, Model model) {
 		this.model = model;
 		this.viewPort = viewPort;
 	}
