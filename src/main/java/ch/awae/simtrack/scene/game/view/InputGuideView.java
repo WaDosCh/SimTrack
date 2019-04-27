@@ -28,7 +28,7 @@ public class InputGuideView extends WindowComponent {
 
 	@Override
 	public Dimension getPreferedDimension() {
-		return new Dimension(400, 400);
+		return new Dimension(300, 350);
 	}
 	
 	@Override
@@ -53,12 +53,12 @@ public class InputGuideView extends WindowComponent {
 		g.push();
 		g.translate(this.pos.x, this.pos.y);
 		g.setColor(Color.white);
-		g.fillRect(0, 0, 400, 400);
+		g.fillRect(0, 0, this.size.width, this.size.height);
 		int y = 80;
 		g.setColor(Color.black);
 		g.setFont(Design.textFont);
 		for (String s : this.inputGuideText) {
-			g.drawString(s, 60, y);
+			g.drawString(s, 20, y);
 			y += Design.textFont.getSize();
 		}
 		g.pop();
