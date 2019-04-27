@@ -1,0 +1,75 @@
+package ch.awae.simtrack.scene.game.view;
+
+import java.awt.Rectangle;
+
+import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.core.SceneController;
+import ch.awae.simtrack.core.input.InputAction;
+import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.ui.Button;
+import ch.awae.simtrack.core.ui.WindowComponent;
+import ch.awae.simtrack.scene.game.controller.Editor;
+import ch.awae.simtrack.scene.game.controller.tools.InGameSaveMenu;
+import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.menu.Menu;
+import ch.awae.simtrack.scene.menu.MenuLoadGame;
+
+public class InGameMenu extends WindowComponent {
+
+	private Model model;
+	private SceneController sceneController;
+	private Editor editor;
+
+	public InGameMenu(Editor editor, InputController input, Model model, SceneController sceneController) {
+		super(Design.titleFont, input);
+		this.editor = editor;
+		this.model = model;
+		this.sceneController = sceneController;
+		
+		this.model.getIsPaused().set(true);
+
+		this.title = "Game Menu";
+		addComponent(new Button("Resume", input, this::dispose));
+		addComponent(new Button("Save", input, this::save));
+		addComponent(new Button("Load", input, this::load));
+		addComponent(new Button("Quit Map", input, this::quitToMenu));
+		addComponent(new Button("Exit to Desktop", input, () -> System.exit(0)));
+	}
+	
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
+			this.dispose();
+			this.model.getIsPaused().set(false);
+		}
+		if (!event.isConsumed)
+			super.handleInput(event);
+		// does not pass events to background / blocking dialog
+		event.consume();
+	}
+
+	@Override
+	public void render(Graphics g) {
+		if (!this.isVisible)
+			return;
+		g.setColor(Design.menuBlackOverlay);
+		Rectangle bounds = g.getClipBounds();
+		g.fillRect(0, 0, bounds.width, bounds.height);
+		super.render(g);
+	}
+
+	private void save() {
+		this.editor.loadTool(InGameSaveMenu.class);
+	}
+
+	private void quitToMenu() {
+		this.sceneController.loadScene(Menu.class);
+	}
+
+	private void load() {
+		// TODO: check whether current game was saved and confirm dialog to quit?
+		this.sceneController.loadScene(MenuLoadGame.class);
+	}
+
+}

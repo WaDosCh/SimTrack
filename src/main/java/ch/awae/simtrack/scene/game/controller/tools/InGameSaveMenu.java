@@ -38,7 +38,7 @@ public class InGameSaveMenu extends GameTool {
 		this.panel.add(this.inputField);
 		this.panel.add(new Button("Save with Name", input, this::save));
 		this.panel.add(new Button("Quicksave", input, this::quicksave));
-		this.panel.add(new Button("Cancel", input, () -> this.editor.loadTool(InGameMenu.class)));
+		this.panel.add(new Button("Cancel", input, () -> this.editor.loadTool(FreeTool.class)));
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class InGameSaveMenu extends GameTool {
 	public void handleInput(InputEvent event) {
 		this.panel.handleInput(event);
 		if (!event.isConsumed && event.isPressActionAndConsume(InputAction.DROP_TOOL))
-			editor.loadTool(InGameMenu.class);
+			editor.loadTool(FreeTool.class);
 		else if (!event.isConsumed)
 			super.handleInput(event);
 	}

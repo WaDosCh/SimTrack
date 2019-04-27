@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
@@ -46,6 +47,14 @@ public class DesktopComponent extends BaseComponent {
 	@Override
 	public void render(Graphics g) {
 		int activateHoveringAt = 0;
+		
+		Iterator<WindowComponent> it = this.windows.iterator();
+		while (it.hasNext()) {
+			WindowComponent window = it.next();
+			if (window.isDisposed)
+				it.remove();
+		}
+		
 		// traverse windows in reverse to check which windows should be able to show hovering on components
 		for (int i = this.windows.size() - 1; i >= 0; i--) {
 			WindowComponent window = this.windows.get(i);

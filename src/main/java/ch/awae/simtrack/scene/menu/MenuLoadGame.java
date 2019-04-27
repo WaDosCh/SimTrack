@@ -2,7 +2,6 @@ package ch.awae.simtrack.scene.menu;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import org.apache.logging.log4j.LogManager;
@@ -10,35 +9,43 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
+import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
+import ch.awae.simtrack.core.ui.DesktopComponent;
 import ch.awae.simtrack.core.ui.Label;
+import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.Design;
 
 public class MenuLoadGame extends Scene {
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private BasePanel panel;
+	private DesktopComponent ui;
+	private WindowComponent window;
 	private InputController input;
 
-	public MenuLoadGame(Controller controller, InputController input) {
+	public MenuLoadGame(Controller controller, Window window, InputController input) {
 		super(controller);
 		this.input = input;
+
+		this.ui = new DesktopComponent(input);
+		this.ui.layout(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 		initMenu();
+		addRenderer(this.ui);
 	}
 
 	private void initMenu() {
-		this.panel = new BasePanel();
-		this.panel.add(new Label("Load Game", true));
+		this.window = new WindowComponent(Design.titleFont, this.input);
+		window.title = "Load Game";
 		addSaveButtons();
-		this.panel.add(new Button("Cancel", this.input, this::cancel));
-		
-		getRenderers().clear();
-		addRenderer(this.panel);
+		this.window.addComponent(new Button("Cancel", this.input, this::cancel));
+		this.ui.addWindow(this.window);
 	}
 
 	private void addSaveButtons() {
@@ -50,12 +57,13 @@ public class MenuLoadGame extends Scene {
 			}));
 			savePanel.add(new Button("X", this.input, () -> {
 				if (!savedGame.delete()) {
-					logger.warn("Could not delete savegame: "+savedGame.getName());
+					logger.warn("Could not delete savegame: " + savedGame.getName());
 				}
+				this.window.dispose();
 				initMenu();
-				logger.info("delete button clicked for "+savedGame.getName());
+				logger.info("delete button clicked for " + savedGame.getName());
 			}));
-			this.panel.add(savePanel);
+			this.window.addComponent(savePanel);
 		}
 	}
 
@@ -84,7 +92,9 @@ public class MenuLoadGame extends Scene {
 
 	@Override
 	public void handleInput(InputEvent event) {
-		panel.handleInput(event);
+		this.ui.handleInput(event);
+		if (!event.isConsumed && event.isPressActionAndConsume(InputAction.DESELECT))
+			cancel();
 	}
 
 }

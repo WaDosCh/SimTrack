@@ -241,6 +241,8 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 
 	@Override
 	public void tick() {
+		if (this.model.getIsPaused().get())
+			return;
 		updateMovingMap();
 		updateZoomFactor();
 	}

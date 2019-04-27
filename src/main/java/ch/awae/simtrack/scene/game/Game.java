@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.DesktopComponent;
@@ -15,11 +16,11 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
-import ch.awae.simtrack.scene.game.controller.tools.InGameMenu;
 import ch.awae.simtrack.scene.game.controller.tools.InGameSaveMenu;
 import ch.awae.simtrack.scene.game.controller.tools.ToolBar;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.DebugToolsView;
+import ch.awae.simtrack.scene.game.view.InGameMenu;
 import ch.awae.simtrack.scene.game.view.InputGuideView;
 import ch.awae.simtrack.scene.game.view.renderer.MapRenderer;
 
@@ -52,7 +53,6 @@ public class Game extends Scene {
 		setupUI();
 
 		// TODO: remove the following tools, these are UI elements, not tools
-		editor.addTool(new InGameMenu(this.editor, input, this.viewPortNavigator, this.model, this.sceneController));
 		editor.addTool(new InGameSaveMenu(this.editor, this.model, input, viewPortNavigator));
 
 		addRenderer(new MapRenderer(this.input, this.model, this.viewPortNavigator));
@@ -75,7 +75,8 @@ public class Game extends Scene {
 		this.ui.addWindow(this.debugWindow, PositionH.LEFT, PositionV.TOP);
 
 		InputGuideView inputGuide = new InputGuideView(this.input, this.model);
-		this.ui.addWindow(inputGuide, PositionH.CENTER, PositionV.CENTER);
+		this.ui.addWindow(inputGuide);
+
 	}
 
 	@Override
@@ -97,6 +98,15 @@ public class Game extends Scene {
 			this.toolbar.handleInput(event);
 		if (!event.isConsumed)
 			this.editor.handleInput(event);
+		if (!event.isConsumed)
+			checkIfGameMenuShouldOpen(event);
+	}
+
+	private void checkIfGameMenuShouldOpen(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
+			InGameMenu ingameMenu = new InGameMenu(this.editor, input, this.model, this.sceneController);
+			this.ui.addWindow(ingameMenu);
+		}
 	}
 
 	private void toggleInputGuide() {

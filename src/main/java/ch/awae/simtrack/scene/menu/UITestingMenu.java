@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
@@ -34,7 +35,7 @@ public class UITestingMenu extends Scene {
 
 		addRenderer(this.ui);
 	}
-	
+
 	@Override
 	public void screenResized(Dimension size) {
 		this.ui.layout(0, 0, size.width, size.height);
@@ -56,16 +57,20 @@ public class UITestingMenu extends Scene {
 			System.out.println("Button " + nr + " pressed");
 		}));
 		panel.add(new InputField(20, input));
-		panel.add(new Button("Go back", input, () -> {
-			this.sceneController.loadScene(Menu.class);
-		}));
+		panel.add(new Button("Go back", input, this::goBack));
 
 		this.ui.addWindow(window, RandomJSExt.getEnum(PositionH.class), RandomJSExt.getEnum(PositionV.class));
+	}
+
+	private void goBack() {
+		this.sceneController.loadScene(Menu.class);
 	}
 
 	@Override
 	public void handleInput(InputEvent event) {
 		this.ui.handleInput(event);
+		if (!event.isConsumed && event.isPressActionAndConsume(InputAction.DESELECT))
+			goBack();
 	}
 
 }

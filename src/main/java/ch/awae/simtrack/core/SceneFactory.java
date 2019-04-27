@@ -31,13 +31,13 @@ public class SceneFactory {
 				logger.info("Creating new model as none was passed to create game scene.");
 				model = ModelFactory.getDefaultModel();
 			}
-			return new Game(controller, model, window, controller.input);
+			return new Game(controller, model, this.window, controller.getInput());
 		} else if (sceneClass == Menu.class) {
-			return new Menu(controller, controller.getInput());
+			return new Menu(controller, this.window, controller.getInput());
 		} else if (sceneClass == MenuLoadGame.class) {
-			return new MenuLoadGame(controller, controller.getInput());
+			return new MenuLoadGame(controller, this.window, controller.getInput());
 		} else if (sceneClass == UITestingMenu.class) {
-			return new UITestingMenu(controller, window, controller.getInput());
+			return new UITestingMenu(controller, this.window, controller.getInput());
 		} else {
 			logger.error("Can't create scene of type {}", sceneClass);
 			return null;

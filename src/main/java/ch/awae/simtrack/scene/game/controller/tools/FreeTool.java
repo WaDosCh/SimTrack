@@ -5,9 +5,7 @@ import java.awt.Color;
 import java.awt.Stroke;
 
 import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
-import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
@@ -29,14 +27,6 @@ public class FreeTool extends GameTool {
 	public FreeTool(Editor editor, InputController input, ViewPortNavigator viewPort) {
 		super(editor, viewPort, false);
 		this.input = input;
-	}
-
-	@Override
-	public void handleInput(InputEvent event) {
-		if (event.isPressActionAndConsume(InputAction.DROP_TOOL))
-			editor.loadTool(InGameMenu.class);
-		if (!event.isConsumed)
-			super.handleInput(event);
 	}
 
 	@Override

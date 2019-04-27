@@ -14,7 +14,6 @@ import lombok.Getter;
 public class BasePanel extends BaseComponent {
 
 	private ArrayList<Component> components;
-	private boolean needsLayout;
 	private PositionH positionH;
 	private PositionV positionV;
 	private Window window;
@@ -29,26 +28,18 @@ public class BasePanel extends BaseComponent {
 		this.positionV = positionV;
 		this.isVertical = isVertical;
 		this.components = new ArrayList<>();
-		this.needsLayout = true;
 	}
-	
+
 	public void setVertical(boolean isVertical) {
 		this.isVertical = isVertical;
-		this.needsLayout = true;
 	}
-	
+
 	public void add(Component component) {
 		this.components.add(component);
-		this.needsLayout = true;
 	}
 
 	@Override
 	public void render(Graphics g) {
-		if (this.needsLayout) {
-			Dimension size = g.getClipBounds().getSize();
-			layout(0, 0, size.width, size.height - Design.toolbarHeight);
-		}
-
 		g.setColor(Design.panelBackground);
 		g.fillRect(this.pos.x, this.pos.y, this.size.width, this.size.height);
 		g.setColor(Design.grayBorder);
@@ -63,8 +54,11 @@ public class BasePanel extends BaseComponent {
 	public void layout(int x, int y, int w, int h) {
 		// Note: Just centers content inside w/h, if w/h is smaller than
 		// required, this does not scale down components
-		this.needsLayout = false;
 		this.size = getPreferedDimension();
+		if (this.isVertical)
+			this.size.width = w;
+		else
+			this.size.height = h;
 		LayoutPositioning layout = new LayoutPositioning(this.positionH, this.positionV, this.size);
 		this.pos = layout.getPixelPositionBasedOnEnums(x, y, w, h);
 		int currentOffset = 0;

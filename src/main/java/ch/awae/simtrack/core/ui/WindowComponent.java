@@ -23,7 +23,7 @@ public class WindowComponent extends BaseComponent {
 	/**
 	 * may be used& changed externally to manage rendering and input handling order
 	 */
-	public int zIndex = Integer.MAX_VALUE / 2;
+	public int zIndex = Integer.MAX_VALUE;
 
 	protected @Getter BasePanel content = new BasePanel();
 
@@ -34,6 +34,7 @@ public class WindowComponent extends BaseComponent {
 	protected InputController input;
 	protected Font font;
 	protected Point movingWindowInitialPos;
+	protected boolean isDisposed;
 
 	public WindowComponent(Font font, InputController input) {
 		super();
@@ -44,6 +45,12 @@ public class WindowComponent extends BaseComponent {
 		FontMetrics fm = c.getFontMetrics(font);
 		this.bannerHeight = 4 + fm.getAscent() + fm.getDescent();
 		this.baselineDelta = 2 + fm.getAscent();
+	}
+	
+
+	public void dispose() {
+		this.zIndex = Integer.MIN_VALUE;
+		this.isDisposed = true;
 	}
 
 	public void addComponent(Component c) {
@@ -114,7 +121,7 @@ public class WindowComponent extends BaseComponent {
 		if (event.isAction(InputAction.SELECT)) {
 			if (event.isPress() && isPointInside(event.getCurrentMousePosition())) {
 				// pull on top, zIndex is later adjusted by DesktopComponent
-				this.zIndex = Integer.MAX_VALUE;
+				this.zIndex = Integer.MAX_VALUE / 2;
 			}
 			if (isInsideBanner(event.getCurrentMousePosition()) && event.isPress() && this.isMovable
 					&& !this.isHeadless) {
@@ -164,6 +171,8 @@ public class WindowComponent extends BaseComponent {
 		}
 		Dimension size = this.content.getPreferedDimension();
 		size.height += bannerHeight; // top nav and border bottom
+		int titleWidth = 2*Design.buttonTextMarginX + measureTextSize(this.font, this.title).width;
+		size.width = Math.max(titleWidth, size.width);
 		return size;
 	}
 

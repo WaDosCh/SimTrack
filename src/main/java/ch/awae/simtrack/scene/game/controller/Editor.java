@@ -38,7 +38,6 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	private BaseRenderer renderer;
 	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
 
-
 	/**
 	 * instantiates a new editor for the given scene.
 	 */
@@ -47,7 +46,7 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 		this.viewPort = viewPortNavigator;
 		this.input = input;
 		this.pathfinder = pathfinder;
-		
+
 		createTools();
 	}
 
