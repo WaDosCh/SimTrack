@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.input.InputController;
@@ -16,6 +19,8 @@ import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 
 public class MenuLoadGame extends Scene {
+
+	private Logger logger = LogManager.getLogger(getClass());
 
 	private BasePanel panel;
 	private InputController input;
@@ -44,8 +49,11 @@ public class MenuLoadGame extends Scene {
 				loadGame(savedGame);
 			}));
 			savePanel.add(new Button("X", this.input, () -> {
-				savedGame.delete();
+				if (!savedGame.delete()) {
+					logger.warn("Could not delete savegame: "+savedGame.getName());
+				}
 				initMenu();
+				logger.info("delete button clicked for "+savedGame.getName());
 			}));
 			this.panel.add(savePanel);
 		}
