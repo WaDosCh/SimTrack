@@ -35,7 +35,6 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	private PathFinding pathfinder;
 
 	private Tool currentTool;
-	private BaseRenderer renderer;
 	private HashMap<Class<? extends Tool>, Tool> tools = new HashMap<>();
 
 	/**
@@ -100,7 +99,6 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 
 		next.loadTool(args);
 		this.currentTool = next;
-		this.renderer = this.currentTool.getRenderer();
 
 		return true;
 	}
@@ -112,9 +110,9 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	 */
 	@Override
 	public void render(Graphics g) {
-		if (this.renderer != null) {
+		if (this.currentTool != null) {
 			GraphicsStack stack = g.getStack();
-			this.renderer.render(g);
+			this.currentTool.render(g);
 			g.setStack(stack);
 		}
 	}

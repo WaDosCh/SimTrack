@@ -7,9 +7,7 @@ import ch.awae.simtrack.core.input.InputHandler;
 /**
  * describes the basic behaviour of any editor tool. Each editor tool represents a possible editor state.
  */
-public interface Tool extends BaseTicker, InputHandler {
-
-	public BaseRenderer getRenderer();
+public interface Tool extends BaseTicker, InputHandler, BaseRenderer {
 
 	/**
 	 * called when this tool is loaded. If the tool needs to prepare its state this may be done here

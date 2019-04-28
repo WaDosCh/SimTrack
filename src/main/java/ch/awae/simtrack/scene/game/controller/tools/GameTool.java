@@ -5,14 +5,13 @@ import java.awt.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 
-public abstract class GameTool implements Tool, BaseRenderer {
+public abstract class GameTool implements Tool {
 
 	protected final Logger logger = LogManager.getLogger(getClass());
 
@@ -37,11 +36,6 @@ public abstract class GameTool implements Tool, BaseRenderer {
 			editor.loadTool(FreeTool.class);
 			logger.debug("auto-unloading tool");
 		}
-	}
-
-	@Override
-	public BaseRenderer getRenderer() {
-		return this;
 	}
 
 }

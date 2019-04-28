@@ -90,13 +90,9 @@ public class BuildTool extends GameTool {
 
 	@Override
 	public void tick() {
-		Point mousePos = this.input.getMousePosition();
-		this.mouseTile = this.getMouseSceneCoordinate(mousePos).toTileCoordinate();
-		checkValid();
 		if (this.currentAction == Action.PLACE) {
 			place();
-		}
-		else if (this.currentAction == Action.DESTROY) {
+		} else if (this.currentAction == Action.DESTROY) {
 			bulldoze();
 		}
 	}
@@ -231,11 +227,14 @@ public class BuildTool extends GameTool {
 
 	@Override
 	public void render(Graphics g) {
-		TileCoordinate c = mouseTile;
-		if (c == null)
+		Point mousePos = this.input.getMousePosition();
+		this.mouseTile = this.getMouseSceneCoordinate(mousePos).toTileCoordinate();
+		checkValid();
+
+		if (this.mouseTile == null)
 			return;
 		if (isBulldozeTool) {
-			this.viewPort.focusHex(c, g);
+			this.viewPort.focusHex(this.mouseTile, g);
 			g.setColor(valid ? Color.RED : darkRed);
 			g.setStroke(bullCursorStroke);
 			double angle = Math.PI / 3;
@@ -244,7 +243,7 @@ public class BuildTool extends GameTool {
 				g.rotate(angle);
 			}
 		} else {
-			this.viewPort.focusHex(c, g);
+			this.viewPort.focusHex(this.mouseTile, g);
 			TrackRenderUtil.renderRails(g, valid ? placeGood ? Color.LIGHT_GRAY : Color.GRAY : Color.RED,
 					valid ? placeGood ? Color.GRAY : Color.DARK_GRAY : Color.RED, track.getRailPaths());
 		}
