@@ -73,6 +73,8 @@ public class Controller implements SceneController {
 			snapshot = new BufferedImage(window.getScreenSize().width, window.getScreenSize().height,
 					BufferedImage.TYPE_INT_RGB);
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
+			snapshotGraphics.clipRect(0, 0, window.getScreenSize().width, window.getScreenSize().height);
+
 		}
 
 		window.flipFrame();
