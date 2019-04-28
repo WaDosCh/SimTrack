@@ -9,7 +9,7 @@ import ch.awae.simtrack.scene.game.view.Design;
 
 public class Label extends BaseComponent {
 
-	public final String title;
+	public String title;
 	protected Font font;
 
 	public Label(String title) {

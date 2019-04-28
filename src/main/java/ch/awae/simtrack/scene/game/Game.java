@@ -21,6 +21,7 @@ import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.DebugToolsView;
 import ch.awae.simtrack.scene.game.view.InGameMenu;
 import ch.awae.simtrack.scene.game.view.InputGuideView;
+import ch.awae.simtrack.scene.game.view.PlayerInfoView;
 import ch.awae.simtrack.scene.game.view.renderer.MapRenderer;
 
 public class Game extends Scene {
@@ -72,6 +73,9 @@ public class Game extends Scene {
 
 		InputGuideView inputGuide = new InputGuideView(this.input, this.model);
 		this.ui.addWindow(inputGuide);
+		
+		PlayerInfoView infoView = new PlayerInfoView(this.model, this.input);
+		this.ui.addWindow(infoView, PositionH.CENTER, PositionV.TOP);
 
 	}
 
