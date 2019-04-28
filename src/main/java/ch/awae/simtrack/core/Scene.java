@@ -12,8 +12,9 @@ import lombok.Getter;
 
 public abstract class Scene implements InputHandler {
 
+	protected final Logger logger = LogManager.getLogger();
+	
 	protected final SceneController sceneController;
-	protected final Logger logger;
 
 	private @Getter List<BaseRenderer> renderers;
 	private @Getter List<BaseTicker> tickers;
@@ -23,7 +24,6 @@ public abstract class Scene implements InputHandler {
 
 		this.tickers = new ArrayList<>();
 		this.renderers = new ArrayList<>();
-		this.logger = LogManager.getLogger();
 	}
 
 	protected void addRenderer(BaseRenderer component) {

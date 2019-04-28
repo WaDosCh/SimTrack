@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene.menu;
+package ch.awae.simtrack.scene.uiTest;
 
 import java.awt.Dimension;
 
@@ -17,6 +17,7 @@ import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.util.RandomJSExt;
 import ch.judos.generic.data.RandomJS;
 

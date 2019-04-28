@@ -7,9 +7,7 @@ import java.io.ObjectInputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.Controller;
-import ch.awae.simtrack.core.Scene;
-import ch.awae.simtrack.core.Window;
+import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -22,30 +20,31 @@ import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.Design;
 
-public class MenuLoadGame extends Scene {
+public class MenuLoadView extends WindowComponent {
 
 	private Logger logger = LogManager.getLogger(getClass());
+	private SceneController sceneController;
+	private DesktopComponent parentUi;
 
-	private DesktopComponent ui;
-	private WindowComponent window;
-	private InputController input;
+	public MenuLoadView(SceneController controller, InputController input, DesktopComponent parentUi) {
+		super(Design.titleFont, input);
+		this.sceneController = controller;
+		this.parentUi = parentUi;
 
-	public MenuLoadGame(Controller controller, Window window, InputController input) {
-		super(controller);
-		this.input = input;
-
-		this.ui = new DesktopComponent(input);
-		this.ui.layout(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 		initMenu();
-		addRenderer(this.ui);
 	}
 
 	private void initMenu() {
-		this.window = new WindowComponent(Design.titleFont, this.input);
-		window.title = "Load Game";
+		this.content = new BasePanel();
+		this.title = "Load Game";
 		addSaveButtons();
-		this.window.addComponent(new Button("Cancel", this.input, this::cancel));
-		this.ui.addWindow(this.window);
+		addComponent(new Button("Cancel", this.input, this::dispose));
+	}
+	
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		super.dispose();
 	}
 
 	private void addSaveButtons() {
@@ -59,16 +58,11 @@ public class MenuLoadGame extends Scene {
 				if (!savedGame.delete()) {
 					logger.warn("Could not delete savegame: " + savedGame.getName());
 				}
-				this.window.dispose();
 				initMenu();
 				logger.info("delete button clicked for " + savedGame.getName());
 			}));
-			this.window.addComponent(savePanel);
+			addComponent(savePanel);
 		}
-	}
-
-	private void cancel() {
-		this.sceneController.loadScene(Menu.class);
 	}
 
 	private File[] getAvailableSaves() {
@@ -91,15 +85,15 @@ public class MenuLoadGame extends Scene {
 			error.addComponent(new Button("Aww Men! :/",this.input,()-> {
 				error.dispose();
 			}));
-			this.ui.addWindow(error);
+			this.parentUi.addWindow(error);
 		}
 	}
 
 	@Override
 	public void handleInput(InputEvent event) {
-		this.ui.handleInput(event);
+		super.handleInput(event);
 		if (!event.isConsumed && event.isPressActionAndConsume(InputAction.DESELECT))
-			cancel();
+			dispose();
 	}
 
 }

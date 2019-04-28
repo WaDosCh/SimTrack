@@ -9,8 +9,7 @@ import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.ModelFactory;
 import ch.awae.simtrack.scene.menu.Menu;
-import ch.awae.simtrack.scene.menu.MenuLoadGame;
-import ch.awae.simtrack.scene.menu.UITestingMenu;
+import ch.awae.simtrack.scene.uiTest.UITestingMenu;
 
 public class SceneFactory {
 	protected final Logger logger = LogManager.getLogger();
@@ -34,8 +33,6 @@ public class SceneFactory {
 			return new Game(controller, model, this.window, controller.getInput());
 		} else if (sceneClass == Menu.class) {
 			return new Menu(controller, this.window, controller.getInput());
-		} else if (sceneClass == MenuLoadGame.class) {
-			return new MenuLoadGame(controller, this.window, controller.getInput());
 		} else if (sceneClass == UITestingMenu.class) {
 			return new UITestingMenu(controller, this.window, controller.getInput());
 		} else {

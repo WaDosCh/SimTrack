@@ -24,10 +24,9 @@ public class InGameSaveMenu extends WindowComponent {
 	private InputField inputField;
 	private DesktopComponent parentUi;
 
-	public InGameSaveMenu(Model model, InputController input, DesktopComponent parentUi) {
+	public InGameSaveMenu(Model model, InputController input) {
 		super(Design.titleFont, input);
 		this.model = model;
-		this.parentUi = parentUi;
 
 		this.title = "Save Game";
 		this.inputField = new InputField(32, this.input);

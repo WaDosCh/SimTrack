@@ -13,7 +13,6 @@ import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.menu.Menu;
-import ch.awae.simtrack.scene.menu.MenuLoadGame;
 
 public class InGameMenu extends WindowComponent {
 
@@ -67,7 +66,7 @@ public class InGameMenu extends WindowComponent {
 
 	private void save() {
 		this.isVisible = false;
-		InGameSaveMenu saveWindows = new InGameSaveMenu(this.model, this.input, this.parentUi);
+		InGameSaveMenu saveWindows = new InGameSaveMenu(this.model, this.input);
 		this.parentUi.addWindow(saveWindows);
 		saveWindows.onClose = (cmd) -> {
 			if (InGameSaveMenu.CLOSE_ACTION_SAVED.equals(cmd)) {
@@ -85,7 +84,7 @@ public class InGameMenu extends WindowComponent {
 
 	private void load() {
 		// TODO: check whether current game was saved and confirm dialog to quit?
-		this.sceneController.loadScene(MenuLoadGame.class);
+		this.sceneController.loadScene(Menu.class);
 	}
 
 }
