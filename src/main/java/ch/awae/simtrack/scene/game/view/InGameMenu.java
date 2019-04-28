@@ -13,6 +13,7 @@ import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.menu.Menu;
+import ch.awae.simtrack.scene.menu.MenuLoadView;
 
 public class InGameMenu extends WindowComponent {
 
@@ -56,8 +57,6 @@ public class InGameMenu extends WindowComponent {
 
 	@Override
 	public void render(Graphics g) {
-		if (!this.isVisible)
-			return;
 		g.setColor(Design.menuBlackOverlay);
 		Rectangle bounds = g.getClipBounds();
 		g.fillRect(0, 0, bounds.width, bounds.height);
@@ -67,7 +66,6 @@ public class InGameMenu extends WindowComponent {
 	private void save() {
 		this.isVisible = false;
 		InGameSaveMenu saveWindows = new InGameSaveMenu(this.model, this.input);
-		this.parentUi.addWindow(saveWindows);
 		saveWindows.onClose = (cmd) -> {
 			if (InGameSaveMenu.CLOSE_ACTION_SAVED.equals(cmd)) {
 				dispose();
@@ -76,14 +74,19 @@ public class InGameMenu extends WindowComponent {
 				this.isVisible = true;
 			}
 		};
+		this.parentUi.addWindow(saveWindows);
+	}
+	
+	private void load() {
+		this.isVisible = false;
+		MenuLoadView loadWindow = new MenuLoadView(this.sceneController, this.input, this.parentUi);
+		loadWindow.onClose = (cmd) -> {
+			this.isVisible = true;
+		};
+		this.parentUi.addWindow(loadWindow);
 	}
 
 	private void quitToMenu() {
-		this.sceneController.loadScene(Menu.class);
-	}
-
-	private void load() {
-		// TODO: check whether current game was saved and confirm dialog to quit?
 		this.sceneController.loadScene(Menu.class);
 	}
 

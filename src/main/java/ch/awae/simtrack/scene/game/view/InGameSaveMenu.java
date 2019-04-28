@@ -1,12 +1,10 @@
 package ch.awae.simtrack.scene.game.view;
 
-import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -76,16 +74,6 @@ public class InGameSaveMenu extends WindowComponent {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void render(Graphics g) {
-		if (!this.isVisible)
-			return;
-		g.setColor(Design.menuBlackOverlay);
-		Dimension size = g.getClipBounds().getSize();
-		g.fillRect(0, 0, size.width, size.height);
-		super.render(g);
 	}
 
 }
