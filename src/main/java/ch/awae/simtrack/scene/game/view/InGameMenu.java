@@ -8,9 +8,9 @@ import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.Button;
+import ch.awae.simtrack.core.ui.DesktopComponent;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.controller.Editor;
-import ch.awae.simtrack.scene.game.controller.tools.InGameSaveMenu;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.scene.menu.MenuLoadGame;
@@ -20,12 +20,13 @@ public class InGameMenu extends WindowComponent {
 	private Model model;
 	private SceneController sceneController;
 	private Editor editor;
+	private DesktopComponent parentUi;
 
-	public InGameMenu(Editor editor, InputController input, Model model, SceneController sceneController) {
+	public InGameMenu(InputController input, Model model, SceneController sceneController, DesktopComponent ui) {
 		super(Design.titleFont, input);
-		this.editor = editor;
 		this.model = model;
 		this.sceneController = sceneController;
+		this.parentUi = ui;
 		
 		this.model.getIsPaused().set(true);
 
@@ -38,10 +39,15 @@ public class InGameMenu extends WindowComponent {
 	}
 	
 	@Override
+	public void dispose() {
+		this.model.getIsPaused().set(false);
+		super.dispose();
+	}
+	
+	@Override
 	public void handleInput(InputEvent event) {
 		if (event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
 			this.dispose();
-			this.model.getIsPaused().set(false);
 		}
 		if (!event.isConsumed)
 			super.handleInput(event);
@@ -60,7 +66,17 @@ public class InGameMenu extends WindowComponent {
 	}
 
 	private void save() {
-		this.editor.loadTool(InGameSaveMenu.class);
+		this.isVisible = false;
+		InGameSaveMenu saveWindows = new InGameSaveMenu(this.model, this.input, this.parentUi);
+		this.parentUi.addWindow(saveWindows);
+		saveWindows.onClose = (cmd) -> {
+			if (InGameSaveMenu.CLOSE_ACTION_SAVED.equals(cmd)) {
+				dispose();
+			}
+			else {
+				this.isVisible = true;
+			}
+		};
 	}
 
 	private void quitToMenu() {

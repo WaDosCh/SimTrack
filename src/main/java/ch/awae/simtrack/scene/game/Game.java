@@ -16,7 +16,6 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
-import ch.awae.simtrack.scene.game.controller.tools.InGameSaveMenu;
 import ch.awae.simtrack.scene.game.controller.tools.ToolBar;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.DebugToolsView;
@@ -51,9 +50,6 @@ public class Game extends Scene {
 		this.toolbar = new ToolBar(this.editor, input, this.viewPortNavigator);
 		this.ui = new DesktopComponent(input);
 		setupUI();
-
-		// TODO: remove the following tools, these are UI elements, not tools
-		editor.addTool(new InGameSaveMenu(this.editor, this.model, input, viewPortNavigator));
 
 		addRenderer(new MapRenderer(this.input, this.model, this.viewPortNavigator));
 		addRenderer(this.editor);
@@ -104,7 +100,7 @@ public class Game extends Scene {
 
 	private void checkIfGameMenuShouldOpen(InputEvent event) {
 		if (event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
-			InGameMenu ingameMenu = new InGameMenu(this.editor, input, this.model, this.sceneController);
+			InGameMenu ingameMenu = new InGameMenu(input, this.model, this.sceneController, this.ui);
 			this.ui.addWindow(ingameMenu);
 		}
 	}

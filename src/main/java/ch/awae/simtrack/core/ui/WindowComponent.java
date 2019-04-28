@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.function.Consumer;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
@@ -24,6 +25,11 @@ public class WindowComponent extends BaseComponent {
 	 * may be used& changed externally to manage rendering and input handling order
 	 */
 	public int zIndex = Integer.MAX_VALUE;
+	
+	/**
+	 * will be called upon closing this window
+	 */
+	public Consumer<String> onClose;
 
 	protected @Getter BasePanel content = new BasePanel();
 
@@ -48,9 +54,18 @@ public class WindowComponent extends BaseComponent {
 	}
 	
 
-	public void dispose() {
+	public void dispose(String closeResult) {
 		this.zIndex = Integer.MIN_VALUE;
 		this.isDisposed = true;
+		if (this.onClose!=null) {
+			if (closeResult == null)
+				closeResult = "";
+			this.onClose.accept(closeResult);
+		}
+	}
+	
+	public void dispose() {
+		dispose("");
 	}
 
 	public void addComponent(Component c) {
