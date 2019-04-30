@@ -14,7 +14,7 @@ import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
-import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
+import ch.awae.simtrack.scene.game.model.tile.track.ConstructionTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
 import ch.awae.simtrack.scene.game.view.renderer.Renderer;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
@@ -59,10 +59,10 @@ public class ToolBar extends GameTool {
 		// bind track tiles
 		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
 			if (i != 3 && i != 4 && i != 8) {
-				TransformableTrackTile tile = TrackProvider.getTileInstance(i);
+				ConstructionTrackTile tile = TrackProvider.getTileInstance(i);
 				bind(() -> editor.loadTool(BuildTool.class, tile), (g) -> {
 					g.scale(0.8, 0.8);
-					TrackRenderUtil.renderRails(g, this.rbeds, this.rails, tile.getRailPaths());
+					TrackRenderUtil.renderRails(g, this.rbeds, this.rails, tile.getPaths());
 				});
 			}
 		}

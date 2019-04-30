@@ -11,10 +11,10 @@ import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.TileType;
-import ch.awae.simtrack.scene.game.model.tile.TrackTile;
+import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
+import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 
@@ -109,10 +109,10 @@ public class TileRenderer implements Renderer {
 	}
 
 	private void renderTrack(Graphics2D g2, TrackTile tile) {
-		TrackRenderUtil.renderRails(g2, bedColour, railColour, tile.getRailPaths());
-		if (tile instanceof DestinationTrackTile) {
-			DestinationTrackTile dest = (DestinationTrackTile) tile;
-			g2.rotate(Math.PI / 3 * tile.getRailPaths()[0]._1.ordinal());
+		TrackRenderUtil.renderRails(g2, bedColour, railColour, tile.getPaths());
+		if (tile instanceof BorderTrackTile) {
+			BorderTrackTile dest = (BorderTrackTile) tile;
+			g2.rotate(Math.PI / 3 * tile.getPaths()[0]._1.ordinal());
 			g2.setColor(railColour);
 			g2.setStroke(arrowStroke);
 			g2.translate(30, 0);

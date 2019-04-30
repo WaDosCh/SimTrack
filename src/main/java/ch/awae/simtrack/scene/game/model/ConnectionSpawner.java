@@ -8,11 +8,10 @@ import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.BorderTrackTile;
+import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 
 /**
- * This basic implementation spawns connections on the edges with a random
- * distribution.
+ * This basic implementation spawns connections on the edges with a random distribution.
  * 
  * @author Andreas Wälchli
  * @version 2.1, 2015-01-23
@@ -68,7 +67,7 @@ class ConnectionSpawner {
 			TileCoordinate pos = new TileCoordinate(u, v);
 			if (!list.contains(pos)) {
 				boolean output = RAND.nextBoolean();
-				BorderTrackTile tile = BorderTrackTile.getInstance(Edge.byIndex(edge), output);
+				BorderTrackTile tile = new BorderTrackTile(Edge.byIndex(edge), output);
 				model.setTileAt(pos, tile);
 				if (!output) {
 					TileEdgeCoordinate tec = new TileEdgeCoordinate(pos, Edge.byIndex(edge));

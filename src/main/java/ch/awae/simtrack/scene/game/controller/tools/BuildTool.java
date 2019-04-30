@@ -15,26 +15,24 @@ import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
-import ch.awae.simtrack.scene.game.model.tile.TrackTile;
-import ch.awae.simtrack.scene.game.model.tile.TransformableTrackTile;
-import ch.awae.simtrack.scene.game.model.tile.track.FusedTrackFactory;
+import ch.awae.simtrack.scene.game.model.tile.track.ConstructionTrackTile;
+import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackValidator;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
-import lombok.Getter;
 
 /**
  * Build Tool. Used for placing and deleting track tiles
  */
 public class BuildTool extends GameTool {
 
+	// XXX: move these properties to a renderer
 	private static Stroke bullCursorStroke = new BasicStroke(6);
 	private static Color darkRed = Color.RED.darker();
 	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	private boolean isBulldozeTool;
-	private @Getter boolean valid = false;
-	private boolean placeGood = false;
-	private @Getter TransformableTrackTile track;
+	private boolean valid = false;
+	private ConstructionTrackTile track;
 	private Model model;
 	private InputController input;
 	private TileCoordinate mouseTile;
@@ -99,9 +97,9 @@ public class BuildTool extends GameTool {
 
 	@Override
 	public void loadTool(Object... args) {
-		if (args.length == 1 && args[0] instanceof TransformableTrackTile) {
+		if (args.length == 1 && args[0] instanceof TrackTile) {
 			isBulldozeTool = false;
-			track = (TransformableTrackTile) args[0];
+			track = (ConstructionTrackTile) args[0];
 		} else if (args.length == 0) {
 			isBulldozeTool = true;
 		} else {
@@ -116,7 +114,6 @@ public class BuildTool extends GameTool {
 
 	private void checkValid() {
 		this.valid = this.isBulldozeTool ? canDelete() : canPlace();
-		this.placeGood = !isBulldozeTool && valid && makesPlaceSense();
 	}
 
 	private boolean canPlace() {
@@ -128,44 +125,18 @@ public class BuildTool extends GameTool {
 
 		// compatible?
 		Tile tile = model.getTileAt(mouseTile);
-		if (tile != null) {
-			if (tile instanceof FixedTile)
-				return false;
-			if (tile instanceof TrackTile) {
-				TrackTile ttile = (TrackTile) tile;
-				TrackTile fused = FusedTrackFactory.createFusedTrack(ttile, track);
-				if (TrackValidator.isValidTrack(fused)) {
-					return true;
-				}
+		if (tile == null)
+			return true;
+		if (tile instanceof FixedTile)
+			return false;
+		if (tile instanceof TrackTile) {
+			TrackTile ttile = (TrackTile) tile;
+			TrackTile fused = ttile.fuseWith(this.track);
+			if (TrackValidator.isValidTrack(fused) && !fused.equals(ttile)) {
+				return true;
 			}
-			return false;
 		}
-		return true;
-	}
-
-	private boolean makesPlaceSense() {
-		if (mouseTile == null)
-			return false;
-		// in range?
-		if (!model.isOnMap(mouseTile))
-			return false;
-
-		// compatible?
-		Tile tile = model.getTileAt(mouseTile);
-
-		if (tile != null) {
-			if (tile instanceof FixedTile)
-				return false;
-			if (tile instanceof TrackTile) {
-				TrackTile ttile = (TrackTile) tile;
-				TrackTile fused = FusedTrackFactory.createFusedTrack(ttile, track);
-				if (TrackValidator.isValidTrack(fused)) {
-					return TrackValidator.intern(ttile) != TrackValidator.intern(fused);
-				}
-			}
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -196,15 +167,17 @@ public class BuildTool extends GameTool {
 	 * places the tile at the current location or (if applicable) fuses the new tile onto the current one.
 	 */
 	private void place() {
-		if (canPlace() && makesPlaceSense()) {
+		if (canPlace()) {
 			if (input.getMousePosition().y < this.viewPort.getScreenSize().height) {
-				if (model.getTileAt(mouseTile) == null)
-					model.setTileAt(mouseTile, TrackValidator.intern(track));
-				else {
+				if (model.getTileAt(mouseTile) == null) {
+					model.setTileAt(mouseTile, track.getNormalTrackTile());
+					model.playerMoney -= track.getBuildCost();
+				} else {
 					TrackTile oldTile = (TrackTile) model.getTileAt(mouseTile);
 					model.removeTileAt(mouseTile);
-					model.setTileAt(mouseTile,
-							TrackValidator.intern(FusedTrackFactory.createFusedTrack(oldTile, this.track)));
+					TrackTile fusedTrack = oldTile.fuseWith(this.track);
+					model.playerMoney -= this.track.getBuildCost();
+					model.setTileAt(mouseTile, fusedTrack);
 				}
 			}
 		}
@@ -244,8 +217,8 @@ public class BuildTool extends GameTool {
 			}
 		} else {
 			this.viewPort.focusHex(this.mouseTile, g);
-			TrackRenderUtil.renderRails(g, valid ? placeGood ? Color.LIGHT_GRAY : Color.GRAY : Color.RED,
-					valid ? placeGood ? Color.GRAY : Color.DARK_GRAY : Color.RED, track.getRailPaths());
+			TrackRenderUtil.renderRails(g, valid ? Color.LIGHT_GRAY : Color.RED, valid ? Color.GRAY : Color.RED,
+					track.getPaths());
 		}
 	}
 

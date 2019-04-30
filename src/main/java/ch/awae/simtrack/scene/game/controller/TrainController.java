@@ -16,6 +16,7 @@ import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
+import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Time;
 import lombok.Getter;
@@ -51,13 +52,16 @@ public class TrainController implements BaseTicker {
 	}
 
 	private void spawnTrain(Model model) {
-		Set<Entry<TileCoordinate, Tile>> spawners = model.getPossibleSpawnPoints();
+		Set<Entry<TileCoordinate, Tile>> spawners = model.getTileFiltered(tile -> {
+			return tile instanceof BorderTrackTile && ((BorderTrackTile) tile).isTrainSpawner();
+		});
 		if (spawners.size() == 0) {
 			logger.warn("No possible spawn points for a new train.");
 			return;
 		}
-		Entry<TileCoordinate, Tile> spawner = CollectionUtil.randomValue(spawners);
-		TileEdgeCoordinate start = model.getPaths(spawner.getKey()).get(0)._2;
+		Entry<TileCoordinate, Tile> entry = CollectionUtil.randomValue(spawners);
+		BorderTrackTile spawner = (BorderTrackTile) entry.getValue();
+		TileEdgeCoordinate start = new TileEdgeCoordinate(entry.getKey(), spawner.getStartingEdge());
 
 		Train t = new Train(model, start, new PathFindingOptions(Type.RandomTarget),
 				TrainElementConfiguration.locomotive1);

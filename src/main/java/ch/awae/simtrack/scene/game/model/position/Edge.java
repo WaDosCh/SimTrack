@@ -18,6 +18,7 @@ public enum Edge {
 		this.Δv = Δv;
 	}
 
+	// XXX: rename to "byOrdinal"
 	public static Edge byIndex(int index) {
 		return values()[index];
 	}
@@ -28,6 +29,10 @@ public enum Edge {
 
 	public Edge getNeighbour(boolean clockwise) {
 		return byIndex((ordinal() + (clockwise ? 1 : 5)) % 6);
+	}
+	
+	public boolean isNeighbour(Edge other) {
+		return getNeighbour(false) == other || getNeighbour(true) == other;
 	}
 
 	public Edge getNeighbourX(int clockwiseSteps) {
@@ -57,6 +62,12 @@ public enum Edge {
 		PointD position = new PointD(50, 0);
 		position.rotate(getAngleOut());
 		return position;
+	}
+
+	public Edge mirrorAlong(Edge axis) {
+		int delta = ordinal() - axis.ordinal();
+		int newOrd = (axis.ordinal() - delta + 6 ) % 6;
+		return values()[newOrd];
 	}
 
 }

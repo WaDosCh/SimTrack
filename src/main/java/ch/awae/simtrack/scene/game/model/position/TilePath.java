@@ -3,39 +3,19 @@ package ch.awae.simtrack.scene.game.model.position;
 import java.io.Serializable;
 
 import ch.judos.generic.data.geometry.PointD;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode
 public final class TilePath implements Comparable<TilePath>, Serializable {
 
 	private static final long serialVersionUID = 9173421190168686602L;
+
+	// XXX: rename to edge1, edge2
 	public final Edge _1, _2;
 
-	public TilePath(Edge _1, Edge _2) {
-		if (_1.getNeighbour(false) == _2 || _2.getNeighbour(true) == _2)
-			throw new RuntimeException("Invalid tilePath from " + _1 + " to " + _2);
-		this._1 = _1;
-		this._2 = _2;
-	}
-
-	public TilePath normalised() {
-		if (_1.ordinal() > _2.ordinal())
-			return new TilePath(_2, _1);
-		else
-			return this;
-	}
-
-	@Override
-	public int compareTo(TilePath path) {
-		int high = _1.compareTo(path._1);
-		if (high == 0)
-			return _2.compareTo(path._2);
-		else
-			return high;
-	}
-
-	public TilePath swap() {
-		return new TilePath(_2, _1);
+	public TilePath(Edge edge1, Edge edge2) {
+		if (edge1.isNeighbour(edge2))
+			throw new RuntimeException("Invalid tilePath from " + edge1 + " to " + edge2);
+		this._1 = edge1;
+		this._2 = edge2;
 	}
 
 	public double getPathLength() {
@@ -54,7 +34,7 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		PointD start = new PointD(-50, 0);
 		// build a movement vector when we would go from left to right
 		PointD delta;
-		if (_1.getOpposite() == _2) { // straight
+		if (isStraight()) {
 			delta = new PointD(progressedDistance, 0.);
 		} else { // curved, assume it's a right curve
 			final double radius = 100 * Math.sqrt(3) / 2;
@@ -77,4 +57,48 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		return _1.getNeighbourX(2) == _2;
 	}
 
+	public boolean isStraight() {
+		return _1.getOpposite() == _2;
+	}
+
+	public boolean connectsAt(Edge edge) {
+		return _1 == edge || _2 == edge;
+	}
+
+	public boolean connectsFromTo(Edge edge, Edge edge2) {
+		return (_1 == edge && _2 == edge2) || (_2 == edge && _1 == edge);
+	}
+
+	public TilePath mirroredAlong(Edge axis) {
+		return new TilePath(_1.mirrorAlong(axis), _2.mirrorAlong(axis));
+	}
+
+	@Override
+	public int hashCode() {
+		// make sure that the hash method is commutable i.e.:
+		// hashCode(x,y) == hashCode(y,x)
+		return _1.hashCode() + _2.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TilePath other = (TilePath) obj;
+		return (_1 == other._1 && _2 == other._2) || (_2 == other._1 && _1 == other._2);
+	}
+
+	@Override
+	public int compareTo(TilePath o) {
+		return Integer.compare(hashCode(), o.hashCode());
+	}
+
+	@Override
+	public String toString() {
+		return "TilePath(" + _1 + ", " + _2 + ")";
+	}
 }

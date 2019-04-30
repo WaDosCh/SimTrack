@@ -18,8 +18,8 @@ import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
+import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.observe.Observer;
 import ch.awae.utils.functional.T2;
@@ -37,13 +37,13 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private EnhancedH2<TileEdgeCoordinate, TileEdgeCoordinate, Float> connectionCache;
+	private EnhancedHashMap2<TileEdgeCoordinate, TileEdgeCoordinate, Float> connectionCache;
 	private Observer modelObserver;
 	private Pathfinder<TileEdgeCoordinate> pathfinder;
 
 	public PathFinding(Model model) {
 		this.model = model;
-		this.connectionCache = new EnhancedH2<>();
+		this.connectionCache = new EnhancedHashMap2<>();
 		this.modelObserver = this.model.createObserver();
 		this.pathfinder = new DijkstraPathfinder<>(this);
 	}
@@ -157,7 +157,7 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 
 	public Stack<TileEdgeCoordinate> randomPathForStart(TileEdgeCoordinate start) {
 		Set<Entry<TileCoordinate, Tile>> destinations = this.model.getTileFiltered(
-				tile -> tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination());
+				tile -> tile instanceof BorderTrackTile && ((BorderTrackTile) tile).isTrainDestination());
 		List<TileEdgeCoordinate> targets = destinations.stream()
 				.map(destination -> this.model.getPaths(destination.getKey()).get(0)._2).collect(Collectors.toList());
 
@@ -180,7 +180,7 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 
 }
 
-class EnhancedH2<K1, K2, V> extends HashMap2<K1, K2, V> {
+class EnhancedHashMap2<K1, K2, V> extends HashMap2<K1, K2, V> {
 	public Set<K2> getInnerKeySet(K1 key) {
 		val map = super.map1.get(key);
 		if (map == null)

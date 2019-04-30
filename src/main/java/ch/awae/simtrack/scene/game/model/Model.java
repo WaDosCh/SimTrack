@@ -27,11 +27,10 @@ import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.position.TilePath;
-import ch.awae.simtrack.scene.game.model.tile.DestinationTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
-import ch.awae.simtrack.scene.game.model.tile.TrackTile;
+import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
+import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.util.observe.Observable;
 import ch.awae.simtrack.util.observe.ObservableHandler;
 import ch.awae.utils.functional.T2;
@@ -47,6 +46,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private int maxS, maxT;
 
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
+	private List<T2<TileCoordinate, BorderTrackTile>> spawners = new ArrayList<>();
+
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
 	private Set<Entity> entities = new HashSet<>();
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
@@ -112,20 +113,13 @@ public class Model implements Serializable, Observable, BaseTicker {
 	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position) {
 		Tile tile = tiles.get(position);
 		if (tile instanceof TrackTile) {
-			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = new ArrayList<>();
 			TrackTile tt = (TrackTile) tile;
-			for (TilePath p : tt.getPaths()) {
-				TileEdgeCoordinate from = new TileEdgeCoordinate(position, p._1);
-				TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
-				float cost = tt.getTravelCost();
+			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = tt.getAllDirectedPaths(position);
+			list = list.stream().filter(x -> {
+				Signal s = signals.get(x._1.getOppositeDirection());
 				// if there is a one-way signal at FROM, then omit the link
-				Signal s = signals.get(from);
-				if (s != null && s.getType() == Type.ONE_WAY)
-					continue;
-				// fill list
-				list.add(new T3<>(from.getOppositeDirection(), to, cost));
-			}
-			// list OK
+				return s == null || s.getType() != Type.ONE_WAY;
+			}).collect(Collectors.toList());
 			return list;
 		} else {
 			return Collections.emptyList();
@@ -133,11 +127,11 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public Set<Entry<TileEdgeCoordinate, Signal>> getSignals() {
-		return signals.entrySet();
+		return this.signals.entrySet();
 	}
 
 	public Signal getSignalAt(TileEdgeCoordinate position) {
-		return signals.get(position);
+		return this.signals.get(position);
 	}
 
 	public boolean setSignalAt(TileEdgeCoordinate position, Signal signal) {
@@ -153,7 +147,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 			return false;
 		// check if signal position is valid
 		Tile tile = tiles.get(position.tile);
-		if (tile == null || (tile instanceof DestinationTrackTile && ((DestinationTrackTile) tile).isTrainDestination())
+		if (tile == null || (tile instanceof BorderTrackTile && ((BorderTrackTile) tile).isTrainDestination())
 				|| !(tile instanceof TrackTile))
 			return false;
 		Signal opponent = getSignalAt(position.getOppositeDirection());
@@ -173,7 +167,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 		TrackTile tile = (TrackTile) raw_tile;
 		if (current == null)
 			throw new IllegalArgumentException("no signal exists");
-		if (tile instanceof DestinationTrackTile)
+		if (tile instanceof BorderTrackTile)
 			throw new IllegalArgumentException("fixed signal on soure");
 		signals.remove(position);
 		notifyChanged();
@@ -185,7 +179,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 			return false;
 		TrackTile tile = (TrackTile) raw_tile;
 		Signal current = signals.get(position);
-		return !(current == null || tile instanceof DestinationTrackTile);
+		return !(current == null || tile instanceof BorderTrackTile);
 	}
 
 	public void load() {
@@ -326,15 +320,6 @@ public class Model implements Serializable, Observable, BaseTicker {
 
 	public boolean isTileReserved(TileCoordinate tile) {
 		return tileReservations.get(tile) != null;
-	}
-
-	public Set<Entry<TileCoordinate, Tile>> getPossibleSpawnPoints() {
-		return this.tiles.entrySet().stream().filter(this::spawnFilter).collect(Collectors.toSet());
-	}
-
-	private boolean spawnFilter(Entry<TileCoordinate, Tile> entry) {
-		return entry.getValue() instanceof DestinationTrackTile
-				&& ((DestinationTrackTile) entry.getValue()).isTrainSpawner() && !isTileReserved(entry.getKey());
 	}
 
 }

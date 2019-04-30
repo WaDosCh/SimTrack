@@ -14,8 +14,8 @@ public class ModelFactory {
 
 	public static Model getDefaultModel() {
 		ModelCreationOptions defaults = new ModelCreationOptions();
-		defaults.size = new Dimension(23, 15);
-		defaults.connectionCount = 15;
+		defaults.size = new Dimension(14, 8);
+		defaults.connectionCount = 3;
 		defaults.startingMoney = 1000;
 		return getModel(defaults);
 	}
