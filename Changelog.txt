@@ -26,7 +26,8 @@ v0.3.2
 	- removing unreserved tracks makes train search a new path
 	- tracks are marked as UpgradeTiles if they are currently reserved
 	- allow screenshots to be taken anywhere with F3
-	- set screenshot jpg quality to 0.95 
+	- set screenshot jpg quality to 0.95
+	- fix trains can spawn even when borderTrackTile is still reserved 
 
 v0.3.1
 	- new input system
