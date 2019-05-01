@@ -1,5 +1,7 @@
 package ch.awae.simtrack.scene.menu;
 
+import java.awt.Dimension;
+
 import ch.awae.simtrack.core.Scene;
 import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.Window;
@@ -45,6 +47,11 @@ public class Menu extends Scene {
 	@Override
 	public void handleInput(InputEvent event) {
 		this.ui.handleInput(event);
+	}
+	
+	@Override
+	public void screenResized(Dimension size) {
+		this.ui.layout(0, 0, size.width, size.height);
 	}
 
 }

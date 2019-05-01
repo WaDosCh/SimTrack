@@ -87,6 +87,7 @@ public class Game extends Scene {
 	@Override
 	public void screenResized(Dimension screenSize) {
 		this.viewPortNavigator.setScreenSize(screenSize);
+		this.ui.layout(0, 0, screenSize.width, screenSize.height);
 	}
 
 	@Override

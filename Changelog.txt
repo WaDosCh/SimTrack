@@ -19,6 +19,7 @@ v0.3.2
 	- construction only possible if budget >= cost
 	- removing tracks has a cost
 	- add bounty when train reaches destination
+	- resize DesktopComponents when ui size is changed (newly open windows are centered again)
 
 v0.3.1
 	- new input system
