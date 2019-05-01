@@ -5,9 +5,7 @@ import java.io.Serializable;
 import ch.awae.simtrack.core.BaseTicker;
 
 /**
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-23
- * @since SimTrack 0.2.1
+ * any moving object on the map is an entity
  */
 public interface Entity extends Serializable, BaseTicker {
 

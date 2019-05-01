@@ -1,10 +1,10 @@
-package ch.awae.simtrack.scene.game.model;
+package ch.awae.simtrack.scene.game.controller;
 
 import java.util.Random;
 
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.BasicFixedTile;
-import ch.awae.simtrack.scene.game.model.tile.TileType;
+import ch.awae.simtrack.scene.game.model.tile.EnvironmentTile;
 
 public class ObstacleSpawner {
 
@@ -18,7 +18,7 @@ public class ObstacleSpawner {
 
 			TileCoordinate tileCoordinate = new TileCoordinate(u - (v / 2), v);
 
-			model.setTileAt(tileCoordinate, BasicFixedTile.getInstance(TileType.WATER));
+			model.setTileAt(tileCoordinate, EnvironmentTile.WATER_TILE);
 		}
 	}
 }

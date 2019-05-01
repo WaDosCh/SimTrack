@@ -1,5 +1,8 @@
 package ch.awae.simtrack.scene.game.model;
 
+import ch.awae.simtrack.scene.game.controller.ConnectionSpawner;
+import ch.awae.simtrack.scene.game.controller.ObstacleSpawner;
+
 public class ModelFactory {
 
 	public static Model getModel(ModelCreationOptions options) {

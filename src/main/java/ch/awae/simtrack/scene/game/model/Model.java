@@ -29,8 +29,10 @@ import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
+import ch.awae.simtrack.scene.game.model.tile.BulldozeTile;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
+import ch.awae.simtrack.scene.game.model.tile.UpgradeTile;
 import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.util.observe.Observable;
@@ -88,8 +90,13 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public void setTileAt(TileCoordinate position, Tile tile) {
-		if (this.tiles.containsKey(position))
+		Tile oldTile = this.tiles.get(position);
+		if (oldTile != null && !(oldTile instanceof BulldozeTile))
 			return;
+		if (oldTile instanceof BulldozeTile && tile instanceof TrackTile) {
+			oldTile = ((BulldozeTile) oldTile).getTile();
+			tile = new UpgradeTile(oldTile, (TrackTile) tile);
+		}
 		this.tiles.put(position, tile);
 		notifyChanged();
 	}
@@ -106,6 +113,14 @@ public class Model implements Serializable, Observable, BaseTicker {
 		Tile tile = this.tiles.get(position);
 		if (tile == null || tile instanceof FixedTile)
 			throw new IllegalArgumentException();
+
+		// if tile is still reserved replace it with a BulldozeTile
+		if (this.tileReservations.get(position) != null) {
+			this.tiles.put(position, new BulldozeTile(tile));
+			notifyChanged();
+			return;
+		}
+
 		this.tiles.remove(position);
 		// remove any signals
 		for (Edge e : Edge.values()) {
@@ -164,17 +179,14 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public void removeSignalAt(TileEdgeCoordinate position) {
-		Signal current = signals.get(position);
 		Tile raw_tile = tiles.get(position.tile);
 		if (!(raw_tile instanceof TrackTile))
 			throw new IllegalArgumentException("illegal tile");
 		TrackTile tile = (TrackTile) raw_tile;
-		if (current == null)
-			throw new IllegalArgumentException("no signal exists");
 		if (tile instanceof BorderTrackTile)
 			throw new IllegalArgumentException("fixed signal on soure");
-		signals.remove(position);
-		notifyChanged();
+		if (signals.remove(position) != null)
+			notifyChanged();
 	}
 
 	public boolean canRemoveSignalAt(TileEdgeCoordinate position) {
@@ -227,25 +239,37 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	/**
-	 * Releases a tile currently owned by a given train
+	 * Releases a tile
 	 * 
-	 * @param train the train that currently owns the tile
+	 * @param entity the entity that wants to release the tile
 	 * @param coordinate the tile to be released
-	 * @throws IllegalArgumentException the tile is owned by another train
+	 * @throws IllegalArgumentException the tile is not owned by the given entity
 	 */
-	public void releaseTile(@NonNull Train train, @NonNull TileCoordinate coordinate) {
+	public void releaseTile(@NonNull Entity entity, @NonNull TileCoordinate coordinate) {
 		synchronized (tileReservations) {
 			T2<Train, Integer> current = tileReservations.get(coordinate);
 			if (current == null)
-				logger.warn(train + " tried to release an unreserved tile! " + coordinate.u + "|" + coordinate.v + "]");
-			else if (!current._1.equals(train)) {
-				logger.error(train + " tried to release a tile it does not own!");
+				logger.warn(
+						entity + " tried to release an unreserved tile! " + coordinate.u + "|" + coordinate.v + "]");
+			else if (!current._1.equals(entity)) {
+				logger.error(entity + " tried to release a tile it does not own!");
 				throw new IllegalArgumentException("tile ownership mismatch");
 			} else if (current._2 == 1) {
-				logger.debug(train + " released tile [" + coordinate.u + "|" + coordinate.v + "]");
+				logger.debug(entity + " released tile [" + coordinate.u + "|" + coordinate.v + "]");
 				tileReservations.remove(coordinate);
+				Tile tile = this.tiles.get(coordinate);
+				if (tile instanceof BulldozeTile) {
+					this.tiles.remove(coordinate);
+					for (Edge e : Edge.values())
+						this.signals.remove(coordinate.getEdge(e));
+					notifyChanged();
+				} else if (tile instanceof UpgradeTile) {
+					this.tiles.put(coordinate, ((UpgradeTile) tile).getToBeBuilt());
+					notifyChanged();
+				}
+
 			} else {
-				logger.debug(train + " partially released tile [" + coordinate.u + "|" + coordinate.v + "]");
+				logger.debug(entity + " partially released tile [" + coordinate.u + "|" + coordinate.v + "]");
 				tileReservations.put(coordinate, new T2<Train, Integer>(current._1, current._2 - 1));
 			}
 		}
@@ -256,7 +280,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 	 * 
 	 * @param train the train that wishes to reserve a bunch of tiles
 	 * @param path a sequence of tiles to be reserved
-	 * @return the number of tiles that have been reserved (may be 0)
+	 * @return the number of tiles that have been reserved (may be 0)<br>
+	 *         might return -1 when the route has become invalid due to missing tracks
 	 * @throws IllegalArgumentException a tile in the path is no track tile
 	 */
 	public int reserveTiles(@NonNull Train train, @NonNull List<TileEdgeCoordinate> path) {
@@ -269,8 +294,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 				TileCoordinate coord = edge.tile;
 				Tile tile = tiles.get(coord);
 				if (!(tile instanceof TrackTile)) {
-					logger.error("path element " + edge + " references an invalid tile: " + tile);
-					throw new IllegalArgumentException("path element " + edge + " references an invalid tile: " + tile);
+					logger.warn("path element " + edge + " references an invalid tile: " + tile);
+					return -1;
 				}
 				if (tileReservations.get(coord) != null) {
 					if (!tileReservations.get(coord)._1.equals(train))

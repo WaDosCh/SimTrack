@@ -22,6 +22,9 @@ v0.3.2
 	- resize DesktopComponents when ui size is changed (newly open windows are centered again)
 	- inputFields support entering numbers only
 	- added create-custom-game view
+	- removing reserved tracks happens only after reservation is released
+	- removing unreserved tracks makes train search a new path
+	- tracks are marked as UpgradeTiles if they are currently reserved
 
 v0.3.1
 	- new input system

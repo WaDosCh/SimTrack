@@ -125,7 +125,7 @@ public class BuildTool extends GameTool {
 		Tile tile = model.getTileAt(mouseTile);
 		if (this.track.getBuildCost() > this.model.playerMoney)
 			return false;
-		
+
 		if (tile == null)
 			return true;
 		if (tile instanceof FixedTile)
@@ -172,17 +172,15 @@ public class BuildTool extends GameTool {
 	 */
 	private void place() {
 		if (canPlace()) {
-			if (input.getMousePosition().y < this.viewPort.getScreenSize().height) {
-				if (model.getTileAt(mouseTile) == null) {
-					model.setTileAt(mouseTile, track.getNormalTrackTile());
-					model.playerMoney -= track.getBuildCost();
-				} else {
-					TrackTile oldTile = (TrackTile) model.getTileAt(mouseTile);
-					model.removeTileAt(mouseTile);
-					TrackTile fusedTrack = oldTile.fuseWith(this.track);
-					model.playerMoney -= this.track.getBuildCost();
-					model.setTileAt(mouseTile, fusedTrack);
-				}
+			if (model.getTileAt(mouseTile) == null) {
+				model.setTileAt(mouseTile, track.getNormalTrackTile());
+				model.playerMoney -= track.getBuildCost();
+			} else {
+				TrackTile oldTile = (TrackTile) model.getTileAt(mouseTile);
+				model.removeTileAt(mouseTile);
+				TrackTile fusedTrack = oldTile.fuseWith(this.track);
+				model.playerMoney -= this.track.getBuildCost();
+				model.setTileAt(mouseTile, fusedTrack);
 			}
 		}
 	}

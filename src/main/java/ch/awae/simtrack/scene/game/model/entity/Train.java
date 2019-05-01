@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.PathFindingOptions;
+import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
@@ -71,7 +72,7 @@ public class Train implements Entity {
 		this.speed = 5;
 		this.id = idCounter++;
 
-		setStartingPosition(model, start, pathFindingOptions);
+		setStartingPosition(start, pathFindingOptions);
 		addStarterHistory();
 
 		// TODO: add moooarr power
@@ -81,9 +82,6 @@ public class Train implements Entity {
 		}
 	}
 	
-	/**
-	 * @return
-	 */
 	private double getAccelerationPerSecond() {
 		//TODO: implement value based on power of locomotives and weight of wagons
 		return 0.5;
@@ -97,7 +95,7 @@ public class Train implements Entity {
 		return Math.pow(this.speed, 2) / (2*this.getAccelerationPerSecond());
 	}
 
-	private void setStartingPosition(Model model, TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
+	private void setStartingPosition(TileEdgeCoordinate start, PathFindingOptions pathFindingOptions) {
 		this.currentTileTargetEdge = start;
 		this.pathFindingOptions = pathFindingOptions;
 		this.currentTilePath = new TilePathCoordinate(start.tile,
@@ -130,7 +128,7 @@ public class Train implements Entity {
 	public void tick() {
 		if (this.path == null && this.pathFindingOptions != null) {
 			if (this.pathFindingOptions.searchAgainInTicks == 0) {
-				searchPath(this.model);
+				searchPath();
 			}
 			if (this.pathFindingOptions.searchAgainInTicks == -300) {
 				logger.info(this + " path request is starving...");
@@ -146,7 +144,7 @@ public class Train implements Entity {
 		// this.speed = MathJS.clamp(this.amountOfTilesAheadReserved, 2, 6);
 
 		if (this.currentTilePath == null) {
-			if (!createNextTilePath(this.model))
+			if (!createNextTilePath())
 				return;
 		}
 
@@ -154,7 +152,7 @@ public class Train implements Entity {
 		if (this.progressedDistance >= this.currentTilePath.getPathLength()) {
 			if (this.path.size() > 0) {
 				double length = this.currentTilePath.getPathLength();
-				if (createNextTilePath(this.model)) {
+				if (createNextTilePath()) {
 					this.progressedDistance -= length;
 				} else {
 					this.progressedDistance = length;
@@ -180,12 +178,17 @@ public class Train implements Entity {
 	}
 
 	/**
-	 * @param model
 	 * @return true if the train can enter a new tile
 	 */
-	private boolean createNextTilePath(Model model) {
+	private boolean createNextTilePath() {
 		if (this.amountOfTilesAheadReserved == 0) {
 			this.amountOfTilesAheadReserved = model.reserveTiles(this, this.path);
+			// invalid path, when tracks are removed
+			if (this.amountOfTilesAheadReserved == -1) {
+				this.path = null;
+				this.pathFindingOptions = new PathFindingOptions(Type.RandomTarget);
+				this.amountOfTilesAheadReserved = 0;
+			}
 			if (this.amountOfTilesAheadReserved == 0)
 				return false;
 		}
@@ -226,7 +229,7 @@ public class Train implements Entity {
 		return null;
 	}
 
-	private void searchPath(Model model) {
+	private void searchPath() {
 		PathFindingRequest request = new PathFindingRequest(this, this.currentTileTargetEdge, null,
 				this.pathFindingOptions, (path) -> {
 					this.path = path;

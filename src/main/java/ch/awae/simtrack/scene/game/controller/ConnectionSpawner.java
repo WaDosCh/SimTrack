@@ -1,8 +1,9 @@
-package ch.awae.simtrack.scene.game.model;
+package ch.awae.simtrack.scene.game.controller;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
 import ch.awae.simtrack.scene.game.model.position.Edge;
@@ -17,7 +18,7 @@ import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
  * @version 2.1, 2015-01-23
  * @since SimTrack 0.2.1
  */
-class ConnectionSpawner {
+public class ConnectionSpawner {
 
 	private static Random RAND = new Random();
 

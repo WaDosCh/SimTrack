@@ -34,7 +34,7 @@ public class Graphics extends Graphics2D {
 			clip = null;
 		}
 
-		public PrivateGraphicsStack prep(AffineTransform T, Stroke stroke, Color color, Font font, Shape clip) {
+		public PrivateGraphicsStack prepend(AffineTransform T, Stroke stroke, Color color, Font font, Shape clip) {
 			return new PrivateGraphicsStack(T, stroke, color, font, clip, this);
 		}
 	}
@@ -56,7 +56,7 @@ public class Graphics extends Graphics2D {
 	}
 
 	public void push() {
-		stack = stack.prep(backer.getTransform(), backer.getStroke(), backer.getColor(), backer.getFont(),
+		stack = stack.prepend(backer.getTransform(), backer.getStroke(), backer.getColor(), backer.getFont(),
 				backer.getClip());
 	}
 

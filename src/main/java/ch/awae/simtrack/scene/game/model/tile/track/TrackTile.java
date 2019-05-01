@@ -5,12 +5,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TilePath;
 import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
-import ch.awae.simtrack.scene.game.model.tile.TileType;
+import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
 
 public class TrackTile implements Tile {
 
@@ -27,11 +28,6 @@ public class TrackTile implements Tile {
 	public TrackTile(TilePath... paths) {
 		Arrays.sort(paths);
 		this.paths = paths;
-	}
-
-	@Override
-	public TileType getType() {
-		return TileType.TRACK;
 	}
 
 	public boolean connectsAt(Edge edge) {
@@ -103,6 +99,11 @@ public class TrackTile implements Tile {
 		}
 		String st = str.toString();
 		return st.substring(0, st.length() - 3) + ")";
+	}
+
+	@Override
+	public void render(TileRenderer renderer, Graphics graphics) {
+		renderer.renderTrack(graphics, this);
 	}
 
 }
