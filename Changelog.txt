@@ -20,6 +20,8 @@ v0.3.2
 	- removing tracks has a cost
 	- add bounty when train reaches destination
 	- resize DesktopComponents when ui size is changed (newly open windows are centered again)
+	- inputFields support entering numbers only
+	- added create-custom-game view
 
 v0.3.1
 	- new input system

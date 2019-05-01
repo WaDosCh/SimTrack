@@ -8,6 +8,7 @@ import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.DesktopComponent;
+import ch.awae.simtrack.core.ui.WindowComponent;
 
 public class Menu extends Scene {
 
@@ -31,13 +32,23 @@ public class Menu extends Scene {
 		MainMenuView mainMenu = new MainMenuView(this.input, this.sceneController);
 		mainMenu.onClose = (cmd) -> {
 			if (MainMenuView.CLOSE_ACTION_LOAD.equals(cmd))
-				openLoadMenu();
+				openLoadView();
+			if (MainMenuView.CLOSE_ACTION_NEW_CUSTOM_GAME.equals(cmd))
+				openNewCustomGameView();
 		};
 		this.ui.addWindow(mainMenu);
 	}
 
-	private void openLoadMenu() {
-		MenuLoadView loadMenu = new MenuLoadView(this.sceneController, this.input, this.ui);
+	private void openNewCustomGameView() {
+		WindowComponent customGame = new CustomNewGameView(this.sceneController, this.input);
+		customGame.onClose = (cmd) -> {
+			openMainMenu();
+		};
+		this.ui.addWindow(customGame);
+	}
+
+	private void openLoadView() {
+		WindowComponent loadMenu = new MenuLoadView(this.sceneController, this.input, this.ui);
 		loadMenu.onClose = (cmd) -> {
 			openMainMenu();
 		};

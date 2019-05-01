@@ -1,7 +1,5 @@
 package ch.awae.simtrack.scene.game.model;
 
-import java.awt.Dimension;
-
 public class ModelFactory {
 
 	public static Model getModel(ModelCreationOptions options) {
@@ -13,12 +11,7 @@ public class ModelFactory {
 	}
 
 	public static Model getDefaultModel() {
-		ModelCreationOptions defaults = new ModelCreationOptions();
-		defaults.size = new Dimension(14, 8);
-		defaults.connectionCount = 3;
-		defaults.startingMoney = 1000;
-		defaults.bulldozeCost = 4;
-		return getModel(defaults);
+		return getModel(new ModelCreationOptions());
 	}
 
 }

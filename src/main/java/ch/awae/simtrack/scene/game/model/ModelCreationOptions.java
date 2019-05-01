@@ -8,4 +8,11 @@ public class ModelCreationOptions {
 	public int connectionCount;
 	public int startingMoney;
 	public int bulldozeCost;
+	
+	public ModelCreationOptions() {
+		this.size = new Dimension(20, 14);
+		this.connectionCount = 10;
+		this.startingMoney = 50;
+		this.bulldozeCost = 4;
+	}
 }

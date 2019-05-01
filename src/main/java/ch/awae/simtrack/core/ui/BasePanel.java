@@ -30,12 +30,15 @@ public class BasePanel extends BaseComponent {
 		this.components = new ArrayList<>();
 	}
 
-	public void setVertical(boolean isVertical) {
+	public BasePanel setVertical(boolean isVertical) {
 		this.isVertical = isVertical;
+		return this;
 	}
 
-	public void add(Component component) {
-		this.components.add(component);
+	public BasePanel add(Component... components) {
+		for (Component component : components)
+			this.components.add(component);
+		return this;
 	}
 
 	@Override

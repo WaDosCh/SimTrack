@@ -7,6 +7,12 @@ import ch.judos.generic.data.StringUtils;
 import lombok.Getter;
 
 public class TextEditing implements InputHandler {
+	
+	private static final String ALL_TEXT_REGEX = ".";
+	private static final String FILE_SAVE_REGEX = "[a-zA-Z0-9-_ +,.&!]";
+	private static final String NUMBERS_ONLY_REGEX = "[0-9]";
+	
+	public String allowedCharactersRegex = ALL_TEXT_REGEX;
 
 	private @Getter String text;
 	private @Getter int cursor;
@@ -16,6 +22,10 @@ public class TextEditing implements InputHandler {
 	public TextEditing(String text) {
 		this.text = text;
 		this.cursor = text.length();
+	}
+	
+	public void setNumbersOnly() {
+		this.allowedCharactersRegex = NUMBERS_ONLY_REGEX;
 	}
 
 	@Override
@@ -43,7 +53,7 @@ public class TextEditing implements InputHandler {
 			this.cursor = 0;
 		} else if (event.isPressActionAndConsume(InputAction.END)) {
 			this.cursor = this.text.length();
-		} else if (event.getText().matches("[a-zA-Z0-9-_ +,.&!]")) {
+		} else if (event.getText().matches(this.allowedCharactersRegex)) {
 			this.text = StringUtils.substr(this.text, 0, this.cursor) + event.getText()
 					+ StringUtils.substr(this.text, this.cursor);
 			this.cursor++;
@@ -69,6 +79,11 @@ public class TextEditing implements InputHandler {
 			return StringUtils.substr(this.text, 0, this.cursor) + "|" + StringUtils.substr(this.text, this.cursor);
 		}
 		return StringUtils.substr(this.text, 0, this.cursor) + " " + StringUtils.substr(this.text, this.cursor);
+	}
+
+	public void setText(String text) {
+		this.text = text;
+		this.cursor = this.text.length();
 	}
 
 }

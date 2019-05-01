@@ -30,6 +30,11 @@ public class InputField extends Label {
 		this.expectedLength = expectedLength;
 		this.focused = false;
 	}
+	
+	public InputField setNumbersOnly() {
+		this.text.setNumbersOnly();
+		return this;
+	}
 
 	@Override
 	public void unfocus() {
@@ -91,6 +96,18 @@ public class InputField extends Label {
 
 	public String getText() {
 		return this.text.getText();
+	}
+	
+	public int getNumber() {
+		return Integer.valueOf(getText());
+	}
+	
+	public void setText(String text) {
+		this.text.setText(text);
+	}
+	
+	public void setText(int number) {
+		this.text.setText(""+number);
 	}
 
 }
