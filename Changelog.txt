@@ -16,6 +16,7 @@ v0.3.2
 	- reuse loadGame dialog ingame as window
 	- fix selecting build tool shows track shortly at a wrong position (last position when build tool was selected)
 	- add track costs and subtract when player builds something
+	- construction only possible if budget >= cost
 
 v0.3.1
 	- new input system

@@ -119,12 +119,13 @@ public class BuildTool extends GameTool {
 	private boolean canPlace() {
 		if (mouseTile == null)
 			return false;
-		// in range?
 		if (!model.isOnMap(mouseTile))
 			return false;
 
-		// compatible?
 		Tile tile = model.getTileAt(mouseTile);
+		if (this.track.getBuildCost() > this.model.playerMoney)
+			return false;
+		
 		if (tile == null)
 			return true;
 		if (tile instanceof FixedTile)
