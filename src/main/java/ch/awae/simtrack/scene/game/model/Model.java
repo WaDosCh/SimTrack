@@ -55,6 +55,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private Set<Entity> toBeRemoved = new HashSet<>();
 
 	public int playerMoney;
+	private @Getter int bulldozeCost;
+
 	private @Getter GameClock clock = new GameClock();
 	private @Getter LinkedList<PathFindingRequest> pathFindingQueue = new LinkedList<>();
 	private @Getter AtomicBoolean isPaused = new AtomicBoolean(false);
@@ -64,10 +66,11 @@ public class Model implements Serializable, Observable, BaseTicker {
 
 	private @Getter transient ObservableHandler observableHandler;
 
-	Model(Dimension size, int startingMoney) {
+	Model(Dimension size, int startingMoney, int bulldozeCost) {
 		this.sizeX = size.width;
 		this.sizeY = size.height;
 		this.playerMoney = startingMoney;
+		this.bulldozeCost = bulldozeCost;
 		this.maxS = (int) (this.sizeX * new TileCoordinate(1, 0).toSceneCoordinate().s);
 		this.maxT = (int) (this.sizeY * new TileCoordinate(0, 1).toSceneCoordinate().t);
 	}

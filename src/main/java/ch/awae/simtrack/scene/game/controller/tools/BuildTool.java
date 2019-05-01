@@ -113,7 +113,7 @@ public class BuildTool extends GameTool {
 	}
 
 	private void checkValid() {
-		this.valid = this.isBulldozeTool ? canDelete() : canPlace();
+		this.valid = this.isBulldozeTool ? canBulldoze() : canPlace();
 	}
 
 	private boolean canPlace() {
@@ -147,19 +147,22 @@ public class BuildTool extends GameTool {
 	 * @param m the model to check in
 	 * @return {@code true} if and only if the given position in the given model contains a tile and it can be deleted.
 	 */
-	private boolean canDelete() {
-		if (mouseTile == null)
+	private boolean canBulldoze() {
+		if (this.mouseTile == null)
 			return false;
-		Tile t = model.getTileAt(mouseTile);
+		Tile t = this.model.getTileAt(this.mouseTile);
 		if (t == null || t instanceof FixedTile)
+			return false;
+		if (this.model.playerMoney < this.model.getBulldozeCost())
 			return false;
 		return true;
 	}
 
 	private void bulldoze() {
-		if (canDelete()) {
+		if (canBulldoze()) {
 			if (input.getMousePosition().y < this.viewPort.getScreenSize().height) {
-				model.removeTileAt(mouseTile);
+				this.model.removeTileAt(this.mouseTile);
+				this.model.playerMoney -= this.model.getBulldozeCost();
 			}
 		}
 	}

@@ -7,4 +7,5 @@ public class ModelCreationOptions {
 	public Dimension size;
 	public int connectionCount;
 	public int startingMoney;
+	public int bulldozeCost;
 }

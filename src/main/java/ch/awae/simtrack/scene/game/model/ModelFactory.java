@@ -5,7 +5,7 @@ import java.awt.Dimension;
 public class ModelFactory {
 
 	public static Model getModel(ModelCreationOptions options) {
-		Model model = new Model(options.size, options.startingMoney);
+		Model model = new Model(options.size, options.startingMoney, options.bulldozeCost);
 		ConnectionSpawner.spawnConnections(model, options.connectionCount);
 		int obstacleCount = options.size.width * options.size.height / 10;
 		ObstacleSpawner.spawnObstacles(model, obstacleCount);
@@ -17,6 +17,7 @@ public class ModelFactory {
 		defaults.size = new Dimension(14, 8);
 		defaults.connectionCount = 3;
 		defaults.startingMoney = 1000;
+		defaults.bulldozeCost = 4;
 		return getModel(defaults);
 	}
 
