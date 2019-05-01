@@ -1,6 +1,5 @@
 package ch.awae.simtrack.scene.game.model.entity;
 
-import java.util.List;
 import java.util.Stack;
 
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +16,7 @@ import ch.awae.simtrack.scene.game.model.position.TilePath;
 import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.judos.generic.data.DynamicList;
 import ch.judos.generic.data.RandomJS;
+import lombok.Getter;
 
 public class Train implements Entity {
 
@@ -47,10 +47,10 @@ public class Train implements Entity {
 	 */
 	private TileEdgeCoordinate currentTileTargetEdge;
 	private TilePathCoordinate currentTilePath;
-	private DynamicList<TrainElementConfiguration> trainElements;
+	private @Getter DynamicList<TrainElementConfiguration> trainElements;
 	private DynamicList<TilePathCoordinate> reservedTiles;
 
-	private int id;
+	private @Getter int id;
 	private static int idCounter = 1;
 
 	/**
@@ -59,10 +59,12 @@ public class Train implements Entity {
 	 */
 	private int amountOfTilesAheadReserved;
 	private Model model;
+	private @Getter int destinationReachedBounty;
 
 	public Train(Model model, TileEdgeCoordinate start, PathFindingOptions pathFindingOptions,
 			TrainElementConfiguration firstElement) {
 		this.model = model;
+		this.destinationReachedBounty = 5;
 		this.trainElements = new DynamicList<>(firstElement);
 		this.reservedTiles = new DynamicList<>();
 		this.amountOfTilesAheadReserved = 0;
@@ -120,14 +122,6 @@ public class Train implements Entity {
 		return "Train" + this.id;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public List<TrainElementConfiguration> getElements() {
-		return this.trainElements;
-	}
-
 	public int getTrainLength() {
 		return this.trainElements.stream().mapToInt(element -> element.getLength()).sum();
 	}
@@ -169,6 +163,7 @@ public class Train implements Entity {
 				this.path = null;
 				logger.info(this + " has reached its destination");
 				this.model.removeEntity(this);
+				this.model.playerMoney += this.destinationReachedBounty;
 				this.reservedTiles.clear();
 			}
 		}

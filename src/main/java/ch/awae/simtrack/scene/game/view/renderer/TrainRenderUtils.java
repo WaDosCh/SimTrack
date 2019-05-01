@@ -35,7 +35,7 @@ public class TrainRenderUtils {
 	}
 
 	private static void drawImage(Graphics g2, Train train) {
-		List<TrainElementConfiguration> elements = train.getElements();
+		List<TrainElementConfiguration> elements = train.getTrainElements();
 		double offset = 0;
 		for (TrainElementConfiguration element : elements) {
 			SceneCoordinate axis1Pos = train.getPositionWithOffset(offset + element.getFirstAxle());
