@@ -2,6 +2,7 @@ package ch.awae.simtrack.scene.game.model;
 
 import java.awt.Dimension;
 import java.io.Serializable;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
@@ -34,7 +36,6 @@ import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.util.observe.Observable;
 import ch.awae.simtrack.util.observe.ObservableHandler;
 import ch.awae.utils.functional.T2;
-import ch.awae.utils.functional.T3;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -110,13 +111,13 @@ public class Model implements Serializable, Observable, BaseTicker {
 		notifyChanged();
 	}
 
-	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getPaths(TileCoordinate position) {
+	public List<TilePathCoordinate> getPaths(TileCoordinate position) {
 		Tile tile = tiles.get(position);
 		if (tile instanceof TrackTile) {
 			TrackTile tt = (TrackTile) tile;
-			List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> list = tt.getAllDirectedPaths(position);
+			List<TilePathCoordinate> list = tt.getAllDirectedPaths(position);
 			list = list.stream().filter(x -> {
-				Signal s = signals.get(x._1.getOppositeDirection());
+				Signal s = signals.get(x.getFrom());
 				// if there is a one-way signal at FROM, then omit the link
 				return s == null || s.getType() != Type.ONE_WAY;
 			}).collect(Collectors.toList());
@@ -200,6 +201,18 @@ public class Model implements Serializable, Observable, BaseTicker {
 
 	public Set<Entry<TileCoordinate, Tile>> getTileFiltered(Function<Tile, Boolean> filter) {
 		return this.tiles.entrySet().stream().filter(entry -> filter.apply(entry.getValue()))
+				.collect(Collectors.toSet());
+	}
+
+	public <T extends Tile> Set<Entry<TileCoordinate, T>> getTileFiltered(Class<T> clazz) {
+		return getTileFiltered(clazz, (t) -> true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Tile> Set<Entry<TileCoordinate, T>> getTileFiltered(Class<T> clazz, Function<T, Boolean> filter) {
+		return this.tiles.entrySet().stream().filter(tile -> {
+			return clazz.isInstance(tile.getValue()) && filter.apply((T) tile.getValue());
+		}).map(tile -> new SimpleEntry<TileCoordinate, T>(tile.getKey(), (T) tile.getValue()))
 				.collect(Collectors.toSet());
 	}
 

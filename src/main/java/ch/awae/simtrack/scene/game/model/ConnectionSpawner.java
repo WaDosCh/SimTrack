@@ -67,10 +67,10 @@ class ConnectionSpawner {
 			TileCoordinate pos = new TileCoordinate(u, v);
 			if (!list.contains(pos)) {
 				boolean output = RAND.nextBoolean();
-				BorderTrackTile tile = new BorderTrackTile(Edge.byIndex(edge), output);
+				BorderTrackTile tile = new BorderTrackTile(Edge.byOrdinal(edge), output);
 				model.setTileAt(pos, tile);
 				if (!output) {
-					TileEdgeCoordinate tec = new TileEdgeCoordinate(pos, Edge.byIndex(edge));
+					TileEdgeCoordinate tec = new TileEdgeCoordinate(pos, Edge.byOrdinal(edge));
 					Signal signal = new Signal(tec, Type.ONE_WAY);
 					model.setSignalAt(tec, signal);
 				}

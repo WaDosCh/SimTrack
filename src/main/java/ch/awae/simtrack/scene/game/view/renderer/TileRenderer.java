@@ -112,7 +112,7 @@ public class TileRenderer implements Renderer {
 		TrackRenderUtil.renderRails(g2, bedColour, railColour, tile.getPaths());
 		if (tile instanceof BorderTrackTile) {
 			BorderTrackTile dest = (BorderTrackTile) tile;
-			g2.rotate(Math.PI / 3 * tile.getPaths()[0]._1.ordinal());
+			g2.rotate(Math.PI / 3 * tile.getPaths()[0].edge1.ordinal());
 			g2.setColor(railColour);
 			g2.setStroke(arrowStroke);
 			g2.translate(30, 0);

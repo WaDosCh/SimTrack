@@ -7,12 +7,10 @@ import java.util.List;
 
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TilePath;
+import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.TileType;
-import ch.awae.utils.functional.T3;
-import lombok.Getter;
 
 public class TrackTile implements Tile {
 
@@ -81,15 +79,11 @@ public class TrackTile implements Tile {
 		return true;
 	}
 
-	// XXX: change return type to use TilePathCoordinate (also includes path length, so T3 not needed)
-	public List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> getAllDirectedPaths(TileCoordinate position) {
-		List<T3<TileEdgeCoordinate, TileEdgeCoordinate, Float>> result = new ArrayList<>();
+	public List<TilePathCoordinate> getAllDirectedPaths(TileCoordinate position) {
+		List<TilePathCoordinate> result = new ArrayList<>();
 		for (TilePath p : this.paths) {
-			TileEdgeCoordinate from = new TileEdgeCoordinate(position, p._1);
-			TileEdgeCoordinate to = new TileEdgeCoordinate(position, p._2);
-			float cost = (float) p.getPathLength();
-			result.add(new T3<>(from.getOppositeDirection(), to, cost));
-			result.add(new T3<>(to.getOppositeDirection(), from, cost));
+			result.add(new TilePathCoordinate(position, p));
+			result.add(new TilePathCoordinate(position, p.reversed()));
 		}
 		return result;
 	}
@@ -105,7 +99,7 @@ public class TrackTile implements Tile {
 	public String toString() {
 		StringBuffer str = new StringBuffer("TrackTile(");
 		for (TilePath p : this.paths) {
-			str.append(p._1 + ", " + p._2 + " / ");
+			str.append(p.edge1 + ", " + p.edge2 + " / ");
 		}
 		String st = str.toString();
 		return st.substring(0, st.length() - 3) + ")";

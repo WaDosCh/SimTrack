@@ -28,5 +28,13 @@ public class TilePathCoordinate implements Serializable {
 	public double getPathLength() {
 		return this.path.getPathLength();
 	}
+	
+	public TileEdgeCoordinate getFrom() {
+		return new TileEdgeCoordinate(this.tile, this.path.edge1);
+	}
+	
+	public TileEdgeCoordinate getTo() {
+		return new TileEdgeCoordinate(this.tile, this.path.edge2);
+	}
 
 }

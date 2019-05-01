@@ -24,7 +24,7 @@ public class ConstructionTrackTile extends TrackTile {
 	public ConstructionTrackTile rotated(boolean clockwise) {
 		TilePath[] links = new TilePath[this.paths.length];
 		for (int i = 0; i < this.paths.length; i++) {
-			links[i] = new TilePath(this.paths[i]._1.getNeighbour(clockwise), this.paths[i]._2.getNeighbour(clockwise));
+			links[i] = new TilePath(this.paths[i].edge1.getNeighbour(clockwise), this.paths[i].edge2.getNeighbour(clockwise));
 		}
 		return new ConstructionTrackTile(links, this.baseEdge.getNeighbour(clockwise), this.buildCost);
 	}

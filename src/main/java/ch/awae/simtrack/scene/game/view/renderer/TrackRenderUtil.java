@@ -79,20 +79,15 @@ public class TrackRenderUtil {
 
 	/**
 	 * renders a given rail connection network
-	 * 
-	 * @param g
-	 * @param sleepers
-	 * @param rails
-	 * @param network
 	 */
-	public static void renderRails(Graphics2D g, Color sleepers, Color rails, TilePath[] network) {
+	public static void renderRails(Graphics2D g, Color sleepers, Color railColor, TilePath[] paths) {
 		g.setStroke(railStroke);
 		AffineTransform Tx = g.getTransform();
 		for (int pass = 0; pass < 2; pass++) {
-			g.setColor(pass == 0 ? sleepers : rails);
-			for (int i = 0; i < network.length; i++) {
-				g.rotate(Math.PI / 3 * network[i]._1.ordinal());
-				switch ((network[i]._2.ordinal() - network[i]._1.ordinal() + 6) % 6) {
+			g.setColor(pass == 0 ? sleepers : railColor);
+			for (TilePath path : paths) {
+				g.rotate(Math.PI / 3 * path.edge1.ordinal());
+				switch ((path.edge2.ordinal() - path.edge1.ordinal() + 6) % 6) {
 					case 4:
 						if (pass == 0)
 							TrackRenderUtil.renderCurvedRailbed(g);

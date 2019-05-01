@@ -8,18 +8,17 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 
 	private static final long serialVersionUID = 9173421190168686602L;
 
-	// XXX: rename to edge1, edge2
-	public final Edge _1, _2;
+	public final Edge edge1, edge2;
 
 	public TilePath(Edge edge1, Edge edge2) {
 		if (edge1.isNeighbour(edge2))
 			throw new RuntimeException("Invalid tilePath from " + edge1 + " to " + edge2);
-		this._1 = edge1;
-		this._2 = edge2;
+		this.edge1 = edge1;
+		this.edge2 = edge2;
 	}
 
 	public double getPathLength() {
-		if (_1.getOpposite() == _2)
+		if (edge1.getOpposite() == edge2)
 			return 100;
 
 		// radius of the circle to draw a curved rail
@@ -49,35 +48,35 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		// position
 		PointD point = start.add(delta);
 		// consider actual direction of path and rotate start,delta vectors
-		point.rotate(_1.getAngleIn());
+		point.rotate(edge1.getAngleIn());
 		return new SceneCoordinate(point.x, point.y);
 	}
 
 	public boolean isLeftCurve() {
-		return _1.getNeighbourX(2) == _2;
+		return edge1.getNeighbourX(2) == edge2;
 	}
 
 	public boolean isStraight() {
-		return _1.getOpposite() == _2;
+		return edge1.getOpposite() == edge2;
 	}
 
 	public boolean connectsAt(Edge edge) {
-		return _1 == edge || _2 == edge;
+		return this.edge1 == edge || this.edge2 == edge;
 	}
 
-	public boolean connectsFromTo(Edge edge, Edge edge2) {
-		return (_1 == edge && _2 == edge2) || (_2 == edge && _1 == edge);
+	public boolean connectsFromTo(Edge other1, Edge other2) {
+		return (this.edge1 == other1 && this.edge2 == other2) || (this.edge2 == other1 && this.edge1 == other1);
 	}
 
 	public TilePath mirroredAlong(Edge axis) {
-		return new TilePath(_1.mirrorAlong(axis), _2.mirrorAlong(axis));
+		return new TilePath(edge1.mirrorAlong(axis), edge2.mirrorAlong(axis));
 	}
 
 	@Override
 	public int hashCode() {
 		// make sure that the hash method is commutable i.e.:
 		// hashCode(x,y) == hashCode(y,x)
-		return _1.hashCode() + _2.hashCode();
+		return edge1.hashCode() + edge2.hashCode();
 	}
 
 	@Override
@@ -89,7 +88,7 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		TilePath other = (TilePath) obj;
-		return (_1 == other._1 && _2 == other._2) || (_2 == other._1 && _1 == other._2);
+		return (edge1 == other.edge1 && edge2 == other.edge2) || (edge2 == other.edge1 && edge1 == other.edge2);
 	}
 
 	@Override
@@ -99,6 +98,10 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 
 	@Override
 	public String toString() {
-		return "TilePath(" + _1 + ", " + _2 + ")";
+		return "TilePath(" + edge1 + ", " + edge2 + ")";
+	}
+
+	public TilePath reversed() {
+		return new TilePath(this.edge2, this.edge1);
 	}
 }

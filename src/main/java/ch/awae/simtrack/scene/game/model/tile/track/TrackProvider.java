@@ -37,10 +37,10 @@ public class TrackProvider {
 		int buildCost = json.getInt("buildCost");
 		TilePath[] paths = new TilePath[a.size() / 2];
 		for (int i = 0; i + 1 < a.size(); i += 2) {
-			paths[i / 2] = new TilePath(Edge.byIndex(a.getInt(i)), Edge.byIndex(a.getInt(i + 1)));
+			paths[i / 2] = new TilePath(Edge.byOrdinal(a.getInt(i)), Edge.byOrdinal(a.getInt(i + 1)));
 		}
 		// first edge becomes base edge automatically
-		Edge baseEdge = Edge.byIndex(a.getInt(0));
+		Edge baseEdge = Edge.byOrdinal(a.getInt(0));
 		return new ConstructionTrackTile(paths, baseEdge, buildCost);
 	}
 

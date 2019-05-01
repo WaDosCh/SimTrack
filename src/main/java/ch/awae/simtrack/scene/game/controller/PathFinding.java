@@ -18,6 +18,7 @@ import ch.awae.simtrack.scene.game.model.PathFindingOptions.Type;
 import ch.awae.simtrack.scene.game.model.PathFindingRequest;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.util.CollectionUtil;
@@ -37,7 +38,7 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private EnhancedHashMap2<TileEdgeCoordinate, TileEdgeCoordinate, Float> connectionCache;
+	private EnhancedHashMap2<TileEdgeCoordinate, TileEdgeCoordinate, Double> connectionCache;
 	private Observer modelObserver;
 	private Pathfinder<TileEdgeCoordinate> pathfinder;
 
@@ -60,19 +61,17 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 	}
 
 	private void buildGraphForTileCoordinate(TileCoordinate tileCoordinate) {
-		val paths = this.model.getPaths(tileCoordinate);
-		for (val path : paths) {
-			this.connectionCache.put(path._1, path._2, path._3);
+		for (TilePathCoordinate path : this.model.getPaths(tileCoordinate)) {
+			this.connectionCache.put(path.getFrom().getOppositeDirection(), path.getTo(), path.getPathLength());
 		}
 	}
 
 	/**
 	 * @param start
 	 * @param end
-	 * @return Returns a path of TileEdgeCoordinates from start (exclusive: the
-	 *         train is anyway already on this edge) to end (inclusive)<br>
-	 *         Use pop operation to get the next tileEdgeCoordinate where the
-	 *         train should be heading.<br>
+	 * @return Returns a path of TileEdgeCoordinates from start (exclusive: the train is anyway already on this edge) to
+	 *         end (inclusive)<br>
+	 *         Use pop operation to get the next tileEdgeCoordinate where the train should be heading.<br>
 	 *         <b>Note:</b> If there is no path, null will be returned.
 	 */
 	public Stack<TileEdgeCoordinate> findPath(TileEdgeCoordinate start, TileEdgeCoordinate end) {
@@ -156,10 +155,11 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 	}
 
 	public Stack<TileEdgeCoordinate> randomPathForStart(TileEdgeCoordinate start) {
-		Set<Entry<TileCoordinate, Tile>> destinations = this.model.getTileFiltered(
-				tile -> tile instanceof BorderTrackTile && ((BorderTrackTile) tile).isTrainDestination());
+		Set<Entry<TileCoordinate, BorderTrackTile>> destinations = this.model.getTileFiltered(BorderTrackTile.class,
+				t -> t.isTrainDestination());
 		List<TileEdgeCoordinate> targets = destinations.stream()
-				.map(destination -> this.model.getPaths(destination.getKey()).get(0)._2).collect(Collectors.toList());
+				.map(destination -> this.model.getPaths(destination.getKey()).get(0).getTo())
+				.collect(Collectors.toList());
 
 		HashMap<TileEdgeCoordinate, Stack<TileEdgeCoordinate>> paths = findPathForTiles(start, targets);
 		if (paths.size() == 0)

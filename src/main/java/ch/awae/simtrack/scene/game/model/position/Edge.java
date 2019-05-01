@@ -18,17 +18,16 @@ public enum Edge {
 		this.Δv = Δv;
 	}
 
-	// XXX: rename to "byOrdinal"
-	public static Edge byIndex(int index) {
+	public static Edge byOrdinal(int index) {
 		return values()[index];
 	}
 
 	public Edge getOpposite() {
-		return byIndex((ordinal() + 3) % 6);
+		return byOrdinal((ordinal() + 3) % 6);
 	}
 
 	public Edge getNeighbour(boolean clockwise) {
-		return byIndex((ordinal() + (clockwise ? 1 : 5)) % 6);
+		return byOrdinal((ordinal() + (clockwise ? 1 : 5)) % 6);
 	}
 	
 	public boolean isNeighbour(Edge other) {
@@ -38,7 +37,7 @@ public enum Edge {
 	public Edge getNeighbourX(int clockwiseSteps) {
 		// make sure negative values work:
 		clockwiseSteps = (clockwiseSteps % 6) + 6;
-		return byIndex((ordinal() + clockwiseSteps) % 6);
+		return byOrdinal((ordinal() + clockwiseSteps) % 6);
 	}
 
 	/**

@@ -73,7 +73,7 @@ public class SignalTool extends GameTool {
 		mouse = mouseScene.getPointD();
 		Angle angle = center.getAAngleTo(mouse);
 		int sector = (int) angle.getDegree() / 60;
-		Edge edge = Edge.byIndex(sector);
+		Edge edge = Edge.byOrdinal(sector);
 		this.position = mouseTile.getEdge(edge);
 	}
 
