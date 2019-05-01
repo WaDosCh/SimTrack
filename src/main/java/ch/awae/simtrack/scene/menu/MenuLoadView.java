@@ -37,17 +37,11 @@ public class MenuLoadView extends WindowComponent {
 	private void initMenu() {
 		this.content = new BasePanel();
 		this.title = "Load Game";
-		addSaveButtons();
+		addLoadSaveGameButtons();
 		addComponent(new Button("Cancel", this.input, this::dispose));
 	}
-	
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		super.dispose();
-	}
 
-	private void addSaveButtons() {
+	private void addLoadSaveGameButtons() {
 		for (File savedGame : getAvailableSaves()) {
 			BasePanel savePanel = new BasePanel();
 			savePanel.setVertical(false);
@@ -59,6 +53,8 @@ public class MenuLoadView extends WindowComponent {
 					logger.warn("Could not delete savegame: " + savedGame.getName());
 				}
 				initMenu();
+				this.size = getPreferedDimension();
+				layout(this.pos.x, this.pos.y, this.size.width, this.size.height);
 				logger.info("delete button clicked for " + savedGame.getName());
 			}));
 			addComponent(savePanel);
@@ -82,7 +78,7 @@ public class MenuLoadView extends WindowComponent {
 			WindowComponent error = new WindowComponent(Design.titleFont, this.input);
 			error.title = "Failed to load savegame";
 			error.addComponent(new Label("There was an error loading this savegame."));
-			error.addComponent(new Button("Aww Men! :/",this.input,()-> {
+			error.addComponent(new Button("Aww Men! :/", this.input, () -> {
 				error.dispose();
 			}));
 			this.parentUi.addWindow(error);
