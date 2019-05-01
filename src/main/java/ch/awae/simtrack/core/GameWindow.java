@@ -1,5 +1,7 @@
 package ch.awae.simtrack.core;
 
+import java.awt.Color;
+
 public interface GameWindow extends Window {
 
 	void discard();
@@ -9,11 +11,13 @@ public interface GameWindow extends Window {
 	void flipFrame();
 
 	/**
-	 * indicates if the window has been resized since the last call to this
-	 * method. By default this always returns false (i.e. resize not supported)
+	 * indicates if the window has been resized since the last call to this method. By default this always returns false
+	 * (i.e. resize not supported)
 	 */
 	default boolean resized() {
 		return false;
 	}
+
+	public static final Color BG_COLOR = new Color(238, 238, 238);
 
 }

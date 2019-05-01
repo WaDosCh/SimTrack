@@ -1,10 +1,5 @@
 package ch.awae.simtrack.scene.game.view;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
@@ -18,7 +13,6 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
 import ch.awae.simtrack.scene.game.model.Model;
-import ch.judos.generic.graphics.ImageUtils;
 
 public class DebugToolsView extends WindowComponent {
 
@@ -58,13 +52,7 @@ public class DebugToolsView extends WindowComponent {
 		}));
 		addComponent(new CheckboxButton("Pause", this.input, this.model.getIsPaused()));
 		addComponent(new Button("Screenshot", this.input, () -> {
-			this.sceneController.requestSnapshot(image -> {
-				try {
-					ImageIO.write(ImageUtils.toBufferedImage(image), "jpg", new File("screenshot.jpg"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
+			this.sceneController.requestScreenshot();
 		}));
 
 		addComponent(new Label("Trains:"));

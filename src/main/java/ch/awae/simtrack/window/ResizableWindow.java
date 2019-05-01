@@ -89,6 +89,7 @@ public class ResizableWindow implements GameWindow {
 			graphics.dispose();
 		buffer.show();
 		graphics = new Graphics((Graphics2D) buffer.getDrawGraphics());
+		graphics.setBackground(GameWindow.BG_COLOR);
 		graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	}
 

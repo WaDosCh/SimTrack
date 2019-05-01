@@ -2,9 +2,15 @@ package ch.awae.simtrack.core;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +21,7 @@ import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.profiler.Profiler;
 import ch.awae.simtrack.core.profiler.ProfilerI;
+import ch.judos.generic.graphics.ImageUtils;
 import lombok.Getter;
 
 public class Controller implements SceneController {
@@ -26,7 +33,7 @@ public class Controller implements SceneController {
 	protected final Logger logger = LogManager.getLogger();
 
 	private ProfilerI profiler;
-	private List<Consumer<Image>> snapshotRequests = new ArrayList<>();
+	private boolean screenshotRequested = false;
 
 	private long startOfLastTick = System.currentTimeMillis();
 	private SceneFactory sceneFactory;
@@ -56,25 +63,25 @@ public class Controller implements SceneController {
 		long newStart = System.currentTimeMillis();
 		long deltaT = newStart - startOfLastTick;
 		startOfLastTick = newStart;
-		GameWindow window = this.window;
 
-		profiler.startFrame();
+		this.profiler.startFrame();
 
-		profiler.startSample(this.input);
+		this.profiler.startSample(this.input);
 
 		handleAllInputEvents();
 
-		profiler.endSample(this.input);
+		this.profiler.endSample(this.input);
 
 		// setup screenshot buffers if required
 		BufferedImage snapshot = null;
 		Graphics snapshotGraphics = null;
-		if (!snapshotRequests.isEmpty()) {
+		if (this.screenshotRequested) {
 			snapshot = new BufferedImage(window.getScreenSize().width, window.getScreenSize().height,
 					BufferedImage.TYPE_INT_RGB);
 			snapshotGraphics = new Graphics(snapshot.createGraphics());
+			snapshotGraphics.setBackground(GameWindow.BG_COLOR);
+			snapshotGraphics.clearRect(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 			snapshotGraphics.clipRect(0, 0, window.getScreenSize().width, window.getScreenSize().height);
-
 		}
 
 		window.flipFrame();
@@ -84,13 +91,11 @@ public class Controller implements SceneController {
 		if (this.currentScene == null)
 			return;
 
-		Scene scene = this.currentScene;
-
-		if (window.resized()) {
-			scene.screenResized(window.getScreenSize());
+		if (this.window.resized()) {
+			this.currentScene.screenResized(this.window.getScreenSize());
 		}
 
-		for (BaseRenderer renderer : scene.getRenderers()) {
+		for (BaseRenderer renderer : this.currentScene.getRenderers()) {
 			profiler.startSample(renderer);
 			GraphicsStack stack = graphics.getStack();
 			renderer.render(graphics);
@@ -103,9 +108,9 @@ public class Controller implements SceneController {
 			profiler.endSample(renderer);
 		}
 
-		scene.preTick(deltaT);
+		this.currentScene.preTick(deltaT);
 
-		for (BaseTicker ticker : scene.getTickers()) {
+		for (BaseTicker ticker : this.currentScene.getTickers()) {
 			profiler.startSample(ticker);
 			ticker.tick();
 			profiler.endSample(ticker);
@@ -122,19 +127,20 @@ public class Controller implements SceneController {
 			// hey...)
 			assert (snapshotGraphics != null);
 			snapshotGraphics.dispose();
-			for (Consumer<Image> callback : this.snapshotRequests)
-				callback.accept(snapshot);
-			this.snapshotRequests.clear();
+			saveScreenshot(snapshot);
 		}
 
 		profiler.endFrame();
-
 	}
 
 	private void handleAllInputEvents() {
 		for (InputEvent event : this.input.popAllEvents()) {
 			if (event.isPressActionAndConsume(InputAction.QUIT_GAME))
 				System.exit(0);
+			if (event.isPressActionAndConsume(InputAction.TAKE_SCREENSHOT)) {
+				requestScreenshot();
+				continue;
+			}
 			this.input.handleInput(event);
 			if (event.isConsumed)
 				continue;
@@ -147,8 +153,37 @@ public class Controller implements SceneController {
 		}
 	}
 
-	public void requestSnapshot(Consumer<Image> callback) {
-		snapshotRequests.add(callback);
+	private void saveScreenshot(Image screenshot) {
+		ImageWriter writer = null;
+		FileImageOutputStream outputStream = null;
+		try {
+			// bufferedImage
+			BufferedImage buffer = ImageUtils.toBufferedImage(screenshot);
+
+			// define screenshot quality
+			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
+			jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+			jpegParams.setCompressionQuality(0.95f);
+
+			writer = ImageIO.getImageWritersByFormatName("jpg").next();
+			outputStream = new FileImageOutputStream(new File("screenshot.jpg"));
+			writer.setOutput(outputStream);
+			// writes the file with given compression level
+			// from your JPEGImageWriteParam instance
+			writer.write(null, new IIOImage(buffer, null, null), jpegParams);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null)
+				writer.dispose();
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+		this.screenshotRequested = false;
 	}
 
 	@Override
@@ -165,6 +200,11 @@ public class Controller implements SceneController {
 			this.currentScene = scene;
 		}
 		return this.currentScene;
+	}
+
+	@Override
+	public void requestScreenshot() {
+		this.screenshotRequested = true;
 	}
 
 }

@@ -27,7 +27,6 @@ import ch.awae.simtrack.util.Resource;
  */
 public class TileRenderer implements Renderer {
 	private static final Color bedColor;
-	private static final Color bgColour;
 	private static final Color waterColor;
 	private static final Color railColor;
 	private static final Stroke arrowStroke;
@@ -36,7 +35,6 @@ public class TileRenderer implements Renderer {
 		Properties props = Resource.getConfigProperties("renderer.properties");
 
 		bedColor = props.getColor("railbedColor");
-		bgColour = props.getColor("grassColor");
 		waterColor = props.getColor("waterColor");
 		railColor = props.getColor("railColor");
 		arrowStroke = new BasicStroke(props.getInt("arrowStroke"));
@@ -60,12 +58,11 @@ public class TileRenderer implements Renderer {
 		for (Entry<TileCoordinate, Tile> pair : this.model.getTiles()) {
 			g.setStack(stack);
 			this.currentRenderPosition = pair.getKey();
-			Tile tile = pair.getValue();
 			if (!this.viewPort.isVisible(this.currentRenderPosition))
 				continue;
+
+			Tile tile = pair.getValue();
 			this.viewPort.focusHex(this.currentRenderPosition, g);
-			g.setColor(bgColour);
-			g.fillPolygon(hexEdges[0], hexEdges[1], 6);
 
 			tile.render(this, g);
 		}

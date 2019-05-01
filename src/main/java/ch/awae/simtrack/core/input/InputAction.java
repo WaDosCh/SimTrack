@@ -12,11 +12,8 @@ public enum InputAction implements InputActionI {
 	PAN_UP(VK_W, VK_UP),
 	PAN_DOWN(VK_S, VK_DOWN),
 
-	// BASE TOOLS
+	// TOOLS
 	DROP_TOOL(VK_ESCAPE),
-	DEBUG_TOOL(VK_F2),
-
-	// BUILD TOOL
 	BT_BUILD_TILE(MOUSE_LEFT),
 	BT_DELETE_TILE(MOUSE_RIGHT),
 	BT_ROTATE_LEFT(VK_Q),
@@ -41,11 +38,13 @@ public enum InputAction implements InputActionI {
 	TOOLBAR_10(VK_0),
 
 	// GENERAL
-	PROFILER(VK_F6),
 	SELECT(MOUSE_LEFT),
 	DESELECT(VK_ESCAPE),
 	SELECT2(MOUSE_RIGHT),
 	INPUT_GUIDE(VK_F1),
+	DEBUG_TOOL(VK_F2),
+	TAKE_SCREENSHOT(VK_F3),
+	PROFILER(VK_F6),
 	QUIT_GAME(VK_F12),
 	BACKSPACE(VK_BACK_SPACE),
 	LEFT(VK_LEFT),
@@ -53,7 +52,7 @@ public enum InputAction implements InputActionI {
 	DELETE(VK_DELETE),
 	HOME(VK_HOME),
 	END(VK_END),
-	CONFIRM(VK_ENTER);
+	CONFIRM(VK_ENTER),;
 
 	/**
 	 * possible keycodes to execute this action

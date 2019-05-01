@@ -78,6 +78,7 @@ public class NativeFullscreen implements GameWindow {
 			graphics.dispose();
 		buffer.show();
 		graphics = new Graphics((Graphics2D) buffer.getDrawGraphics());
+		graphics.setBackground(GameWindow.BG_COLOR);
 		graphics.clearRect(0, 0, this.screenSize.width, this.screenSize.height);
 	}
 

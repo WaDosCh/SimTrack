@@ -1,6 +1,7 @@
 Input keys
 F1 = show this guide ingame
 F2 = show debug view
+F3 = make screenshot
 F6 = toggle profiler
 F12 = end game
 ESC = deselect current tool
