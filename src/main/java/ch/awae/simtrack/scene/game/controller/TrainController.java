@@ -3,6 +3,7 @@ package ch.awae.simtrack.scene.game.controller;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +16,6 @@ import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.Time;
@@ -52,15 +52,18 @@ public class TrainController implements BaseTicker {
 	}
 
 	private void spawnTrain(Model model) {
-		Set<Entry<TileCoordinate, Tile>> spawners = model.getTileFiltered(tile -> {
-			return tile instanceof BorderTrackTile && ((BorderTrackTile) tile).isTrainSpawner();
-		});
+		Set<Entry<TileCoordinate, BorderTrackTile>> spawners = model.getTileFiltered(BorderTrackTile.class,
+				tile -> tile.isTrainSpawner());
+		spawners = spawners.stream().filter(entry -> {
+			return !this.model.isTileReserved(entry.getKey());
+		}).collect(Collectors.toSet());
+
 		if (spawners.size() == 0) {
 			logger.warn("No possible spawn points for a new train.");
 			return;
 		}
-		Entry<TileCoordinate, Tile> entry = CollectionUtil.randomValue(spawners);
-		BorderTrackTile spawner = (BorderTrackTile) entry.getValue();
+		Entry<TileCoordinate, BorderTrackTile> entry = CollectionUtil.randomValue(spawners);
+		BorderTrackTile spawner = entry.getValue();
 		TileEdgeCoordinate start = new TileEdgeCoordinate(entry.getKey(), spawner.getStartingEdge());
 
 		Train t = new Train(model, start, new PathFindingOptions(Type.RandomTarget),
