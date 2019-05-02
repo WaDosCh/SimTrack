@@ -25,10 +25,10 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	private static double ZOOM_MIN = 0.1;
 	private static final double ZOOM_MAX = 10;
 	private static final double ZOOM_DEFAULT = 1;
+	private final static double ZOOM_SPEED_FACTOR = 1.2;
 
-	private final static int BORDER = 40;
-	private final static float DELTA_ZOOM = -.05f;
-	private final static int MOVE_SPEED = 8;
+	private final static int SCROLL_MOUSE_BORDER = 10;
+	private final static int SCROLL_MOVE_SPEED = 8;
 	private int dx = 0, dy = 0;
 
 	private @Getter double zoom;
@@ -135,20 +135,18 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	}
 
 	/**
-	 * sets the zoom level. the given point remains stationary while zooming.
+	 * update target zoom level. the given point remains stationary while zooming.
 	 * 
-	 * @param delta difference between new zoom and current
+	 * @param dzoom positive or negative, independent of value will update targetZoom by one step
 	 * @param fixed fixed point
 	 */
-	public void zoom(float dzoom, Point fixed) {
-
-		int delta = (int) (100 * dzoom);
+	public void zoom(double dzoom, Point fixed) {
 
 		this.focusedPointForZoom = fixed;
-		if (delta > 0)
-			this.targetZoom *= 1.2;
-		if (delta < 0)
-			this.targetZoom /= 1.2;
+		if (dzoom < 0)
+			this.targetZoom *= ZOOM_SPEED_FACTOR;
+		else if (dzoom > 0)
+			this.targetZoom /= ZOOM_SPEED_FACTOR;
 
 		if (this.targetZoom < ZOOM_MIN)
 			this.targetZoom = ZOOM_MIN;
@@ -254,20 +252,24 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	@Override
 	public void handleInput(InputEvent event) {
 		if (event.isActionAndConsume(InputAction.PAN_LEFT)) {
-			dx = event.isPress() ? 1 : 0;
+			if (dx >= 0)
+				dx = event.isPress() ? 1 : 0;
 		}
 		if (event.isActionAndConsume(InputAction.PAN_RIGHT)) {
-			dx = event.isPress() ? -1 : 0;
+			if (dx <= 0)
+				dx = event.isPress() ? -1 : 0;
 		}
 		if (event.isActionAndConsume(InputAction.PAN_DOWN)) {
-			dy = event.isPress() ? -1 : 0;
+			if (dy <= 0)
+				dy = event.isPress() ? -1 : 0;
 		}
 		if (event.isActionAndConsume(InputAction.PAN_UP)) {
-			dy = event.isPress() ? 1 : 0;
+			if (dy >= 0)
+				dy = event.isPress() ? 1 : 0;
 		}
 		if (event.isChanged()) {
 			double scrollAmount = event.getChangeValue();
-			zoom((float) (scrollAmount * DELTA_ZOOM), event.getCurrentMousePosition());
+			zoom(scrollAmount, event.getCurrentMousePosition());
 		}
 	}
 
@@ -277,18 +279,18 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 			return;
 
 		int mx = 0, my = 0;
-		if (mousePos.x < BORDER)
+		if (mousePos.x < SCROLL_MOUSE_BORDER)
 			mx = 1;
-		if (mousePos.y < BORDER)
+		if (mousePos.y < SCROLL_MOUSE_BORDER)
 			my = 1;
-		if (mousePos.x > this.screenSize.width - BORDER)
+		if (mousePos.x > this.screenSize.width - SCROLL_MOUSE_BORDER)
 			mx = -1;
-		if (mousePos.y > this.screenSize.height - BORDER)
+		if (mousePos.y > this.screenSize.height - SCROLL_MOUSE_BORDER)
 			my = -1;
 		mx += dx;
 		my += dy;
-		mx *= MOVE_SPEED;
-		my *= MOVE_SPEED;
+		mx *= SCROLL_MOVE_SPEED;
+		my *= SCROLL_MOVE_SPEED;
 		moveScene(mx, my);
 	}
 
