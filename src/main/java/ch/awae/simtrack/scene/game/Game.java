@@ -16,12 +16,12 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
-import ch.awae.simtrack.scene.game.controller.tools.ToolBar;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.view.DebugToolsView;
 import ch.awae.simtrack.scene.game.view.InGameMenu;
 import ch.awae.simtrack.scene.game.view.InputGuideView;
 import ch.awae.simtrack.scene.game.view.PlayerInfoView;
+import ch.awae.simtrack.scene.game.view.ToolBar;
 import ch.awae.simtrack.scene.game.view.renderer.MapRenderer;
 
 public class Game extends Scene {
@@ -54,10 +54,8 @@ public class Game extends Scene {
 
 		addRenderer(new MapRenderer(this.input, this.model, this.viewPortNavigator));
 		addRenderer(this.editor);
-		addRenderer(this.toolbar);
 		addRenderer(this.ui);
 
-		addTicker(this.toolbar);
 		addTicker(this.editor);
 		addTicker(this.viewPortNavigator);
 		addTicker(this.model);
@@ -76,7 +74,8 @@ public class Game extends Scene {
 		
 		PlayerInfoView infoView = new PlayerInfoView(this.model, this.input);
 		this.ui.addWindow(infoView, PositionH.CENTER, PositionV.TOP);
-
+		
+		this.ui.addWindow(this.toolbar, PositionH.CENTER, PositionV.BOTTOM);
 	}
 
 	@Override
@@ -95,8 +94,6 @@ public class Game extends Scene {
 		this.ui.handleInput(event);
 		if (!event.isConsumed)
 			this.viewPortNavigator.handleInput(event);
-		if (!event.isConsumed)
-			this.toolbar.handleInput(event);
 		if (!event.isConsumed)
 			this.editor.handleInput(event);
 		if (!event.isConsumed)

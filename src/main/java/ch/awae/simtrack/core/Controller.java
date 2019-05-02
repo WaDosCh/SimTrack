@@ -150,6 +150,7 @@ public class Controller implements SceneController {
 			this.currentScene.handleInput(event);
 			if (event.isConsumed)
 				continue;
+			logger.info("unhandled: "+event);
 		}
 	}
 

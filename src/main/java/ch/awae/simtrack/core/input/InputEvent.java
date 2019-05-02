@@ -51,8 +51,6 @@ public class InputEvent {
 		this.currentMousePosition = currentMousePos;
 		this.isConsumed = false;
 	}
-	
-	
 
 	public boolean isPressActionConsumeAndRun(InputAction action, Runnable run) {
 		if (isPressActionAndConsume(action)) {
@@ -135,9 +133,13 @@ public class InputEvent {
 
 	@Override
 	public String toString() {
-		return "InputEvent [" + type + ", "+ KeyEvent.getKeyText(this.keyCode)+", holdKeyCodes="
-				+ holdKeyCodes + ", changeValue=" + changeValue + ", currentMousePosition=" + currentMousePosition
-				+ ", text=" + text + "]";
+		StringBuffer buf = new StringBuffer(
+				"InputEvent [" + type + ", " + KeyEvent.getKeyText(this.keyCode) + ", holdKeyCodes=" + holdKeyCodes
+						+ ", mousePos=" + currentMousePosition.x+"/"+currentMousePosition.y + ", text=" + text + ", keycode=" + this.keyCode);
+		if (this.changeValue != 0)
+			buf.append(", changeValue=" + changeValue);
+		buf.append("]");
+		return buf.toString();
 	}
 
 }

@@ -1,6 +1,10 @@
 In development:
 	- See: https://github.com/WaDosCh/SimTrack/issues
 
+v0.3.3
+	- use ui system for toolbar as well
+	- added build Cost to toolbar, added naming to signals in toolbar
+
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent
 	- positioning for Windows on DesktopComponent

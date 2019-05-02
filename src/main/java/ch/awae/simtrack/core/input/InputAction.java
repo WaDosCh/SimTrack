@@ -4,6 +4,8 @@ import static ch.awae.simtrack.core.input.InputController.MOUSE_LEFT;
 import static ch.awae.simtrack.core.input.InputController.MOUSE_RIGHT;
 import static java.awt.event.KeyEvent.*;
 
+import java.security.InvalidParameterException;
+
 public enum InputAction implements InputActionI {
 
 	// MOVEMENT
@@ -25,7 +27,7 @@ public enum InputAction implements InputActionI {
 	ST_DELETE_SIGNAL(MOUSE_RIGHT),
 
 	// TOOLBAR
-	TOOLBAR_0(VK_MINUS),
+	TOOLBAR_0(VK_MINUS, 16777383), // "§" left of number 1
 	TOOLBAR_1(VK_1),
 	TOOLBAR_2(VK_2),
 	TOOLBAR_3(VK_3),
@@ -53,6 +55,12 @@ public enum InputAction implements InputActionI {
 	HOME(VK_HOME),
 	END(VK_END),
 	CONFIRM(VK_ENTER),;
+
+	public static InputAction getToolbarActionByNumber(int number) {
+		if (number < 0 || number > 10)
+			throw new InvalidParameterException("number must be >= 0 && <= 10");
+		return InputAction.valueOf("TOOLBAR_" + number);
+	}
 
 	/**
 	 * possible keycodes to execute this action

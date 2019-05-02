@@ -15,8 +15,7 @@ public class TrackValidator {
 
 	static {
 		validTiles = new HashSet<>();
-		for (int i = 0; i < TrackProvider.getTileCount(); i++) {
-			ConstructionTrackTile t0 = TrackProvider.getTileInstance(i);
+		for (ConstructionTrackTile t0 : TrackProvider.getTiles()) {
 			ConstructionTrackTile t1 = t0.mirrored();
 			for (int r = 0; r < 6; r++) {
 				validTiles.add(t0.getNormalTrackTile());

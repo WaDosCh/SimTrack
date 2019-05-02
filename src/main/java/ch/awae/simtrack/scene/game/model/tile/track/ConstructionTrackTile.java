@@ -10,11 +10,13 @@ public class ConstructionTrackTile extends TrackTile {
 
 	protected Edge baseEdge; // use for the mirror function
 	protected @Getter int buildCost;
+	protected @Getter boolean showInToolbar;
 
-	public ConstructionTrackTile(TilePath[] paths, Edge baseEdge, int buildCost) {
+	public ConstructionTrackTile(TilePath[] paths, Edge baseEdge, int buildCost, boolean showInToolbar) {
 		super(paths);
 		this.baseEdge = baseEdge;
 		this.buildCost = buildCost;
+		this.showInToolbar = showInToolbar;
 	}
 
 	/**
@@ -26,7 +28,7 @@ public class ConstructionTrackTile extends TrackTile {
 		for (int i = 0; i < this.paths.length; i++) {
 			links[i] = new TilePath(this.paths[i].edge1.getNeighbour(clockwise), this.paths[i].edge2.getNeighbour(clockwise));
 		}
-		return new ConstructionTrackTile(links, this.baseEdge.getNeighbour(clockwise), this.buildCost);
+		return new ConstructionTrackTile(links, this.baseEdge.getNeighbour(clockwise), this.buildCost, this.showInToolbar);
 	}
 
 	/**
@@ -37,7 +39,7 @@ public class ConstructionTrackTile extends TrackTile {
 		for (int i = 0; i < this.paths.length; i++) {
 			paths[i] = this.paths[i].mirroredAlong(this.baseEdge);
 		}
-		return new ConstructionTrackTile(paths, this.baseEdge, this.buildCost);
+		return new ConstructionTrackTile(paths, this.baseEdge, this.buildCost, this.showInToolbar);
 	}
 	
 	public TrackTile getNormalTrackTile() {
