@@ -132,10 +132,9 @@ public class BuildTool extends GameTool {
 			return false;
 		if (tile instanceof TrackTile) {
 			TrackTile ttile = (TrackTile) tile;
-			TrackTile fused = ttile.fuseWith(this.track);
-			if (TrackValidator.isValidTrack(fused) && !fused.equals(ttile)) {
-				return true;
-			}
+			ConstructionTrackTile fusedTrack = this.track.fuseWith(ttile);
+			return TrackValidator.isValidTrack(fusedTrack) && !fusedTrack.equals(ttile)
+					&& fusedTrack.getBuildCost() <= this.model.playerMoney;
 		}
 		return false;
 	}
@@ -178,8 +177,8 @@ public class BuildTool extends GameTool {
 			} else {
 				TrackTile oldTile = (TrackTile) model.getTileAt(mouseTile);
 				model.removeTileAt(mouseTile);
-				TrackTile fusedTrack = oldTile.fuseWith(this.track);
-				model.playerMoney -= this.track.getBuildCost();
+				ConstructionTrackTile fusedTrack = this.track.fuseWith(oldTile);
+				model.playerMoney -= fusedTrack.getBuildCost();
 				model.setTileAt(mouseTile, fusedTrack);
 			}
 		}

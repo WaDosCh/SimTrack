@@ -2,7 +2,6 @@ package ch.awae.simtrack.scene.game.model.tile.track;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import ch.awae.simtrack.core.Graphics;
@@ -45,17 +44,6 @@ public class TrackTile implements Tile {
 		return false;
 	}
 
-	public TrackTile fuseWith(TrackTile tile) {
-		HashSet<TilePath> paths = new HashSet<>();
-		for (TilePath path : this.paths)
-			paths.add(path);
-		for (TilePath path : tile.paths) {
-			if (!paths.contains(path))
-				paths.add(path);
-		}
-		return new TrackTile(paths.toArray(new TilePath[0]));
-	}
-
 	@Override
 	public int hashCode() {
 		return Arrays.hashCode(paths);
@@ -83,7 +71,7 @@ public class TrackTile implements Tile {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @return all undirected paths, if you want a path for both directions use getAllDirectedPaths
 	 */
