@@ -34,6 +34,7 @@ public class CoordinateInformationRenderer implements BaseRenderer {
 		SceneCoordinate scenePos = this.viewPort.toSceneCoordinate(screenPos);
 		TileCoordinate tilePos = scenePos.toTileCoordinate();
 
+		String screenPosStr = screenPositionToString(screenPos);
 		if (screenPos.y > viewPort.getScreenSize().height - Design.toolbarHeight)
 			screenPos.y -= 150;
 		if (screenPos.x > viewPort.getScreenSize().width - 400)
@@ -46,7 +47,7 @@ public class CoordinateInformationRenderer implements BaseRenderer {
 		g.setColor(Color.black);
 		g.setFont(Design.textFont);
 		y += Design.textFont.getSize();
-		g.drawString(screenPositionToString(screenPos), screenPos.x + 20, y);
+		g.drawString(screenPosStr, screenPos.x + 20, y);
 		y += Design.textFont.getSize();
 		g.drawString(scenePos.toString(), screenPos.x + 20, y);
 		y += Design.textFont.getSize();
