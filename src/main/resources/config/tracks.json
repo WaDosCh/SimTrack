@@ -9,34 +9,34 @@
 	},
 	"crossing" : {
 		"links" : [0, 3, 1, 4],
-		"buildCost": 6
+		"buildCost": 8
 	},
 	"curve-straight-crossing" : {
 		"links" : [0, 3, 1, 5],
-		"buildCost": 7,
+		"buildCost": 9,
 		"showInToolbar": false
 	},
 	"curve-crossing" : {
 		"links" : [0, 2, 1, 3],
-		"buildCost": 8,
+		"buildCost": 10,
 		"showInToolbar": false
 	},
 	"turnout" : {
 		"links" : [0, 3, 1, 3],
-		"buildCost": 10
+		"buildCost": 15
 	},
 	"three-way" : {
 		"links" : [0, 3, 1, 3, 5, 3],
-		"buildCost": 20
+		"buildCost": 22
 	},
 	"wye-switch" : {
 		"links" : [1, 3, 5, 3],
-		"buildCost": 11,
+		"buildCost": 18,
 		"showInToolbar": false
 	},
 	"single-slip" : {
 		"links" : [0, 3, 1, 4, 1, 3],
-		"buildCost": 30,
+		"buildCost": 32,
 		"showInToolbar": false
 	},
 	"double-slip" : {

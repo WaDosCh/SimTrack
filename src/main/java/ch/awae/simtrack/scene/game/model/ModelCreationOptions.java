@@ -12,7 +12,7 @@ public class ModelCreationOptions {
 	public ModelCreationOptions() {
 		this.size = new Dimension(20, 14);
 		this.connectionCount = 10;
-		this.startingMoney = 50;
-		this.bulldozeCost = 4;
+		this.startingMoney = 60;
+		this.bulldozeCost = 2;
 	}
 }
