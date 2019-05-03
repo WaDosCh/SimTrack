@@ -12,7 +12,6 @@ import ch.awae.simtrack.core.input.InputHandler;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.view.Design;
 import ch.judos.generic.data.geometry.PointD;
 import lombok.Getter;
 
@@ -26,10 +25,10 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	private static final double ZOOM_DEFAULT = 1;
 	private final static double ZOOM_SPEED_FACTOR = 1.2;
 
-	private final static int OUTSIDE_BOUNDS = 200;
 	private final static int SCROLL_MOUSE_BORDER = 10;
 	private final static int SCROLL_MOVE_SPEED = 8;
-	
+	private final static int TILES_OUTSIDE_MAP = 1;
+
 	private SceneCoordinate sceneDimensions;
 
 	private int keyMoveX = 0, keyMoveY = 0; // current scrolling on map with keys
@@ -118,21 +117,22 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	}
 
 	private void updateCornerViewPortInsideMap() {
-		double minX = this.screenSize.width - (this.zoom * this.sceneDimensions.s);
-		double minY = this.screenSize.height - Design.toolbarHeight - (this.zoom * this.sceneDimensions.t);
-		double x = this.sceneCorner.x;
-		double y = this.sceneCorner.y;
-		if (x > OUTSIDE_BOUNDS)
-			x = OUTSIDE_BOUNDS;
-		if (x < minX - OUTSIDE_BOUNDS)
-			x = (int) minX - OUTSIDE_BOUNDS;
-		if (y > OUTSIDE_BOUNDS && y < minY - OUTSIDE_BOUNDS)
-			y = minY / 2;
-		else if (y > OUTSIDE_BOUNDS)
-			y = OUTSIDE_BOUNDS;
-		else if (y < minY - OUTSIDE_BOUNDS)
-			y = (int) minY - OUTSIDE_BOUNDS;
-		this.sceneCorner.setLocation(x, y);
+		TileCoordinate topLeftTile = new TileCoordinate(-TILES_OUTSIDE_MAP / 2, -TILES_OUTSIDE_MAP);
+		Point topLeftScreen = toScreenCoordinate(topLeftTile.toSceneCoordinate());
+		if (topLeftScreen.x > 0)
+			this.sceneCorner.x -= topLeftScreen.x;
+		if (topLeftScreen.y > 0)
+			this.sceneCorner.y -= topLeftScreen.y;
+
+		Dimension gridSize = this.model.getTileGridSize();
+		TileCoordinate bottomRightTile = new TileCoordinate(
+				gridSize.width + TILES_OUTSIDE_MAP / 2 - gridSize.height / 2 - 1, gridSize.height + TILES_OUTSIDE_MAP);
+		Point bottomRightScreen = toScreenCoordinate(bottomRightTile.toSceneCoordinate());
+
+		if (bottomRightScreen.x < this.screenSize.width)
+			this.sceneCorner.x += this.screenSize.width - bottomRightScreen.x;
+		if (bottomRightScreen.y < this.screenSize.height)
+			this.sceneCorner.y += this.screenSize.height - bottomRightScreen.y;
 	}
 
 	/**
@@ -250,20 +250,17 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	@Override
 	public void handleInput(InputEvent event) {
 		if (event.isActionAndConsume(InputAction.PAN_LEFT)) {
-			if (keyMoveX >= 0)
-				keyMoveX = event.isPress() ? 1 : 0;
+			// for press set to 1, otherwise only reset if this was last pressed key
+			keyMoveX = event.isPress() ? 1 : (keyMoveX > 0 ? 0 : keyMoveX);
 		}
 		if (event.isActionAndConsume(InputAction.PAN_RIGHT)) {
-			if (keyMoveX <= 0)
-				keyMoveX = event.isPress() ? -1 : 0;
+			keyMoveX = event.isPress() ? -1 : (keyMoveX < 0 ? 0 : keyMoveX);
 		}
 		if (event.isActionAndConsume(InputAction.PAN_DOWN)) {
-			if (keyMoveY <= 0)
-				keyMoveY = event.isPress() ? -1 : 0;
+			keyMoveY = event.isPress() ? -1 : (keyMoveY < 0 ? 0 : keyMoveY);
 		}
 		if (event.isActionAndConsume(InputAction.PAN_UP)) {
-			if (keyMoveY >= 0)
-				keyMoveY = event.isPress() ? 1 : 0;
+			keyMoveY = event.isPress() ? 1 : (keyMoveY > 0 ? 0 : keyMoveY);
 		}
 		if (event.isActionAndConsume(InputAction.MOUSE_ZOOM) && event.isChanged()) {
 			double scrollAmount = event.getChangeValue();
