@@ -6,6 +6,7 @@ v0.3.3
 	- added build Cost to toolbar, added naming to signals in toolbar
 	- fix coordinateInformation window sometimes not visible
 	- make scrolling around smoother with keys
+	- fix delete save doesn't work after loading it
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent

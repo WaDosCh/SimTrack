@@ -2,6 +2,7 @@ package ch.awae.simtrack.scene.menu;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import org.apache.logging.log4j.LogManager;
@@ -68,7 +69,7 @@ public class MenuLoadView extends WindowComponent {
 
 	private void loadGame(File savedGame) {
 		logger.debug("LOAD GAME");
-		ObjectInputStream in;
+		ObjectInputStream in = null;
 		try {
 			in = new ObjectInputStream(new FileInputStream(new File("saves/" + savedGame.getName())));
 			Model model = (Model) in.readObject();
@@ -82,6 +83,13 @@ public class MenuLoadView extends WindowComponent {
 				error.dispose();
 			}));
 			this.parentUi.addWindow(error);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+				}
+			}
 		}
 	}
 
