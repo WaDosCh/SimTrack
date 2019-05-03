@@ -27,7 +27,7 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 
 	private final static int SCROLL_MOUSE_BORDER = 10;
 	private final static int SCROLL_MOVE_SPEED = 8;
-	private final static int TILES_OUTSIDE_MAP = 1;
+	private final static int TILES_OUTSIDE_MAP = 2;
 
 	private SceneCoordinate sceneDimensions;
 
