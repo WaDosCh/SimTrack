@@ -28,8 +28,8 @@ public class ConnectionSpawner {
 
 		for (int i = 0; i < amount; i++) {
 
-			final int ho = model.getHorizontalSize();
-			final int ve = model.getVerticalSize();
+			final int ho = model.getTileGridSize().width;
+			final int ve = model.getTileGridSize().height;
 
 			boolean isHo = RAND.nextInt(ho + ve / 2) < ho;
 			boolean isTo = RAND.nextBoolean();

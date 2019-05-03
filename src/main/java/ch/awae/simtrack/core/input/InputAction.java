@@ -13,6 +13,7 @@ public enum InputAction implements InputActionI {
 	PAN_RIGHT(VK_D, VK_RIGHT),
 	PAN_UP(VK_W, VK_UP),
 	PAN_DOWN(VK_S, VK_DOWN),
+	MOUSE_ZOOM(InputController.MOUSE_SCROLL),
 
 	// TOOLS
 	DROP_TOOL(VK_ESCAPE),

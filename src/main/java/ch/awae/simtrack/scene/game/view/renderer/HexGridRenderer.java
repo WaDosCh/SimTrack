@@ -33,8 +33,8 @@ public class HexGridRenderer implements Renderer {
 			return;
 		g.setColor(gridColor);
 		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
-		for (int i = 0; i < this.model.getHorizontalSize(); i++) {
-			for (int j = 0; j < this.model.getVerticalSize(); j++) {
+		for (int i = 0; i < this.model.getTileGridSize().width; i++) {
+			for (int j = 0; j < this.model.getTileGridSize().height; j++) {
 				TileCoordinate hex = new TileCoordinate(i - (j / 2), j);
 				if (!this.viewPort.isVisible(hex))
 					continue;

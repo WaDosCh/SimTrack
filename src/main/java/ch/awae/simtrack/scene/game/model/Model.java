@@ -45,7 +45,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 
 	private static final long serialVersionUID = -2351561961256044096L;
 	private Logger logger = LogManager.getLogger();
-	private int sizeX, sizeY;
+	private @Getter Dimension tileGridSize;
 	private int maxS, maxT;
 
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
@@ -69,20 +69,11 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private @Getter transient ObservableHandler observableHandler;
 
 	Model(Dimension size, int startingMoney, int bulldozeCost) {
-		this.sizeX = size.width;
-		this.sizeY = size.height;
+		this.tileGridSize = size;
 		this.playerMoney = startingMoney;
 		this.bulldozeCost = bulldozeCost;
-		this.maxS = (int) (this.sizeX * new TileCoordinate(1, 0).toSceneCoordinate().s);
-		this.maxT = (int) (this.sizeY * new TileCoordinate(0, 1).toSceneCoordinate().t);
-	}
-
-	public int getHorizontalSize() {
-		return this.sizeX;
-	}
-
-	public int getVerticalSize() {
-		return this.sizeY;
+		this.maxS = (int) (this.tileGridSize.width * new TileCoordinate(1, 0).toSceneCoordinate().s);
+		this.maxT = (int) (this.tileGridSize.height * new TileCoordinate(0, 1).toSceneCoordinate().t);
 	}
 
 	public Tile getTileAt(TileCoordinate position) {

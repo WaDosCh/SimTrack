@@ -12,9 +12,8 @@ public class ObstacleSpawner {
 		Random r = new Random();
 
 		for (int i = 0; i < amountOfObstacles; i++) {
-
-			int u = r.nextInt(model.getHorizontalSize() - 4) + 2;
-			int v = r.nextInt(model.getVerticalSize() - 4) + 2;
+			int u = r.nextInt(model.getTileGridSize().width - 4) + 2;
+			int v = r.nextInt(model.getTileGridSize().height - 4) + 2;
 
 			TileCoordinate tileCoordinate = new TileCoordinate(u - (v / 2), v);
 

@@ -21,21 +21,23 @@ import lombok.Getter;
  */
 public class ViewPortNavigator implements BaseTicker, InputHandler {
 
-	public static int outsideBounds = 0;
 	private static double ZOOM_MIN = 0.1;
 	private static final double ZOOM_MAX = 10;
 	private static final double ZOOM_DEFAULT = 1;
 	private final static double ZOOM_SPEED_FACTOR = 1.2;
 
+	private final static int OUTSIDE_BOUNDS = 200;
 	private final static int SCROLL_MOUSE_BORDER = 10;
 	private final static int SCROLL_MOVE_SPEED = 8;
-	private int dx = 0, dy = 0;
+	
+	private SceneCoordinate sceneDimensions;
+
+	private int keyMoveX = 0, keyMoveY = 0; // current scrolling on map with keys
 
 	private @Getter double zoom;
 	private @Getter double targetZoom;
 
 	private PointD sceneCorner;
-	private SceneCoordinate sceneDimensions;
 	private Point focusedPointForZoom;
 
 	private @Getter Dimension screenSize;
@@ -57,20 +59,20 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 		this.zoom = ZOOM_DEFAULT;
 		this.targetZoom = this.zoom;
 		this.sceneCorner = new PointD(0, 0);
-		update();
+		updatePossibleZoomAndSceneDimensions();
 	}
 
 	public void setScreenSize(Dimension screenSize) {
 		this.screenSize = screenSize;
-		update();
+		updatePossibleZoomAndSceneDimensions();
 	}
 
-	public void update() {
-		double minH = this.screenSize.width / (this.model.getHorizontalSize() - 1.0);
+	public void updatePossibleZoomAndSceneDimensions() {
+		double minH = this.screenSize.width / (this.model.getTileGridSize().width - 1.0);
 		if (minH > ZOOM_MIN)
-			ZOOM_MIN = minH * 0.01;
-		this.sceneDimensions = new SceneCoordinate((this.model.getHorizontalSize() - 1) * 100,
-				((this.model.getVerticalSize() - 1) * Math.sqrt(3) * 50));
+			ZOOM_MIN = minH / 100;
+		this.sceneDimensions = new SceneCoordinate((this.model.getTileGridSize().width - 1) * 100,
+				((this.model.getTileGridSize().height - 1) * Math.sqrt(3) * 50));
 		updateCornerViewPortInsideMap();
 	}
 
@@ -113,7 +115,6 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	public void moveScene(int dx, int dy) {
 		this.sceneCorner.x += (float) dx;
 		this.sceneCorner.y += (float) dy;
-		updateCornerViewPortInsideMap();
 	}
 
 	private void updateCornerViewPortInsideMap() {
@@ -121,16 +122,16 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 		double minY = this.screenSize.height - Design.toolbarHeight - (this.zoom * this.sceneDimensions.t);
 		double x = this.sceneCorner.x;
 		double y = this.sceneCorner.y;
-		if (x > outsideBounds)
-			x = outsideBounds;
-		if (x < minX - outsideBounds)
-			x = (int) minX - outsideBounds;
-		if (y > outsideBounds && y < minY - outsideBounds)
+		if (x > OUTSIDE_BOUNDS)
+			x = OUTSIDE_BOUNDS;
+		if (x < minX - OUTSIDE_BOUNDS)
+			x = (int) minX - OUTSIDE_BOUNDS;
+		if (y > OUTSIDE_BOUNDS && y < minY - OUTSIDE_BOUNDS)
 			y = minY / 2;
-		else if (y > outsideBounds)
-			y = outsideBounds;
-		else if (y < minY - outsideBounds)
-			y = (int) minY - outsideBounds;
+		else if (y > OUTSIDE_BOUNDS)
+			y = OUTSIDE_BOUNDS;
+		else if (y < minY - OUTSIDE_BOUNDS)
+			y = (int) minY - OUTSIDE_BOUNDS;
 		this.sceneCorner.setLocation(x, y);
 	}
 
@@ -141,7 +142,6 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	 * @param fixed fixed point
 	 */
 	public void zoom(double dzoom, Point fixed) {
-
 		this.focusedPointForZoom = fixed;
 		if (dzoom < 0)
 			this.targetZoom *= ZOOM_SPEED_FACTOR;
@@ -171,7 +171,6 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 		this.sceneCorner = scroll.add(this.focusedPointForZoom);
 
 		this.zoom = newZoom;
-		updateCornerViewPortInsideMap();
 	}
 
 	/**
@@ -179,12 +178,10 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	 * 
 	 * @param hex the hex to be focused
 	 * @param g the graphics
-	 * @return a new graphics instance that has the centre of the given tile in its origin and a total tile width of 100
+	 * @return focus the graphics instance such that the centre of the given tile is in its origin
 	 */
 	public void focusHex(TileCoordinate hex, Graphics g) {
-		Point p = toScreenCoordinate(hex.toSceneCoordinate());
-		g.translate(p.x, p.y);
-		g.scale(this.zoom, this.zoom);
+		transformToScene(g, hex.toSceneCoordinate());
 	}
 
 	/**
@@ -197,7 +194,7 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	}
 
 	public void transformToScene(Graphics g, SceneCoordinate sceneCoordinates) {
-		Point p = toScreenCoordinate(new SceneCoordinate(0, 0));
+		Point p = toScreenCoordinate(sceneCoordinates);
 		g.translate(p.x, p.y);
 		g.scale(this.zoom, this.zoom);
 	}
@@ -243,6 +240,7 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 			return;
 		updateMovingMap();
 		updateZoomFactor();
+		updateCornerViewPortInsideMap();
 	}
 
 	public Point getSceneCorner() {
@@ -252,22 +250,22 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	@Override
 	public void handleInput(InputEvent event) {
 		if (event.isActionAndConsume(InputAction.PAN_LEFT)) {
-			if (dx >= 0)
-				dx = event.isPress() ? 1 : 0;
+			if (keyMoveX >= 0)
+				keyMoveX = event.isPress() ? 1 : 0;
 		}
 		if (event.isActionAndConsume(InputAction.PAN_RIGHT)) {
-			if (dx <= 0)
-				dx = event.isPress() ? -1 : 0;
+			if (keyMoveX <= 0)
+				keyMoveX = event.isPress() ? -1 : 0;
 		}
 		if (event.isActionAndConsume(InputAction.PAN_DOWN)) {
-			if (dy <= 0)
-				dy = event.isPress() ? -1 : 0;
+			if (keyMoveY <= 0)
+				keyMoveY = event.isPress() ? -1 : 0;
 		}
 		if (event.isActionAndConsume(InputAction.PAN_UP)) {
-			if (dy >= 0)
-				dy = event.isPress() ? 1 : 0;
+			if (keyMoveY >= 0)
+				keyMoveY = event.isPress() ? 1 : 0;
 		}
-		if (event.isChanged()) {
+		if (event.isActionAndConsume(InputAction.MOUSE_ZOOM) && event.isChanged()) {
 			double scrollAmount = event.getChangeValue();
 			zoom(scrollAmount, event.getCurrentMousePosition());
 		}
@@ -287,8 +285,8 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 			mx = -1;
 		if (mousePos.y > this.screenSize.height - SCROLL_MOUSE_BORDER)
 			my = -1;
-		mx += dx;
-		my += dy;
+		mx += keyMoveX;
+		my += keyMoveY;
 		mx *= SCROLL_MOVE_SPEED;
 		my *= SCROLL_MOVE_SPEED;
 		moveScene(mx, my);
