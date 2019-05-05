@@ -49,9 +49,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private int maxS, maxT;
 
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
-	private List<T2<TileCoordinate, BorderTrackTile>> spawners = new ArrayList<>();
-
 	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
+
 	private Set<Entity> entities = new HashSet<>();
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
@@ -274,6 +273,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 	 * @return the number of tiles that have been reserved (may be 0)<br>
 	 *         might return -1 when the route has become invalid due to missing tracks
 	 * @throws IllegalArgumentException a tile in the path is no track tile
+	 * XXX: move this into a controller, model should just provide signals and path of TrackTiles not individual logic
 	 */
 	public int reserveTiles(@NonNull Train train, @NonNull List<TileEdgeCoordinate> path) {
 		synchronized (tileReservations) {
@@ -327,26 +327,15 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public void removeEntity(@NonNull Entity entity) {
-
-		if (entity instanceof Train) {
-			releaseAllTiles((Train) entity);
-		}
-
+		releaseTiles(entity, entity.getReservedTiles());
 		this.toBeRemoved.add(entity);
 	}
 
-	private void releaseAllTiles(Train entity) {
-		synchronized (tileReservations) {
-			List<TileCoordinate> matches = new ArrayList<>();
-			for (Entry<TileCoordinate, T2<Train, Integer>> e : tileReservations.entrySet()) {
-				if (e.getValue()._1.equals(entity)) {
-					matches.add(e.getKey());
-				}
-			}
-			for (TileCoordinate tc : matches) {
-				logger.info(entity + " removed from tile [" + tc.u + "|" + tc.v + "]");
-				tileReservations.remove(tc);
-			}
+	private void releaseTiles(Entity entity, Set<TileCoordinate> releaseTiles) {
+		if (releaseTiles == null)
+			return;
+		for (TileCoordinate tile : releaseTiles) {
+			releaseTile(entity, tile);
 		}
 	}
 

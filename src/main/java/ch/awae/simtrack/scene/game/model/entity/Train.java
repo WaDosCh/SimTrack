@@ -1,6 +1,8 @@
 package ch.awae.simtrack.scene.game.model.entity;
 
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -240,6 +242,11 @@ public class Train implements Entity {
 					logger.info("No path found for " + this + " trying again later");
 				});
 		model.getPathFindingQueue().add(request);
+	}
+
+	@Override
+	public Set<TileCoordinate> getReservedTiles() {
+		return this.reservedTiles.stream().map(tilePath -> tilePath.getTile()).collect(Collectors.toSet());
 	}
 
 }

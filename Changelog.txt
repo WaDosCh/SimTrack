@@ -7,6 +7,7 @@ v0.3.3
 	- fix coordinateInformation window sometimes not visible
 	- make scrolling around smoother with keys
 	- fix delete save doesn't work after loading it
+	- show 2 tiles outside of map
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent
