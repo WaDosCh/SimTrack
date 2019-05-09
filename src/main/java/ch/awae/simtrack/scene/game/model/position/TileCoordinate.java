@@ -75,9 +75,9 @@ public class TileCoordinate implements Serializable {
 	 * @return the position of the hex centre on the scene.
 	 */
 	public SceneCoordinate toSceneCoordinate() {
-		double x = (2 * this.u + this.v) * 50;
-		double y = this.v * Math.sqrt(3) * 50;
-		return new SceneCoordinate(x, y);
+		double s = (2 * this.u + this.v) * 50;
+		double t = this.v * Math.sqrt(3) * 50;
+		return new SceneCoordinate(s, t);
 	}
 
 }

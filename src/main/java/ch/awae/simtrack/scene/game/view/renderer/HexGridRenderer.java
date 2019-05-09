@@ -10,10 +10,6 @@ import ch.awae.simtrack.util.Resource;
 
 /**
  * Renderer for the hex grid overlay
- * 
- * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
- * @since SimTrack 0.2.1
  */
 public class HexGridRenderer implements Renderer {
 
