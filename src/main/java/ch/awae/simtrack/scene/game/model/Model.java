@@ -72,8 +72,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 		this.tileGridSize = size;
 		this.playerMoney = startingMoney;
 		this.bulldozeCost = bulldozeCost;
-		this.maxS = (int) (this.tileGridSize.width * new TileCoordinate(1, 0).toSceneCoordinate().s);
-		this.maxT = (int) (this.tileGridSize.height * new TileCoordinate(0, 1).toSceneCoordinate().t);
+		this.maxS = this.tileGridSize.width * TileCoordinate.TILE_U_S_OFFSET;
+		this.maxT = this.tileGridSize.height * TileCoordinate.TILE_V_T_OFFSET;
 	}
 
 	public Tile getTileAt(TileCoordinate position) {
@@ -226,7 +226,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 		SceneCoordinate sceneCoord = tile.toSceneCoordinate();
 		if (sceneCoord.s < 0 || sceneCoord.t < 0)
 			return false;
-		return sceneCoord.s <= maxS && sceneCoord.t <= maxT;
+		return sceneCoord.s < maxS && sceneCoord.t < maxT;
 	}
 
 	/**
