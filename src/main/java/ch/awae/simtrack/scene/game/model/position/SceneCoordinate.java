@@ -26,7 +26,7 @@ public final class SceneCoordinate {
 	}
 
 	public TileCoordinate toTileCoordinate() {
-		double v = (2.0 * t) / (Math.sqrt(3) * 100);
+		double v = (2.0 * t) / (2 * TileCoordinate.TILE_V_T_OFFSET);
 		double u = (1.0 * s) / 100 - v / 2;
 		int baseU = (int) Math.floor(u);
 		int baseV = (int) Math.floor(v);

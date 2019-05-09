@@ -7,13 +7,19 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 
+import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Delegate;
 
 public class Graphics extends Graphics2D {
 
-	public static interface GraphicsStack {};
+	private final static int HEX_HALF = TileCoordinate.TILE_SIDE_HEIGHT_HALF;
+	private final static int[][] HEX_EDGES = { { 0, -50, -50, 0, 50, 50 },
+			{ 2 * HEX_HALF, HEX_HALF, -HEX_HALF, -2 * HEX_HALF, -HEX_HALF, HEX_HALF } };
+
+	public static interface GraphicsStack {
+	};
 
 	@AllArgsConstructor
 	private final static @Data class PrivateGraphicsStack implements GraphicsStack {
@@ -45,6 +51,14 @@ public class Graphics extends Graphics2D {
 
 	public Graphics(Graphics2D backer) {
 		this.backer = backer;
+	}
+	
+	public void drawHex() {
+		backer.drawPolygon(HEX_EDGES[0], HEX_EDGES[1], 6);
+	}
+	
+	public void fillHex() {
+		backer.fillPolygon(HEX_EDGES[0], HEX_EDGES[1], 6);
 	}
 
 	// STACK MANAGEMENT

@@ -267,14 +267,14 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	/**
-	 * Request ownership over a sequence of tiles
+	 * Request ownership over a sequence of tiles<br>
+	 * XXX: move this into a controller, model should just provide signals and path of TrackTiles not individual logic
 	 * 
 	 * @param train the train that wishes to reserve a bunch of tiles
 	 * @param path a sequence of tiles to be reserved
 	 * @return the number of tiles that have been reserved (may be 0)<br>
 	 *         might return -1 when the route has become invalid due to missing tracks
 	 * @throws IllegalArgumentException a tile in the path is no track tile
-	 * XXX: move this into a controller, model should just provide signals and path of TrackTiles not individual logic
 	 */
 	public int reserveTiles(@NonNull Train train, @NonNull List<TileEdgeCoordinate> path) {
 		synchronized (tileReservations) {

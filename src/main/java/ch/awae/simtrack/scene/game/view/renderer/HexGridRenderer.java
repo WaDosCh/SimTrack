@@ -28,7 +28,6 @@ public class HexGridRenderer implements Renderer {
 		if (!this.model.getDrawGrid().get())
 			return;
 		g.setColor(gridColor);
-		int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
 		for (int i = 0; i < this.model.getTileGridSize().width; i++) {
 			for (int j = 0; j < this.model.getTileGridSize().height; j++) {
 				TileCoordinate hex = new TileCoordinate(i - (j / 2), j);
@@ -36,16 +35,7 @@ public class HexGridRenderer implements Renderer {
 					continue;
 				g.push();
 				this.viewPort.focusHex(hex, g);
-				for (int k = 0; k < 3; k++) {
-					g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-					g.rotate(Math.PI / 3);
-				}
-				if (j == 0) {
-					for (int a = 0; a < 2; a++) {
-						g.rotate(Math.PI / 3);
-						g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-					}
-				}
+				g.drawHex();
 				g.pop();
 			}
 		}

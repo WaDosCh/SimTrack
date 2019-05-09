@@ -104,7 +104,7 @@ public final class Resource {
 			}
 			logger.debug("loading '" + id + "' with " + props.size() + " entries");
 			for (Entry<Object, Object> entry : props.entrySet()) {
-				logger.debug("  " + entry.getKey() + "\t= " + entry.getValue());
+				logger.trace("  " + entry.getKey() + "\t= " + entry.getValue());
 			}
 			return new Properties(props);
 		});

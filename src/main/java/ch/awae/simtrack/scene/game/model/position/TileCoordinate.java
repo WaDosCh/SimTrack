@@ -6,10 +6,6 @@ import lombok.EqualsAndHashCode;
 
 /**
  * This defines a integer coordinate on the hexagonal tiles of the game model
- * 
- * @author Andreas Wälchli
- * @version 1.1, 2015-01-16
- * @since SimTrack 0.0.1
  */
 @EqualsAndHashCode
 public class TileCoordinate implements Serializable {
@@ -17,42 +13,37 @@ public class TileCoordinate implements Serializable {
 	private static final long serialVersionUID = -1177199223722620095L;
 
 	/**
-	 * exact value of the sine of 60 degrees (pi/3)
+	 * also known as U/2 in our notes
 	 */
-	private static final double SQRT3DIV2 = Math.sqrt(3) / 2;
+	public static final int TILE_SIDE_HEIGHT_HALF = 29;
+
+	/**
+	 * the s offset between two tiles positioned at (u,v) and (u,v+1)
+	 */
+	public static final int TILE_V_S_OFFSET = 50;
+
+	/**
+	 * the s offset between two tiles positioned at (u,v) and (u+1,v)
+	 */
+	public static final int TILE_U_S_OFFSET = 2 * TILE_V_S_OFFSET;
+
+	/**
+	 * the t offset between two tiles positioned at (u,v) and (u,v+1)
+	 */
+	public static final int TILE_V_T_OFFSET = 3 * TILE_SIDE_HEIGHT_HALF; // 87
 
 	public final int u, v;
 
 	/**
 	 * Instantiates a new tile coordinate.
 	 *
-	 * @param u
-	 *            the u component of the coordinate. This corresponds to the
-	 *            horizontal axis in a laying grid
-	 * @param v
-	 *            the v component of the coordinate. This corresponds to the
-	 *            "top-left-to-bottom-right" diagonal axis in a laying grid
+	 * @param u the u component of the coordinate. This corresponds to the horizontal axis in a laying grid
+	 * @param v the v component of the coordinate. This corresponds to the "top-left-to-bottom-right" diagonal axis in a
+	 *            laying grid
 	 */
 	public TileCoordinate(int u, int v) {
 		this.u = u;
 		this.v = v;
-	}
-
-	/**
-	 * calculates the distance between two tiles. This is the euclidian distance
-	 * between the centres of the two tiles. This value will always be smaller
-	 * than the minimum step count when travelling the hex grid. Therefore this
-	 * value can be used as an inadmissible heuristic for basic pathfinding
-	 *
-	 * @param other
-	 *            the coordinate to calculate the distance to
-	 * @return the euclidian distance to the other tile coordinate
-	 */
-	public double distanceTo(TileCoordinate other) {
-		double x = (this.u - other.u) + (this.v - other.v) * 0.5;
-		double y = (this.v - other.v) * SQRT3DIV2;
-
-		return Math.sqrt(x * x + y * y);
 	}
 
 	@Override
@@ -69,14 +60,14 @@ public class TileCoordinate implements Serializable {
 	}
 
 	/**
-	 * calculates the scene pixel coordinates of the centre of a given hex tile.
-	 * The scene coordinates are not the screen coordinates.
+	 * calculates the scene pixel coordinates of the centre of a given hex tile. The scene coordinates are not the
+	 * screen coordinates.
 	 * 
 	 * @return the position of the hex centre on the scene.
 	 */
 	public SceneCoordinate toSceneCoordinate() {
-		double s = (2 * this.u + this.v) * 50;
-		double t = this.v * Math.sqrt(3) * 50;
+		double s = (2 * this.u + this.v) * TILE_V_S_OFFSET;
+		double t = this.v * TILE_V_T_OFFSET;
 		return new SceneCoordinate(s, t);
 	}
 

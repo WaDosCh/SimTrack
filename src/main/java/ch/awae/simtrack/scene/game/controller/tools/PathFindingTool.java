@@ -22,7 +22,6 @@ import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
 public class PathFindingTool extends GameTool {
 
 	private final static Stroke borderStroke = new BasicStroke(6);
-	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private TileCoordinate start;
@@ -90,20 +89,13 @@ public class PathFindingTool extends GameTool {
 				g.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}
 		}
-
 		if (start != null) {
 			g.push();
 			g.setStroke(borderStroke);
 			this.viewPort.focusHex(start, g);
 			g.setColor(Color.GREEN);
-			double angle = Math.PI / 3;
-			for (int i = 0; i < 6; i++) {
-				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-				g.rotate(angle);
-			}
-			for (int i = 0; i < startEdge.ordinal(); i++) {
-				g.rotate(angle);
-			}
+			double angle60d = Math.PI / 3;
+			g.rotate(angle60d * startEdge.ordinal());
 			g.fillOval(30, -20, 40, 40);
 			g.pop();
 		}
@@ -113,14 +105,9 @@ public class PathFindingTool extends GameTool {
 			g.setStroke(borderStroke);
 			this.viewPort.focusHex(end, g);
 			g.setColor(Color.ORANGE);
-			double angle = Math.PI / 3;
-			for (int i = 0; i < 6; i++) {
-				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-				g.rotate(angle);
-			}
-			for (int i = 0; i < endEdge.ordinal(); i++) {
-				g.rotate(angle);
-			}
+			g.drawHex();
+			double angle60d = Math.PI / 3;
+			g.rotate(angle60d * endEdge.ordinal());
 			g.fillOval(30, -20, 40, 40);
 			g.pop();
 		}

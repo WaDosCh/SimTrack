@@ -150,7 +150,8 @@ public class Controller implements SceneController {
 			this.currentScene.handleInput(event);
 			if (event.isConsumed)
 				continue;
-			logger.info("unhandled: "+event);
+			if (event.isPress())
+				logger.debug("unhandled: " + event);
 		}
 	}
 
@@ -192,11 +193,11 @@ public class Controller implements SceneController {
 		Scene scene = this.sceneFactory.createScene(sceneClass, args);
 		if (scene != null) {
 			if (this.currentScene != null) {
-				logger.debug("unloading scene " + this.currentScene);
+				logger.trace("unloading scene " + this.currentScene);
 				this.currentScene.unloadScene();
 			}
 
-			logger.debug("loading scene " + scene);
+			logger.trace("loading scene " + scene);
 			scene.loadScene();
 			this.currentScene = scene;
 		}

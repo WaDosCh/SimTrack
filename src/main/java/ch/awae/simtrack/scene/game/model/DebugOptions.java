@@ -12,5 +12,6 @@ public class DebugOptions implements Serializable {
 	private @Getter AtomicBoolean showCoordinates = new AtomicBoolean(false);
 	private @Getter AtomicBoolean showInputGuide = new AtomicBoolean(false);
 	private @Getter AtomicBoolean showTrainReservations = new AtomicBoolean(false);
+	private @Getter AtomicBoolean renderSoftware = new AtomicBoolean(false);
 
 }

@@ -28,7 +28,6 @@ public class BuildTool extends GameTool {
 	// XXX: move these properties to a renderer
 	private static Stroke bullCursorStroke = new BasicStroke(6);
 	private static Color darkRed = Color.RED.darker();
-	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 
 	private boolean isBulldozeTool;
 	private boolean valid = false;
@@ -211,11 +210,7 @@ public class BuildTool extends GameTool {
 			this.viewPort.focusHex(this.mouseTile, g);
 			g.setColor(valid ? Color.RED : darkRed);
 			g.setStroke(bullCursorStroke);
-			double angle = Math.PI / 3;
-			for (int i = 0; i < 6; i++) {
-				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-				g.rotate(angle);
-			}
+			g.drawHex();
 		} else {
 			this.viewPort.focusHex(this.mouseTile, g);
 			TrackRenderUtil.renderRails(g, valid ? Color.LIGHT_GRAY : Color.RED, valid ? Color.GRAY : Color.RED,

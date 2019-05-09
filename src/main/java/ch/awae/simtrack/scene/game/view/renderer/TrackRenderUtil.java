@@ -8,6 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Arc2D.Double;
 
+import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TilePath;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
@@ -27,8 +28,6 @@ public class TrackRenderUtil {
 	private final static int railGauge;
 	private final static Stroke railStroke;
 
-	private final static double halfSide = (int) (50 / Math.sqrt(3));
-
 	static {
 		Properties props = Resource.getConfigProperties("trackRenderer.properties");
 
@@ -41,16 +40,16 @@ public class TrackRenderUtil {
 
 	private static void renderCurvedRail(Graphics2D g) {
 		for (int i = 0; i < 2; i++) {
-			double radius = 3 * halfSide + (i == 0 ? railGauge / 2 : -railGauge / 2);
-			Double arc = new Arc2D.Double(50 - radius - 1.7, -(3 * halfSide + radius), 2 * radius + 3, 2 * radius,
-					209.25, 60, Arc2D.OPEN);
+			double radius = TileCoordinate.TILE_V_T_OFFSET + (i == 0 ? railGauge / 2 : -railGauge / 2);
+			Double arc = new Arc2D.Double(50 - radius - 1.7, -(TileCoordinate.TILE_V_T_OFFSET + radius), 2 * radius + 3,
+					2 * radius, 209.25, 60, Arc2D.OPEN);
 			g.draw(arc);
 		}
 	}
 
 	private static void renderCurvedRailbed(Graphics2D g) {
 		AffineTransform transform = g.getTransform();
-		double radius = 3 * halfSide;
+		double radius = TileCoordinate.TILE_V_T_OFFSET;
 		double step = Math.PI / (3 * sleeperCount);
 		g.rotate(step * 1 / 3, 50 - 1, -radius);
 		step += (1. / 2. * step) / sleeperCount;

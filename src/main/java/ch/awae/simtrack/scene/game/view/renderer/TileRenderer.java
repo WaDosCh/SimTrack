@@ -3,6 +3,7 @@ package ch.awae.simtrack.scene.game.view.renderer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
@@ -18,18 +19,13 @@ import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 
-/**
- * Renderer for track rendering
- * 
- * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
- * @since SimTrack 0.2.1
- */
 public class TileRenderer implements Renderer {
 	private static final Color bedColor;
 	private static final Color waterColor;
 	private static final Color railColor;
 	private static final Stroke arrowStroke;
+	private static final BufferedImage tileGrass;
+	private static final BufferedImage tileWater;
 
 	static {
 		Properties props = Resource.getConfigProperties("renderer.properties");
@@ -38,11 +34,11 @@ public class TileRenderer implements Renderer {
 		waterColor = props.getColor("waterColor");
 		railColor = props.getColor("railColor");
 		arrowStroke = new BasicStroke(props.getInt("arrowStroke"));
+
+		tileGrass = Resource.getImage("tile-grass.png");
+		tileWater = Resource.getImage("tile-water.png");
 	}
 
-	private final static int hexSideHalf = 1 + (int) (50 / Math.sqrt(3));
-	private final static int[][] hexEdges = { { 0, -50, -50, 0, 50, 50 },
-			{ 2 * hexSideHalf, hexSideHalf, -hexSideHalf, -2 * hexSideHalf, -hexSideHalf, hexSideHalf } };
 	private Model model;
 	private ViewPortNavigator viewPort;
 	private TileCoordinate currentRenderPosition;
@@ -71,19 +67,29 @@ public class TileRenderer implements Renderer {
 
 	public void renderTileBorder(Graphics g, int width) {
 		g.setStroke(new BasicStroke(width));
-		g.drawPolygon(hexEdges[0], hexEdges[1], 6);
+		g.drawHex();
 	}
 
 	private void renderUnknown(Graphics g) {
 		g.setColor(Color.RED.darker());
-		g.fillPolygon(hexEdges[0], hexEdges[1], 6);
+		g.fillHex();
 		g.setColor(Color.BLACK);
 		g.scale(5, 5);
 		g.drawString("?", -2, 5);
 	}
 
 	public void renderWater(Graphics g) {
+		if (this.model.getDebugOptions().getRenderSoftware().get()) {
+			renderWaterSoft(g);
+			return;
+		}
+		g.scale(0.5, 0.5);
+		g.drawImage(tileWater, -100, -116, null);
+	}
+
+	public void renderWaterSoft(Graphics g) {
 		g.setColor(waterColor);
+		final int hexSideHalf = TileCoordinate.TILE_SIDE_HEIGHT_HALF;
 		g.fillOval(-hexSideHalf, -hexSideHalf, 2 * hexSideHalf, 2 * hexSideHalf);
 		g.push();
 		for (Edge edge : Edge.values()) {

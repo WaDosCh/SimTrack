@@ -16,7 +16,6 @@ import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 public class FreeTool extends GameTool {
 
 	private final static Stroke borderStroke = new BasicStroke(3);
-	private final static int hexSideHalf = (int) (50 / Math.sqrt(3));
 	private InputController input;
 
 	/**
@@ -36,11 +35,7 @@ public class FreeTool extends GameTool {
 			g.setStroke(borderStroke);
 			this.viewPort.focusHex(mouseTile, g);
 			g.setColor(Color.ORANGE);
-			double angle = Math.PI / 3;
-			for (int i = 0; i < 6; i++) {
-				g.drawLine(50, -hexSideHalf, 50, hexSideHalf);
-				g.rotate(angle);
-			}
+			g.drawHex();
 		}
 	}
 

@@ -54,6 +54,8 @@ public class DebugToolsView extends WindowComponent {
 		addComponent(new Button("Screenshot", this.input, () -> {
 			this.sceneController.requestScreenshot();
 		}));
+		addComponent(
+				new CheckboxButton("Render Software", this.input, this.model.getDebugOptions().getRenderSoftware()));
 
 		addComponent(new Label("Trains:"));
 		addComponent(new Button("Pathfinding Tool", this.input, () -> {

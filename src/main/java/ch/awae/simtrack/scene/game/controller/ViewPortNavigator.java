@@ -161,7 +161,7 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	 * 
 	 * @param hex the hex to be focused
 	 * @param g the graphics
-	 * @return focus the graphics instance such that the centre of the given tile is in its origin
+	 * @return focus the graphics instance such that the center of the given tile is in its origin
 	 */
 	public void focusHex(TileCoordinate hex, Graphics g) {
 		transformToScene(g, hex.toSceneCoordinate());
@@ -270,6 +270,14 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 		mx *= SCROLL_MOVE_SPEED;
 		my *= SCROLL_MOVE_SPEED;
 		moveScene(mx, my);
+	}
+
+	public double getTargetZoom() {
+		return this.viewPortData.targetZoom;
+	}
+
+	public double getZoom() {
+		return this.viewPortData.zoom;
 	}
 
 }

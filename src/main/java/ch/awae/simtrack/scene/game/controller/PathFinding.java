@@ -23,7 +23,6 @@ import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.util.CollectionUtil;
 import ch.awae.simtrack.util.observe.Observer;
-import ch.awae.utils.functional.T2;
 import ch.awae.utils.pathfinding.DijkstraPathfinder;
 import ch.awae.utils.pathfinding.GraphDataProvider;
 import ch.awae.utils.pathfinding.Pathfinder;
@@ -120,18 +119,6 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 			}
 		}
 		return result;
-	}
-
-	public int searchComparator(T2<TileEdgeCoordinate, Float> arg0, T2<TileEdgeCoordinate, Float> arg1,
-			TileCoordinate target) {
-		double dist1 = arg0._2 + arg0._1.tile.distanceTo(target);
-		double dist2 = arg1._2 + arg1._1.tile.distanceTo(target);
-		return (int) (dist1 - dist2);
-	}
-
-	public void setModel(Model model) {
-		this.model = model;
-		this.modelObserver = this.model.createObserver();
 	}
 
 	@Override

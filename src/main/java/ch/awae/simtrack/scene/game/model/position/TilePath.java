@@ -22,7 +22,7 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 			return 100;
 
 		// radius of the circle to draw a curved rail
-		final double radius = 100 * Math.sqrt(3) / 2;
+		final double radius = TileCoordinate.TILE_V_T_OFFSET;
 		final double perimeter = radius * 2 * Math.PI;
 		// a curve is basically 60° of the whole perimeter
 		return perimeter * 60 / 360;
@@ -36,7 +36,7 @@ public final class TilePath implements Comparable<TilePath>, Serializable {
 		if (isStraight()) {
 			delta = new PointD(progressedDistance, 0.);
 		} else { // curved, assume it's a right curve
-			final double radius = 100 * Math.sqrt(3) / 2;
+			final double radius = TileCoordinate.TILE_V_T_OFFSET;
 			double deltaAngle = progressedDistance / getPathLength() * 60 / 360 * Math.PI * 2;
 
 			delta = new PointD(0, -radius);
