@@ -10,6 +10,7 @@ import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.input.InputHandler;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.model.ViewPortData;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.judos.generic.data.geometry.PointD;
@@ -22,42 +23,26 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 
 	private static double ZOOM_MIN = 0.1;
 	private static final double ZOOM_MAX = 10;
-	private static final double ZOOM_DEFAULT = 1;
+	public static final double ZOOM_DEFAULT = 1;
 	private final static double ZOOM_SPEED_FACTOR = 1.2;
 
 	private final static int SCROLL_MOUSE_BORDER = 10;
 	private final static int SCROLL_MOVE_SPEED = 8;
 	private final static int TILES_OUTSIDE_MAP = 2;
 
-	private SceneCoordinate sceneDimensions;
-
 	private int keyMoveX = 0, keyMoveY = 0; // current scrolling on map with keys
-
-	private @Getter double zoom;
-	private @Getter double targetZoom;
-
-	private PointD sceneCorner;
-	private Point focusedPointForZoom;
-
 	private @Getter Dimension screenSize;
+
+	private ViewPortData viewPortData;
 
 	private Model model;
 	private InputController input;
 
 	public ViewPortNavigator(Model model, Dimension screenSize, InputController input) {
 		this.model = model;
+		this.viewPortData = this.model.getViewPortData();
 		this.screenSize = screenSize;
 		this.input = input;
-		this.resetZoomAndScrolling();
-	}
-
-	/**
-	 * initialises the viewport
-	 */
-	public void resetZoomAndScrolling() {
-		this.zoom = ZOOM_DEFAULT;
-		this.targetZoom = this.zoom;
-		this.sceneCorner = new PointD(0, 0);
 		updatePossibleZoomAndSceneDimensions();
 	}
 
@@ -70,8 +55,6 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 		double minH = this.screenSize.width / (this.model.getTileGridSize().width - 1.0);
 		if (minH > ZOOM_MIN)
 			ZOOM_MIN = minH / 100;
-		this.sceneDimensions = new SceneCoordinate((this.model.getTileGridSize().width - 1) * 100,
-				((this.model.getTileGridSize().height - 1) * Math.sqrt(3) * 50));
 		updateCornerViewPortInsideMap();
 	}
 
@@ -82,10 +65,10 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	 * @return the scene coordinate
 	 */
 	public SceneCoordinate toSceneCoordinate(Point p) {
-		double x = p.x - this.sceneCorner.x;
-		double y = p.y - this.sceneCorner.y;
-		x /= this.zoom;
-		y /= this.zoom;
+		double x = p.x - this.viewPortData.sceneCorner.x;
+		double y = p.y - this.viewPortData.sceneCorner.y;
+		x /= this.viewPortData.zoom;
+		y /= this.viewPortData.zoom;
 		return new SceneCoordinate(x, y);
 	}
 
@@ -98,10 +81,10 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	public Point toScreenCoordinate(SceneCoordinate p) {
 		double x = p.s;
 		double y = p.t;
-		x *= this.zoom;
-		y *= this.zoom; // here : screen scaled scene coordinate
-		x += this.sceneCorner.x;
-		y += this.sceneCorner.y;
+		x *= this.viewPortData.zoom;
+		y *= this.viewPortData.zoom; // here : screen scaled scene coordinate
+		x += this.viewPortData.sceneCorner.x;
+		y += this.viewPortData.sceneCorner.y;
 		return new Point((int) x, (int) y);
 	}
 
@@ -112,17 +95,17 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	 * @param dy
 	 */
 	public void moveScene(int dx, int dy) {
-		this.sceneCorner.x += (float) dx;
-		this.sceneCorner.y += (float) dy;
+		this.viewPortData.sceneCorner.x += (float) dx;
+		this.viewPortData.sceneCorner.y += (float) dy;
 	}
 
 	private void updateCornerViewPortInsideMap() {
 		TileCoordinate topLeftTile = new TileCoordinate(-TILES_OUTSIDE_MAP / 2, -TILES_OUTSIDE_MAP);
 		Point topLeftScreen = toScreenCoordinate(topLeftTile.toSceneCoordinate());
 		if (topLeftScreen.x > 0)
-			this.sceneCorner.x -= topLeftScreen.x;
+			this.viewPortData.sceneCorner.x -= topLeftScreen.x;
 		if (topLeftScreen.y > 0)
-			this.sceneCorner.y -= topLeftScreen.y;
+			this.viewPortData.sceneCorner.y -= topLeftScreen.y;
 
 		Dimension gridSize = this.model.getTileGridSize();
 		TileCoordinate bottomRightTile = new TileCoordinate(
@@ -130,9 +113,9 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 		Point bottomRightScreen = toScreenCoordinate(bottomRightTile.toSceneCoordinate());
 
 		if (bottomRightScreen.x < this.screenSize.width)
-			this.sceneCorner.x += this.screenSize.width - bottomRightScreen.x;
+			this.viewPortData.sceneCorner.x += this.screenSize.width - bottomRightScreen.x;
 		if (bottomRightScreen.y < this.screenSize.height)
-			this.sceneCorner.y += this.screenSize.height - bottomRightScreen.y;
+			this.viewPortData.sceneCorner.y += this.screenSize.height - bottomRightScreen.y;
 	}
 
 	/**
@@ -142,35 +125,35 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	 * @param fixed fixed point
 	 */
 	public void zoom(double dzoom, Point fixed) {
-		this.focusedPointForZoom = fixed;
+		this.viewPortData.focusedPointForZoom = fixed;
 		if (dzoom < 0)
-			this.targetZoom *= ZOOM_SPEED_FACTOR;
+			this.viewPortData.targetZoom *= ZOOM_SPEED_FACTOR;
 		else if (dzoom > 0)
-			this.targetZoom /= ZOOM_SPEED_FACTOR;
+			this.viewPortData.targetZoom /= ZOOM_SPEED_FACTOR;
 
-		if (this.targetZoom < ZOOM_MIN)
-			this.targetZoom = ZOOM_MIN;
-		if (this.targetZoom > ZOOM_MAX)
-			this.targetZoom = ZOOM_MAX;
+		if (this.viewPortData.targetZoom < ZOOM_MIN)
+			this.viewPortData.targetZoom = ZOOM_MIN;
+		if (this.viewPortData.targetZoom > ZOOM_MAX)
+			this.viewPortData.targetZoom = ZOOM_MAX;
 	}
 
 	protected void updateZoomFactor() {
-		if (this.focusedPointForZoom == null)
+		if (this.viewPortData.focusedPointForZoom == null)
 			return;
-		double diff = (this.targetZoom - this.zoom);
+		double diff = (this.viewPortData.targetZoom - this.viewPortData.zoom);
 		double diffDir = Math.signum(diff);
 		diff = Math.abs(diff);
 		double diffChange = diff * 0.1;
-		if (diffChange > 0 && diffChange < 0.001 * this.targetZoom) {
-			diffChange = Math.min(0.001 * this.targetZoom, diff);
+		if (diffChange > 0 && diffChange < 0.001 * this.viewPortData.targetZoom) {
+			diffChange = Math.min(0.001 * this.viewPortData.targetZoom, diff);
 		}
-		double newZoom = this.zoom + diffDir * diffChange;
+		double newZoom = this.viewPortData.zoom + diffDir * diffChange;
 
-		PointD scroll = this.sceneCorner.subtract(this.focusedPointForZoom);
-		scroll.scaleI(newZoom / this.zoom);
-		this.sceneCorner = scroll.add(this.focusedPointForZoom);
+		PointD scroll = this.viewPortData.sceneCorner.subtract(this.viewPortData.focusedPointForZoom);
+		scroll.scaleI(newZoom / this.viewPortData.zoom);
+		this.viewPortData.sceneCorner = scroll.add(this.viewPortData.focusedPointForZoom);
 
-		this.zoom = newZoom;
+		this.viewPortData.zoom = newZoom;
 	}
 
 	/**
@@ -196,7 +179,7 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	public void transformToScene(Graphics g, SceneCoordinate sceneCoordinates) {
 		Point p = toScreenCoordinate(sceneCoordinates);
 		g.translate(p.x, p.y);
-		g.scale(this.zoom, this.zoom);
+		g.scale(this.viewPortData.zoom, this.viewPortData.zoom);
 	}
 
 	/**
@@ -211,7 +194,7 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	 */
 	public boolean isVisible(SceneCoordinate point, int radius) {
 		Point screenPos = toScreenCoordinate(point);
-		double screenRad = radius * this.zoom;
+		double screenRad = radius * this.viewPortData.zoom;
 		// above or to the left is outside
 		if (screenPos.x < -screenRad || screenPos.y < -screenRad)
 			return false;
@@ -244,7 +227,7 @@ public class ViewPortNavigator implements BaseTicker, InputHandler {
 	}
 
 	public Point getSceneCorner() {
-		return this.sceneCorner.getPoint();
+		return this.viewPortData.sceneCorner.getPoint();
 	}
 
 	@Override

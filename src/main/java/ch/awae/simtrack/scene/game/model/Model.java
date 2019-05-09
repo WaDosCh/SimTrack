@@ -64,6 +64,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private @Getter AtomicBoolean drawGrid = new AtomicBoolean(true);
 
 	private @Getter DebugOptions debugOptions = new DebugOptions();
+	private @Getter ViewPortData viewPortData = new ViewPortData();
 
 	private @Getter transient ObservableHandler observableHandler;
 
