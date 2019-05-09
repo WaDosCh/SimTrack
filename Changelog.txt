@@ -9,6 +9,7 @@ v0.3.3
 	- fix delete save doesn't work after loading it (close stream memory leak)
 	- show 2 tiles outside of map
 	- save viewportNavigator settings in model
+	- create 2 images for grass, water tiles in 2x resolution
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent
