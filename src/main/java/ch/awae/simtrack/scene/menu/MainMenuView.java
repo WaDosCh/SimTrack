@@ -24,7 +24,7 @@ public class MainMenuView extends WindowComponent {
 		this.sceneController = sceneController;
 
 		this.title = "Main Menu";
-		addComponent(new Button("Load Scenario", input, this::loadScenario).setEnabled(false));
+		addComponent(new Button("Load Scenario", input, this::loadScenario).setEnabled(false).setWeight(1, 1));
 		addComponent(new Button("New Custom Game", input, this::newGame));
 		addComponent(new Button("Load Game", input, this::loadGame));
 		addComponent(new Button("Options", input, this::openOptions).setEnabled(false));

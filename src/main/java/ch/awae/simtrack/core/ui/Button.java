@@ -7,10 +7,8 @@ import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.window.Graphics;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
 @EqualsAndHashCode(callSuper = true)
 public class Button extends Label {
 
@@ -91,4 +89,8 @@ public class Button extends Label {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Button(" + this.title + ")";
+	}
 }

@@ -18,7 +18,7 @@ public class PlayerInfoView extends WindowComponent {
 	private void initView() {
 		this.isHeadless = false;
 		this.title = "Player information";
-		addComponent(new LabelWithUpdatedText(()-> model.playerMoney+"$", false));
+		addComponent(new LabelWithUpdatedText(()-> model.playerMoney+"$", false).setWeight(1, 0));
 	}
 
 }

@@ -41,6 +41,10 @@ public class MenuLoadView extends WindowComponent {
 		this.title = "Load Game";
 		addLoadSaveGameButtons();
 		addComponent(new Button("Cancel", this.input, this::dispose));
+		if (this.pos != null) {
+			this.size = getPreferedDimension();
+			layout(this.pos.x, this.pos.y, this.size.width, this.size.height);
+		}
 	}
 
 	private void addLoadSaveGameButtons() {
@@ -49,14 +53,13 @@ public class MenuLoadView extends WindowComponent {
 			savePanel.setVertical(false);
 			savePanel.add(new Button(savedGame.getName(), this.input, () -> {
 				loadGame(savedGame);
-			}));
+			}).setWeight(1, 0));
 			savePanel.add(new Button("X", this.input, () -> {
 				if (!savedGame.delete()) {
 					logger.warn("Could not delete savegame: " + savedGame.getName());
 				}
 				initMenu();
-				this.size = getPreferedDimension();
-				layout(this.pos.x, this.pos.y, this.size.width, this.size.height);
+
 				logger.info("delete button clicked for " + savedGame.getName());
 			}).setColored(Colored.CAUTION));
 			addComponent(savePanel);

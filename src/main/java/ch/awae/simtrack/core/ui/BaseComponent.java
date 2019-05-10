@@ -7,10 +7,18 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
+import lombok.Getter;
+
 public abstract class BaseComponent implements Component {
 
-	public Dimension size;
+	protected Dimension size;
 	protected Point pos;
+
+	/**
+	 * used for panels if more space is available than needed, to decide which components get the space
+	 */
+	protected @Getter int stretchWeightX = 0;
+	protected @Getter int stretchWeightY = 0;
 
 	public BaseComponent() {
 		super();
@@ -21,6 +29,12 @@ public abstract class BaseComponent implements Component {
 	public void layout(int x, int y, int w, int h) {
 		this.pos = new Point(x, y);
 		this.size = new Dimension(w, h);
+	}
+
+	public BaseComponent setWeight(int x, int y) {
+		this.stretchWeightX = x;
+		this.stretchWeightY = y;
+		return this;
 	}
 
 	/**

@@ -2,8 +2,8 @@ package ch.awae.simtrack.core.ui;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
-import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
@@ -16,7 +16,6 @@ public class BasePanel extends BaseComponent {
 	private ArrayList<Component> components;
 	private PositionH positionH;
 	private PositionV positionV;
-	private Window window;
 	private @Getter boolean isVertical;
 
 	/**
@@ -58,22 +57,50 @@ public class BasePanel extends BaseComponent {
 
 	@Override
 	public void layout(int x, int y, int w, int h) {
-		// Note: Just centers content inside w/h, if w/h is smaller than
-		// required, this does not scale down components
+		Dimension prefered = this.getPreferedDimension();
+		int stretchX = this.getStretchWeightX();
+		int stretchY = this.getStretchWeightY();
 		this.size = new Dimension(w, h);
+		if (stretchX == 0)
+			this.size.width = prefered.width;
+		if (stretchY == 0)
+			this.size.height = prefered.height;
 		LayoutPositioning layout = new LayoutPositioning(this.positionH, this.positionV, this.size);
 		this.pos = layout.getPixelPositionBasedOnEnums(x, y, w, h);
+
 		int currentOffset = 0;
-		for (Component b : this.components) {
-			Dimension componentSize = b.getPreferedDimension();
-			if (this.isVertical) {
-				b.layout(this.pos.x, this.pos.y + currentOffset, this.size.width, componentSize.height);
-				currentOffset += componentSize.height;
-			} else {
-				b.layout(this.pos.x + currentOffset, this.pos.y, componentSize.width, this.size.height);
-				currentOffset += componentSize.width;
+		int addedPerStretch = 0;
+		if (this.isVertical) {
+			int remaining = h - prefered.height;
+			if (stretchY > 0)
+				addedPerStretch = remaining / stretchY;
+			for (Component c : this.components) {
+				Dimension componentSize = c.getPreferedDimension();
+				int add = c.getStretchWeightY() * addedPerStretch;
+				c.layout(this.pos.x, this.pos.y + currentOffset, this.size.width, componentSize.height + add);
+				currentOffset += componentSize.height + add;
+			}
+		} else {
+			int remaining = w - prefered.width;
+			if (stretchX > 0)
+				addedPerStretch = remaining / stretchX;
+			for (Component c : this.components) {
+				Dimension componentSize = c.getPreferedDimension();
+				int add = c.getStretchWeightX() * addedPerStretch;
+				c.layout(this.pos.x + currentOffset, this.pos.y, componentSize.width + add, this.size.height);
+				currentOffset += componentSize.width + add;
 			}
 		}
+	}
+
+	@Override
+	public int getStretchWeightX() {
+		return this.components.stream().mapToInt(c -> c.getStretchWeightX()).sum();
+	}
+
+	@Override
+	public int getStretchWeightY() {
+		return this.components.stream().mapToInt(c -> c.getStretchWeightY()).sum();
 	}
 
 	@Override
@@ -100,6 +127,11 @@ public class BasePanel extends BaseComponent {
 			if (event.isConsumed)
 				return;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "BasePanel(" + this.components.stream().map(c -> c.toString()).collect(Collectors.joining(", ")) + ")";
 	}
 
 }

@@ -15,6 +15,7 @@ v0.3.3
 	- use images for map rendering (properly iterate tiles to render on map)
 	- add rendering hints to graphics object
 	- better layout for save menu
+	- add stretching to components based on setting a weight, allows to align components better
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent

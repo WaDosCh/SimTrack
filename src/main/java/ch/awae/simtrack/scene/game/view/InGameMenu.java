@@ -31,7 +31,8 @@ public class InGameMenu extends WindowComponent {
 		this.model.getIsPaused().set(true);
 
 		this.title = "Game Menu";
-		addComponent(new Button("Resume", input, this::dispose));
+		// set weight of one button such that panel extends to size of Window
+		addComponent(new Button("Resume", input, this::dispose).setWeight(1, 1));
 		addComponent(new Button("Save", input, this::save));
 		addComponent(new Button("Load", input, this::load));
 		addComponent(new Button("Quit Map", input, this::quitToMenu));
