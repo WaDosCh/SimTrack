@@ -14,6 +14,7 @@ v0.3.3
 	- fix bug where building outside grid was possible
 	- use images for map rendering (properly iterate tiles to render on map)
 	- add rendering hints to graphics object
+	- better layout for save menu
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent

@@ -19,6 +19,9 @@ public class BasePanel extends BaseComponent {
 	private Window window;
 	private @Getter boolean isVertical;
 
+	/**
+	 * by default inner components are stacked vertically
+	 */
 	public BasePanel() {
 		this(PositionH.CENTER, PositionV.CENTER, true);
 	}

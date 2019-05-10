@@ -1,9 +1,6 @@
 package ch.awae.simtrack.scene.menu;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,8 +9,10 @@ import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
+import ch.awae.simtrack.core.saves.SaveGames;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
+import ch.awae.simtrack.core.ui.Button.Colored;
 import ch.awae.simtrack.core.ui.DesktopComponent;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.core.ui.WindowComponent;
@@ -23,14 +22,16 @@ import ch.awae.simtrack.scene.game.view.Design;
 
 public class MenuLoadView extends WindowComponent {
 
-	private Logger logger = LogManager.getLogger(getClass());
+	private Logger logger = LogManager.getLogger();
 	private SceneController sceneController;
 	private DesktopComponent parentUi;
+	private SaveGames saveGame;
 
 	public MenuLoadView(SceneController controller, InputController input, DesktopComponent parentUi) {
 		super(Design.titleFont, input);
 		this.sceneController = controller;
 		this.parentUi = parentUi;
+		this.saveGame = new SaveGames();
 
 		initMenu();
 	}
@@ -43,7 +44,7 @@ public class MenuLoadView extends WindowComponent {
 	}
 
 	private void addLoadSaveGameButtons() {
-		for (File savedGame : getAvailableSaves()) {
+		for (File savedGame : this.saveGame.getAvailableSaves()) {
 			BasePanel savePanel = new BasePanel();
 			savePanel.setVertical(false);
 			savePanel.add(new Button(savedGame.getName(), this.input, () -> {
@@ -57,25 +58,16 @@ public class MenuLoadView extends WindowComponent {
 				this.size = getPreferedDimension();
 				layout(this.pos.x, this.pos.y, this.size.width, this.size.height);
 				logger.info("delete button clicked for " + savedGame.getName());
-			}));
+			}).setColored(Colored.CAUTION));
 			addComponent(savePanel);
 		}
 	}
 
-	private File[] getAvailableSaves() {
-		File saveFolder = new File("saves/");
-		return saveFolder.listFiles((folder, name) -> name.endsWith(".simtrack.save"));
-	}
-
 	private void loadGame(File savedGame) {
-		logger.debug("LOAD GAME");
-		ObjectInputStream in = null;
 		try {
-			in = new ObjectInputStream(new FileInputStream(new File("saves/" + savedGame.getName())));
-			Model model = (Model) in.readObject();
+			Model model = this.saveGame.loadGame(savedGame);
 			this.sceneController.loadScene(Game.class, model);
 		} catch (Exception e) {
-			logger.error("error loading save", e);
 			WindowComponent error = new WindowComponent(Design.titleFont, this.input);
 			error.title = "Failed to load savegame";
 			error.addComponent(new Label("There was an error loading this savegame."));
@@ -83,13 +75,6 @@ public class MenuLoadView extends WindowComponent {
 				error.dispose();
 			}));
 			this.parentUi.addWindow(error);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-				}
-			}
 		}
 	}
 

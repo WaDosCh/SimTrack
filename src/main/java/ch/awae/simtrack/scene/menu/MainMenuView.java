@@ -16,22 +16,22 @@ public class MainMenuView extends WindowComponent {
 	public static final String CLOSE_ACTION_NEW_CUSTOM_GAME = "NEW_CUSTOM_GAME";
 
 	protected final Logger logger = LogManager.getLogger();
-	
+
 	private SceneController sceneController;
 
 	public MainMenuView(InputController input, SceneController sceneController) {
 		super(Design.titleFont, input);
 		this.sceneController = sceneController;
-		
-		title = "Main Menu";
+
+		this.title = "Main Menu";
 		addComponent(new Button("Load Scenario", input, this::loadScenario).setEnabled(false));
 		addComponent(new Button("New Custom Game", input, this::newGame));
-		addComponent(new Button("Load Saved Game", input, this::loadGame));
+		addComponent(new Button("Load Game", input, this::loadGame));
 		addComponent(new Button("Options", input, this::openOptions).setEnabled(false));
 		addComponent(new Button("UI Test Menu", input, this::openTestMenu));
 		addComponent(new Button("Exit", input, this::exitGame));
 	}
-	
+
 	private void openTestMenu() {
 		this.sceneController.loadScene(UITestingMenu.class);
 	}

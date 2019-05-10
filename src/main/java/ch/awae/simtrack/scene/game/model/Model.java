@@ -65,6 +65,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 
 	private @Getter DebugOptions debugOptions = new DebugOptions();
 	private @Getter ViewPortData viewPortData = new ViewPortData();
+	public String lastSaveGameName = "NewCustomGame";
 
 	private @Getter transient ObservableHandler observableHandler;
 

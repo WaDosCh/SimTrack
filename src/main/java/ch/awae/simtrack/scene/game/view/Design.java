@@ -11,9 +11,13 @@ public class Design {
 	public static final Color panelBackground;
 	public static final Color grayBorder;
 	public static final Color textColor;
+	
 	public static final Color buttonBackground;
+	public static final Color buttonBackgroundCaution;
 	public static final Color buttonHover;
+	public static final Color buttonHoverCaution;
 	public static final Color buttonBorder;
+	
 	public static final Color textFieldBg;
 	public static final Color textFieldBorder;
 	public static final Color textFieldFocus;
@@ -33,6 +37,7 @@ public class Design {
 	public static final Color windowBorder;
 	public static final Color windowBannerBg;
 
+
 	static {
 		Properties props = Resource.getConfigProperties("design.properties");
 		toolbarHeight = props.getInt("toolbarHeight");
@@ -45,10 +50,12 @@ public class Design {
 		windowBorder = props.getColor("windowBorder");
 		windowBannerBg = props.getColor("windowBannerBg");
 		
-		buttonTextMarginX = props.getInt("buttonMarginX");
-		buttonTextMarginY = props.getInt("buttonMarginY");
+		buttonTextMarginX = props.getInt("buttonTextMarginX");
+		buttonTextMarginY = props.getInt("buttonTextMarginY");
 		buttonBackground = props.getColor("buttonBackground");
+		buttonBackgroundCaution = props.getColor("buttonBackgroundCaution");
 		buttonHover = props.getColor("buttonHover");
+		buttonHoverCaution = props.getColor("buttonHoverCaution");
 		buttonDisabled = props.getColor("buttonDisabled");
 		buttonBorder = props.getColor("buttonBorder");
 		

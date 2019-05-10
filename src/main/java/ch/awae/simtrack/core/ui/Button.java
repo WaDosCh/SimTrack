@@ -1,5 +1,7 @@
 package ch.awae.simtrack.core.ui;
 
+import java.awt.Color;
+
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -12,16 +14,24 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Button extends Label {
 
+	public enum Colored {
+		DEFAULT,
+		CAUTION;
+	}
+
 	public final Runnable action;
 	public final InputController input;
 	protected boolean isEnabled;
 	protected InputAction hotkeyAction = null;
+	protected Color bg;
+	protected Color hover;
 
 	public Button(String title, InputController input, Runnable action) {
 		super(title);
 		this.input = input;
 		this.action = action;
 		this.isEnabled = true;
+		setColored(Colored.DEFAULT);
 	}
 
 	public Button setEnabled(boolean isEnabled) {
@@ -29,10 +39,21 @@ public class Button extends Label {
 		return this;
 	}
 
+	public Button setColored(Colored colored) {
+		if (colored == Colored.CAUTION) {
+			bg = Design.buttonBackgroundCaution;
+			hover = Design.buttonHoverCaution;
+		} else {
+			bg = Design.buttonBackground;
+			hover = Design.buttonHover;
+		}
+		return this;
+	}
+
 	public void render(Graphics g) {
-		g.setColor(Design.buttonBackground);
-		if (isPointInside(this.input.getMousePosition()) && this.isEnabled) {
-			g.setColor(Design.buttonHover);
+		g.setColor(this.bg);
+		if (this.isEnabled && isPointInside(this.input.getMousePosition())) {
+			g.setColor(this.hover);
 		}
 		if (!this.isEnabled)
 			g.setColor(Design.buttonDisabled);
