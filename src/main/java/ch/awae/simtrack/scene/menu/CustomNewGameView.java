@@ -3,7 +3,9 @@ package ch.awae.simtrack.scene.menu;
 import java.awt.Dimension;
 
 import ch.awae.simtrack.core.SceneController;
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.BasePanel;
 import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.InputField;
@@ -77,6 +79,13 @@ public class CustomNewGameView extends WindowComponent {
 		op.connectionCount = this.connections.getNumber();
 
 		this.controller.loadScene(Game.class, ModelFactory.getModel(op));
+	}
+	
+	@Override
+	public void handleInput(InputEvent event) {
+		super.handleInput(event);
+		if (!event.isConsumed && event.isPressActionAndConsume(InputAction.DESELECT))
+			dispose();
 	}
 
 }
