@@ -23,6 +23,7 @@ import ch.awae.simtrack.scene.game.view.InputGuideView;
 import ch.awae.simtrack.scene.game.view.PlayerInfoView;
 import ch.awae.simtrack.scene.game.view.ToolBar;
 import ch.awae.simtrack.scene.game.view.renderer.MapRenderer;
+import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
 
 public class Game extends Scene {
 
@@ -87,6 +88,7 @@ public class Game extends Scene {
 	public void screenResized(Dimension screenSize) {
 		this.viewPortNavigator.setScreenSize(screenSize);
 		this.ui.layout(0, 0, screenSize.width, screenSize.height);
+		TileRenderer.reloadGraphics();
 	}
 
 	@Override

@@ -24,8 +24,8 @@ public class TileRenderer implements Renderer {
 	private static final Color waterColor;
 	private static final Color railColor;
 	private static final Stroke arrowStroke;
-	private static final BufferedImage tileGrass;
-	private static final BufferedImage tileWater;
+	private static BufferedImage tileGrass;
+	private static BufferedImage tileWater;
 
 	static {
 		Properties props = Resource.getConfigProperties("renderer.properties");
@@ -35,6 +35,10 @@ public class TileRenderer implements Renderer {
 		railColor = props.getColor("railColor");
 		arrowStroke = new BasicStroke(props.getInt("arrowStroke"));
 
+		reloadGraphics();
+	}
+
+	public static void reloadGraphics() {
 		tileGrass = Resource.getImage("tile-grass.png");
 		tileWater = Resource.getImage("tile-water.png");
 	}
@@ -83,6 +87,7 @@ public class TileRenderer implements Renderer {
 			renderWaterSoft(g);
 			return;
 		}
+
 		g.scale(0.5, 0.5);
 		g.drawImage(tileWater, -100, -116, null);
 	}
