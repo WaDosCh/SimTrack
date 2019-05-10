@@ -2,11 +2,11 @@ package ch.awae.simtrack.scene.game.view.renderer;
 
 import java.awt.Color;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.window.Graphics;
 
 /**
  * Renderer for the hex grid overlay

@@ -5,11 +5,11 @@ import java.awt.FontMetrics;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.NamedComponent;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.window.Graphics;
 
 public final class Profiler implements ProfilerI {
 

@@ -3,9 +3,9 @@ package ch.awae.simtrack.core.ui;
 import java.awt.Dimension;
 import java.awt.Font;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.window.Graphics;
 
 public class Label extends BaseComponent {
 

@@ -3,12 +3,12 @@ package ch.awae.simtrack.core.ui;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.window.Graphics;
 import lombok.Getter;
 
 public class BasePanel extends BaseComponent {

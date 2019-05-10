@@ -2,7 +2,6 @@ package ch.awae.simtrack.scene.game.view;
 
 import java.awt.Rectangle;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
@@ -14,6 +13,7 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.scene.menu.MenuLoadView;
+import ch.awae.simtrack.window.Graphics;
 
 public class InGameMenu extends WindowComponent {
 

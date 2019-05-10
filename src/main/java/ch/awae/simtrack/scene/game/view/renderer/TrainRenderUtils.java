@@ -7,12 +7,12 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.entity.TrainElementConfiguration;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.window.Graphics;
 
 public class TrainRenderUtils {
 

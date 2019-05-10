@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -19,6 +18,7 @@ import ch.awae.simtrack.scene.game.model.tile.track.ConstructionTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackValidator;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
+import ch.awae.simtrack.window.Graphics;
 
 /**
  * Build Tool. Used for placing and deleting track tiles

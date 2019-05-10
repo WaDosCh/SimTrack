@@ -1,11 +1,14 @@
-package ch.awae.simtrack.core;
+package ch.awae.simtrack.window;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.RenderingHints.Key;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.util.HashMap;
 
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import lombok.AllArgsConstructor;
@@ -17,6 +20,14 @@ public class Graphics extends Graphics2D {
 	private final static int HEX_HALF = TileCoordinate.TILE_SIDE_HEIGHT_HALF;
 	private final static int[][] HEX_EDGES = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * HEX_HALF, HEX_HALF, -HEX_HALF, -2 * HEX_HALF, -HEX_HALF, HEX_HALF } };
+	
+	private static HashMap<Key, Object> hints;
+	{
+		hints = new HashMap<Key,Object>();
+		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING,
+	             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	}
 
 	public static interface GraphicsStack {
 	};
@@ -51,6 +62,7 @@ public class Graphics extends Graphics2D {
 
 	public Graphics(Graphics2D backer) {
 		this.backer = backer;
+		this.backer.setRenderingHints(hints);
 	}
 	
 	public void drawHex() {

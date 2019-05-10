@@ -3,12 +3,12 @@ package ch.awae.simtrack.core.ui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.util.TextEditing;
+import ch.awae.simtrack.window.Graphics;
 import ch.judos.generic.data.StringUtils;
 import lombok.Getter;
 import lombok.Setter;

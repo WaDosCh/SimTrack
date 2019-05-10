@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
+import ch.awae.simtrack.window.Graphics;
 
 /**
  * organize multiple WindowComponents, handling correct draw & input order, also responsible for moving and alwaysOnTop

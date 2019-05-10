@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.ui.WindowComponent;
@@ -17,6 +16,7 @@ import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.tile.track.ConstructionTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
+import ch.awae.simtrack.window.Graphics;
 
 /**
  * Track tool-bar used for track selection while editing the board

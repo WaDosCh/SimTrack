@@ -2,9 +2,9 @@ package ch.awae.simtrack.scene.game.view;
 
 import java.awt.Dimension;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.ui.Button;
+import ch.awae.simtrack.window.Graphics;
 
 public abstract class ToolBarButton extends Button {
 

@@ -1,10 +1,10 @@
 package ch.awae.simtrack.core.ui;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.window.Graphics;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

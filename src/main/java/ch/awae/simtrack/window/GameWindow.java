@@ -1,6 +1,8 @@
-package ch.awae.simtrack.core;
+package ch.awae.simtrack.window;
 
 import java.awt.Color;
+
+import ch.awae.simtrack.core.Window;
 
 public interface GameWindow extends Window {
 

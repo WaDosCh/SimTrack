@@ -2,9 +2,9 @@ package ch.awae.simtrack.scene.game.model.tile;
 
 import java.awt.Color;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
+import ch.awae.simtrack.window.Graphics;
 import lombok.Getter;
 
 public class UpgradeTile implements FixedTile {

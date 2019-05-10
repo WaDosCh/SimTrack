@@ -8,8 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.BaseRenderer;
 import ch.awae.simtrack.core.BaseTicker;
-import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.input.InputHandler;
@@ -19,6 +17,8 @@ import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
 import ch.awae.simtrack.scene.game.controller.tools.SignalTool;
 import ch.awae.simtrack.scene.game.controller.tools.Tool;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.window.Graphics;
+import ch.awae.simtrack.window.Graphics.GraphicsStack;
 import lombok.NonNull;
 
 /**

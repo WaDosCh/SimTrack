@@ -10,10 +10,8 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
 import lombok.Getter;
-import ch.awae.simtrack.core.GameWindow;
 
 public class NativeFullscreen implements GameWindow {
 

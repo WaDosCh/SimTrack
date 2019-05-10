@@ -1,8 +1,8 @@
 package ch.awae.simtrack.scene.game.view.renderer;
 
 import ch.awae.simtrack.core.BaseRenderer;
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.Game;
+import ch.awae.simtrack.window.Graphics;
 
 /**
  * General representation of any renderer.

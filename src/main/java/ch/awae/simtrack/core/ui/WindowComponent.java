@@ -8,11 +8,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.function.Consumer;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.window.Graphics;
 import lombok.Getter;
 
 public class WindowComponent extends BaseComponent {

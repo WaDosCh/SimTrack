@@ -15,12 +15,14 @@ import javax.imageio.stream.FileImageOutputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.profiler.Profiler;
 import ch.awae.simtrack.core.profiler.ProfilerI;
+import ch.awae.simtrack.window.GameWindow;
+import ch.awae.simtrack.window.Graphics;
+import ch.awae.simtrack.window.Graphics.GraphicsStack;
 import ch.judos.generic.graphics.ImageUtils;
 import lombok.Getter;
 
@@ -86,6 +88,7 @@ public class Controller implements SceneController {
 
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
+	    
 		// clip makes everyone aware of the available screen size
 		graphics.clipRect(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 		if (this.currentScene == null)

@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.Edge;
@@ -18,6 +17,7 @@ import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.window.Graphics;
 
 public class TileRenderer implements Renderer {
 	private static final Color bedColor;

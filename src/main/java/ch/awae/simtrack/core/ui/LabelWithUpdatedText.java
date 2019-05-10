@@ -2,7 +2,7 @@ package ch.awae.simtrack.core.ui;
 
 import java.util.function.Supplier;
 
-import ch.awae.simtrack.core.Graphics;
+import ch.awae.simtrack.window.Graphics;
 
 public class LabelWithUpdatedText extends Label {
 

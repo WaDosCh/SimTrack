@@ -10,12 +10,10 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.util.Properties;
 import ch.awae.simtrack.util.Resource;
 import lombok.Getter;
-import ch.awae.simtrack.core.GameWindow;
 
 public class ResizableWindow implements GameWindow {
 

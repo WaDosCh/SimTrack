@@ -3,8 +3,8 @@ package ch.awae.simtrack.scene.game.model.tile;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
+import ch.awae.simtrack.window.Graphics;
 import lombok.Getter;
 
 /**

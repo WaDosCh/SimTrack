@@ -3,8 +3,8 @@ package ch.awae.simtrack.scene.game.view.renderer;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.window.Graphics;
 
 public class BackgroundRenderer implements Renderer {
 

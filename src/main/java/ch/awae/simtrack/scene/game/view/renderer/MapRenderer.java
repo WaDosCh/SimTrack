@@ -3,10 +3,10 @@ package ch.awae.simtrack.scene.game.view.renderer;
 import java.util.ArrayList;
 
 import ch.awae.simtrack.core.BaseRenderer;
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.window.Graphics;
 
 public class MapRenderer implements BaseRenderer {
 

@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -18,6 +17,7 @@ import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileEdgeCoordinate;
+import ch.awae.simtrack.window.Graphics;
 import ch.judos.generic.data.geometry.Angle;
 import ch.judos.generic.data.geometry.PointD;
 

@@ -1,10 +1,10 @@
 package ch.awae.simtrack.scene.game.view.renderer;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Train;
+import ch.awae.simtrack.window.Graphics;
 
 public class EntityRenderer implements Renderer {
 

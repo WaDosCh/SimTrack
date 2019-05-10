@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import ch.awae.simtrack.core.BaseTicker;
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
@@ -13,6 +12,7 @@ import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.ViewPortData;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
+import ch.awae.simtrack.window.Graphics;
 import ch.judos.generic.data.geometry.PointD;
 import lombok.Getter;
 

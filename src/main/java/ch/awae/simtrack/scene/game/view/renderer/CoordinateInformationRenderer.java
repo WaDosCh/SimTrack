@@ -6,13 +6,13 @@ import java.awt.Point;
 import java.text.DecimalFormat;
 
 import ch.awae.simtrack.core.BaseRenderer;
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.SceneCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.window.Graphics;
 
 public class CoordinateInformationRenderer implements BaseRenderer {
 

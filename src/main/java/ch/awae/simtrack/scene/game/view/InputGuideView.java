@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.util.Resource;
+import ch.awae.simtrack.window.Graphics;
 
 public class InputGuideView extends WindowComponent {
 

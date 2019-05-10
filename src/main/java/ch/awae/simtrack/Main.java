@@ -3,10 +3,10 @@ package ch.awae.simtrack;
 import javax.swing.SwingUtilities;
 
 import ch.awae.simtrack.core.Controller;
-import ch.awae.simtrack.core.GameWindow;
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.util.MacKeyboardHack;
+import ch.awae.simtrack.window.GameWindow;
 import ch.awae.simtrack.window.ResizableWindow;
 
 public class Main {

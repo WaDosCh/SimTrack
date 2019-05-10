@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.BaseRenderer;
-import ch.awae.simtrack.core.Graphics;
-import ch.awae.simtrack.core.Graphics.GraphicsStack;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Train;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
+import ch.awae.simtrack.window.Graphics;
+import ch.awae.simtrack.window.Graphics.GraphicsStack;
 import ch.awae.utils.functional.T2;
 
 public class TileReservationRenderer implements BaseRenderer {

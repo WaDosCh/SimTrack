@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.model.position.Edge;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.position.TilePath;
 import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
+import ch.awae.simtrack.window.Graphics;
 
 public class TrackTile implements Tile {
 

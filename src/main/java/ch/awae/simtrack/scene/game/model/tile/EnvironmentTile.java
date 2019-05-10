@@ -1,7 +1,7 @@
 package ch.awae.simtrack.scene.game.model.tile;
 
-import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
+import ch.awae.simtrack.window.Graphics;
 
 public class EnvironmentTile implements FixedTile {
 
