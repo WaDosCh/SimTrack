@@ -25,7 +25,7 @@ public class Main {
 		
 		InputController input = new InputController();
 //		GameWindow window = new NativeFullscreen(input);
-		GameWindow window = new ResizableWindow(1200, 800, input);
+		GameWindow window = new ResizableWindow(1650, 1040, input);
 		
 		Controller controller = new Controller(window);
 		controller.start();
