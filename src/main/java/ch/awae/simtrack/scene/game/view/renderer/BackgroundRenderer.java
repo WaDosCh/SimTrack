@@ -8,7 +8,7 @@ import ch.awae.simtrack.util.Resource;
 
 public class BackgroundRenderer implements Renderer {
 
-	private Color color = Resource.getConfigProperties("renderer.properties").getColor("grassColor");
+	private Color GRASS_COLOR = Resource.getConfigProperties("renderer.properties").getColor("grassColor");
 
 	public BackgroundRenderer() {
 	}
@@ -16,7 +16,7 @@ public class BackgroundRenderer implements Renderer {
 	@Override
 	public void render(Graphics g) {
 		Dimension size = g.getClipBounds().getSize();
-		g.setColor(color);
+		g.setColor(GRASS_COLOR);
 		g.fillRect(0, 0, size.width,size.height);
 	}
 

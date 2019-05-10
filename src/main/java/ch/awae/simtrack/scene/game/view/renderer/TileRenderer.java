@@ -2,9 +2,9 @@ package ch.awae.simtrack.scene.game.view.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
-import java.util.Map.Entry;
 
 import ch.awae.simtrack.core.Graphics;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
@@ -55,18 +55,47 @@ public class TileRenderer implements Renderer {
 	@Override
 	public void render(Graphics g) {
 		Graphics.GraphicsStack stack = g.getStack();
-		for (Entry<TileCoordinate, Tile> pair : this.model.getTiles()) {
+
+		TileCoordinate topLeftTile = this.viewPort.toSceneCoordinate(new Point(0, 0)).toTileCoordinate();
+		TileCoordinate topRightTile = this.viewPort.toSceneCoordinate(new Point(this.viewPort.getScreenSize().width, 0))
+				.toTileCoordinate();
+		TileCoordinate bottomTile = this.viewPort.toSceneCoordinate(new Point(0, this.viewPort.getScreenSize().height))
+				.toTileCoordinate();
+
+		int tileU = topLeftTile.u;
+		int tileV = topLeftTile.v - 1;
+		int tileULeft = 1;
+
+		while (true) {
+			renderTile(g, new TileCoordinate(tileU, tileV));
+
+			tileU++;
+			if (tileU == topRightTile.u + 1) {
+				tileULeft++;
+				tileU = topLeftTile.u - tileULeft / 2;
+				tileV++;
+				if (tileV == bottomTile.v + 2) {
+					break;
+				}
+			}
+
 			g.setStack(stack);
-			this.currentRenderPosition = pair.getKey();
-			if (!this.viewPort.isVisible(this.currentRenderPosition))
-				continue;
-
-			Tile tile = pair.getValue();
-			this.viewPort.focusHex(this.currentRenderPosition, g);
-
-			tile.render(this, g);
 		}
 		g.setStack(stack);
+	}
+
+	private void renderTile(Graphics g, TileCoordinate tileCoord) {
+		this.currentRenderPosition = tileCoord;
+		if (!this.viewPort.isVisible(this.currentRenderPosition))
+			return;
+		Tile tile = this.model.getTileAt(tileCoord);
+		this.viewPort.focusHex(this.currentRenderPosition, g);
+		if (tile == null || !(tile instanceof EnvironmentTile)) {
+			renderGrass(g);
+		}
+		if (tile != null) {
+			tile.render(this, g);
+		}
 	}
 
 	public void renderTileBorder(Graphics g, int width) {
@@ -87,9 +116,18 @@ public class TileRenderer implements Renderer {
 			renderWaterSoft(g);
 			return;
 		}
-
 		g.scale(0.5, 0.5);
 		g.drawImage(tileWater, -100, -116, null);
+	}
+
+	private void renderGrass(Graphics g) {
+		if (this.model.getDebugOptions().getRenderSoftware().get()) {
+			return;
+		}
+		g.push();
+		g.scale(0.5, 0.5);
+		g.drawImage(tileGrass, -100, -116, null);
+		g.pop();
 	}
 
 	public void renderWaterSoft(Graphics g) {

@@ -12,6 +12,7 @@ v0.3.3
 	- create 2 images for grass, water tiles in 2x resolution
 	- set tile height to 116 pixel fixed (no sqrt or unprecise double height)
 	- fix bug where building outside grid was possible
+	- use images for map rendering (properly iterate tiles to render on map)
 
 v0.3.2
 	- added isHeadless/ isMovable properties to WindowComponent
