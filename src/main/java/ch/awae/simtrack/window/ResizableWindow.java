@@ -87,6 +87,9 @@ public class ResizableWindow implements GameWindow {
 	public void flipFrame() {
 		if (graphics != null)
 			graphics.dispose();
+		if (buffer.contentsLost() || buffer.contentsRestored()) {
+			buffer = canvas.getBufferStrategy();
+		}
 		buffer.show();
 		graphics = new Graphics((Graphics2D) buffer.getDrawGraphics());
 		graphics.setBackground(GameWindow.BG_COLOR);

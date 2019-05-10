@@ -41,8 +41,8 @@ public class TrackRenderUtil {
 	private static void renderCurvedRail(Graphics2D g) {
 		for (int i = 0; i < 2; i++) {
 			double radius = TileCoordinate.TILE_V_T_OFFSET + (i == 0 ? railGauge / 2 : -railGauge / 2);
-			Double arc = new Arc2D.Double(50 - radius - 1.7, -(TileCoordinate.TILE_V_T_OFFSET + radius), 2 * radius + 3,
-					2 * radius, 209.25, 60, Arc2D.OPEN);
+			Double arc = new Arc2D.Double(50 - radius, -(TileCoordinate.TILE_V_T_OFFSET + radius), 2 * radius,
+					2 * radius, 210, 60, Arc2D.OPEN);
 			g.draw(arc);
 		}
 	}
@@ -55,14 +55,14 @@ public class TrackRenderUtil {
 		step += (1. / 2. * step) / sleeperCount;
 		for (int i = 0; i < sleeperCount; i++) {
 			g.fillRect(49 - sleeperWidth / 2, -sleeperHeight / 2, sleeperWidth, sleeperHeight);
-			g.rotate(step, 50 - 1, -radius);
+			g.rotate(step, 50, -radius);
 		}
 		g.setTransform(transform);
 	}
 
 	private static void renderStraightRail(Graphics2D g) {
-		g.drawLine(-49, railGauge / 2, 49, railGauge / 2);
-		g.drawLine(-49, -railGauge / 2, 49, -railGauge / 2);
+		g.drawLine(-50, railGauge / 2, 49, railGauge / 2);
+		g.drawLine(-50, -railGauge / 2, 49, -railGauge / 2);
 	}
 
 	private static void renderStraightRailbed(Graphics2D g) {
