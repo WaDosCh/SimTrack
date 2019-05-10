@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.scene.game.Game;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.ModelFactory;
@@ -15,11 +16,14 @@ public class SceneFactory {
 	protected final Logger logger = LogManager.getLogger();
 
 	private Window window;
-	private Controller controller;
+	private SceneController controller;
 
-	public SceneFactory(Controller controller, Window window) {
+	private InputController input;
+
+	public SceneFactory(SceneController controller, Window window, InputController input) {
 		this.controller = controller;
 		this.window = window;
+		this.input = input;
 	}
 
 	public Scene createScene(Class<? extends Scene> sceneClass, Object... args) {
@@ -30,11 +34,11 @@ public class SceneFactory {
 				logger.info("Creating new model as none was passed to create game scene.");
 				model = ModelFactory.getDefaultModel();
 			}
-			return new Game(controller, model, this.window, controller.getInput());
+			return new Game(controller, model, this.window, this.input);
 		} else if (sceneClass == Menu.class) {
-			return new Menu(controller, this.window, controller.getInput());
+			return new Menu(controller, this.window, this.input);
 		} else if (sceneClass == UITestingMenu.class) {
-			return new UITestingMenu(controller, this.window, controller.getInput());
+			return new UITestingMenu(controller, this.window, this.input);
 		} else {
 			logger.error("Can't create scene of type {}", sceneClass);
 			return null;

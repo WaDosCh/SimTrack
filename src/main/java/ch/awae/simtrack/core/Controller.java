@@ -43,7 +43,7 @@ public class Controller implements SceneController {
 	public Controller(GameWindow window) {
 		this.window = window;
 		this.input = window.getInput();
-		this.sceneFactory = new SceneFactory(this, window);
+		this.sceneFactory = new SceneFactory((SceneController) this, window, this.input);
 		this.gameClock = new HighPrecisionClock(60, this::tick, "Game Loop");
 
 		profiler = new Profiler();
@@ -88,7 +88,7 @@ public class Controller implements SceneController {
 
 		window.flipFrame();
 		Graphics graphics = window.getGraphics();
-	    
+
 		// clip makes everyone aware of the available screen size
 		graphics.clipRect(0, 0, window.getScreenSize().width, window.getScreenSize().height);
 		if (this.currentScene == null)

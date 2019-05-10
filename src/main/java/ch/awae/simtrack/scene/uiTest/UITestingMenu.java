@@ -2,8 +2,8 @@ package ch.awae.simtrack.scene.uiTest;
 
 import java.awt.Dimension;
 
-import ch.awae.simtrack.core.Controller;
 import ch.awae.simtrack.core.Scene;
+import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.Window;
 import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
@@ -13,9 +13,9 @@ import ch.awae.simtrack.core.ui.Button;
 import ch.awae.simtrack.core.ui.DesktopComponent;
 import ch.awae.simtrack.core.ui.InputField;
 import ch.awae.simtrack.core.ui.Label;
-import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionH;
 import ch.awae.simtrack.core.ui.LayoutPositioning.PositionV;
+import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.util.RandomJSExt;
@@ -25,7 +25,7 @@ public class UITestingMenu extends Scene {
 
 	private DesktopComponent ui;
 
-	public UITestingMenu(Controller controller, Window window, InputController input) {
+	public UITestingMenu(SceneController controller, Window window, InputController input) {
 		super(controller);
 
 		this.ui = new DesktopComponent(input);
