@@ -2,7 +2,7 @@
 Railroad Planning and Structuring Game
 
 0.3.3 Image rendering
-![images for map rendering](https://raw.githubusercontent.com/WaDosCh/SimTrack/master/screenshots/v0.3.3-2%20screenshot.jpg)
+![images for map rendering](https://raw.githubusercontent.com/WaDosCh/SimTrack/master/v0.3.3-3%20screenshot.jpg)
 
 0.3.3 Updated Toolbar
 ![v0.3.3 updated toolbar](https://raw.githubusercontent.com/WaDosCh/SimTrack/master/screenshots/v0.3.3-1%20updated%20toolbar.jpg)
