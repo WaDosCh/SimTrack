@@ -23,6 +23,7 @@ import ch.awae.simtrack.core.profiler.ProfilerI;
 import ch.awae.simtrack.window.GameWindow;
 import ch.awae.simtrack.window.Graphics;
 import ch.awae.simtrack.window.Graphics.GraphicsStack;
+import ch.judos.generic.control.HighPrecisionClock;
 import ch.judos.generic.graphics.ImageUtils;
 import lombok.Getter;
 

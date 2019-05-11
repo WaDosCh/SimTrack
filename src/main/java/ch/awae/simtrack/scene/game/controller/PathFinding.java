@@ -1,6 +1,5 @@
 package ch.awae.simtrack.scene.game.controller;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,13 +36,13 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 
 	private Logger logger = LogManager.getLogger(getClass());
 
-	private EnhancedHashMap2<TileEdgeCoordinate, TileEdgeCoordinate, Double> connectionCache;
+	private HashMap2<TileEdgeCoordinate, TileEdgeCoordinate, Double> connectionCache;
 	private Observer modelObserver;
 	private Pathfinder<TileEdgeCoordinate> pathfinder;
 
 	public PathFinding(Model model) {
 		this.model = model;
-		this.connectionCache = new EnhancedHashMap2<>();
+		this.connectionCache = new HashMap2<>();
 		this.modelObserver = this.model.createObserver();
 		this.pathfinder = new DijkstraPathfinder<>(this);
 	}
@@ -167,11 +166,3 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 
 }
 
-class EnhancedHashMap2<K1, K2, V> extends HashMap2<K1, K2, V> {
-	public Set<K2> getInnerKeySet(K1 key) {
-		val map = super.map1.get(key);
-		if (map == null)
-			return Collections.emptySet();
-		return map.keySet();
-	}
-}

@@ -28,11 +28,13 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.9.8</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>ch.awae</groupId>
 			<artifactId>awaeUtils</artifactId>
 			<version>2.1.0</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
