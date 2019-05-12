@@ -35,6 +35,15 @@ public class ConstructionTrackTile extends TrackTile {
 				this.showInToolbar);
 	}
 
+	public ConstructionTrackTile rotated(int clockwiseTurns) {
+		if (clockwiseTurns < 0)
+			clockwiseTurns += 6;
+		ConstructionTrackTile tile = this;
+		for (int i = 0; i < clockwiseTurns; i++)
+			tile = tile.rotated(true);
+		return tile;
+	}
+
 	/**
 	 * @return a new Track tile which is mirrored along the baseEdge
 	 */
