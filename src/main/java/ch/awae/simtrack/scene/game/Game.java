@@ -33,10 +33,8 @@ public class Game extends Scene {
 	private ViewPortNavigator viewPortNavigator;
 	private Editor editor;
 
-	private ToolBar toolbar;
 	private TrainController trainController;
 	private DesktopComponent ui;
-	private DebugToolsView debugWindow;
 	private InputController input;
 
 	public Game(SceneController sceneController, Model modelToLoad, Window window, InputController input) {
@@ -49,7 +47,6 @@ public class Game extends Scene {
 		this.pathfinder = new PathFinding(this.model);
 		this.trainController = new TrainController(this.model);
 		this.editor = new Editor(this.model, this.viewPortNavigator, input, this.pathfinder);
-		this.toolbar = new ToolBar(this.editor, input, this.viewPortNavigator);
 		this.ui = new DesktopComponent(input);
 		setupUI();
 
@@ -66,9 +63,9 @@ public class Game extends Scene {
 
 	private void setupUI() {
 		this.ui.layout(0, 0, this.window.getScreenSize().width, this.window.getScreenSize().height);
-		this.debugWindow = new DebugToolsView(this.editor, this.trainController, this.input, this.sceneController,
+		DebugToolsView debugWindow = new DebugToolsView(this.editor, this.trainController, this.input, this.sceneController,
 				this.model);
-		this.ui.addWindow(this.debugWindow, PositionH.LEFT, PositionV.TOP);
+		this.ui.addWindow(debugWindow, PositionH.LEFT, PositionV.TOP);
 
 		InputGuideView inputGuide = new InputGuideView(this.input, this.model);
 		this.ui.addWindow(inputGuide);
@@ -76,7 +73,8 @@ public class Game extends Scene {
 		PlayerInfoView infoView = new PlayerInfoView(this.model, this.input);
 		this.ui.addWindow(infoView, PositionH.CENTER, PositionV.TOP);
 		
-		this.ui.addWindow(this.toolbar, PositionH.CENTER, PositionV.BOTTOM);
+		ToolBar toolbar = new ToolBar(this.editor, input, this.viewPortNavigator);
+		this.ui.addWindow(toolbar, PositionH.CENTER, PositionV.BOTTOM);
 	}
 
 	@Override
