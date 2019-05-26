@@ -52,7 +52,7 @@ public class PathFinding implements BaseTicker, GraphDataProvider<TileEdgeCoordi
 	 */
 	private void buildGraph() {
 		this.connectionCache.clear();
-		for (Entry<TileCoordinate, Tile> entry : this.model.getTiles()) {
+		for (Entry<TileCoordinate, Tile> entry : this.model.getTilesSet()) {
 			TileCoordinate tileCoordinate = entry.getKey();
 			buildGraphForTileCoordinate(tileCoordinate);
 		}

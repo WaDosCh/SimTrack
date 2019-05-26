@@ -78,11 +78,11 @@ public class SignalTool extends GameTool {
 	}
 
 	private void checkPlace() {
-		valid = model.canPlaceSignal(this.position, type);
+		valid = model.getRules().canPlaceSignal(this.position, type);
 	}
 
 	private void checkDelete() {
-		valid = model.canRemoveSignalAt(this.position);
+		valid = model.getRules().canRemoveSignalAt(this.position);
 	}
 
 	private void buildSignal() {

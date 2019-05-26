@@ -27,7 +27,7 @@ public class SignalRenderer implements Renderer {
 	public void render(Graphics g) {
 		g.push();
 
-		for (Entry<TileEdgeCoordinate, Signal> entry : this.model.getSignals()) {
+		for (Entry<TileEdgeCoordinate, Signal> entry : this.model.getSignalsSet()) {
 			TileEdgeCoordinate position = entry.getKey();
 			Signal signal = entry.getValue();
 

@@ -49,7 +49,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private int maxS, maxT;
 
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
-	private HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
+	private @Getter HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
 
 	private Set<Entity> entities = new HashSet<>();
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
@@ -77,6 +77,12 @@ public class Model implements Serializable, Observable, BaseTicker {
 		this.maxT = this.tileGridSize.height * TileCoordinate.TILE_V_T_OFFSET;
 	}
 
+	public ModelRules getRules() {
+		// either store rules on model, or stored type of rules and create instance
+		// appropriately here/ in load method
+		return new ModelRules(this);
+	}
+
 	public Tile getTileAt(TileCoordinate position) {
 		return this.tiles.get(position);
 	}
@@ -93,7 +99,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 		notifyChanged();
 	}
 
-	public Set<Map.Entry<TileCoordinate, Tile>> getTiles() {
+	public Set<Map.Entry<TileCoordinate, Tile>> getTilesSet() {
 		return tiles.entrySet();
 	}
 
@@ -137,7 +143,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 		}
 	}
 
-	public Set<Entry<TileEdgeCoordinate, Signal>> getSignals() {
+	public Set<Entry<TileEdgeCoordinate, Signal>> getSignalsSet() {
 		return this.signals.entrySet();
 	}
 
@@ -146,28 +152,11 @@ public class Model implements Serializable, Observable, BaseTicker {
 	}
 
 	public boolean setSignalAt(TileEdgeCoordinate position, Signal signal) {
-		if (!canPlaceSignal(position, signal.getType()))
+		if (!getRules().canPlaceSignal(position, signal.getType()))
 			return false;
 		signals.put(position, signal);
 		notifyChanged();
 		return true;
-	}
-
-	public boolean canPlaceSignal(TileEdgeCoordinate position, Type type) {
-		if (signals.containsKey(position))
-			return false;
-		// check if signal position is valid
-		Tile tile = tiles.get(position.tile);
-		if (tile == null || (tile instanceof BorderTrackTile && ((BorderTrackTile) tile).isTrainDestination())
-				|| !(tile instanceof TrackTile))
-			return false;
-		Signal opponent = getSignalAt(position.getOppositeDirection());
-		if (opponent != null) {
-			if (opponent.getType() == Type.ONE_WAY || type == Type.ONE_WAY)
-				return false;
-		}
-		TrackTile track = (TrackTile) tile;
-		return track.connectsAt(position.edge);
 	}
 
 	public void removeSignalAt(TileEdgeCoordinate position) {
@@ -181,14 +170,6 @@ public class Model implements Serializable, Observable, BaseTicker {
 			notifyChanged();
 	}
 
-	public boolean canRemoveSignalAt(TileEdgeCoordinate position) {
-		Tile raw_tile = tiles.get(position.tile);
-		if (!(raw_tile instanceof TrackTile))
-			return false;
-		TrackTile tile = (TrackTile) raw_tile;
-		Signal current = signals.get(position);
-		return !(current == null || tile instanceof BorderTrackTile);
-	}
 
 	public void load() {
 		this.observableHandler = new ObservableHandler();
@@ -324,6 +305,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 		return set;
 	}
 
+	// TODO: switch type to something generic, not Trains only
 	public HashMap<TileCoordinate, T2<Train, Integer>> getTileReservations() {
 		return tileReservations;
 	}

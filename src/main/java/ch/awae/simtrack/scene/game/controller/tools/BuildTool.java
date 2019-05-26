@@ -12,11 +12,8 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
-import ch.awae.simtrack.scene.game.model.tile.FixedTile;
-import ch.awae.simtrack.scene.game.model.tile.Tile;
 import ch.awae.simtrack.scene.game.model.tile.track.ConstructionTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
-import ch.awae.simtrack.scene.game.model.tile.track.TrackValidator;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
 import ch.awae.simtrack.window.Graphics;
 
@@ -112,52 +109,14 @@ public class BuildTool extends GameTool {
 	}
 
 	private void checkValid() {
-		this.valid = this.isBulldozeTool ? canBulldoze() : canPlace();
-	}
-
-	private boolean canPlace() {
-		if (mouseTile == null)
-			return false;
-		if (!model.isOnMap(mouseTile))
-			return false;
-
-		Tile tile = model.getTileAt(mouseTile);
-		if (this.track.getBuildCost() > this.model.playerMoney)
-			return false;
-
-		if (tile == null)
-			return true;
-		if (tile instanceof FixedTile)
-			return false;
-		if (tile instanceof TrackTile) {
-			TrackTile ttile = (TrackTile) tile;
-			ConstructionTrackTile fusedTrack = this.track.fuseWith(ttile);
-			return TrackValidator.isValidTrack(fusedTrack) && !fusedTrack.getNormalTrackTile().equals(ttile)
-					&& fusedTrack.getBuildCost() <= this.model.playerMoney;
-		}
-		return false;
-	}
-
-	/**
-	 * checks if the tile at a given location in a given model can be deleted
-	 * 
-	 * @param c the location to check on
-	 * @param m the model to check in
-	 * @return {@code true} if and only if the given position in the given model contains a tile and it can be deleted.
-	 */
-	private boolean canBulldoze() {
-		if (this.mouseTile == null)
-			return false;
-		Tile t = this.model.getTileAt(this.mouseTile);
-		if (t == null || t instanceof FixedTile)
-			return false;
-		if (this.model.playerMoney < this.model.getBulldozeCost())
-			return false;
-		return true;
+		if (this.isBulldozeTool)
+			this.valid = this.model.getRules().canBulldoze(this.mouseTile);
+		else
+			this.valid = this.model.getRules().canPlaceTrack(this.mouseTile, this.track);
 	}
 
 	private void bulldoze() {
-		if (canBulldoze()) {
+		if (this.model.getRules().canBulldoze(this.mouseTile)) {
 			if (input.getMousePosition().y < this.viewPort.getScreenSize().height) {
 				this.model.removeTileAt(this.mouseTile);
 				this.model.playerMoney -= this.model.getBulldozeCost();
@@ -169,7 +128,7 @@ public class BuildTool extends GameTool {
 	 * places the tile at the current location or (if applicable) fuses the new tile onto the current one.
 	 */
 	private void place() {
-		if (canPlace()) {
+		if (this.model.getRules().canPlaceTrack(this.mouseTile, this.track)) {
 			if (model.getTileAt(mouseTile) == null) {
 				model.setTileAt(mouseTile, track.getNormalTrackTile());
 				model.playerMoney -= track.getBuildCost();
