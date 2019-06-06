@@ -50,7 +50,9 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	}
 
 	private void createTools() {
-		addTool(new FreeTool(this, input, this.viewPort));
+		FreeTool freeTool = new FreeTool(this, input, this.viewPort);
+		this.currentTool = freeTool;
+		addTool(freeTool);
 		addTool(new BuildTool(this, this.model, this.input, this.viewPort));
 		addTool(new PathFindingTool(this, this.viewPort, this.pathfinder));
 		addTool(new SignalTool(this, this.model, this.input, this.viewPort));
@@ -70,11 +72,8 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	 * 
 	 * @param tool the tool to add.
 	 */
-	public void addTool(@NonNull Tool tool) {
+	private void addTool(@NonNull Tool tool) {
 		this.tools.put(tool.getClass(), tool);
-		if (this.currentTool == null) {
-			loadTool(tool.getClass());
-		}
 	}
 
 	/**
@@ -85,7 +84,7 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	 * @param args additional arguments to hand over to the new tool
 	 * @return {@code true} if the tool switch was successful
 	 */
-	public boolean loadTool(Class<? extends Tool> toolClazz, Object... args) {
+	public void loadTool(Class<? extends Tool> toolClazz, Object... args) {
 		if (toolClazz == null)
 			throw new RuntimeException("May not load null tool");
 		logger.debug("Load tool: " + toolClazz.getSimpleName() + "[" + StringUtils.join(args, ",") + "]");
@@ -93,14 +92,11 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 		if (next == null) {
 			throw new RuntimeException("Tool " + toolClazz.getSimpleName() + " was not registered");
 		}
-
-		if (this.currentTool != next && this.currentTool != null)
+		if (this.currentTool != next) {
 			this.currentTool.unloadTool();
-
-		next.loadTool(args);
-		this.currentTool = next;
-
-		return true;
+			next.loadTool(args);
+			this.currentTool = next;
+		}
 	}
 
 	/**
