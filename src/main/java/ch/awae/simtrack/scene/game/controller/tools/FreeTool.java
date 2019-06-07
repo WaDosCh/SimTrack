@@ -1,12 +1,11 @@
 package ch.awae.simtrack.scene.game.controller.tools;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Stroke;
-
+import ch.awae.simtrack.core.input.InputAction;
 import ch.awae.simtrack.core.input.InputController;
+import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
+import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.window.Graphics;
 
@@ -15,27 +14,40 @@ import ch.awae.simtrack.window.Graphics;
  */
 public class FreeTool extends GameTool {
 
-	private final static Stroke borderStroke = new BasicStroke(3);
 	private InputController input;
+	private Model model;
 
 	/**
 	 * creates a new tool instance.
 	 * 
+	 * @param model
+	 * 
 	 * @param e the editor owning the tool
 	 */
-	public FreeTool(Editor editor, InputController input, ViewPortNavigator viewPort) {
-		super(editor, viewPort, false);
+	public FreeTool(Editor editor, InputController input, ViewPortNavigator viewPort, Model model) {
+		super(editor, viewPort);
 		this.input = input;
+		this.model = model;
 	}
 
 	@Override
 	public void render(Graphics g) {
-		TileCoordinate mouseTile = this.getMouseSceneCoordinate(this.input.getMousePosition()).toTileCoordinate();
-		if (mouseTile != null) {
-			g.setStroke(borderStroke);
-			this.viewPort.focusHex(mouseTile, g);
-			g.setColor(Color.ORANGE);
-			g.drawHex();
+	}
+
+	@Override
+	public void handleInput(InputEvent event) {
+		if (event.isPressActionAndConsume(InputAction.SELECT)) {
+			TileCoordinate selectTile = this.getMouseSceneCoordinate(event.getCurrentMousePosition())
+					.toTileCoordinate();
+			this.model.select(selectTile);
+			return;
+		}
+		if (event.isPressAction(InputAction.DESELECT)) {
+			if (this.model.hasSelected()) {
+				event.consume();
+				this.model.select(null);
+				return;
+			}
 		}
 	}
 

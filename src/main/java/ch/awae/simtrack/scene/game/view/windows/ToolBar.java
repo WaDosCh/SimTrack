@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game.view.windows;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,6 +15,8 @@ import ch.awae.simtrack.scene.game.controller.tools.SignalTool;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.tile.track.ConstructionTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackProvider;
+import ch.awae.simtrack.scene.game.view.Design;
+import ch.awae.simtrack.scene.game.view.ToolBarButton;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
 import ch.awae.simtrack.window.Graphics;
 

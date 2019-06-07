@@ -20,6 +20,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ch.awae.simtrack.core.BaseTicker;
+import ch.awae.simtrack.scene.game.controller.event.EventBus;
+import ch.awae.simtrack.scene.game.controller.event.EventType;
 import ch.awae.simtrack.scene.game.model.entity.Entity;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
 import ch.awae.simtrack.scene.game.model.entity.Signal.Type;
@@ -66,6 +68,10 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private @Getter DebugOptions debugOptions = new DebugOptions();
 	private @Getter ViewPortData viewPortData = new ViewPortData();
 	public String lastSaveGameName = "NewCustomGame";
+
+	private @Getter TileCoordinate selectedTile;
+
+	private @Getter transient EventBus eventBus;
 
 	private @Getter transient ObservableHandler observableHandler;
 
@@ -170,9 +176,9 @@ public class Model implements Serializable, Observable, BaseTicker {
 			notifyChanged();
 	}
 
-
 	public void load() {
 		this.observableHandler = new ObservableHandler();
+		this.eventBus = new EventBus();
 		this.isPaused.set(false);
 	}
 
@@ -325,6 +331,15 @@ public class Model implements Serializable, Observable, BaseTicker {
 
 	public boolean isTileReserved(TileCoordinate tile) {
 		return tileReservations.get(tile) != null;
+	}
+
+	public void select(TileCoordinate selectTile) {
+		this.selectedTile = selectTile;
+		this.eventBus.notifyEvent(EventType.SELECTION_CHANGED, selectTile);
+	}
+
+	public boolean hasSelected() {
+		return this.selectedTile != null;
 	}
 
 }

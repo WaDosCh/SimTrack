@@ -32,7 +32,7 @@ public class PathFindingTool extends GameTool {
 	private Stack<TileEdgeCoordinate> path;
 
 	public PathFindingTool(Editor editor, ViewPortNavigator viewPort, PathFinding pathFinder) {
-		super(editor, viewPort, true);
+		super(editor, viewPort);
 
 		this.pathFinder = pathFinder;
 		this.startEdge = Edge.RIGHT;

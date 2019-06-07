@@ -47,7 +47,7 @@ public class BuildTool extends GameTool {
 	 * @param editor the editor the build tool will operate under
 	 */
 	public BuildTool(Editor editor, Model model, InputController input, ViewPortNavigator viewPort) {
-		super(editor, viewPort, true);
+		super(editor, viewPort);
 		this.model = model;
 		this.input = input;
 	}

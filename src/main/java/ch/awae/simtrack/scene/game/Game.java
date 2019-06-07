@@ -16,14 +16,16 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.PathFinding;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.ViewPortNavigator;
+import ch.awae.simtrack.scene.game.controller.event.EventType;
 import ch.awae.simtrack.scene.game.model.Model;
-import ch.awae.simtrack.scene.game.view.DebugToolsView;
-import ch.awae.simtrack.scene.game.view.InGameMenu;
-import ch.awae.simtrack.scene.game.view.InputGuideView;
-import ch.awae.simtrack.scene.game.view.PlayerInfoView;
-import ch.awae.simtrack.scene.game.view.ToolBar;
 import ch.awae.simtrack.scene.game.view.renderer.MapRenderer;
 import ch.awae.simtrack.scene.game.view.renderer.TileRenderer;
+import ch.awae.simtrack.scene.game.view.windows.DebugToolsView;
+import ch.awae.simtrack.scene.game.view.windows.InGameMenu;
+import ch.awae.simtrack.scene.game.view.windows.InputGuideView;
+import ch.awae.simtrack.scene.game.view.windows.PlayerInfoView;
+import ch.awae.simtrack.scene.game.view.windows.SelectedTileWindow;
+import ch.awae.simtrack.scene.game.view.windows.ToolBar;
 
 public class Game extends Scene {
 
@@ -63,18 +65,24 @@ public class Game extends Scene {
 
 	private void setupUI() {
 		this.ui.layout(0, 0, this.window.getScreenSize().width, this.window.getScreenSize().height);
-		DebugToolsView debugWindow = new DebugToolsView(this.editor, this.trainController, this.input, this.sceneController,
-				this.model);
+		DebugToolsView debugWindow = new DebugToolsView(this.editor, this.trainController, this.input,
+				this.sceneController, this.model);
 		this.ui.addWindow(debugWindow, PositionH.LEFT, PositionV.TOP);
 
 		InputGuideView inputGuide = new InputGuideView(this.input, this.model);
 		this.ui.addWindow(inputGuide);
-		
+
 		PlayerInfoView infoView = new PlayerInfoView(this.model, this.input);
 		this.ui.addWindow(infoView, PositionH.CENTER, PositionV.TOP);
-		
+
 		ToolBar toolbar = new ToolBar(this.editor, input, this.viewPortNavigator);
 		this.ui.addWindow(toolbar, PositionH.CENTER, PositionV.BOTTOM);
+
+		this.model.getEventBus().subscribe(EventType.SELECTION_CHANGED, (type, args) -> {
+			if (args != null && args.length > 0 && args[0] != null) {
+				this.ui.addWindow(new SelectedTileWindow(this.model, input), PositionH.RIGHT, PositionV.TOP);
+			}
+		});
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game.view.windows;
 
 import ch.awae.simtrack.core.SceneController;
 import ch.awae.simtrack.core.input.InputAction;
@@ -13,6 +13,7 @@ import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.controller.TrainController;
 import ch.awae.simtrack.scene.game.controller.tools.PathFindingTool;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.Design;
 
 public class DebugToolsView extends WindowComponent {
 

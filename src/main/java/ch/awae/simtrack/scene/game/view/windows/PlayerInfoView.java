@@ -1,9 +1,10 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game.view.windows;
 
 import ch.awae.simtrack.core.input.InputController;
 import ch.awae.simtrack.core.ui.LabelWithUpdatedText;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.Design;
 
 public class PlayerInfoView extends WindowComponent {
 

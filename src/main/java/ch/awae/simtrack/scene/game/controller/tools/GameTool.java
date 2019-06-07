@@ -18,12 +18,9 @@ public abstract class GameTool implements Tool {
 	protected final Editor editor;
 	protected ViewPortNavigator viewPort;
 
-	private final boolean autoUnload;
-
-	public GameTool(Editor editor, ViewPortNavigator viewPort, boolean autoUnloadTool) {
+	public GameTool(Editor editor, ViewPortNavigator viewPort) {
 		this.editor = editor;
 		this.viewPort = viewPort;
-		this.autoUnload = autoUnloadTool;
 	}
 
 	protected SceneCoordinate getMouseSceneCoordinate(Point mousePosition) {
@@ -32,7 +29,7 @@ public abstract class GameTool implements Tool {
 
 	@Override
 	public void handleInput(InputEvent event) {
-		if (autoUnload && event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
+		if (event.isPressActionAndConsume(InputAction.DROP_TOOL)) {
 			editor.loadTool(FreeTool.class);
 			logger.debug("auto-unloading tool");
 		}

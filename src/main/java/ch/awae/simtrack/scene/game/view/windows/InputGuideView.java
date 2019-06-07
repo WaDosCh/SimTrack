@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game.view.windows;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -8,6 +8,7 @@ import ch.awae.simtrack.core.input.InputEvent;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.util.Resource;
 import ch.awae.simtrack.window.Graphics;
 

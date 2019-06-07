@@ -1,5 +1,8 @@
 package ch.awae.simtrack.scene.game.controller;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Stroke;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +31,7 @@ import lombok.NonNull;
 public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 
 	private Logger logger = LogManager.getLogger(getClass());
+	private final static Stroke borderStroke = new BasicStroke(3);
 
 	private Model model;
 	private ViewPortNavigator viewPort;
@@ -50,7 +54,7 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	}
 
 	private void createTools() {
-		FreeTool freeTool = new FreeTool(this, input, this.viewPort);
+		FreeTool freeTool = new FreeTool(this, input, this.viewPort, this.model);
 		this.currentTool = freeTool;
 		addTool(freeTool);
 		addTool(new BuildTool(this, this.model, this.input, this.viewPort));
@@ -106,6 +110,14 @@ public class Editor implements BaseTicker, BaseRenderer, InputHandler {
 	 */
 	@Override
 	public void render(Graphics g) {
+		if (this.model.getSelectedTile() != null) {
+			g.push();
+			g.setStroke(borderStroke);
+			this.viewPort.focusHex(this.model.getSelectedTile(), g);
+			g.setColor(Color.ORANGE);
+			g.drawHex();
+			g.pop();
+		}
 		if (this.currentTool != null) {
 			GraphicsStack stack = g.getStack();
 			this.currentTool.render(g);

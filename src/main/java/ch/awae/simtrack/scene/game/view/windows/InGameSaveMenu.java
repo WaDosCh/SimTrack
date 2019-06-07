@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game.view.windows;
 
 import java.io.File;
 
@@ -13,6 +13,7 @@ import ch.awae.simtrack.core.ui.InputField;
 import ch.awae.simtrack.core.ui.Spacer;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.Design;
 import ch.judos.generic.data.StringUtils;
 
 public class InGameSaveMenu extends WindowComponent {

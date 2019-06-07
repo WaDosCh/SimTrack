@@ -1,4 +1,4 @@
-package ch.awae.simtrack.scene.game.view;
+package ch.awae.simtrack.scene.game.view.windows;
 
 import java.awt.Rectangle;
 
@@ -11,6 +11,7 @@ import ch.awae.simtrack.core.ui.DesktopComponent;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.controller.Editor;
 import ch.awae.simtrack.scene.game.model.Model;
+import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.scene.menu.Menu;
 import ch.awae.simtrack.scene.menu.MenuLoadView;
 import ch.awae.simtrack.window.Graphics;

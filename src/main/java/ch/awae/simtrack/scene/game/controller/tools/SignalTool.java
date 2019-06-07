@@ -34,7 +34,7 @@ public class SignalTool extends GameTool {
 	private InputController input;
 
 	public SignalTool(Editor editor, Model model, InputController input, ViewPortNavigator viewPort) {
-		super(editor, viewPort, true);
+		super(editor, viewPort);
 		this.model = model;
 		this.input = input;
 	}
