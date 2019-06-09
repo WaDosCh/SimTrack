@@ -4,7 +4,8 @@ In development:
 v0.3.4
 	- select tiles
 	- added EventBus
-	- open ui windows for current selection 
+	- open ui windows for current selection
+	- show build cost on map in hovered tile 
 	
 v0.3.3
 	- use ui system for toolbar as well

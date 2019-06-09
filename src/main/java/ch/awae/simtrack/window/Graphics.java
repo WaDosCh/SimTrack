@@ -20,12 +20,11 @@ public class Graphics extends Graphics2D {
 	private final static int HEX_HALF = TileCoordinate.TILE_SIDE_HEIGHT_HALF;
 	private final static int[][] HEX_EDGES = { { 0, -50, -50, 0, 50, 50 },
 			{ 2 * HEX_HALF, HEX_HALF, -HEX_HALF, -2 * HEX_HALF, -HEX_HALF, HEX_HALF } };
-	
+
 	private static HashMap<Key, Object> hints;
 	{
-		hints = new HashMap<Key,Object>();
-		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING,
-	             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		hints = new HashMap<Key, Object>();
+		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 	}
 
@@ -64,11 +63,11 @@ public class Graphics extends Graphics2D {
 		this.backer = backer;
 		this.backer.setRenderingHints(hints);
 	}
-	
+
 	public void drawHex() {
 		backer.drawPolygon(HEX_EDGES[0], HEX_EDGES[1], 6);
 	}
-	
+
 	public void fillHex() {
 		backer.fillPolygon(HEX_EDGES[0], HEX_EDGES[1], 6);
 	}
@@ -108,6 +107,11 @@ public class Graphics extends Graphics2D {
 		} else {
 			throw new IllegalArgumentException("unsupported stack type");
 		}
+	}
+
+	public void drawCenterText(String string, int x, int y) {
+		int width = this.getFontMetrics().stringWidth(string);
+		this.drawString(string, x - width / 2, y);
 	}
 
 }

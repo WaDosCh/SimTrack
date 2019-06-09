@@ -14,6 +14,7 @@ import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.position.TileCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.track.ConstructionTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
+import ch.awae.simtrack.scene.game.view.Design;
 import ch.awae.simtrack.scene.game.view.renderer.TrackRenderUtil;
 import ch.awae.simtrack.window.Graphics;
 
@@ -174,6 +175,9 @@ public class BuildTool extends GameTool {
 			this.viewPort.focusHex(this.mouseTile, g);
 			TrackRenderUtil.renderRails(g, valid ? Color.LIGHT_GRAY : Color.RED, valid ? Color.GRAY : Color.RED,
 					track.getPaths());
+			g.setFont(Design.textFont);
+			g.setColor(Design.textColor);
+			g.drawCenterText(this.track.getBuildCost()+"$", 0, 40);
 		}
 	}
 
