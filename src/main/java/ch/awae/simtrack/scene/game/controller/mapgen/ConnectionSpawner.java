@@ -1,7 +1,6 @@
-package ch.awae.simtrack.scene.game.controller;
+package ch.awae.simtrack.scene.game.controller.mapgen;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import ch.awae.simtrack.scene.game.model.Model;
 import ch.awae.simtrack.scene.game.model.entity.Signal;
@@ -16,28 +15,27 @@ import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 
 /**
  * This basic implementation spawns connections on the edges with a random distribution.
- * 
- * @author Andreas Wälchli
- * @version 2.1, 2015-01-23
- * @since SimTrack 0.2.1
  */
-public class ConnectionSpawner {
+public class ConnectionSpawner extends Spawner {
 
-	private static Random RAND = new Random();
+	public ConnectionSpawner(Model model, ModelCreationOptions options) {
+		super(model, options);
+	}
 
-	public static void spawnConnections(Model model, int amount) {
+	@Override
+	public void spawn(Model model, ModelCreationOptions options) {
 
 		ArrayList<TileCoordinate> list = new ArrayList<>();
 
-		for (int i = 0; i < amount; i++) {
+		for (int i = 0; i < options.connectionCount; i++) {
 
 			final int ho = model.getTileGridSize().width;
 			final int ve = model.getTileGridSize().height;
 
-			boolean isHo = RAND.nextInt(ho + ve / 2) < ho;
-			boolean isTo = RAND.nextBoolean();
+			boolean isHo = r.nextInt(ho + ve / 2) < ho;
+			boolean isTo = r.nextBoolean();
 
-			int r1 = RAND.nextInt(isHo ? ho : ((ve + 1) / 2));
+			int r1 = r.nextInt(isHo ? ho : ((ve + 1) / 2));
 
 			int edgeNr, u, v;
 			// STEP 2: determine position / orient
@@ -52,10 +50,10 @@ public class ConnectionSpawner {
 					edgeNr = isTo ? 2 : 4;
 				else if (isTo)
 					// top edge
-					edgeNr = RAND.nextBoolean() ? 1 : 2;
+					edgeNr = r.nextBoolean() ? 1 : 2;
 				else
 					// bottom edge
-					edgeNr = RAND.nextBoolean() ? 4 : 5;
+					edgeNr = r.nextBoolean() ? 4 : 5;
 			} else {
 				r1 += 2;
 				r1 *= 2;
@@ -63,7 +61,7 @@ public class ConnectionSpawner {
 				if (r1 + 1 >= ve)
 					continue;
 				u = (isTo ? 0 : ho - 1) - (v / 2);
-				edgeNr = RAND.nextInt(3) + (isTo ? 5 : 2);
+				edgeNr = r.nextInt(3) + (isTo ? 5 : 2);
 				if (edgeNr > 5)
 					edgeNr -= 6;
 			}
@@ -73,7 +71,7 @@ public class ConnectionSpawner {
 
 			if (!list.contains(pos)) {
 				// spawn border track
-				boolean output = RAND.nextBoolean();
+				boolean output = r.nextBoolean();
 				Edge edge = Edge.byOrdinal(edgeNr);
 				BorderTrackTile tile = new BorderTrackTile(edge, output);
 				model.setTileAt(pos, tile);
@@ -106,4 +104,5 @@ public class ConnectionSpawner {
 		}
 
 	}
+
 }

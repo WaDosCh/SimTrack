@@ -2,6 +2,7 @@ package ch.awae.simtrack.scene.game.model;
 
 import java.awt.Dimension;
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,12 +35,14 @@ import ch.awae.simtrack.scene.game.model.position.TilePathCoordinate;
 import ch.awae.simtrack.scene.game.model.tile.BulldozeTile;
 import ch.awae.simtrack.scene.game.model.tile.FixedTile;
 import ch.awae.simtrack.scene.game.model.tile.Tile;
+import ch.awae.simtrack.scene.game.model.tile.Updatable;
 import ch.awae.simtrack.scene.game.model.tile.UpgradeTile;
 import ch.awae.simtrack.scene.game.model.tile.track.BorderTrackTile;
 import ch.awae.simtrack.scene.game.model.tile.track.TrackTile;
 import ch.awae.simtrack.util.observe.Observable;
 import ch.awae.simtrack.util.observe.ObservableHandler;
 import ch.awae.utils.functional.T2;
+import ch.judos.generic.data.HashMapList;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -53,6 +56,8 @@ public class Model implements Serializable, Observable, BaseTicker {
 	private HashMap<TileCoordinate, Tile> tiles = new HashMap<>();
 	private @Getter HashMap<TileEdgeCoordinate, Signal> signals = new HashMap<>();
 
+	private @Getter long tick;
+	private HashMapList<Long, WeakReference<Updatable>> updateSchedule = new HashMapList<>();
 	private Set<Entity> entities = new HashSet<>();
 	private HashMap<TileCoordinate, T2<Train, Integer>> tileReservations = new HashMap<>();
 	private Set<Entity> toBeRemoved = new HashSet<>();
@@ -75,7 +80,7 @@ public class Model implements Serializable, Observable, BaseTicker {
 
 	private @Getter transient ObservableHandler observableHandler;
 
-	Model(Dimension size, int startingMoney, int bulldozeCost) {
+	public Model(Dimension size, int startingMoney, int bulldozeCost) {
 		this.tileGridSize = size;
 		this.playerMoney = startingMoney;
 		this.bulldozeCost = bulldozeCost;
@@ -102,6 +107,13 @@ public class Model implements Serializable, Observable, BaseTicker {
 			tile = new UpgradeTile(oldTile, (TrackTile) tile);
 		}
 		this.tiles.put(position, tile);
+		if (tile instanceof Updatable) {
+			Updatable u = (Updatable) tile;
+			if (u.getUpdateEveryTicks() > 0) {
+				long nextUpdate = u.getUpdateEveryTicks() + this.tick;
+				this.updateSchedule.put(nextUpdate, new WeakReference<Updatable>(u));
+			}
+		}
 		notifyChanged();
 	}
 
@@ -186,11 +198,28 @@ public class Model implements Serializable, Observable, BaseTicker {
 	public void tick() {
 		if (this.isPaused.get())
 			return;
+		this.tick++;
+		tickUpdatables();
 		for (Entity entity : this.entities) {
 			entity.tick();
 		}
 		this.entities.removeAll(this.toBeRemoved);
 		this.toBeRemoved.clear();
+	}
+
+	private void tickUpdatables() {
+		ArrayList<WeakReference<Updatable>> updateables = this.updateSchedule.getList(this.tick);
+		if (updateables != null) {
+			for (WeakReference<Updatable> updateable : updateables) {
+				if (updateable.get() != null) {
+					updateable.get().update();
+					long updateInTicks = updateable.get().getUpdateEveryTicks();
+					if (updateInTicks != 0)
+						this.updateSchedule.put(updateInTicks + this.tick, updateable);
+				}
+			}
+			this.updateSchedule.removeKey(this.tick);
+		}
 	}
 
 	public Set<Entry<TileCoordinate, Tile>> getTileFiltered(Function<Tile, Boolean> filter) {

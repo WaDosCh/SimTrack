@@ -12,8 +12,7 @@ import ch.awae.simtrack.core.ui.InputField;
 import ch.awae.simtrack.core.ui.Label;
 import ch.awae.simtrack.core.ui.WindowComponent;
 import ch.awae.simtrack.scene.game.Game;
-import ch.awae.simtrack.scene.game.model.ModelCreationOptions;
-import ch.awae.simtrack.scene.game.model.ModelFactory;
+import ch.awae.simtrack.scene.game.controller.mapgen.ModelCreationOptions;
 import ch.awae.simtrack.scene.game.view.Design;
 
 public class CustomNewGameView extends WindowComponent {
@@ -77,10 +76,9 @@ public class CustomNewGameView extends WindowComponent {
 		op.startingMoney = this.startingMoney.getNumber();
 		op.bulldozeCost = this.bulldozeCost.getNumber();
 		op.connectionCount = this.connections.getNumber();
-
-		this.controller.loadScene(Game.class, ModelFactory.getModel(op));
+		this.controller.loadScene(Game.class, op);
 	}
-	
+
 	@Override
 	public void handleInput(InputEvent event) {
 		super.handleInput(event);
